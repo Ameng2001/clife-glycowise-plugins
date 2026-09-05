@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif; }
+    a { color: #8a5a2b; } a:hover { color: #6b4520; }
+    .hatch { background-image: repeating-linear-gradient(45deg, #e8e8e6 0 7px, #f4f4f2 7px 14px); }
+  </style>
+</helmet>
+
+<div style="width: 860px; height: 900px; background: #f4f4f2; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; color: #1a1a1a">
+
+  <div>
+    <div style="font-size: 14px; font-weight: 600">患者端 · 企业微信内日报</div>
+    <div style="font-size: 12px; color: #6b6b66; margin-top: 4px; line-height: 1.5">
+      企微做不到大按钮与 22pt 字号，所以正文走<strong>图片</strong>承载大字，交互走<strong>回复数字</strong>。左右两态必须一眼可分。
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 20px; flex-grow: 1; min-height: 0">
+
+    <!-- 态一：数据完整 -->
+    <div style="width: 390px; display: flex; flex-direction: column; gap: 8px">
+      <div style="font-size: 11px; font-weight: 600; color: #57574f; letter-spacing: 0.05em">态一 · 数据完整</div>
+
+      <div style="flex-grow: 1; background: #ededea; border: 1px solid #d9d9d5; border-radius: 4px; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; overflow: hidden">
+
+        <div style="font-size: 11px; color: #8a8a82; text-align: center">昨天 08:02</div>
+
+        <div style="display: flex; gap: 8px; align-items: flex-start">
+          <div style="width: 30px; height: 30px; border-radius: 3px; background: #cfcfc9; flex-shrink: 0"></div>
+          <div style="background: #ffffff; border-radius: 4px; padding: 3px; max-width: 300px">
+
+            <!-- 图片承载的大字卡片 -->
+            <div style="background: #fbfbfa; border: 1px solid #ebebe8; border-radius: 3px; padding: 18px 16px">
+              <div style="font-size: 13px; color: #6b6b66">刘阿姨，早上好</div>
+              <div style="font-size: 30px; font-weight: 600; line-height: 1.25; margin-top: 10px; letter-spacing: -0.01em">昨天血糖<br>比前天稳</div>
+              <div style="height: 1px; background: #ebebe8; margin: 16px 0"></div>
+              <div style="font-size: 19px; line-height: 1.5; color: #3a3a36">
+                在合适范围里的时间<br>
+                <span style="font-size: 34px; font-weight: 600; color: #1a1a1a">14 小时</span>
+              </div>
+              <div style="font-size: 16px; color: #6b6b66; margin-top: 12px; line-height: 1.5">夜里没有出现过低。</div>
+              <div style="margin-top: 16px; padding: 11px 12px; background: #f2f2ef; border-radius: 3px">
+                <div style="font-size: 16px; color: #3a3a36; line-height: 1.5">今天试试：<strong>晚饭后走 15 分钟</strong></div>
+              </div>
+            </div>
+            <div style="font-size: 10px; color: #a8a8a0; padding: 5px 4px 2px">图片 · 可长按放大</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: flex-start">
+          <div style="width: 30px; height: 30px; border-radius: 3px; background: #cfcfc9; flex-shrink: 0"></div>
+          <div style="background: #ffffff; border-radius: 4px; padding: 11px 12px; max-width: 290px">
+            <div style="font-size: 14px; line-height: 1.65; color: #1a1a1a">
+              回我一个数字就行：<br>
+              <strong>1</strong> 我知道了<br>
+              <strong>2</strong> 我有点不舒服<br>
+              <strong>3</strong> 想问问小韦
+            </div>
+          </div>
+        </div>
+
+        <div style="flex-grow: 1"></div>
+        <div style="display: flex; gap: 8px; align-items: center; background: #ffffff; border-radius: 4px; padding: 9px 11px">
+          <div style="flex-grow: 1; font-size: 13px; color: #a8a8a0">输入…</div>
+          <div style="font-size: 12px; color: #6b6b66; border: 1px solid #d9d9d5; border-radius: 3px; padding: 4px 10px">发送</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 态二：数据不足 —— 绝不能长得像"平稳" -->
+    <div style="width: 390px; display: flex; flex-direction: column; gap: 8px">
+      <div style="font-size: 11px; font-weight: 600; color: oklch(0.45 0.11 75); letter-spacing: 0.05em">态二 · 数据不足（不是"平稳"）</div>
+
+      <div style="flex-grow: 1; background: #ededea; border: 1px solid #d9d9d5; border-radius: 4px; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; overflow: hidden">
+
+        <div style="font-size: 11px; color: #8a8a82; text-align: center">今天 08:02</div>
+
+        <div style="display: flex; gap: 8px; align-items: flex-start">
+          <div style="width: 30px; height: 30px; border-radius: 3px; background: #cfcfc9; flex-shrink: 0"></div>
+          <div style="background: #ffffff; border-radius: 4px; padding: 3px; max-width: 300px">
+
+            <div style="border: 1px dashed #b8b8b2; border-radius: 3px; padding: 18px 16px" class="hatch">
+              <div style="font-size: 13px; color: #6b6b66">刘阿姨，早上好</div>
+              <div style="font-size: 30px; font-weight: 600; line-height: 1.25; margin-top: 10px; letter-spacing: -0.01em; color: #3a3a36">昨天没有<br>收到数据</div>
+              <div style="height: 1px; background: #d9d9d5; margin: 16px 0"></div>
+              <div style="font-size: 19px; line-height: 1.55; color: #3a3a36">
+                这不是说昨天没事，<br>是我们<strong>没看到</strong>。
+              </div>
+              <div style="margin-top: 16px; padding: 11px 12px; background: #ffffff; border: 1px solid #ecdcc0; border-radius: 3px">
+                <div style="font-size: 16px; color: #4a4034; line-height: 1.55">手机靠近传感器，<br>打开一下小程序就好了。</div>
+              </div>
+            </div>
+            <div style="font-size: 10px; color: #a8a8a0; padding: 5px 4px 2px">图片 · 可长按放大</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: flex-start">
+          <div style="width: 30px; height: 30px; border-radius: 3px; background: #cfcfc9; flex-shrink: 0"></div>
+          <div style="background: #ffffff; border-radius: 4px; padding: 11px 12px; max-width: 290px">
+            <div style="font-size: 14px; line-height: 1.65; color: #1a1a1a">
+              回我一个数字：<br>
+              <strong>1</strong> 我这就弄<br>
+              <strong>2</strong> 不会弄，帮我一下<br>
+              <strong>3</strong> 这几天没戴
+            </div>
+          </div>
+        </div>
+
+        <div style="flex-grow: 1"></div>
+        <div style="display: flex; gap: 8px; align-items: center; background: #ffffff; border-radius: 4px; padding: 9px 11px">
+          <div style="flex-grow: 1; font-size: 13px; color: #a8a8a0">输入…</div>
+          <div style="font-size: 12px; color: #6b6b66; border: 1px solid #d9d9d5; border-radius: 3px; padding: 4px 10px">发送</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size: 11px; color: #6b6b66; line-height: 1.6; border-top: 1px solid #d9d9d5; padding-top: 11px">
+    一期不做实时告警，所以卡片里没有任何"我们在夜里看着你"的暗示。低血糖的急救科普是固定材料，随佩戴指导一次性交付，不依赖推送。
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif; }
+    a { color: #8a5a2b; } a:hover { color: #6b4520; }
+    .hatch { background-image: repeating-linear-gradient(45deg, #e8e8e6 0 6px, #f4f4f2 6px 12px); }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 900px; background: #f4f4f2; color: #1a1a1a; display: flex; flex-direction: column; overflow: hidden">
+
+  <div style="display: flex; align-items: center; gap: 20px; padding: 0 24px; height: 56px; background: #ffffff; border-bottom: 1px solid #d9d9d5; flex-shrink: 0">
+    <div style="font-size: 15px; font-weight: 600">签发工作台</div>
+    <div style="font-size: 13px; color: #6b6b66">黄医生 · 内科 · 执业证已核验</div>
+    <div style="flex-grow: 1"></div>
+    <div style="font-size: 12px; color: #6b6b66">今日待签 18 份 · 预计 42 分钟</div>
+  </div>
+
+  <div style="display: flex; flex-grow: 1; min-height: 0">
+
+    <!-- 左：分级队列 -->
+    <div style="width: 520px; border-right: 1px solid #d9d9d5; background: #ffffff; display: flex; flex-direction: column; min-height: 0">
+
+      <div style="padding: 15px 20px 13px; border-bottom: 1px solid #ebebe8; flex-shrink: 0">
+        <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px">按授权层级分流</div>
+        <div style="display: flex; flex-direction: column; gap: 7px">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 9px 11px; background: #fbfbfa; border: 1px solid #ebebe8; border-radius: 3px">
+            <div style="font-size: 16px; font-weight: 600; width: 28px; color: #6b6b66">31</div>
+            <div style="flex-grow: 1">
+              <div style="font-size: 12px; color: #3a3a36">纯教育类 · 免签直发</div>
+              <div style="font-size: 11px; color: #8a8a82; margin-top: 2px">固定模板，不含个体判断</div>
+            </div>
+            <div style="font-size: 11px; color: #8a8a82">不占你时间</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 9px 11px; background: #fbfbfa; border: 1px solid #ebebe8; border-radius: 3px">
+            <div style="font-size: 16px; font-weight: 600; width: 28px; color: #6b6b66">9</div>
+            <div style="flex-grow: 1">
+              <div style="font-size: 12px; color: #3a3a36">膳食营养类 · 注册营养师签</div>
+              <div style="font-size: 11px; color: #8a8a82; margin-top: 2px">已转 周营养师</div>
+            </div>
+            <div style="font-size: 11px; color: #8a8a82">不占你时间</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 9px 11px; border: 1px solid #cfcfc9; border-left: 3px solid #2e2e2a; border-radius: 3px; background: #ffffff">
+            <div style="font-size: 16px; font-weight: 600; width: 28px">18</div>
+            <div style="flex-grow: 1">
+              <div style="font-size: 12px; font-weight: 600; color: #1a1a1a">涉及用药或分层 · 必须你签</div>
+              <div style="font-size: 11px; color: #8a8a82; margin-top: 2px">法规不允许下放</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; padding: 11px 20px; border-bottom: 1px solid #ebebe8; background: #fbfbfa; flex-shrink: 0">
+        <div style="width: 14px; height: 14px; border: 1px solid #8a8a82; border-radius: 2px; background: #ffffff"></div>
+        <div style="font-size: 12px; color: #3a3a36">选择本页 6 份</div>
+        <div style="flex-grow: 1"></div>
+        <div style="font-size: 12px; color: #8a8a82">批量签发仅对同类且无红标者开放</div>
+      </div>
+
+      <div style="flex-grow: 1; overflow: hidden">
+
+        <div style="display: flex; gap: 11px; padding: 13px 20px; border-bottom: 1px solid #f2f2ef; background: #f7f5f2">
+          <div style="width: 14px; height: 14px; border: 1px solid #2e2e2a; border-radius: 2px; background: #2e2e2a; flex-shrink: 0; margin-top: 2px"></div>
+          <div style="flex-grow: 1">
+            <div style="display: flex; align-items: baseline; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">刘凤兰</span>
+              <span style="font-size: 11px; color: #6b6b66">68岁 · 减药建议</span>
+            </div>
+            <div style="font-size: 12px; color: #3a3a36; margin-top: 4px; line-height: 1.5">TBR 6.2%，夜间 2 次。草稿建议下调晚间磺脲剂量。</div>
+            <div style="display: inline-block; margin-top: 6px; font-size: 11px; color: oklch(0.45 0.11 75); background: #fdf8ef; border: 1px solid #ecdcc0; padding: 3px 7px; border-radius: 2px">夜间覆盖 58% · 数据为下限</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 11px; padding: 13px 20px; border-bottom: 1px solid #f2f2ef">
+          <div style="width: 14px; height: 14px; border: 1px solid #8a8a82; border-radius: 2px; background: #ffffff; flex-shrink: 0; margin-top: 2px"></div>
+          <div style="flex-grow: 1">
+            <div style="display: flex; align-items: baseline; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">韦荣坚</span>
+              <span style="font-size: 11px; color: #6b6b66">61岁 · 分层复核</span>
+            </div>
+            <div style="font-size: 12px; color: #3a3a36; margin-top: 4px; line-height: 1.5">服务分层由 L2 变 L3，需你确认后方可对患者表述。</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 11px; padding: 13px 20px; border-bottom: 1px solid #f2f2ef">
+          <div style="width: 14px; height: 14px; border: 1px dashed #b8b8b2; border-radius: 2px; flex-shrink: 0; margin-top: 2px" class="hatch"></div>
+          <div style="flex-grow: 1; opacity: 0.72">
+            <div style="display: flex; align-items: baseline; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">陈国伟</span>
+              <span style="font-size: 11px; color: #6b6b66">51岁 · 数据不足</span>
+            </div>
+            <div style="font-size: 12px; color: #3a3a36; margin-top: 4px; line-height: 1.5">有效数据 41%，未达 70% 门槛。系统只出趋势描述，不生成结论，<strong>不可批量签</strong>。</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 11px; padding: 13px 20px; border-bottom: 1px solid #f2f2ef">
+          <div style="width: 14px; height: 14px; border: 1px solid #8a8a82; border-radius: 2px; background: #ffffff; flex-shrink: 0; margin-top: 2px"></div>
+          <div style="flex-grow: 1">
+            <div style="display: flex; align-items: baseline; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">黄秀英</span>
+              <span style="font-size: 11px; color: #6b6b66">72岁 · 用药清单过期</span>
+            </div>
+            <div style="font-size: 12px; color: #3a3a36; margin-top: 4px; line-height: 1.5">用药清单 41 天未核对，草稿的用药相关判断已被系统屏蔽。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：单份详情与证据链 -->
+    <div style="flex-grow: 1; display: flex; flex-direction: column; min-width: 0">
+
+      <div style="padding: 17px 24px 13px; background: #ffffff; border-bottom: 1px solid #d9d9d5; flex-shrink: 0">
+        <div style="display: flex; align-items: baseline; gap: 10px">
+          <div style="font-size: 17px; font-weight: 600">刘凤兰 · 减药建议草稿</div>
+          <div style="font-size: 12px; color: #6b6b66">由方案生成智能体产出 · 待你签发</div>
+        </div>
+      </div>
+
+      <div style="padding: 17px 24px; display: flex; flex-direction: column; gap: 13px; flex-grow: 1; min-height: 0; overflow: hidden">
+
+        <!-- 阻断提示 -->
+        <div style="padding: 12px 14px; background: #fdf8ef; border: 1px solid #ecdcc0; border-radius: 3px">
+          <div style="font-size: 12px; font-weight: 600; color: #4a4034">系统已阻断一类草稿</div>
+          <div style="font-size: 12px; color: #4a4034; margin-top: 6px; line-height: 1.6">
+            该患者夜间覆盖率 58%，低血糖时间是<strong>下限</strong>。系统不生成任何"加强降糖"方向的建议，只允许减药方向。若你判断需要加药，请先补足夜间数据。
+          </div>
+        </div>
+
+        <!-- 证据链 -->
+        <div style="background: #ffffff; border: 1px solid #d9d9d5; border-radius: 4px; padding: 14px 16px">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 11px">这条建议基于什么（可导出留档）</div>
+          <div style="display: flex; flex-direction: column; gap: 9px">
+            <div style="display: flex; gap: 11px; align-items: baseline">
+              <div style="font-size: 11px; color: #8a8a82; width: 74px; flex-shrink: 0">数据窗口</div>
+              <div style="font-size: 12px; color: #3a3a36; line-height: 1.5">9月20日–10月3日 · 14 天 · 有效 83% · 夜间 58% · 单一传感器、无补录点</div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: baseline">
+              <div style="font-size: 11px; color: #8a8a82; width: 74px; flex-shrink: 0">触发规则</div>
+              <div style="font-size: 12px; color: #3a3a36; line-height: 1.5">R09 老年 TBR 超标（实测 6.2%，阈值 1%）· R28 老年目标切换</div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: baseline">
+              <div style="font-size: 11px; color: #8a8a82; width: 74px; flex-shrink: 0">依据出处</div>
+              <div style="font-size: 12px; color: #3a3a36; line-height: 1.5">中国老年糖尿病诊疗指南 2024 · ATTD 2019 国际共识</div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: baseline">
+              <div style="font-size: 11px; color: #8a8a82; width: 74px; flex-shrink: 0">用药清单</div>
+              <div style="font-size: 12px; color: #3a3a36; line-height: 1.5">6 天前由药师核对 · 含磺脲类与基础胰岛素</div>
+            </div>
+            <div style="display: flex; gap: 11px; align-items: baseline">
+              <div style="font-size: 11px; color: #8a8a82; width: 74px; flex-shrink: 0">合规检查</div>
+              <div style="font-size: 12px; color: #3a3a36; line-height: 1.5">已过出口闸 · 无功效声称、无产品推荐、无"逆转/停药"表述</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 草稿正文 -->
+        <div style="background: #ffffff; border: 1px solid #d9d9d5; border-radius: 4px; padding: 14px 16px; flex-grow: 1; min-height: 0">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 9px">草稿正文 · 可直接改</div>
+          <div style="font-size: 13px; color: #1a1a1a; line-height: 1.75; border-left: 2px solid #ebebe8; padding-left: 13px">
+            近两周夜间低血糖 2 次，均在凌晨 2–4 点，未记录症状，符合无感知低血糖表现。结合病程 20 年与老年控制目标（糖化 7.5–8.0%），建议下调晚间磺脲剂量，两周后复评。<br><br>
+            另建议将睡前加餐由黄瓜改为含 10–15 克碳水的食物；该患者在用 α-糖苷酶抑制剂，如需急救补糖须用<strong>葡萄糖</strong>，蔗糖与淀粉类起效受药物抑制。
+          </div>
+        </div>
+
+        <!-- 动作 -->
+        <div style="display: flex; gap: 9px; align-items: center; flex-shrink: 0">
+          <div style="font-size: 13px; color: #ffffff; background: #2e2e2a; padding: 10px 18px; border-radius: 3px">签发这一份</div>
+          <div style="font-size: 13px; color: #2e2e2a; background: #ffffff; border: 1px solid #cfcfc9; padding: 10px 18px; border-radius: 3px">改后签发</div>
+          <div style="font-size: 13px; color: #2e2e2a; background: #ffffff; border: 1px solid #cfcfc9; padding: 10px 18px; border-radius: 3px">退回 · 信息不足</div>
+          <div style="flex-grow: 1"></div>
+          <div style="font-size: 11px; color: #8a8a82; text-align: right; line-height: 1.5">签发人、时间、依据快照一并留痕<br>依据失效时会通知你</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

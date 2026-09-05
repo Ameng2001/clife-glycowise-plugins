@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif; }
+    a { color: #8a5a2b; } a:hover { color: #6b4520; }
+    .hatch { background-image: repeating-linear-gradient(45deg, #e8e8e6 0 7px, #f4f4f2 7px 14px); }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #ffffff; color: #1a1a1a; display: flex; flex-direction: column; overflow: hidden">
+
+  <div style="padding: 18px 18px 14px; border-bottom: 1px solid #ebebe8; flex-shrink: 0">
+    <div style="font-size: 16px; font-weight: 600">妈妈这一周</div>
+    <div style="font-size: 12px; color: #6b6b66; margin-top: 4px">刘凤兰 · 9月28日 – 10月4日</div>
+  </div>
+
+  <div style="flex-grow: 1; overflow: hidden; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px">
+
+    <!-- 一句话结论 -->
+    <div style="background: #fbfbfa; border: 1px solid #ebebe8; border-radius: 4px; padding: 15px 15px">
+      <div style="font-size: 19px; font-weight: 600; line-height: 1.45">这周比上周稳一些，<br>没有出现需要送医的情况。</div>
+      <div style="font-size: 13px; color: #6b6b66; margin-top: 10px; line-height: 1.6">黄医生看过这周的数据，把晚上的一种药减了半片。下次复诊 10 月 18 日。</div>
+    </div>
+
+    <!-- 覆盖状态 —— 她付的钱买到了什么，必须诚实 -->
+    <div style="border: 1px solid #d9d9d5; border-radius: 4px; overflow: hidden">
+      <div style="padding: 12px 15px; border-bottom: 1px solid #ebebe8">
+        <div style="font-size: 13px; font-weight: 600">这周我们看到了多少</div>
+      </div>
+      <div style="padding: 13px 15px; display: flex; flex-direction: column; gap: 11px">
+        <div style="display: flex; align-items: center; gap: 11px">
+          <div style="flex-grow: 1">
+            <div style="font-size: 13px; color: #3a3a36">白天</div>
+            <div style="font-size: 11px; color: #6b6b66; margin-top: 2px">7 天里有 7 天的数据</div>
+          </div>
+          <div style="font-size: 15px; font-weight: 600">完整</div>
+        </div>
+        <div style="height: 1px; background: #f2f2ef"></div>
+        <div style="display: flex; align-items: center; gap: 11px">
+          <div style="flex-grow: 1">
+            <div style="font-size: 13px; color: #3a3a36">夜里</div>
+            <div style="font-size: 11px; color: #6b6b66; margin-top: 2px">7 天里有 4 天的数据</div>
+          </div>
+          <div style="font-size: 15px; font-weight: 600; color: oklch(0.5 0.12 75)">有缺口</div>
+        </div>
+        <div style="padding: 11px 12px; border: 1px solid #ecdcc0; background: #fdf8ef; border-radius: 3px">
+          <div style="font-size: 12px; color: #4a4034; line-height: 1.6">缺口那 3 天不是"没事"，是我们没拿到数据。妈妈手机放在客厅充电时容易断，我们已经提醒过她。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 一期能力边界 —— 不能让她以为买了夜间监护 -->
+    <div style="border: 1px dashed #b8b8b2; border-radius: 4px; padding: 13px 15px" class="hatch">
+      <div style="font-size: 13px; font-weight: 600; color: #3a3a36">这个服务现在不做什么</div>
+      <div style="font-size: 12px; color: #3a3a36; margin-top: 8px; line-height: 1.65">
+        我们<strong>不会在夜里实时盯着</strong>妈妈的血糖，也不会在夜里打电话给你。数据是第二天汇总后由健管师和医生看。
+      </div>
+      <div style="font-size: 12px; color: #3a3a36; margin-top: 9px; line-height: 1.65">
+        夜里如果出事，靠的是妈妈自己和身边的人。请确认<strong>本地紧急联系人</strong>还能随时到场。
+      </div>
+      <div style="display: inline-block; margin-top: 11px; font-size: 12px; color: #2e2e2a; background: #ffffff; border: 1px solid #cfcfc9; padding: 7px 13px; border-radius: 3px">
+        当前登记：邻居 覃阿姨 · 去确认
+      </div>
+    </div>
+
+    <!-- 她能做的一件事 -->
+    <div style="border: 1px solid #ebebe8; border-radius: 4px; padding: 13px 15px; background: #fbfbfa">
+      <div style="font-size: 13px; font-weight: 600">这周你可以做的一件事</div>
+      <div style="font-size: 12px; color: #3a3a36; margin-top: 7px; line-height: 1.6">周末打电话时问一句：手机有没有放在身边。比问"血糖多少"有用。</div>
+    </div>
+
+  </div>
+
+  <div style="border-top: 1px solid #ebebe8; padding: 12px 18px; display: flex; gap: 9px; flex-shrink: 0">
+    <div style="flex-grow: 1; text-align: center; font-size: 13px; color: #ffffff; background: #2e2e2a; padding: 10px; border-radius: 3px">联系小韦</div>
+    <div style="flex-grow: 1; text-align: center; font-size: 13px; color: #2e2e2a; border: 1px solid #cfcfc9; padding: 10px; border-radius: 3px">看详细报告</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
