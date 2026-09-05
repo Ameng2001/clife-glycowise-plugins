@@ -41,6 +41,25 @@
 
 ## Plugin Candidates
 
+> # ⚠ 本节已被重排修订（2026-09-05）
+>
+> **修订文档：`decisions/phase1-rescope-2026-09-05.md`（以它为准）。触发：台账 C-15。**
+>
+> 下面的四层结构成文于 C-15 之前，**它只排了居家 CGM 段，门店侧五段一条都不在里面**。原内容全部保留供对照，但读之前须先知悉五处变化：
+>
+> | # | 变化 | 说明 |
+> |---|---|---|
+> | 1 | **新增 9 个门店侧候选 OP-34~OP-42** | `onsite-triage` 分诊与危急值闸 · `his-bridge` HIS 读入（⚠D-24）· `patient-master` 患者主档 · `body-measure-intake` 体测与检验入档（⚠D-23）· `enrollment-decision` 入组判定与分层 · `service-package-fulfillment` 服务包履约台账 · `wecom-group-provisioning` 群装配 · `followup-ledger` 跟进记录与复盘（替代飞书表格）· `legacy-migration-gate` 存量迁移硬闸 |
+> | 2 | **第 2 层「一期地基」整体重排** | 门店侧在 CGM 之前：`patient-master` → `onsite-triage` → `his-bridge` → `body-measure-intake` → `enrollment-decision` → `followup-ledger`(+`feishu-sync`) → `service-package-fulfillment` → `wecom-group-provisioning`，**然后**才是 `cgm-ingest` → `sync-health` → `glucose-metrics`。理由：`dedup_key` 的第一个字段就是 `patient_id`，没有患者主档 OP-01 连键都算不出来 |
+> | 3 | **第 0 层新增 R-7 / R-8，第 1 层新增 G11 / G12** | **R-7** 患者主键永不复用永不合并（🔴 与 R-1 同级不可逆）· **R-8** 体测检验值五元组 `value+unit+method+measured_at+source`（🔴 采集时点不可补）· **G11** 存量迁移闸（PIPL 29，G1 盖不住）· **G12** HIS 取数范围闸 + PIPIA 重评（15 工作日日历闸，须最早启动） |
+> | 4 | **第 3 层四处位移** | `feishu-sync` 改与 `followup-ledger` 同批（原绑 `triage-queue` 是绑错了对象——飞书表里存的是跟进记录不是队列）· `med-list-freshness` 须紧跟 `his-bridge`/`enrollment-decision` · `triage-queue` 增依赖 `followup-ledger` · `bedtime-low-guard` 增依赖 `enrollment-decision` 的 `health_tier` |
+> | 5 | **一期建议拆成 P1a 门店侧 / P1b CGM 链路两个上线单元** | P1a 是**可独立上线的价值单元，但不是可独立售卖的单元**（唯一可售交付物 14 天达标报告由 OP-02 产出，在 P1b）。⚠ 同时纠正一处：**健管师上午 3.5 小时手抄属居家段，消灭它的是 `cgm-ingest`，不是门店侧**——不得把这份收益算进 P1a |
+>
+> **工作量量级**：原估 4–5 人 × 20–24 周 → **5–6 人 × 28–32 周**（P1a 约 10–12 周、P1b 约 16–20 周，重叠 4–6 周）。
+> **不变的一条**：`cgm-ingest` 仍是全项目 ROI 最高的单件事。
+>
+> ---
+
 > 由 `opportunity-brief.md` 填写（2026-09-05）。完整评分矩阵、工作量、依赖图与理由见该文件。
 > **分期边界只有一条：B-13 一期无实时告警。** 一期与二期候选分栏，不混排。
 >
@@ -185,3 +204,4 @@ OP-25 退出访谈问卷（零开发）· OP-15 话术库编写与培训 · OP-2
 |---|---|---|
 | 2026-09-04 | 初版，基于调研报告 | — |
 | 2026-09-04 | **硅基接入已商务确认，给 SDK/蓝牙协议 + 原始读数** | 推翻调研"无可用通道"结论。关键路径从"厂商商务谈判"转移到"**7×24 采集载体选型**"。Phase 0/1 可合并，降级通道退为兜底。安全价值主张（夜间低血糖告警）从画饼变为可交付承诺。`research/sources/01、05` 与主报告的通道章节需据此修订。 |
+| 2026-09-05 | **一期范围重排**（C-15）：门店侧五段拆成 OP-34~OP-42 九个候选并前置于 CGM 链路；新增 R-7/R-8 强制预留与 G11/G12 合规闸；建议拆 P1a 门店侧 / P1b CGM 链路两个上线单元；工作量修正为 5–6 人 × 28–32 周。见 `decisions/phase1-rescope-2026-09-05.md` | Plugin Candidates 一节的四层结构被整体修订（原内容保留供对照）；`opportunity-brief.md` §2.1/§4.1/§8.2/§10 待同步 |
