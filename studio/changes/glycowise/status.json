@@ -32,7 +32,8 @@
     "decisions/confirmed-facts": "done（决策台账）",
     "decisions/rework-log": "done",
     "brief.md Plugin Candidates": "done（已回填，四层结构）",
-    "docs": "done — MRD + PRD一期 + PRD二期，md 与 docx 均在 docs/"
+    "docs": "done — MRD + PRD一期 + PRD二期，md 与 docx 均在 docs/",
+    "skill-map": "done（本批：第 0 层 R-1~R-6 + 第 1 层 G1~G10；14 skill / 4 插件；D-12 阻塞支不含）"
   },
   "hard_constraints": [
     "CGM 是第三类医疗器械，平台不做器械交易",
@@ -40,7 +41,22 @@
     "AI 不得自动生成处方，方案须医师签发后推送",
     "SDK/蓝牙需 7×24 常驻采集载体；小程序无后台常驻，夜间采集必须另找载体"
   ],
-  "skills": {},
+  "skills": {
+    "init-workspace": "draft",
+    "audit-trail": "draft",
+    "consent-ledger": "draft",
+    "output-compliance-gate": "draft",
+    "gate-regression-suite": "draft",
+    "credential-gate": "draft",
+    "genai-filing": "draft",
+    "reservation-contract-check": "draft",
+    "store-readiness-check": "draft",
+    "outcome-claim-gate": "draft",
+    "emergency-contact-gate": "draft",
+    "adverse-event-report": "draft",
+    "script-library": "draft",
+    "script-spotcheck": "draft"
+  },
   "open_decisions": [
     {
       "id": "D-01",
