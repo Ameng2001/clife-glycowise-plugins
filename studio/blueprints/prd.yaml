@@ -1,0 +1,160 @@
+name: prd
+display_name: "产品需求文档（PRD）"
+version: "1.0"
+lifecycle_stage: specification
+description: "面向内部研发的产品需求文档，按分期分册（一期 / 二期）。定义范围边界、角色权限、业务流程、功能与数据需求、规则需求、非功能需求与验收标准。不做市场论证（见 MRD），不做界面设计（另立）。"
+
+audience: "内部立项与研发"
+phased: true
+phase_rule: "分期边界只有一条：B-13 一期无实时告警。每册只写本期范围，跨期内容以「本期不做，见 X 期」一行带过，不展开。"
+
+tone_rules:
+  - "受众是研发，写到可实现的粒度：判断条件要可计算，阈值要有数字，数据字段要有类型与约束。"
+  - "凡依赖未确认事实的需求，必须标注为「假设」并写明假设不成立时的影响与分支。"
+  - "被 confirmed-facts.md C 类推翻的结论禁止引用原值。"
+  - "安全相关需求（低血糖链路、合规闸门）须显式标注不可绕过、不可降级、不经 LLM 自由发挥。"
+
+structure:
+  - chapter: "一、范围与边界"
+    required: true
+    sections:
+      - "本期目标"
+      - "范围内"
+      - "明确不做"
+      - "与另一期的边界"
+    artifact_sources:
+      - "decisions/confirmed-facts.md"
+      - "brief.md"
+      - "opportunity-brief.md"
+    word_count: "1500-2500"
+    guidelines: "「明确不做」比「范围内」更重要，要具体到能防止研发自行扩张。一期必须写明：结构性无当夜干预能力，服务包与话术不得含任何夜间安全承诺。"
+
+  - chapter: "二、约束与前提"
+    required: true
+    sections:
+      - "不可逾越的硬约束"
+      - "已确认事实"
+      - "假设与其失效影响"
+      - "强制预留项"
+    artifact_sources:
+      - "decisions/confirmed-facts.md"
+      - "decisions/carrier-selection.md"
+    word_count: "2000-3000"
+    guidelines: "硬约束四条（器械资质、食品宣称、AI 不出处方、分期边界）逐条给出对研发的具体含义。强制预留项（R-1~R-6）单列，说明它们是准入条件不是候选项，并标出哪些不可逆。假设一节要给分支：若假设不成立，哪些需求作废或形态改变。"
+
+  - chapter: "三、角色与权限"
+    required: true
+    sections:
+      - "角色清单"
+      - "权限矩阵"
+      - "话术与输出边界"
+    artifact_sources:
+      - "behavior-matrix.md"
+      - "personas/README.md"
+    word_count: "2000-3000"
+    guidelines: "权限矩阵到「角色 × 实体 × 读/写/禁止」粒度。必须写明系统拦得住什么、拦不住什么——例如健管师在单聊里回答用药问题，系统能拦住写用药字段但拦不住打字，需要话术库与会话存档配合。"
+
+  - chapter: "四、业务流程"
+    required: true
+    sections:
+      - "流程总览与衔接"
+      - "各流程详述"
+      - "异常路径"
+    artifact_sources:
+      - "processes/README.md"
+      - "processes/enrollment.md"
+      - "processes/daily-monitoring.md"
+      - "processes/review-and-plan.md"
+      - "processes/remission-assessment.md"
+    word_count: "4000-6000"
+    guidelines: "每个流程给流程图、判断点表（条件可计算、标注对应规则编号）、泳道。异常路径不是附录而是正文：外出断档、传感器脱落、同步中断、解析错误、患者问用药、厂商中断，每条给感知方式与处置。"
+
+  - chapter: "五、功能需求"
+    required: true
+    sections:
+      - "能力清单与优先级"
+      - "各能力详述"
+      - "验收标准"
+    artifact_sources:
+      - "opportunity-brief.md"
+      - "brief.md"
+      - "behavior-matrix.md"
+    word_count: "6000-9000"
+    guidelines: "按机会评估的分层组织：强制预留、合规准入闸、地基、价值候选。每个能力给：目标、输入输出、核心逻辑、边界条件、验收标准。合规准入闸类能力要写明为什么不能因用户感知不到而后置。"
+
+  - chapter: "六、数据需求"
+    required: true
+    sections:
+      - "核心数据实体"
+      - "字段级定义"
+      - "数据质量规则"
+      - "留存、审计与授权"
+    artifact_sources:
+      - "../../research/sources/05-数据集成技术方案.md"
+      - "behavior-matrix.md"
+      - "domain-canvas.md"
+    word_count: "3500-5000"
+    guidelines: "去重键、三层时间、原始值不可变留存、质量标记的单写者原则要写死。数据质量规则给可计算的判定条件。授权部分对齐 PIPL：单独同意、分项同意、撤回同等便捷、不得代同意、境内处理。"
+
+  - chapter: "七、规则需求"
+    required: true
+    sections:
+      - "临床规则"
+      - "合规规则"
+      - "规则治理"
+    artifact_sources:
+      - "../../research/sources/02-CGM临床指标与规则库.md"
+      - "decisions/confirmed-facts.md"
+      - "domain-canvas.md"
+    word_count: "3000-4500"
+    guidelines: "临床规则给触发条件、动作、级别、依据来源。必须写清实时与回顾两套口径物理分开，以及低血糖链路优先级最高、不经合规词库过滤（预审冻结模板）。规则治理要求每条规则可追溯到指南出处，并给出指南更新时的维护机制。"
+
+  - chapter: "八、非功能需求"
+    required: true
+    sections:
+      - "性能与时延"
+      - "可用性与降级"
+      - "安全与合规"
+      - "可观测性"
+    artifact_sources:
+      - "processes/daily-monitoring.md"
+      - "decisions/carrier-selection.md"
+      - "domain-canvas.md"
+    word_count: "2000-3000"
+    guidelines: "时延指标要区分本期真实可达值与另一期目标值。可观测性一节必须包含「没有数据与没有异常不能长得一样」这条最高优先级显示规则，以及数据断流的可观测设计。"
+
+  - chapter: "九、依赖、排期与风险"
+    required: true
+    sections:
+      - "外部依赖"
+      - "能力间依赖与建设顺序"
+      - "被阻塞项"
+      - "风险与对策"
+    artifact_sources:
+      - "opportunity-brief.md"
+      - "decisions/confirmed-facts.md"
+      - "decisions/cgm-vendor-bd-guide.md"
+    word_count: "2000-3000"
+    guidelines: "被阻塞项要写明被谁阻塞、阻塞解除的判定条件、以及在阻塞期间可以先做什么。厂商依赖要给出降级路径。"
+
+  - chapter: "十、验收标准与待确认"
+    required: true
+    sections:
+      - "本期验收标准"
+      - "KPI 与其推算性质"
+      - "待确认清单"
+    artifact_sources:
+      - "opportunity-brief.md"
+      - "decisions/confirmed-facts.md"
+    word_count: "1500-2500"
+    guidelines: "验收标准要可测量。KPI 必须标注哪些是推算值、需要用至心真实结果数据校准。"
+
+compliance_rules:
+  - "安全相关需求须标注不可绕过、不可降级。"
+  - "AI 输出相关需求须体现「只到草稿，医师签发后推送」。"
+  - "不得设计任何把血糖数据映射到产品推荐的功能。"
+  - "所有假设显式标注并给出失效分支。"
+
+export:
+  format: ["docx", "pdf"]
+  style: "internal-spec"

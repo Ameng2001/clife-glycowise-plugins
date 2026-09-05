@@ -1,0 +1,129 @@
+name: mrd
+display_name: "市场需求文档（MRD）"
+version: "1.0"
+lifecycle_stage: justification
+description: "面向内部立项与研发的市场需求文档。论证市场空间、用户与场景、竞争格局、商业模式与规模路径，并把需要拍板的商业决策显式列出。不做技术方案设计（见 PRD）。"
+
+audience: "内部立项与研发"
+tone_rules:
+  - "受众是内部，风险、被推翻的结论、合规红线、真实成本模型一律写透，不做对外口径的软化。"
+  - "凡引用数字必须标注来源与是否为推算。至心真实结果数据尚未取得，所有 KPI 目标值均为推算，须逐处标注。"
+  - "禁止使用「逆转」「治愈」「停药」等对外禁用词；引用门店现有话术时须同时标注其违规性质。"
+  - "被 confirmed-facts.md C 类推翻的结论禁止引用原值，如需提及须以「原判断→修正后」形式呈现。"
+
+structure:
+  - chapter: "一、结论与决策请求"
+    required: true
+    sections:
+      - "一页结论"
+      - "需要拍板的决策清单"
+      - "本文档的证据基础与局限"
+    artifact_sources:
+      - "decisions/confirmed-facts.md"
+      - "opportunity-brief.md"
+      - "brief.md"
+    word_count: "1500-2500"
+    guidelines: "开门见山给结论，不铺垫。决策清单要具体到「谁在什么时间之前决定什么」，每条附不决定的后果。局限一节必须诚实列出：至心真实结果数据未取得、传感器缓存深度未问定、定价未决、无界面设计。"
+
+  - chapter: "二、市场与人群"
+    required: true
+    sections:
+      - "疾病人群规模与结构"
+      - "CGM 市场现状与价格轨迹"
+      - "支付结构与付费意愿"
+      - "政策环境"
+    artifact_sources:
+      - "../../research/sources/03-商业模式与竞品.md"
+      - "../../research/sources/01-CGM设备与数据接口.md"
+    word_count: "3000-4500"
+    guidelines: "用调研第 3 份第 4 节的量化数据，逐条标来源。价格轨迹要体现 CGM 硬件已无利润这一判断的证据链。付费意愿必须区分「愿意付多少」与「实际转化」，并写明子女代付的决策结构。"
+
+  - chapter: "三、用户与场景"
+    required: true
+    sections:
+      - "核心用户画像"
+      - "关键旅程与情绪低点"
+      - "静默流失路径"
+    artifact_sources:
+      - "personas/README.md"
+      - "personas/elderly-t2d-patient.md"
+      - "personas/adult-child-payer.md"
+      - "personas/churn-refund-user.md"
+      - "journeys/README.md"
+    word_count: "3500-5000"
+    guidelines: "七个画像不必平均用力，重点写老年患者、子女代付人、脱落型三个。必须写清「每个角色都有一条悄悄放弃的路径」这条主线，以及三条旅程的情绪最低点都不在直觉位置这个发现。脱落画像的六条退出路径与早期信号是本章的落点。"
+
+  - chapter: "四、竞争格局"
+    required: true
+    sections:
+      - "国外标杆与其失败样本"
+      - "国内厂商、平台与线下机构"
+      - "格局判断与我方位置"
+    artifact_sources:
+      - "../../research/sources/03-商业模式与竞品.md"
+    word_count: "3000-4500"
+    guidelines: "核心论点是「CGM 是钩子不是产品」，用 Levels/Zoe/Veri 的收缩与 Virta/Twin/Omada 的存活做对照论证。国内部分要点出「无人公开服务包价格与疗效」这个空白。我方位置要落到「线下不可替代环节 + 人工支持带来的留存差」。"
+
+  - chapter: "五、商业模式与定价"
+    required: true
+    sections:
+      - "服务包结构"
+      - "单位经济模型"
+      - "定价决策：三条路径与测算"
+      - "分佣与复购结构"
+    artifact_sources:
+      - "opportunity-brief.md"
+      - "decisions/confirmed-facts.md"
+      - "../../research/sources/03-商业模式与竞品.md"
+    word_count: "4000-6000"
+    guidelines: "本章是 MRD 的核心。定价一节**不做决定，列选项**：调价、认定为获客成本并捆交付条件、改包结构三条路径，各自给测算、前置条件、利弊与适用情形，供决策会使用。必须用修正后的成本（体验包 456–521）而非原估 295。服务与产品分离对德心营收的冲击要量化或至少给出量级。"
+
+  - chapter: "六、规模路径与产能约束"
+    required: true
+    sections:
+      - "健管师产能模型"
+      - "医师签发瓶颈与天花板"
+      - "留存与转化假设"
+      - "分阶段规模路径"
+    artifact_sources:
+      - "journeys/health-manager-day.md"
+      - "decisions/confirmed-facts.md"
+      - "opportunity-brief.md"
+    word_count: "3000-4500"
+    guidelines: "必须用修正后的健管师人均 32/40/48，不得引用被推翻的 60，并说明 60 的来源与为什么它只能用于谈资源。医师瓶颈一节要写清结论是反转的：软件缓解有限，只能靠给体验包发放量设上限，这是运营决策。留存假设要挂在「有人工支持时 89–92% vs 自助 42.7%」这个差值上。"
+
+  - chapter: "七、风险"
+    required: true
+    sections:
+      - "合规风险"
+      - "临床安全风险"
+      - "留存与商业风险"
+      - "供应链与厂商依赖"
+    artifact_sources:
+      - "decisions/confirmed-facts.md"
+      - "../../research/sources/04-合规风险.md"
+      - "opportunity-brief.md"
+    word_count: "3000-4500"
+    guidelines: "合规部分要点名门店现有做法的违规性质（血糖分级映射产品、朋友圈个案对比、逆转中心命名），并给出同类处罚案例的金额量级。临床安全必须包含一期医源性强化路径（夜间缺口→TBR 低估→加药）这条新发现。厂商依赖要写明单一供应商风险与三诺作为第二供应商的必要性。"
+
+  - chapter: "八、待决事项与低成本验证"
+    required: true
+    sections:
+      - "待决清单"
+      - "零开发即可启动的验证"
+    artifact_sources:
+      - "decisions/confirmed-facts.md"
+      - "decisions/cgm-vendor-bd-guide.md"
+      - "personas/README.md"
+    word_count: "1500-2500"
+    guidelines: "待决清单按「阻塞什么」排序而非按主题。验证一节必须都是不需要写代码的动作：退出访谈问卷、飞书历史表工时统计、流失信号只记录不触发跑两周、向厂商问定的技术清单。"
+
+compliance_rules:
+  - "所有数字标注来源；推算值必须显式标注「推算」。"
+  - "引用 confirmed-facts.md C 类条目时不得使用原值。"
+  - "不得出现对外禁用词（逆转/治愈/停药/降糖功效声称）作为我方主张。"
+  - "服务与产品分离原则须在商业模式章节显式体现，不得设计任何捆绑销售结构。"
+
+export:
+  format: ["docx", "pdf"]
+  style: "internal-report"

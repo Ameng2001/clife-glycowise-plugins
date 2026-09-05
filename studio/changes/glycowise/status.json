@@ -1,0 +1,227 @@
+{
+  "type": "plugin",
+  "plugin": "glycowise",
+  "domain": "控糖场景（CGM 数据对接 + 五师共管服务包）",
+  "target_collection": ".",
+  "target_dir": "glycowise",
+  "action": "create",
+  "iteration": 3,
+  "phase": "specification-complete",
+  "created_at": "2026-09-04",
+  "updated_at": "2026-09-05",
+  "inputs": {
+    "research_report": "research/控糖场景深度探索报告-2026-09-04.md",
+    "research_sources": "research/sources/00-05",
+    "ingestions": "ingestions/ (德心门店调研 docx、至心会议纪要 pdf、康养智慧顾问产品规划 pptx、五师共管图)",
+    "vendor_integration": "硅基动感已商务确认：SDK/蓝牙协议 + 原始读数（5–15 分钟点）"
+  },
+  "custom_experts": [
+    "studio/agents/diabetes-cgm-expert.md",
+    "studio/agents/cgm-data-integration-expert.md"
+  ],
+  "artifacts": {
+    "brief": "done",
+    "personas": "done (7 个，含脱落反向画像)",
+    "processes": "done + 已回修（review-and-plan 仅定点修补，未整篇通读）",
+    "domain-canvas": "done + 已回修",
+    "journeys": "done（3 条旅程）",
+    "behavior-matrix": "done（1184 行）",
+    "opportunity-brief": "done（933 行）",
+    "decisions/carrier-selection": "done v2.1（一个 Android 代码库 / 两种部署 / 双路并存）",
+    "decisions/cgm-vendor-bd-guide": "done（商务谈判要点指南 v1.0，含必问清单/合同条款/已知陷阱/各厂商情况）",
+    "decisions/confirmed-facts": "done（决策台账）",
+    "decisions/rework-log": "done",
+    "brief.md Plugin Candidates": "done（已回填，四层结构）",
+    "docs": "done — MRD + PRD一期 + PRD二期，md 与 docx 均在 docs/"
+  },
+  "hard_constraints": [
+    "CGM 是第三类医疗器械，平台不做器械交易",
+    "固体饮料不得宣称降糖/逆转，服务与产品物理分离",
+    "AI 不得自动生成处方，方案须医师签发后推送",
+    "SDK/蓝牙需 7×24 常驻采集载体；小程序无后台常驻，夜间采集必须另找载体"
+  ],
+  "skills": {},
+  "open_decisions": [
+    {
+      "id": "D-01",
+      "title": "CGM 采集载体选型",
+      "status": "decided-but-deferred-to-P2",
+      "blocks": [
+        "夜间低血糖告警",
+        "Phase 1 排期"
+      ],
+      "note": "关键路径已从厂商谈判转移到此",
+      "recommendation": "A1 采集盒（我方资产·常插电·4G·带扬声器，老年与夜间高风险主载体）+ A2 随身端（同一 App 装患者手机，移动段副路），双路同时连同一传感器互为冗余；C 厂商App旁路降为兜底；D华为手表/E小程序否决；成品嵌入式网关因移动端SDK装不进而出局",
+      "night_latency": "5-6 分钟（连续2读数≈1采样间隔 + 上报<10s + 判定推送<40s）；预测性告警为负时延，可提前10-30分钟"
+    },
+    {
+      "id": "D-02",
+      "title": "夜间值班责任人",
+      "status": "deferred-to-P2",
+      "owner": "至心/德心（业务侧，非技术）",
+      "note": "载体分析结论：夜间告警端到端瓶颈不是技术。技术链路时延约20-40分钟且已被临床定义卡死（Level2需<3.0持续≥15分钟才算事件，防压迫伪差），工程优化不了。真正问题是凌晨3点有没有人看那条消息。至心现营业时间9:00-23:00、62人满编，无24h值班。此项不解则任何载体的端到端可用性为0，且服务包不得含任何夜间安全承诺。 ⚠ 已纠正：原“时延被临床定义卡死20-40分钟”结论作废，那是把回顾性事件统计定义(持续≥15min)误当实时触发条件。实时应为2连续读数+预测性告警，时延工程可优化。但夜间值班责任人仍是端到端归零因素。 【时延修正后此项更刺眼】技术侧已不是瓶颈：我们能在6分钟内知道，但没有人被指定在凌晨3点看。",
+      "options": [
+        "至心自建夜班（成本高，需增编）",
+        "第三方24h呼叫中心/护理站合作",
+        "不承诺门店夜间响应：Level2不可静音由患者本人自救+强制登记的本地可到场施救者+120直通，门店次日晨间复盘"
+      ]
+    },
+    {
+      "id": "D-03",
+      "title": "向硅基问定两个技术事实",
+      "status": "answered",
+      "owner": "BD/技术对接",
+      "due": "3个工作日内",
+      "items": [
+        "SDK 具体形态：移动端SDK / 嵌入式SDK / 纯协议文档——决定网关是成品网关还是自研Android采集盒",
+        "同一枚传感器是否允许多个BLE连接并存——若不允许，网关与手机App不能同时在线，移动段兜底设计要重做"
+      ],
+      "answers": {
+        "SDK形态": "移动端 SDK",
+        "多BLE连接并存": "允许"
+      },
+      "implications": [
+        "成品蓝牙网关出局（需嵌入式或裸协议），唯一路径是常插电 Android 采集盒跑我方 App 内嵌硅基 SDK",
+        "Android App 无论如何都要做——这是原企微+小程序产品规划之外的新增开发承诺，需单独排期与预算",
+        "原“网关 vs 自建App”对立消失，二者是同一代码库的两种部署：专用采集盒（老年，我方资产）+ 患者自有手机（移动段）",
+        "“保活成本”论据只对 BYOD 手机成立；专用盒子无保活问题（无其他应用、可关电池优化、常插电）",
+        "多连接并存 → 盒子与手机可同时连同一传感器，解掉“外出即断档”这一最大数据缺口成因，且互为冗余",
+        "iOS 后台 BLE 受限，用 iPhone 的中年患者是否也发盒子待定"
+      ]
+    },
+    {
+      "id": "D-04",
+      "title": "向硅基追问的四个技术事实",
+      "status": "action-required",
+      "owner": "技术对接",
+      "priority": "high",
+      "items": [
+        "T-04 传感器实际采样间隔是 5 分钟还是 15 分钟——若为15分钟，告警时延从5-6分钟变15-16分钟，三倍差距（最高优先级）",
+        "T-01 读数是否带传感器侧序号——决定双路去重能否不依赖墙钟时间",
+        "SDK 时间戳语义：是传感器测量时刻还是载体接收时刻——若为后者，任何时间容差方案全部失效",
+        "T-02 多路 BLE 并存是否显著缩短传感器续航——若显著，冲击 14天+70% 数据充分性门槛"
+      ]
+    },
+    {
+      "id": "D-10",
+      "title": "硅基云云对接是否可得",
+      "status": "downgraded",
+      "priority": "一般",
+      "owner": "技术对接",
+      "note": "降为实现选择题：没有云云就用SDK，一期照做。有则省一个App。"
+    },
+    {
+      "id": "D-12",
+      "title": "传感器本地缓存深度",
+      "status": "action-required",
+      "priority": "一期最高",
+      "owner": "技术对接",
+      "note": "SDK路径下决定最长可容忍同步间隔。老年患者长期不开App则数据躺在缓存里直到溢出丢失。直接决定R01能否满足与同步提醒策略。"
+    }
+  ],
+  "pending_rework": {
+    "status": "completed 2026-09-04",
+    "known_gaps": [
+      "review-and-plan.md 只做定点修补，未整篇通读式回修",
+      "personas/churn-refund-user.md 的 S5 信号需按 C-04 标注为技术不可观测",
+      "回修 agent 中途失败，剩余由主会话补做并已终检"
+    ]
+  },
+  "corrections": [
+    {
+      "id": "C-01",
+      "severity": "high",
+      "what": "实时告警触发条件",
+      "was": "低于阈值持续≥15分钟才触发",
+      "now": "2个连续读数即触发 + 预测性告警；实测端到端 5-6 分钟，预测性为负时延",
+      "impact": "原“20-40分钟被临床卡死”作废。时延主导项变为载体上报间隔，属工程可优化；盒子 push-on-arrival 升级为有临床价值的差异化能力",
+      "found_by": "旅程图临床评审"
+    },
+    {
+      "id": "C-02",
+      "severity": "high",
+      "what": "健管师人均管理人数",
+      "was": "≥60 人",
+      "now": "天花板 48，分阶段 32/40/48",
+      "impact": "服务包毛利模型与 KPI 需重算；60 是从合规整改营收缺口(20-36万/月)倒推的数字，应用于谈资源而非派工",
+      "found_by": "旅程图运营评审"
+    },
+    {
+      "id": "C-03",
+      "severity": "medium",
+      "what": "A 体验包定价",
+      "was": "299-399 元，成本约 295",
+      "now": "重算成本 456-521，该定价为净亏 CAC",
+      "impact": "需重新定价或明确认定为获客补贴",
+      "found_by": "旅程图运营评审"
+    },
+    {
+      "id": "C-04",
+      "severity": "medium",
+      "what": "流失信号 S5 通知被关闭",
+      "was": "可观测",
+      "now": "技术上拿不到——关闭微信通知是 OS 级设置",
+      "impact": "persona 07 的 S5 作废，改用行为代理信号",
+      "found_by": "旅程图 UX 评审"
+    },
+    {
+      "id": "C-05",
+      "severity": "medium",
+      "what": "Level 1 静音策略",
+      "was": "夜间一律静音 Level 1",
+      "now": "无感知低血糖高危人群反而要上调阈值到 4.4 并保留告警",
+      "impact": "静音策略必须按人群分层",
+      "found_by": "旅程图临床评审"
+    },
+    {
+      "id": "C-06",
+      "severity": "medium",
+      "what": "企微生态能力假设",
+      "was": "≥12mm按钮/22pt字号/Level2本机强制响铃",
+      "now": "企微内均做不到",
+      "impact": "大字走图片+回复数字；本机强制提醒必须由我方 App/采集盒承担，成为选自建载体的硬理由",
+      "found_by": "旅程图 UX 评审"
+    },
+    {
+      "id": "C-07",
+      "severity": "medium",
+      "what": "瓶颈角色",
+      "was": "健管师是主要瓶颈",
+      "now": "医师更早触顶（180人规模需3.5h/天）",
+      "impact": "签发环节需设计批量化与分级授权",
+      "found_by": "旅程图运营评审"
+    },
+    {
+      "id": "C-12",
+      "severity": "high",
+      "what": "云云路径能否规避同步依赖",
+      "was": "走云云则 D-12 缓存深度无关",
+      "now": "错。移动端SDK意味着两条路径同步依从性一样，云云还额外失去可观测性。D-12 无退路",
+      "found_by": "机会评估技术评审"
+    },
+    {
+      "id": "C-13",
+      "severity": "high",
+      "what": "医师瓶颈可否被软件缓解",
+      "was": "签发工作台可降到130-155min",
+      "now": "结论反转：修正为165-180min，A:B=1:2时回到195-210min等于没缓解。只能靠给A包发放量设上限（运营决策）",
+      "found_by": "机会评估运营评审"
+    }
+  ],
+  "decision_ledger": "decisions/confirmed-facts.md — 事实基准，优先级高于其他所有设计文档；A类已确认事实/B类已定决策/C类已推翻结论/D类待确认",
+  "phasing": {
+    "P1": "无实时告警。通道形态是实现选择而非分期条件：有云云就用云云，没有就用SDK（患者手机装我方App内嵌SDK，周期性同步）。数据完整性≠实时性——传感器本地缓存，周期性连一次即可回填，R01可满足、GMI可用于缓解判定。一期只损失时延。",
+    "P2": "载体与实时。采集盒+自建Android App+BLE直连+实时告警+夜间值班。",
+    "rationale": "复杂度集中在实时告警链路：采集盒、自建App、双路BLE续航冲突、夜间值班四个问题全挂其下，砍掉后一期收敛且四问题同时消失",
+    "P1_key_param": "D-12 传感器本地缓存深度——决定患者最长可多久不同步，是一期数据完整性的关键参数"
+  },
+  "clinical_risk_new": {
+    "title": "一期医源性强化路径",
+    "desc": "夜间缺口→TBR系统性低估→医师在低估低血糖的数据上加药=老年严重低血糖经典成因。回顾性低血糖分析挡不住（它统计发生过的事件，不标注可能没测到）",
+    "countermeasures": [
+      "指标层新增 nocturnal_coverage_pct，<70%置insufficient并报告首屏显示",
+      "该标记下禁止生成强化方向草稿",
+      "用胰岛素/磺脲且连续≥2晚夜间有效率<50%→进临床队列低血糖分支而非挽留队列"
+    ]
+  }
+}
