@@ -1,0 +1,10 @@
+.DS_Store
+
+# 设计画布的构建产物：由 design/*.dc.html + canvas.json 重新生成，
+# 单文件 2.4M（内含编辑器 payload），不入版本库。
+design/*-wireframes.html
+design/*-canvas.html
+
+# 原始调研材料：含真实患者姓名、电话等个人信息（飞书跟踪表截图等）。
+# 不入版本库；仓库内只保留 research/sources/00-内部材料摘要.md 这份脱敏摘要。
+ingestions/
