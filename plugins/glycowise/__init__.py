@@ -2797,6 +2797,9 @@ def 签署单独同意书(ctx) -> None:
     ),
     writes=("ConsentRevocation", "ConsentRecord"),
     validate_supported=False,
+    # 与「处理数据主体权利请求」同为 PIPL 权利响应，口径必须一致（validate B.4）
+    hil=HilPolicy(reviewer_role="合规官（受理与级联核验）",
+                  predicate=lambda confidence, touched_hard: True),
 )
 def 撤回同意(ctx) -> None:
     """按范围撤回并级联下游，须产出豁免触达封锁的告知
@@ -4279,6 +4282,9 @@ def 写入外部协作工具(ctx) -> None:
     post_rules=("D11a_签发人资质失效自动冻结",),
     writes=("Credential",),
     validate_supported=False,
+    # 台账是 D11a 冻结判定的唯一数据源，改台账等于改冻结前提，不可无人复核（validate B.4）
+    hil=HilPolicy(reviewer_role="合规官（资质台账变更）",
+                  predicate=lambda confidence, touched_hard: True),
 )
 def 维护凭证台账(ctx) -> None:
     """到期即自动冻结签发权限
