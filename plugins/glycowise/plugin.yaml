@@ -1,0 +1,34 @@
+plugin: glycowise
+ontology_id: glycowise
+version: 0.1.0
+engine_compat: ">=0.1.0"
+bounded_context: 控糖服务（CGM 数据摄入 → 指标 → 临床规则 → 方案签发 → 履约与缓解判定）
+provides:
+  schema: __init__.py
+  mappings: ./mappings/objects.yaml
+  cq: ./cq/golden.yaml
+generated_by: studio-ontology
+generated_at: 2026-09-05
+source_ir: studio/changes/glycowise/ontology-map.md
+
+# 这是哪一类插件（本仓库有两类，别混）：
+#   kind: onto-engine —— clife-onto-engine 的 Python 本体插件，由 /studio-ontology:compile 从五要素 IR
+#     编译而来，在引擎仓库内被加载，填满 Object/Link/Function/Rule/Action/Mapping/CQ 七个 SPI 槽位。
+#   另一类是 glycowise-compliance/ 等四个 studio 的 Claude Code 技能插件（skill-map 的产物，尚未生成），
+#     它们是 skill/agent 包，不是本体插件，与本目录不共享代码、不互相 import。
+kind: onto-engine
+
+counts:
+  objects: 62
+  links: 40
+  functions: 28
+  rules: 92          # declarative 30 / function-backed 62
+  actions: 63
+  mappings: 62
+  cq: 28
+
+fde_todo:
+  function_backed_rules: 62      # 规则函数体待填
+  action_handlers: 63            # Action 回写逻辑待填
+  rules_missing_source: 7       # source 标 TODO(FDE) 补依据
+  seed_reference_data: 1
