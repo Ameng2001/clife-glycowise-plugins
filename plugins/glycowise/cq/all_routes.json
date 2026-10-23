@@ -4708,5 +4708,155 @@
     ]
    }
   }
+ },
+ "黄伯（P0045）读数 r-P0045-01162 是 2.7，前一读数 2.8，连续两读数 <3.0，按 R03a 触发 Level 2 低血糖处置": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-01162",
+   "rule_id": "R03a_Level2低血糖_实时告警"
+  }
+ },
+ "P0045 的 r-P0045-01162（2.7，前值 2.8）触发二级低血糖处置。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-01162",
+   "rule_id": "R03a_Level2低血糖_实时告警"
+  }
+ },
+ "黄伯（P0045）读数 r-P0045-01162 是 2.7，前一读数 2.8，连续两读数 <3.0，按 R03a 触发 Level 2 低血糖处置；他今早没吃早饭。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-01162",
+   "rule_id": "R03a_Level2低血糖_实时告警"
+  }
+ },
+ "患者 P0045 读数 r-P0045-00017 是 3.5，前一读数 3.8，连续两读数在 3.0–3.9 且在下降，按 R04a 触发 Level 1 低血糖处置": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-00017",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-00017",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "患者 P0045 读数 r-P0045-00017 是 3.5，前一读数 3.8，连续两读数在 3.0–3.9 且在下降，按 R04a 触发 Level 1 低血糖处置；他刚散完步。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-00017",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "给新客（P0099）生成一份维持方向的方案草稿": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0099",
+   "analysis_result": {},
+   "direction": "维持"
+  }
+ },
+ "P0099 出维持方向草稿。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0099",
+   "analysis_result": {},
+   "direction": "维持"
+  }
+ },
+ "给新客（P0099）生成一份维持方向的方案草稿，他是今天刚到店的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0099",
+   "analysis_result": {},
+   "direction": "维持"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：建议您去医院开处方调整一下": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "建议您去医院开处方调整一下。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在 P0012 群里让她去医院开处方调整。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "建议您去医院开处方调整一下。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：建议您去医院开处方调整一下；医院离她家两公里。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "建议您去医院开处方调整一下。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在王叔（P0031）群里答复：这周波动比较大，建议您尽快找医生看看要不要调药方案": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0031",
+   "message": "这周波动比较大，建议您尽快找医生看看要不要调药方案。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师让 P0031 去找医生看是否调药方案。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0031",
+   "message": "这周波动比较大，建议您尽快找医生看看要不要调药方案。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在王叔（P0031）群里答复：这周波动比较大，建议您尽快找医生看看要不要调药方案；他女儿明天陪他去。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0031",
+   "message": "这周波动比较大，建议您尽快找医生看看要不要调药方案。",
+   "sender_role": "健管师"
+  }
  }
 }

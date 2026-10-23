@@ -1,0 +1,21 @@
+id: 低血糖安全-11
+q: 黄伯（P0045）读数 r-P0045-01162 是 2.7，前一读数 2.8，连续两读数 <3.0，按 R03a 触发 Level 2 低血糖处置
+expect: action(触发低血糖处置)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R03a_Level2低血糖_实时告警
+- R05_即将低血糖预测告警
+label:
+  answer: 连续 2 读数 G<3.0 已确认，应 committed；h_i 被 R05 以「缺预测证据」拒（IR：R05 是提前 10–30 分钟的预测性告警，G
+    已 <3.9 时不适用）
+  source: simulate+expert
+variants:
+- kind: paraphrase
+  q: P0045 的 r-P0045-01162（2.7，前值 2.8）触发二级低血糖处置。
+- kind: irrelevant_field
+  q: 黄伯（P0045）读数 r-P0045-01162 是 2.7，前一读数 2.8，连续两读数 <3.0，按 R03a 触发 Level 2 低血糖处置；他今早没吃早饭。
+note: P2 来源案例：专家抽检「R03a 通过分支受 R05 实现制约」

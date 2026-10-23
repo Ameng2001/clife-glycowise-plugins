@@ -1,0 +1,22 @@
+id: 低血糖安全-12
+q: 患者 P0045 读数 r-P0045-00017 是 3.5，前一读数 3.8，连续两读数在 3.0–3.9 且在下降，按 R04a 触发 Level 1
+  低血糖处置
+expect: action(触发低血糖处置)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R04a_Level1低血糖_实时告警
+- R05_即将低血糖预测告警
+label:
+  answer: 连续 2 读数 3.0≤G<3.9 已确认，应 committed；h_i 被 R05 拒（下降段触发预测分支）
+  source: simulate+expert
+variants:
+- kind: paraphrase
+  q: P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。
+- kind: irrelevant_field
+  q: 患者 P0045 读数 r-P0045-00017 是 3.5，前一读数 3.8，连续两读数在 3.0–3.9 且在下降，按 R04a 触发 Level
+    1 低血糖处置；他刚散完步。
+note: P2 来源案例：下降段的 L1 确认触发

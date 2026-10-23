@@ -1,0 +1,19 @@
+id: 结论层与分层-09
+q: 健管师在刘阿姨（P0012）群里答复：建议您去医院开处方调整一下
+expect: action(群内答复患者)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- C19_线上随访边界
+label:
+  answer: 「建议去医院」属异常转介，在健康管理随访允许范围内，committed；h_i 的 C19 关键词「处方」误拒
+  source: simulate+expert
+variants:
+- kind: paraphrase
+  q: 健管师在 P0012 群里让她去医院开处方调整。
+- kind: irrelevant_field
+  q: 健管师在刘阿姨（P0012）群里答复：建议您去医院开处方调整一下；医院离她家两公里。
+note: P4 来源案例：专家抽检「C19 误拦异常转介」

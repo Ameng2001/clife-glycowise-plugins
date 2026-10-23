@@ -72,3 +72,7 @@ tier 4（HIL）为 0：seed 可达的动作里没有带复核闸的实现。
 ## SKIPPED(FDE TODO / seed 不可达) 19 项
 
 见 `make_sim_cases.py` 的 `SKIPPED` 列表（R42/R37/R27 无对应 ContextEvent；R11 无 >16.7 读数；R34 复发窗已过；R57 需跨次累计；C15 非声明参数；C1 词表不可见；D13 为 soft；D10 无含剂量内容；D11a 无 signer 参数；R17/R33 seed 无信号；多跳需 put_link；45 个动作 / 17 条规则仍为 NotImplementedError；R53/R44/C16 被 golden 覆盖；R03a 通过分支受 R05 实现制约）。
+
+## 附：提案来源案例（2026-10-23 晚，不计入上面的"全过"）
+
+`plugins/glycowise/cq/make_proposal_cases.py` 另写出 5 条（低血糖安全-11/-12、参考与配置-12、结论层与分层-09/-10），标签按现实口径，在生产插件 h_i 上**预期失败**，是提案 P2–P4 的 Dᵢ；裁决见 `studio/changes/glycowise/proposals/P2–P4.md` 与 `growth-ledger.md` round 1。参考与配置-13（计算窗口指标 P0099）在两边都 ENGINE_ERROR，删除并记为 P5 候选。

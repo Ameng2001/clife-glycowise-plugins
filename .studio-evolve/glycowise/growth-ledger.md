@@ -8,6 +8,9 @@
 | round | window | proposal | attempt | T_1 | T_2 | T_3 | T_4 | S_consist | S_holdout | S_stable | W_evid | W_family | W_elem | C_tok | inner | outer | verdict | exec | gate_mode | script_hash | notes |
 |-------|--------|----------|---------|-----|-----|-----|-----|-----------|-----------|----------|--------|----------|--------|-------|-------|-------|---------|------|-----------|-------------|-------|
 | 0 | — | baseline | — | | | | | | — | | | | | | — | — | — | | — | | 冷启动基线（v0 编译后、未进化） |
+| 1 | pilot-sim·OUTER=SIM_ONLY | 2 | 1 | 1.000 | 1.000 | 1.000 | — | 1.000 | 1.000 | 1.000 | — | 0.818 | — | 2.969 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:95b29afdbbb39bd2 |  |
+| 1 | pilot-sim·OUTER=SIM_ONLY | 3 | 1 | 1.000 | 1.000 | 1.000 | — | 1.000 | 1.000 | 1.000 | — | 0.818 | — | 2.990 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:95b29afdbbb39bd2 |  |
+| 1 | pilot-sim·OUTER=SIM_ONLY | 4 | 1 | 1.000 | 1.000 | 1.000 | — | 1.000 | 1.000 | 1.000 | — | 0.818 | — | 2.990 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:95b29afdbbb39bd2 |  |
 
 ## 拒绝签名表（归因前必查；命中者不得重复提议）
 
