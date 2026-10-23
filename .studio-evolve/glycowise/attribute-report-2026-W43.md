@@ -42,7 +42,7 @@ D⁺ 26 条共性（ρ≥0.6 的高频元素）：推送告警 / 群内答复患
 
 沙箱 h' 其余证据：真实库全集 81/99（只多过 r03）；仿真库 B-sim 98/98 不变；窗口 35 条顺序回放 32 条裁决不变、3 条变化全是同一机制归位（0015 R51 假阳性消失、0016 C22 不再被泄漏正文里的免责声明蒙过、0018 即 Dᵢ），三条案例的 expect 规则都仍命中。
 
-**未合入生产**。合入由人确认后 `git apply studio/changes/glycowise/proposals/P5.patch`，再重跑 `sets/real-all.yaml` 与 `sets/B-sim.yaml` 确认。
+**已合入生产**（2026-10-23 用户确认后 `git apply P5.patch`）：重跑 real-all 81/99（剩 6 条路由层 wrong）、B-sim 294/294（×3）、窗口顺序回放 32/35 + 同样 3 条归位，与沙箱一致。结果文件 `results/real.h_i.post-P5.jsonl`、`results/sim.h_i.post-P5.jsonl`。
 
 ## 4. 这轮暴露的方法问题（进论文「诚实边界」）
 
