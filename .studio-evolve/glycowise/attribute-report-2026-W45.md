@@ -53,7 +53,7 @@ h_i 在 140 条 × 3 run 上：**351/420**（117/140 案例全过；23 条失败
 | P7 转介医师 | 补 handler（写 ReferralRecord、派医师接单）；R58 / R33 对「本次已转介」短路 | 3 条 CQ（9 句） | ΔT_3 +1 · ΔW_family +1 · ΔA +1 · ΔC +0.33 | 全 0（两臂逐行相同） | **ACCEPT** | 八臂同判 ACCEPT |
 | P8 去重与通道仲裁 | 补 handler；R48 兼读 reading_candidate；R02 由桩改实现；R36 缺参数自算 | 5 条 CQ（15 句，含 rejected(R48) 与 R02 伪差分支） | ΔT_3 +1 · ΔW_family +1 · ΔA +1 · ΔC +0.40 | 全 0 | **ACCEPT** | 七臂 ACCEPT，random REVISE |
 
-两份都是 B-sim 294/294、B_4 102/120 两臂逐行相同。**未合入生产。** 发现的连带问题：P8 补 handler 一处不够——它挂的 R02 也是桩、R36 的 declarative 体在参数缺失时 TypeError、R48 不读本动作的参数，三处不一起改动作照样跑不起来；生产 `__init__.py` 里还有 65 处同类桩。runner 相应改为把 NotImplementedError 判成 IMPL_MISSING（不过、可评判），而不是 ENGINE_ERROR（不可判）。
+两份都是 B-sim 294/294、B_4 102/120 两臂逐行相同。**已合入生产（2026-10-23 用户确认后 `git apply`，real-all 351/420、B-sim 294/294、Dᵢ 9/9 与 15/15，与沙箱及 round-4 基线逐行相同；`results/*.post-P8.jsonl`）。** 发现的连带问题：P8 补 handler 一处不够——它挂的 R02 也是桩、R36 的 declarative 体在参数缺失时 TypeError、R48 不读本动作的参数，三处不一起改动作照样跑不起来；生产 `__init__.py` 里还有 65 处同类桩。runner 相应改为把 NotImplementedError 判成 IMPL_MISSING（不过、可评判），而不是 ENGINE_ERROR（不可判）。
 
 ## 5. 方法问题
 

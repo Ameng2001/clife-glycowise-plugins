@@ -1484,9 +1484,7 @@ def R02_传感器压迫伪差识别(ctx) -> RuleResult:
     优先级 120（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：去重与通道仲裁、统计低血糖事件。
     """
-    # TODO(FDE): 查该读数前后 10min 窗口，校验是否满足回升 ≥1.5 mmol/L 或 15min 内跳变 >5.0 mmol/L
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R02_传感器压迫伪差识别 待实现")
+    return _fde.RULES['R02_传感器压迫伪差识别'](ctx)
 
 @spi.rule(ONTOLOGY, "R05_即将低血糖预测告警", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1811,10 +1809,7 @@ def R36_active率超100自检(ctx) -> RuleResult:
     优先级 335（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：去重与通道仲裁、计算窗口指标。
     """
-    active_pct = ctx.params.get("active_pct")
-    if not (active_pct <= 100):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R36_active率超100自检 未通过", suggestion="须满足：active_pct <= 100")
-    return RuleResult.ok()
+    return _fde.RULES['R36_active率超100自检'](ctx)  # 缺 active_pct 参数时按患者 14 天窗口自算（P8）
 
 @spi.rule(ONTOLOGY, "R48_去重键必须用传感器序号", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2932,12 +2927,7 @@ def 去重与通道仲裁(ctx) -> None:
 
     写入对象：GlucoseReading。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("GlucoseReading", f"glucosereading_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("去重与通道仲裁 handler 待实现")
+    _fde.ACTIONS['去重与通道仲裁'](ctx)
 
 @spi.action(
     ONTOLOGY, "OCR读数复核",
@@ -3623,12 +3613,7 @@ def 转介医师(ctx) -> None:
     HIL：医师（触发条件 always）。
     写入对象：ReferralRecord。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("ReferralRecord", f"referralrecord_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("转介医师 handler 待实现")
+    _fde.ACTIONS['转介医师'](ctx)
 
 @spi.action(
     ONTOLOGY, "评估可否停药并签发减停计划",

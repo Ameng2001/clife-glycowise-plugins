@@ -822,6 +822,12 @@ def r57(ctx):
     return RuleResult.ok()
 
 
+def _referral_staged(ctx, pid):
+    """本次执行是否已为该患者暂存一条转医师的 ReferralRecord（P7：转介本身就是 R58 / R33 要求的动作，不能反过来拒掉转介）。"""
+    return any(is_staged(ctx, r) and r.get("patient_id") == pid and r.get("referred_to") == "医师"
+               for r in ctx.find("ReferralRecord", lambda r: r.get("patient_id") == pid))
+
+
 @rule("R58_Level3严重低血糖强制转诊")
 def r58(ctx):
     pid = pid_of(ctx)
@@ -830,7 +836,7 @@ def r58(ctx):
         return RuleResult.ok()
     sym = ctx.find("SymptomTreatmentRecord", lambda r: r.get("patient_id") == pid and (a is None or r.get("alert_id") in (None, a)))
     l3 = [s for s in sym if any(k in str(s.get("symptom_tag", "")) for k in ("需他人协助", "意识", "抽搐", "昏迷", "叫不醒"))]
-    if l3 and not any("转诊" in str(s.get("treatment_action", "")) or "就医" in str(s.get("treatment_action", "")) for s in l3):
+    if l3 and not _referral_staged(ctx, pid) and not any("转诊" in str(s.get("treatment_action", "")) or "就医" in str(s.get("treatment_action", "")) for s in l3):
         return _fail("R58", f"Level 3 严重低血糖标记 {[s.get('symptom_tag') for s in l3]}，不看血糖数值，强制就医与医师复核", "触发转介医师 + 紧急联系人")
     return RuleResult.ok()
 
@@ -1382,9 +1388,57 @@ def c4(ctx):
     return RuleResult.ok()
 
 
+def _pressure_artifact(ctx, r):
+    """R02 口径：单点 <3.0 但前后 10min 内回升 ≥1.5，或 15min 内跳变 >5.0 → 传感器压迫伪差。返回命中描述或 None。"""
+    g, t, pid = _num(r.get("value_mmol")), _dt(r.get("time_utc")), r.get("patient_id")
+    if g is None or t is None or g >= 3.0 or not pid:
+        return None
+    rows = [x for x in ctx.find("GlucoseReading", lambda x: x.get("patient_id") == pid and x.get("reading_id") != r.get("reading_id"))
+            if _dt(x.get("time_utc")) and _num(x.get("value_mmol")) is not None]
+    near10 = [x for x in rows if abs((_dt(x["time_utc"]) - t).total_seconds()) <= 600]
+    near15 = [x for x in rows if abs((_dt(x["time_utc"]) - t).total_seconds()) <= 900]
+    if any(_num(x["value_mmol"]) - g >= 1.5 for x in near10):
+        return "前后 10min 内回升 ≥1.5"
+    if any(abs(_num(x["value_mmol"]) - g) > 5.0 for x in near15):
+        return "15min 内跳变 >5.0"
+    return None
+
+
+@rule("R02_传感器压迫伪差识别")
+def r02(ctx):
+    r = P(ctx, "reading_candidate")
+    if not isinstance(r, dict):
+        rid = P(ctx, "reading_id")
+        r = ctx.get("GlucoseReading", str(rid)) if rid else None
+    if not isinstance(r, dict):
+        return RuleResult.ok()
+    hit = _pressure_artifact(ctx, r)
+    if hit:
+        return _fail("R02", f"读数 {r.get('reading_id')}={r.get('value_mmol')} 疑为传感器压迫伪差（{hit}），不计入低血糖事件", "标 noise；伪差判定不抑制 hard 级告警")
+    return RuleResult.ok()
+
+
+@rule("R36_active率超100自检")
+def r36(ctx):
+    """IR check：active_pct <= 100。P8：去重与通道仲裁没有 active_pct 参数——按候选读数所属患者近 14 天（含本次暂存）自算，>100% 即去重失效。"""
+    a = _num(P(ctx, "active_pct"))
+    if a is None:
+        pid = pid_of(ctx) or (P(ctx, "reading_candidate", "patient_id") if isinstance(P(ctx, "reading_candidate"), dict) else None)
+        if not pid:
+            return RuleResult.ok()
+        rows = readings_of(ctx, str(pid), days=14, clean_only=True)
+        a = round(100.0 * len(rows) / (14 * 96), 1)
+    if a > 100:
+        return _fail("R36", f"active% = {a} > 100，去重失效信号", "停止入库，检查 dedup_key 与通道仲裁")
+    return RuleResult.ok()
+
+
 @rule("R48_去重键必须用传感器序号")
 def r48(ctx):
     rows = P(ctx, "raw_payload", "readings") or []
+    c = P(ctx, "reading_candidate")
+    if isinstance(c, dict):
+        rows = list(rows) + [c]
     for r in rows:
         if not isinstance(r, dict):
             continue
@@ -1504,7 +1558,7 @@ def r33(ctx):
         signals.append(f"TAR {m7['tar']}% ≥ 50%")
     if any(True for e in episodes_of(ctx, pid, 14)):
         signals.append("停药后低血糖事件")
-    if signals:
+    if signals and not _referral_staged(ctx, pid):
         return _fail("R33", f"停药观察期反弹预警：{signals}", "立即推医师并触发病因排查")
     return RuleResult.ok()
 
@@ -1712,6 +1766,26 @@ def act_deintensify(ctx):
     ctx.emit_effect("workitem", on="committed", template="医师接单", patient_id=pid, queue=queue)
 
 
+@action("转介医师")
+def act_refer(ctx):
+    """P7（W45 / 0224）：IR §4「用药类问题一律转医师，AI 与健管师不得答」。写一条 ReferralRecord（referred_to 医师），
+    带上 Level 3 / 停药观察期 / 用药问题 三个上下文标记，派医师接单工单；HIL 医师 always 由动作声明决定。"""
+    pid = str(ctx.params["patient_id"])
+    q = str(ctx.params.get("question_context") or "")
+    sym = ctx.find("SymptomTreatmentRecord", lambda r: r.get("patient_id") == pid)
+    l3 = [s for s in sym if any(k in str(s.get("symptom_tag", "")) for k in ("需他人协助", "意识", "抽搐", "昏迷", "叫不醒"))]
+    clock = ctx.get("RemissionClock", pid) or {}
+    watch = clock.get("status") == "running"
+    drug_q = bool(_drug_dose_sentences(q)) or any(d in q for d in DRUG_NAMES)
+    tags = [t for t, on in (("Level3严重低血糖", bool(l3)), ("停药观察期", watch), ("用药问题", drug_q)) if on]
+    queue = "clinical_hypo" if l3 else ("remission_watch" if watch else "physician_review")
+    ctx.stage_write("ReferralRecord", f"ref-{pid}-{_now()}", {"patient_id": pid, "question": q, "referred_to": "医师", "referred_at": _now(),
+                                                                "queue": queue, "context_tags": tags, "_staged": exec_token(ctx)})
+    ctx.set_confidence(0.9)
+    ctx.add_evidence(level3=bool(l3), remission_watch=watch, drug_question=drug_q, queue=queue)
+    ctx.emit_effect("workitem", on="committed", template="医师接单", patient_id=pid, queue=queue)
+
+
 @action("判定缓解结果")
 def act_remission(ctx):
     pid = str(ctx.params["patient_id"])
@@ -1818,6 +1892,44 @@ def act_ingest(ctx):
         n += 1
     ctx.stage_write("IngestBatch", f"batch-{ctx.params.get('channel')}-{_now()}", {"channel": ctx.params.get("channel"), "record_count": n, "status": "pending", "_staged": exec_token(ctx)})
     ctx.set_confidence(1.0)
+
+
+@action("去重与通道仲裁")
+def act_dedup(ctx):
+    """P8（W45 / 0233）：IR §4「按传感器序号去重，多路自动仲裁」。
+    强键（sensor_serial + 序号）相同 → 重复，候选落库为 superseded；弱键（weak_dedup）→ ±90s 容差内有读数即重复；
+    强键不同但 ±90s 内有其它通道读数 → 多通道仲裁，source_confidence 高者为准，低者 superseded；
+    R02 口径的压迫伪差 → quality_flag noise（不计入事件，不抑制告警）。"""
+    c = dict(ctx.params.get("reading_candidate") or {})
+    rid = str(c.get("reading_id") or f"cand-{_now()}")
+    pid = str(c.get("patient_id") or pid_of(ctx) or "")
+    c["reading_id"], c["patient_id"] = rid, pid
+    c.setdefault("quality_flag", "clean"); c.setdefault("tz_provenance", "device_reported")
+    dk, t = c.get("dedup_key"), _dt(c.get("time_utc"))
+    others = [r for r in ctx.find("GlucoseReading", lambda r: r.get("patient_id") == pid and r.get("reading_id") != rid)]
+    dup = [r for r in others if dk and r.get("dedup_key") == dk]
+    near = [r for r in others if t and _dt(r.get("time_utc")) and abs((_dt(r["time_utc"]) - t).total_seconds()) <= 90]
+    verdict, ref = "new", None
+    if dup:
+        verdict, ref = "duplicate", dup[0]["reading_id"]
+    elif c.get("weak_dedup") is True and near:
+        verdict, ref = "weak_duplicate", near[0]["reading_id"]
+    elif near:
+        best = max(near, key=lambda r: _num(r.get("source_confidence")) or 0.0)
+        if (_num(c.get("source_confidence")) or 0.0) > (_num(best.get("source_confidence")) or 0.0):
+            verdict, ref = "arbitrated_wins", best["reading_id"]
+            ctx.stage_write("GlucoseReading", str(best["reading_id"]), {**best, "quality_flag": "superseded", "superseded_by": rid, "_staged": exec_token(ctx)})
+        else:
+            verdict, ref = "arbitrated_loses", best["reading_id"]
+    if verdict in ("duplicate", "weak_duplicate", "arbitrated_loses"):
+        c["quality_flag"], c["superseded_by"] = "superseded", ref
+    else:
+        hit = _pressure_artifact(ctx, c)
+        if hit:
+            c["quality_flag"], c["artifact_reason"] = "noise", hit
+    ctx.stage_write("GlucoseReading", rid, {**c, "_staged": exec_token(ctx)})
+    ctx.set_confidence(0.95 if c.get("sensor_serial") else 0.8)
+    ctx.add_evidence(verdict=verdict, ref=ref, quality_flag=c["quality_flag"])
 
 
 @action("触发低血糖处置")
