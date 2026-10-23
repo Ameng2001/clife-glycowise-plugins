@@ -106,6 +106,25 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 - **路由到 telemetry 1 句**（0227「P0088 的均值血糖读数？」→ `无遥测绑定: CgmSummary`）：与 W44 0126 同因，省略式口语更容易被判成遥测读数——平台 backlog。
 - **LLM 路由层预判拒绝 / 追问 9 句**（0226 6 天判缓解、0230「要给她诊断」、0231「夜里出事我们第一时间知道」、0232「去医院开处方」、0235 草稿直发患者、0244「用英纽林逆转」、0245「恭喜您已经逆转了」、0247 L3 包捆英纽林、0260 查 retention_policy）：全部是仿真库 rejected 口径的改写句，路由层继续抢闸，引擎 HARD 规则没被评到——与 W43/W44 现象同源，第三次复现。
 
+## ①-4 第四个真实窗口：`trajectories/2026-W46/`
+
+同一天录的第四个窗口（`record_window.py run --window 2026-W46 --seq-base 301`）。目的：把 real 池推向 200，并补 real 池里最薄的五个 family。80 句全部取仿真库里前三窗口没用过的句子：五个薄 family（缓解路径 / 数据与同意合规 / 因果链溯源 / 结论层与分层 / 出口签发闸）全取 64 句，再补低血糖安全 15、高血糖与波动 1。变体构成 original 9（P7 / P8 新补的 CQ 原句）、paraphrase 29、**irrelevant_field 42**（第一次把带无关从句的口语喂给真路由）。
+
+| 项 | 值 |
+|---|---|
+| 口语 | `utterances.2026-W46.yaml` 80 句 |
+| 轨迹 | **69 条**：execute 52（committed 9 / pending_hil 16 / rejected 27）、ask 17 |
+| 非轨迹 | 11 句全是 clarify（`routing.log.2026-W46.jsonl`）：9 句应拒口语被 LLM 抢先反问（D8 ×2、C19、R54 ×2、C6、R51、C9；validate 复核引擎都会拒），2 句判定缓解被抢先，1 句（0326）LLM 声称找不到吴康复师但 seed 里 S-WU 存在 |
+| 回放 | sequential 69/69；preview 66/69（0312/0313/0325 多出 C22，与 W44/W45 同型） |
+| 成本 | 真 Qwen usage 共 472,907 token，均 5,911/句 |
+| 反馈 | `feedback.yaml` **draft（待标注人确认）**；专家建议草案 `feedback.expert-draft.yaml`：correct 39 / partial 6 / wrong 24（**router 14 / rule 5 / seed 5**）。只供标注人确认，不是标签 |
+
+草案里值得记的（标注人未确认前都是候选）：
+- **第一次有规则层 wrong**（5 条，全在刚合入的 P8 `去重与通道仲裁`）：无序号的 OCR / 伪差读数（0354/0355 art1、0362–0364 ocr9）按 IR 应落 weak_dedup 回退，R48 却硬拒，除非调用方显式传 `weak_dedup: true`；另 6 条 dup1 / x9 是路由层——LLM 把「序号 SN-P0045-A-01343」填进 `sensor_serial`、没给 `dedup_key` / `time_utc`，补上后实测 dup1 → superseded、x9 → clean。R48 对「有序号没 dedup_key」应派生而不是拒，是下一轮提案的候选，而且是第一个**有争议的**提案：朴素修法（放宽 R48）与根因修法（派生 dedup_key / 回退 weak_dedup）在 Dᵢ 上同样过，S / W 上应分出高下。
+- irrelevant_field 的泄漏：无关从句进了面向患者的群消息正文（0322/0346）和 ReferralRecord.question（0307/0378/0379，经同一 actor 的 Session 记忆串到了 original / paraphrase 句）；一句把「市一医院」当成 lab_id 过滤（0303）。
+- seed 不一致 5 条 wrong：40 个 LinkType 声明、seed 里 0 条边（0336/0340/0374 合法多跳查 0 行）；Credential 的 holder 装名字、id 在非 IR 字段 holder_id（0381）；tier_label 陈旧（0319）。cred-chen 2026-09-20 到期仍 valid 且签了 plan-P0066-w41。
+- 摄入读数平铺 payload 时 IngestBatch record_count=0 仍 committed（0316/0317）；推送告警 level「中级」vs 模板枚举「中」（0312/0313）。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -130,3 +149,4 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 - **2026-10-23 第六轮**：W44 标签入库（`feedback.yaml` reviewed，correct 40 / wrong 9 / partial 2）→ `cases/real` 累计 82 条（修了 `make_real_cases.py` id 正则不认 `-rNN`、覆盖 W43 案例的 bug）→ `holdout-3.yaml` 第一次跨窗口（40 条 / 20 层，W43 19 / W44 21）。P5 在 B_3 上无回退（A .75→.825，W44 两条 HIL 答复 r16/r18 的 R51 泄漏被修）。P6（R04a「前一读数」不看采样间隔）3d ACCEPT、八臂同判，同日确认合入生产（real-all 210/246、B-sim 294/294）；仿真案例 低血糖安全-01 与 real 反馈冲突，选择器加 20 min 间隔条件后重生成，B-sim 98/98。见 `attribute-report-2026-W44.md`。
 - **2026-10-23 第七轮**：录第三个窗口 W45（75 句变体 → 63 条轨迹，execute 31 / ask 32；513k token）。顺序回放 63/63；preview 3 条不一致与 W44 同机理（execute 在 guard hard 命中时只审计 guard 违规并返回；guard-soft 违规不进审计）。专家草案：correct 45 / partial 5 / wrong 13，wrong 全在路由层——三类路由错误（多挂一跳、相对时间字面量、枚举字面量）第三个窗口复现，规则层 0 条 wrong。窗口第一次暴露生产插件的**实现缺失**：`转介医师`、`去重与通道仲裁` 两个动作只有桩（0224/0233 NotImplementedError）。专家另记的规则实现偏离 IR 候选（待标注人裁定，未开提案）：R04a 只判前一读数 <3.9 而 IR 要求两读数都在 3.0–3.9（0219，2.8→3.6 的 L2 恢复段也能开 L1 处置）；摄入读数 0 条批次照样 committed、R48 不看顶层 payload（0273）；推送告警去掉 level 后 `_content_type` 不识别为告警、C22 误拒（0220 变体实测）；R55 拦不住「数据已同步到」这类事实性误述（0229，P0045 当天无读数）；seed 两处不一致（A-P0045-02 raised_at 与真实低值读数差一天；cred-chen 到期 33 天仍 valid）。标注人确认进 `feedback.yaml`（status reviewed）后再 `make_real_cases.py --window 2026-W45`。
 - **2026-10-23 第八轮**：W45 标签入库（reviewed）→ `cases/real` 累计 140（修了一次把案例写进 `examples/cases/` 的路径错，重跑到根工作区）→ `holdout-4.yaml` 三窗口（40 / 20 层，W43 7 / W44 12 / W45 21）。h_i 351/420，D⁻ 23 全是路由层，**规则层 0 条 → round 4 无提案**。P6 在 B_4 上无回退（A .825→.85，差的只是它自己的 Dᵢ）。`arm_compare` r1–4：P5、P6 都按 B_{r+1} 判，regress 全 0。随后给两个只有桩的动作补 CQ（`cq/make_impl_cases.py`，8 句 + 变体）作 Dᵢ，沙箱补 handler（P8 连带 R02 / R36 / R48）走双关卡：P7 八臂 ACCEPT、P8 七臂 ACCEPT + random REVISE，B_4 两臂逐行相同、B-sim 294/294；同日合入生产，重放后 real-all 351/420、B-sim 294/294 与沙箱逐行相同（`results/*.post-P8.jsonl`）。见 `attribute-report-2026-W45.md` §6。
+- **2026-10-23 第九轮**：录第四个窗口 W46（80 句 → 69 条轨迹，execute 52 / ask 17；473k token；顺序回放 69/69）。口语优先补 real 池最薄的五个 family，并第一次喂 irrelevant_field 变体 42 句。专家草案 correct 39 / partial 6 / wrong 24（router 14 / rule 5 / seed 5）——**第一次出现规则层 wrong**：刚合入的 P8 的 R48 对无序号读数硬拒而不是落 weak_dedup 回退；另 6 条去重被拒是 LLM 没填 dedup_key。标注人确认进 `feedback.yaml` 后再 `make_real_cases.py --window 2026-W46`（预计 real 池 140 → ~200）。
