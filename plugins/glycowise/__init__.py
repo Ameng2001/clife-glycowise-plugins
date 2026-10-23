@@ -1576,12 +1576,7 @@ def R46_IAH高危阈值上调且禁止静音(ctx) -> RuleResult:
     优先级 149（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：配置患者告警与静音策略。
     """
-    alert_threshold = ctx.params.get("alert_threshold")
-    is_iah_high_risk = ctx.params.get("is_iah_high_risk")
-    night_mute_allowed = ctx.params.get("night_mute_allowed")
-    if not (is_iah_high_risk is not True or (alert_threshold >= 4.4 and night_mute_allowed is False)):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R46_IAH高危阈值上调且禁止静音 未通过", suggestion="须满足：is_iah_high_risk is not True or (alert_threshold >= 4.4 and night_mute_allowed is False)")
-    return RuleResult.ok()
+    return _fde.RULES['R46_IAH高危阈值上调且禁止静音'](ctx)
 
 @spi.rule(ONTOLOGY, "R34_HAAF_24小时复发窗", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -3391,7 +3386,7 @@ def 撤销更正已发出告警(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "放宽告警阈值",
-    description="仅医师可放宽——收紧可自动、放宽仅医师",
+    description="把某项告警阈值改到更不容易报警的值（低值类阈值下调、高值类阈值上调）。仅医师可做，HIL 必审",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("field", "string", required=True),
@@ -3409,17 +3404,11 @@ def 放宽告警阈值(ctx) -> None:
     HIL：医师（唯一可放宽）（触发条件 always）。
     写入对象：AlertThreshold、ThresholdChangeLog。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertThreshold", f"alertthreshold_{ctx.params[...]}", {...})
-    # ctx.stage_write("ThresholdChangeLog", f"thresholdchangelog_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("放宽告警阈值 handler 待实现")
+    _fde.ACTIONS['放宽告警阈值'](ctx)
 
 @spi.action(
     ONTOLOGY, "收紧告警阈值",
-    description="由确定性规则自动触发，记录并通知医师",
+    description="把某项告警阈值改到更早报警的值（低值类阈值上调如 3.9→4.4、高值类阈值下调）。可由规则自动触发，也可由医师手动指定 new_value；记录并通知医师",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("field", "string", required=True),

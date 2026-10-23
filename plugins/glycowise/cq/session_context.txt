@@ -1,0 +1,11 @@
+当前会话（演示租户）已知的对象 id：
+- 刘阿姨 = 患者 P0012；"这个患者"在未另行指明时指 P0012。P0012 的夜间低值阈值字段名 night_low，当前 3.9。P0012 本期草稿 draft_id = d-P0012-01；待审核的方案内容 content_id = c-P0012-plan-02；含分型结论的已签发方案 plan_id = plan-P0012-tier；低血糖告警 alert_id = A-P0012-01。
+- 王叔 = 患者 P0031（有回填与 OCR 上传的读数）。回填上来的三周前低血糖对应告警 alert_id = A-P0031-backfill-01。
+- 停药满 90 天的患者 = P0007；其 HbA1c 化验 lab_result_id = lab-P0007-hba1c，14 天报告 summary_id = s-P0007-14d。
+- 才戴了 6 天的患者 = P0088。
+- "他的 L3 分级"指患者 P0045；英纽林的 sku_id = sku-ynl-01。P0045 用磺脲，其低血糖告警 alert_id = A-P0045-02；OCR 截图识别出 2.8 的告警 alert_id = A-P0045-ocr-01。
+- 还没签单独同意的患者 = P0099。
+- 日报对象 = 患者 P0066（今天无读数）。
+- 血糖前后对比图宣传素材 content_id = c-promo-01。
+- 门店要上架的 CGM 传感器 sku_id = sku-cgm-01。
+- 当前用户：黄医生（医师，signer_id = 黄医生）；营养师 = 陈营养师（signer_id = 陈营养师）。

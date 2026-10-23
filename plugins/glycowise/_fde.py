@@ -658,7 +658,7 @@ def r53(ctx):
 def r44(ctx):
     pid = pid_of(ctx)
     act = str(P(ctx, "action_taken") or "")
-    closing = any(k in act for k in ("闭环", "关闭", "resolved", "resolve", "close", "结案"))
+    closing = any(k in act for k in ("闭环", "关闭", "resolved", "resolve", "close", "结案", "解除", "恢复正常", "已处理完"))
     if not closing:
         return RuleResult.ok()
     hs = (ctx.get("HypoState", pid) or {}) if pid else {}
@@ -954,6 +954,21 @@ def _night_threshold_after(ctx, pid):
     staged = [r for r in rows if r.get("_staged")]
     row = staged[-1] if staged else (rows[-1] if rows else None)
     return _num(row.get("current_value")) if row else None
+
+
+@rule("R46_IAH高危阈值上调且禁止静音")
+def r46(ctx):
+    pid = pid_of(ctx)
+    prof = profile_of(ctx, pid)
+    iah = P(ctx, "is_iah_high_risk") if P(ctx, "is_iah_high_risk") is not None else prof.get("is_iah_high_risk")
+    if iah is not True:
+        return RuleResult.ok()
+    field = str(P(ctx, "field") or "")
+    th = _num(P(ctx, "alert_threshold")) if P(ctx, "alert_threshold") is not None else (_num(P(ctx, "new_value")) if ("low" in field or "低" in field) else _night_threshold_after(ctx, pid))
+    mute = P(ctx, "night_mute_allowed")
+    if mute is True or (th is not None and th < 4.4):
+        return _fail("R46", f"无感知低血糖高危患者 {pid}：低值阈值 {th} 不得低于 4.4，且不可夜间静音（night_mute_allowed={mute}）", "阈值 ≥4.4 并保留夜间告警")
+    return RuleResult.ok()
 
 
 @rule("R34_HAAF_24小时复发窗")
@@ -1534,6 +1549,18 @@ def act_tighten(ctx):
     ctx.stage_write("ThresholdChangeLog", f"tcl-{pid}-{field}-{_now()}", {"patient_id": pid, "changed_by": ctx.actor.id, "trigger_rule": ctx.params.get("trigger_rule"),
                                                                            "before": before, "after": after, "effective_window": "即时", "_staged": True})
     ctx.emit_effect("notify", on="committed", to="医师", message=f"{pid} {field} 阈值 {before}→{after}")
+    ctx.set_confidence(1.0)
+
+
+@action("放宽告警阈值")
+def act_loosen(ctx):
+    pid, field = str(ctx.params["patient_id"]), str(ctx.params["field"])
+    row = _threshold_row(ctx, pid, field) or {"threshold_id": f"th-{pid}-{field}", "current_value": 3.9, "default_value": 3.9, "safe_direction": "收紧"}
+    before, after = _num(row.get("current_value")), _num(ctx.params["new_value"])
+    ctx.stage_write("AlertThreshold", row.get("threshold_id", f"th-{pid}-{field}"),
+                    {**{k: v for k, v in row.items() if k != "_staged"}, "patient_id": pid, "field": field, "current_value": after, "safe_direction": "放宽", "_staged": True})
+    ctx.stage_write("ThresholdChangeLog", f"tcl-{pid}-{field}-{_now()}", {"patient_id": pid, "changed_by": ctx.actor.id, "trigger_rule": "医师手动放宽",
+                                                                           "before": before, "after": after, "effective_window": "即时", "_staged": True})
     ctx.set_confidence(1.0)
 
 
