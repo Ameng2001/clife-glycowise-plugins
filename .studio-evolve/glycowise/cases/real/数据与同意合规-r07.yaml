@@ -1,0 +1,141 @@
+# 由 t-20261023-0331 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 数据与同意合规-r07
+q: 摄入刘阿姨（P0012）的读数 r-P0012-x2（6.1），传感器序号 SN-P0012 有，但去重键坚持用厂商记录 ID vendor-77；厂商说这是旧接口。
+expect: rejected(R48_去重键必须用传感器序号)
+tier: 3
+family: 数据与同意合规
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 摄入读数
+- R48_去重键必须用传感器序号
+label:
+  answer: readings[0] sensor_serial=SN-P0012 但 dedup_key=vendor-77，不以序号开头 → R48 hard，正是 IR『不用厂商记录 ID』的本意。channel 被路由写成 vendor-77 不影响裁决。『厂商说这是旧接口』没进参数。
+  source: feedback
+  trace_id: t-20261023-0331
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 摄入P0012的读数 r-P0012-x2（6.1），传感器序号 SN-P0012 有，但去重键坚持用厂商记录 ID vendor-77；厂商说这是旧接口。
+  kind: paraphrase
+- q: 摄入刘阿姨（P0012）的读数 r-P0012-x2（6.1），传感器序号 SN-P0012 有，但去重键坚持用厂商记录 ID vendor-77；厂商说这是旧接口。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0305
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0306
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑运动。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0307
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0308
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者停药观察期咨询能否彻底停用二甲双胍
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0314
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0315
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0316
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0317
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0318
+  action: 输出服务分层标签
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0320
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 今天的数据已经同步到，餐后记得走一走
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0321
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 今天的数据已经同步到，餐后记得走一走。
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0322
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 建议您去医院开处方调整一下；医院离她家两公里。
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 摄入读数
+  params:
+    channel: vendor-77
+    raw_payload:
+      patient_id: P0012
+      readings:
+      - reading_id: r-P0012-x2
+        value_raw: 6.1
+        sensor_serial: SN-P0012
+        dedup_key: vendor-77

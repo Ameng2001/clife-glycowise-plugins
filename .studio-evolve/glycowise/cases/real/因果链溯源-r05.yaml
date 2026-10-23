@@ -1,0 +1,151 @@
+# 由 t-20261023-0335 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r05
+q: 王叔（P0031）那次「叫不醒」是什么时候、家属做了什么处置？他们家在五楼。
+expect: query
+tier: 1
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-23'
+elements:
+- AlertEvent
+label:
+  answer: 路由从 AlertEvent A-P0031-backfill-01 挂 acknowledged_by→AlertAck 一跳；seed 里 AlertAck 为空、且整库没有任何边 → 0 行。『叫不醒』和家属处置根本不在告警链上，而在 SymptomTreatmentRecord sym-P0031-01：symptom_tag 叫不醒、treatment_action 家属喂糖水、recorded_at
+    2026-10-21T02:20、recorded_by 家属——应查这张表。去掉跳数只查 AlertEvent 也只有 1 行且 responder/action_taken 全 null。
+  source: feedback
+  trace_id: t-20261023-0335
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0031那次「叫不醒」是什么时候、家属做了什么处置？他们家在五楼。
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0305
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0306
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑运动。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0307
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0308
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者停药观察期咨询能否彻底停用二甲双胍
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0314
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0315
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0316
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0317
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0318
+  action: 输出服务分层标签
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0320
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 今天的数据已经同步到，餐后记得走一走
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0321
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 今天的数据已经同步到，餐后记得走一走。
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0322
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 建议您去医院开处方调整一下；医院离她家两公里。
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: AlertEvent
+    where:
+    - field: alert_id
+      op: eq
+      value: A-P0031-backfill-01
+    select:
+    - alert_id
+    - patient_id
+    - level
+    - value
+    - trend
+    - evidence
+    - rule_id
+    - responder
+    - responded_at
+    - action_taken
+    - retest_value
+    steps:
+    - link_type: acknowledged_by
+      direction: out
+      where: []

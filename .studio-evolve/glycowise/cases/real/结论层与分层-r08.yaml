@@ -1,0 +1,104 @@
+# 由 t-20261023-0318 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 结论层与分层-r08
+q: 给刘阿姨（P0012）按 14 天数据输出德心服务分层标签，她孙子周末要来。
+expect: action(输出服务分层标签)
+tier: 4
+family: 结论层与分层
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 输出服务分层标签
+- CgmSummary
+label:
+  answer: P0012 68 岁 → is_elderly → R18 soft『elderly 不做德心分层』只提示；handler 仍算出 tier L3（gmi 7.08、tar 28.7 <50）暂存进 PatientProfile，HIL 医师 always → pending_hil。『她孙子周末要来』没进参数。
+  source: feedback
+  trace_id: t-20261023-0318
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 给P0012按 14 天数据输出德心服务分层标签，她孙子周末要来。
+  kind: paraphrase
+- q: 给刘阿姨（P0012）按 14 天数据输出德心服务分层标签，她孙子周末要来。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0305
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0306
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑运动。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0307
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0308
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者停药观察期咨询能否彻底停用二甲双胍
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0314
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0315
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0316
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0317
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.85
+  action: 输出服务分层标签
+  params:
+    patient_id: P0012
+    window: 14d

@@ -1,0 +1,54 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1443,8 +1443,12 @@
+         if not isinstance(r, dict):
+             continue
+         sn, dk = str(r.get("sensor_serial") or ""), str(r.get("dedup_key") or "")
++        # P9a（W46 / 0354–0364）：IR R48 的三种形态——有序号没键 → handler 按序号派生；无序号无键 → ±90 秒容差兜底并置 weak_dedup；
++        # 只有「给了键却不是序号构成」（厂商记录 ID、单独 device_time）才是违规。
++        if not dk:
++            continue
+         if not sn or not dk.startswith(sn):
+-            if r.get("weak_dedup") is True:
++            if r.get("weak_dedup") is True and not sn:
+                 continue
+             return _fail("R48", f"读数 {r.get('reading_id')} 的 dedup_key 不是「传感器序号 + 序号」", "无序号时才允许 ±90 秒容差兜底并置 weak_dedup")
+     return RuleResult.ok()
+@@ -1892,6 +1896,19 @@
+         n += 1
+     ctx.stage_write("IngestBatch", f"batch-{ctx.params.get('channel')}-{_now()}", {"channel": ctx.params.get("channel"), "record_count": n, "status": "pending", "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
++
++
++def _normalize_time(s, date_hint=None):
++    """P9a：路由层常把 device_time 给成 'HH:MM'；补上今天（或 date_hint）的日期，能解析的原样返回。"""
++    s = str(s or "")
++    if _dt(s):
++        return s
++    import re as _re
++    m = _re.fullmatch(r"(\d{1,2}):(\d{2})", s.strip())
++    if m:
++        d = str(date_hint or _now())[:10]
++        return f"{d}T{int(m.group(1)):02d}:{m.group(2)}"
++    return s
+ 
+ 
+ @action("去重与通道仲裁")
+@@ -1905,6 +1922,17 @@
+     pid = str(c.get("patient_id") or pid_of(ctx) or "")
+     c["reading_id"], c["patient_id"] = rid, pid
+     c.setdefault("quality_flag", "clean"); c.setdefault("tz_provenance", "device_reported")
++    # P9a：IR 字段归一——value_raw/unit_raw → value_mmol；device_time → time_utc；有序号没键 → 键 = 序号；无序号无键 → weak_dedup 回退
++    if c.get("value_mmol") is None and c.get("value_raw") is not None:
++        c["value_mmol"] = c.get("value_raw") if str(c.get("unit_raw") or "mmol/L").lower().startswith("mmol") else round(_num(c.get("value_raw")) / 18.0, 1)
++    if not c.get("time_utc") and c.get("device_time"):
++        c["time_utc"] = _normalize_time(c.get("device_time"), c.get("date_hint"))
++    sn = str(c.get("sensor_serial") or "")
++    if not c.get("dedup_key"):
++        if sn:
++            c["dedup_key"] = sn
++        else:
++            c["weak_dedup"] = True
+     dk, t = c.get("dedup_key"), _dt(c.get("time_utc"))
+     others = [r for r in ctx.find("GlucoseReading", lambda r: r.get("patient_id") == pid and r.get("reading_id") != rid)]
+     dup = [r for r in others if dk and r.get("dedup_key") == dk]

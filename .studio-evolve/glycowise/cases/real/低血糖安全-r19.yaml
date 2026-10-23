@@ -1,0 +1,137 @@
+# 由 t-20261023-0324 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r19
+q: 刘阿姨（P0012）读数 r-P0012-00115 是 3.7，立刻按 R04a 触发 Level 1 低血糖处置；今天天气不错。
+expect: rejected(R04a_Level1低血糖_实时告警)
+tier: 3
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R04a_Level1低血糖_实时告警
+- GlucoseReading
+label:
+  answer: r-P0012-00115 = 3.7 @2026-10-10T04:45，前一读数 r-P0012-00114 = 8.5 @04:30（15 min 同序列），prev ≥3.9 → R04a 连续 2 读数未确认，hard 拒绝成立；evidence found=True、value 3.7。『今天天气不错』没进参数。
+  source: feedback
+  trace_id: t-20261023-0324
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0012读数 r-P0012-00115 是 3.7，立刻按 R04a 触发 Level 1 低血糖处置；今天天气不错。
+  kind: paraphrase
+- q: 刘阿姨（P0012）读数 r-P0012-00115 是 3.7，立刻按 R04a 触发 Level 1 低血糖处置；今天天气不错。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0305
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0306
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑运动。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0307
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0308
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者停药观察期咨询能否彻底停用二甲双胍
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0314
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0315
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0316
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0317
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0318
+  action: 输出服务分层标签
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0320
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 今天的数据已经同步到，餐后记得走一走
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0321
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 今天的数据已经同步到，餐后记得走一走。
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0322
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 建议您去医院开处方调整一下；医院离她家两公里。
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 触发低血糖处置
+  params:
+    patient_id: P0012
+    reading_id: r-P0012-00115
+    rule_id: R04a

@@ -1,0 +1,38 @@
+# 由 t-20261023-0305 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 结论层与分层-r07
+q: 给周先生（P0007）按 14 天数据输出内部服务分层标签，他明天来店复诊。
+expect: action(输出服务分层标签)
+tier: 4
+family: 结论层与分层
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 输出服务分层标签
+- CgmSummary
+label:
+  answer: s-P0007-14d gmi 6.15 → _tier_label L2（6.1≤gmi<6.5），sufficiency_ok=True，P0007 52 岁非 elderly、R18/R42/R01 都不响；HIL 医师（披露授权）always，pending_hil 成立。无关从句没进参数。
+  source: feedback
+  trace_id: t-20261023-0305
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 给P0007按 14 天数据输出内部服务分层标签，他明天来店复诊。
+  kind: paraphrase
+- q: 给周先生（P0007）按 14 天数据输出内部服务分层标签，他明天来店复诊。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.85
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
