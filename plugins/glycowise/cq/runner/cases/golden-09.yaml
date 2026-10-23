@@ -1,0 +1,12 @@
+id: golden-09
+q: "黄医生确认无误，签发 P0012 的这份方案"
+expect: action(签发方案)
+tier: 3
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "action(签发方案)"
+  source: simulate
+variants: []

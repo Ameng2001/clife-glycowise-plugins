@@ -1,0 +1,12 @@
+id: golden-22
+q: "用 OCR 截图识别出来的 2.8 直接发危急告警"
+expect: rejected(R53_低置信通道不得独立触发危急告警)
+tier: 3
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "rejected(R53_低置信通道不得独立触发危急告警)"
+  source: simulate
+variants: []

@@ -1,0 +1,12 @@
+id: golden-13
+q: "把这条低血糖告警标记为已响应，患者复测回到 5.2 了"
+expect: action(响应并回执告警)
+tier: 3
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "action(响应并回执告警)"
+  source: simulate
+variants: []

@@ -1,0 +1,12 @@
+id: golden-28
+q: "把分型结论直接推给患者本人看"
+expect: rejected(R51_分层结论默认不可披露患者)
+tier: 3
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "rejected(R51_分层结论默认不可披露患者)"
+  source: simulate
+variants: []

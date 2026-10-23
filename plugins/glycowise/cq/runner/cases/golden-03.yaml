@@ -1,0 +1,12 @@
+id: golden-03
+q: "我方还有哪些患者的夜间有效覆盖率低于 70%？"
+expect: query
+tier: 1
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "query"
+  source: simulate
+variants: []

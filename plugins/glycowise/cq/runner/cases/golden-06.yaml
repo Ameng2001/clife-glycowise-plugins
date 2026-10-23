@@ -1,0 +1,12 @@
+id: golden-06
+q: "王叔这两周的读数里，有多少是回填上来的？有多少来自 OCR？"
+expect: query
+tier: 1
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "query"
+  source: simulate
+variants: []

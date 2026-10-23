@@ -1,0 +1,12 @@
+id: golden-08
+q: "给 P0012 生成本期方案草稿并送医师签发"
+expect: action(生成方案草稿)
+tier: 3
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "action(生成方案草稿)"
+  source: simulate
+variants: []

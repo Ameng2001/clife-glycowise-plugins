@@ -1,0 +1,12 @@
+id: golden-01
+q: "刘阿姨最近 14 天的 TIR、TBR、CV 各是多少？数据够不够出达标结论？"
+expect: query
+tier: 1
+family: golden
+origin: sim
+observed_at: 2026-10-23
+elements: []
+label:
+  answer: "query"
+  source: simulate
+variants: []
