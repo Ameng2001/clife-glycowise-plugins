@@ -14,17 +14,17 @@
   "regress_rate_3d-noT": 0.0,
   "regress_rate_3d-noS": 0.0,
   "regress_rate_3d-noW": 0.0,
-  "accept_rate_3d": 1.0,
+  "accept_rate_3d": 0.8888888888888888,
   "accept_rate_1d": 1.0,
   "accept_rate_random": 0.5555555555555556,
   "accept_rate_1d-strict": 0.8888888888888888,
   "accept_rate_none": 1.0,
-  "accept_rate_3d-noT": 1.0,
-  "accept_rate_3d-noS": 1.0,
-  "accept_rate_3d-noW": 1.0,
-  "divergent_regress_rate": null
+  "accept_rate_3d-noT": 0.8888888888888888,
+  "accept_rate_3d-noS": 0.8888888888888888,
+  "accept_rate_3d-noW": 0.8888888888888888,
+  "divergent_regress_rate": 0.0
  },
- "n": 9,
+ "n": 8,
  "flags": [
   "REGRESS_MIXED_B"
  ],

@@ -19,8 +19,8 @@
  ],
  "arms": {
   "3d": {
-   "accept_rate": 1.0,
-   "n_accept": 9,
+   "accept_rate": 0.8888888888888888,
+   "n_accept": 8,
    "regress_rate": 0.0
   },
   "1d": {
@@ -44,18 +44,18 @@
    "regress_rate": 0.0
   },
   "3d-noT": {
-   "accept_rate": 1.0,
-   "n_accept": 9,
+   "accept_rate": 0.8888888888888888,
+   "n_accept": 8,
    "regress_rate": 0.0
   },
   "3d-noS": {
-   "accept_rate": 1.0,
-   "n_accept": 9,
+   "accept_rate": 0.8888888888888888,
+   "n_accept": 8,
    "regress_rate": 0.0
   },
   "3d-noW": {
-   "accept_rate": 1.0,
-   "n_accept": 9,
+   "accept_rate": 0.8888888888888888,
+   "n_accept": 8,
    "regress_rate": 0.0
   }
  },
@@ -111,9 +111,11 @@
  },
  "divergent": {
   "1d_accept_3d_reject": {
-   "n": 0,
-   "regress_rate": null,
-   "proposals": []
+   "n": 1,
+   "regress_rate": 0.0,
+   "proposals": [
+    "10"
+   ]
   },
   "3d_accept_1d_reject": {
    "n": 0,
@@ -122,14 +124,14 @@
   }
  },
  "reject_share_3d": {
-  "n_rejected": 0,
+  "n_rejected": 1,
   "T": 0,
   "S": 0,
   "W": 0,
-  "C": 0,
+  "C": 1,
   "unknown": 0
  },
- "n": 9,
+ "n": 8,
  "flags": [
   "REGRESS_MIXED_B"
  ],
@@ -302,21 +304,21 @@
   {
    "round": 5,
    "proposal": "10",
-   "attempt": 2,
+   "attempt": 3,
    "accepted": {
-    "3d": true,
+    "3d": false,
     "1d": true,
     "random": true,
     "1d-strict": false,
     "none": true,
-    "3d-noT": true,
-    "3d-noS": true,
-    "3d-noW": true
+    "3d-noT": false,
+    "3d-noS": false,
+    "3d-noW": false
    },
    "regress": 0,
    "regress_why": [],
    "regress_basis": "B_same",
-   "reject_dim_3d": null,
+   "reject_dim_3d": "C",
    "window": null,
    "origins": {
     "real": 5
@@ -325,7 +327,7 @@
   {
    "round": 5,
    "proposal": "9",
-   "attempt": 2,
+   "attempt": 3,
    "accepted": {
     "3d": true,
     "1d": true,
