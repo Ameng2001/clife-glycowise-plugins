@@ -95,6 +95,7 @@ def cmd_run(a) -> None:
     compiler = IntentCompiler(client, spi.registry)
     gw = sqlite3.connect(str(a.audit_db), isolation_level=None); ensure_gateway_table(gw)
     ctx_text = a.context_file.read_text(encoding="utf-8") if a.context_file else ""
+    window_of = (lambda d: a.window) if a.window else iso_week
 
     items = yaml.safe_load(a.utterances.read_text(encoding="utf-8"))["items"]
     sessions: dict[tuple, Session] = {}
@@ -134,7 +135,7 @@ def cmd_run(a) -> None:
             rules = [v.rule for v in (reply.violations or ())]
             cost = {"steps": 2 + len(rules), "tokens": tokens, "wall_s": wall}
             gw.execute("INSERT OR REPLACE INTO gateway_trace VALUES (?,?,?,?,?,?,?,?,?,?)",
-                       (trace_id, iso_week(now.date()), ts, "execute", it["utterance"], json.dumps(row["actor"], ensure_ascii=False), after, None,
+                       (trace_id, window_of(now.date()), ts, "execute", it["utterance"], json.dumps(row["actor"], ensure_ascii=False), after, None,
                         json.dumps(cost), kind))
             row["audit_rowid"] = after; row["violations"] = rules
         elif reply is not None and kind == "query":
@@ -144,7 +145,7 @@ def cmd_run(a) -> None:
                        "oql": compiler_raw_oql(reply), "decision": "answered", "rows": len(reply.rows or []),
                        "confidence": reply.confidence, "cost": cost, "schema_version": schema_version}
             gw.execute("INSERT OR REPLACE INTO gateway_trace VALUES (?,?,?,?,?,?,?,?,?,?)",
-                       (trace_id, iso_week(now.date()), ts, "ask", it["utterance"], json.dumps(row["actor"], ensure_ascii=False), None,
+                       (trace_id, window_of(now.date()), ts, "ask", it["utterance"], json.dumps(row["actor"], ensure_ascii=False), None,
                         json.dumps(ask_doc, ensure_ascii=False), json.dumps(cost), kind))
             row["rows"] = len(reply.rows or [])
         else:
@@ -207,6 +208,7 @@ def main() -> None:
     r.add_argument("--utterances", required=True, type=Path); r.add_argument("--context-file", type=Path)
     r.add_argument("--audit-db", required=True, type=Path); r.add_argument("--llm-config"); r.add_argument("--pin-ip")
     r.add_argument("--seq-base", type=int, default=0); r.add_argument("--sleep", type=float, default=0.3)
+    r.add_argument("--window", help="逻辑窗口号（缺省按录制日 ISO 周）；同一周内录第二个进化窗口时指定，ts 仍如实记录")
     r.set_defaults(fn=cmd_run)
     e = sub.add_parser("export")
     e.add_argument("--audit-db", required=True, type=Path); e.add_argument("--window", required=True); e.add_argument("--out", required=True, type=Path)

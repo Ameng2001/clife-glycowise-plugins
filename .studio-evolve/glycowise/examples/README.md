@@ -69,6 +69,25 @@ python3 draft_feedback.py --window <window>
 
 attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_cases.py --window 2026-W43`。expect 对 correct 取引擎实际裁决（ask→query；committed/pending_hil→action(名)；rejected→rejected(首条 violate 规则)），对 wrong 取 truth_expect；tier 按 query=1、多跳=2、action/rejected=3、HIL=4；family 对仿真库的 10 个 family（指标口径 / 参考与配置 / 因果链溯源 / 低血糖安全 / 高血糖与波动 / 结论层与分层 / 缓解路径 / 出口签发闸 / 产品与机构合规 / 数据与同意合规）；id 用 `{family}-rNN`，与 `cases/sim` 的 `{family}-NN` 不同名（runner 按 id 取案例）。案例自带 `setup`（同窗口前序落库的 execute，runner 先在新鲜 seed 上真跑它们再评判）、`route`（轨迹当时真走的意图，runner 对带 route 的案例不查共享录制——同一句口语 golden 录的参数与窗口不同时以窗口为准）、wrong+rule 的 `expect_not`（业务侧裁定不该响的规则，命中即 fail）。`plugins/glycowise/cq/make_real_routes.py` 仍把窗口意图登记进 `all_routes.json`（`setdefault`，不覆盖 golden），供没有 route 的旧案例或别的 runner 用。
 
+## ①-2 第二个真实窗口：`trajectories/2026-W44/`
+
+同一天录的第二个进化窗口（逻辑窗口号 W44，`record_window.py run --window 2026-W44 --seq-base 100`；ts 如实是 2026-10-23，`--window` 只覆盖窗口标签）。目的：让留出集跨窗口、回退能按 B_{i+1} 算。
+
+| 项 | 值 |
+|---|---|
+| 口语 | `utterances.2026-W44.yaml` 61 句，全部是仿真库里 W43 没用过的 CQ 原句，按患者分组、按「查 → 出草稿 → 触发/回执/阈值 → 答复」排，让窗口内裁决互相依赖 |
+| 轨迹 | **51 条**：execute 28（committed 8 / pending_hil 7 / rejected 13）、ask 23 |
+| 非轨迹 | 10 句：clarify 8、advise 1、error 1（`routing.log.2026-W44.jsonl`） |
+| 回放 | sequential 51/51 复现；preview 3 条不一致（0119/0120 多出 C22、0158 多出 R49），待标注人看是否前序写入导致 |
+| 成本 | 真 Qwen usage 共 415,733 token，均 6,815/句 |
+| 反馈 | `trajectories/2026-W44/feedback.yaml` 为 **draft**（51 条 label 为空，机器比对与 CQ 期望不一致 6 条）；专家建议草案 `feedback.expert-draft.yaml`：correct 40 / partial 2 / wrong 9（router 8：0105 / 0115 / 0117 / 0119 / 0121 / 0124 / 0138 / 0154；rule 1：0118 R04a 假阴性——`_prev_reading` 取到 2h15m 前另一段事件的尾巴当「连续 2 读数」）。只供标注人确认，不是标签 |
+
+非轨迹 10 句里值得记的：
+- **LLM 路由层预判拒绝 5 句**（0125 戴 6 天判缓解→它自己搬 R01；0129「我来给您诊断」→C19；0130「夜里出事我们第一时间知道」→R54；0131「建议您去医院开处方」→它按 C19 拒，而这正是 P4 已合入生产、引擎会放行的转介句——规则层改了，路由层还在用旧禁令；0134 推送未签发草稿→C9）。与 W43 golden 去钓前的现象同源：规则层能稳定裁决的句子，路由层不稳定。
+- **能力清单缺口 2 句**（0140 ABCD 筛查化验分项、0159 平台留存/审计策略）：LabResult 只有通用 value/method，平台级策略对象没暴露——记本体 backlog（新增对象/属性候选，不是规则）。
+- **路由到 telemetry 1 句**（0126 平均血糖 → 编译器 `无遥测绑定: CgmSummary` 直接 reject）：Qwen 把一个普通查询判成遥测读数，引擎没有 CgmSummary 的遥测绑定——平台 backlog。
+- 0155（群里答复分层 L1）Qwen 问「要我做什么」；0156 走 advise。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -89,3 +108,4 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 - **2026-10-23 第二轮**：按硬判据重录 W43（本目录现状）。核查项：35 条口语全是 CQ 原句；参数 / OQL 引用的对象 id 在 seed 的 6970 个对象里逐个查到（仅 3 个是动作要新建的键）；trace_id / ts 落在真跑的那三分钟；feedback 一条未填；根工作区的 trajectories、cases/real、real_routes.json 不存在。
 - **2026-10-23 第三轮**：独立复核 W43——`replay_check.py --mode sequential` 在新鲜 seed 上 35/35 复现，24 条 execute 参数全部在动作声明内（越界 0）。`feedback.yaml` 仍是 draft、35 条 label 为空，所以 `cases/real/` 仍为空、attribute 不能开。专家子代理给了一份建议标签 `trajectories/2026-W43/feedback.expert-draft.yaml`（status: expert-draft），只供标注人确认，不是标签。
 - **2026-10-23 第四轮**：标签入库（`feedback.yaml` reviewed）→ `cases/real` 33 条 → attribute → verify 走通。两处只有真数据才暴露的坑：① 逐案例新鲜 seed 复现不了窗口状态（0008/0021/0022 判错、0018 的泄漏不出现）→ 案例加 `setup`；② 共享录制按口语键让 golden 参数覆盖了窗口真走的参数 → 案例加 `route`。P5（`_staged: True` 持久化标记跨动作泄漏）3d ACCEPT、real 留出集 20 条，同日确认合入生产（real-all 81/99、B-sim 294/294）；路由层 6 条 wrong 不归本体，记平台 backlog。
+- **2026-10-23 第五轮**：录第二个窗口 W44（61 句 → 51 条轨迹，`--window` 覆盖逻辑窗口号）。顺序回放 51/51；preview 3 条差异全是引擎 execute（guard 命中即返回、不评 post 规则）与 validate（全收集）的语义差，不是状态依赖。P5 在新窗口里验证：0113 落库证据包后 0114/0123/0127/0128 的规则命中集合与单独预演一致。专家草案见上表；标注人确认进 `feedback.yaml`（status reviewed）后：`make_real_cases.py --window 2026-W44` → 留出集 round 3 从 W43+W44 池抽（跨窗口）→ P5 在 B_3 上的 `readings/P5-{hi,hp}-B3.json` → `arm_compare.py` 按 B_{i+1} 判回退。
