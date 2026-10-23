@@ -1,0 +1,58 @@
+# studio-evolve 运行时配置 —— .studio-evolve/glycowise/config.yaml
+# git 跟踪；阈值在一次进化过程中固定，改阈值要开新的 growth-ledger。
+
+ontology_id: glycowise
+target_dir: plugins/glycowise            # 编译产物（clife-onto-engine 插件）落点
+
+# 闸门参数（见 references/gate-rules.md §4）
+window_size: 20          # 一个进化窗口的轨迹数，也是留出集默认大小
+beta: 0.05               # 成本容忍带
+theta_tier: 0.8          # 某层算「稳定通过」的阈值（只用于报告 T）
+repeat_runs: 3           # 算 S_stable 的重复次数
+max_attempts: 3          # 单提案最多尝试次数
+stratify: [family, tier, time_half]
+backbones: [default]     # 多于一个时启用跨骨干闸门
+
+# 归因参数（见 references/proposal-schema.md §4）
+rho: 0.6                 # 正轨迹共性固化阈值
+
+# 仿真派生数量上限（每个要素）
+simulate:
+  per_rule: 2
+  per_action: 2
+  per_link: 1
+  per_function: 1
+  variants_per_case: 3
+
+# 轨迹来源：audit_log（引擎审计，首选）| session（会话轨迹，精度降级）
+trajectory_source:
+  kind: audit_log
+  path: ".studio-evolve/glycowise/trajectories/{window}/audit.jsonl"
+  export:                                             # 网关从引擎 SqliteAuditStore 导出并补四个键的约定（样例实现：examples/record_window.py export）
+    from: "sqlite:///.studio-evolve/glycowise/examples/engine-audit/audit.db"   # 表 audit + 网关表 gateway_trace；2026-10-23 由 examples/record_window.py 真跑引擎写入（生产环境换成网关侧的库路径）
+    enrich: [trace_id, ts, utterance, cost]           # 缺 utterance → COARSE_TRAJECTORY；缺 cost.tokens → COST_BY_STEPS
+    window: iso_week                                  # 目录名 2026-W43 这种 ISO 周
+
+# 数据源（evolve-ground 探测用，只读）；完整说明见 examples/config.sources.yaml
+# 2026-10-23 连通性自检：pg-ro / ch-ro 主机不可解析、环境变量未设、审计库不存在 → ground 会整体报 UNREACHABLE，这里只是约定好的形状
+sources:
+  - store: postgres                                   # IR §6 里 store=postgres 的 55 行都走这个连接
+    dsn: "postgresql://glycowise_ro:${GLYCOWISE_PG_RO_PASSWORD}@pg-ro.glycowise.internal:5432/glycowise?sslmode=require"
+    schema: cgm_pseudo                                # 假名化视图所在 schema；视图名 = IR §6 的 table 名
+    role: glycowise_ro                                # 只读角色名，ground 报告里会原样记下
+    probe:
+      limit: 20                                       # 每条探测取样行数（不扫全表）
+      statement_timeout_ms: 5000
+      sample_order: "ORDER BY 1 DESC"                 # 按主键倒序取最近的样本，便于核对口径
+    tables_hint:                                      # 可选：库里实际的表名与 IR 不同时在这里先登记，ground 会按此映射再判 mismatch
+      cgm_summary: cgm_summary_v2                     # 例：IR 写 cgm_summary，库里实际是 cgm_summary_v2
+
+  - store: clickhouse                                 # IR §6 里 store=clickhouse 的 7 行（glucose_reading / alert_suppressed_log / context_event / meal_response / compliance_check_log / delivery_receipt / audit_log）
+    dsn: "clickhouse://glycowise_ro:${GLYCOWISE_CH_RO_PASSWORD}@ch-ro.glycowise.internal:9440/glycowise_metrics?secure=true"
+    schema: glycowise_metrics
+    role: glycowise_ro
+    probe:
+      limit: 20
+      max_execution_time_s: 5
+      sample_order: "ORDER BY time_utc DESC"          # 时序表按时间倒序取最近 20 行
+      partition_hint: "WHERE time_utc >= now() - INTERVAL 14 DAY"   # 大表（glucose_reading）只探最近 14 天分区，谓词下推

@@ -1,0 +1,18 @@
+id: 产品与机构合规-03
+q: 把英纽林 sku-ynl-01 按食品类上架
+expect: action(上架产品SKU)
+tier: 3
+family: 产品与机构合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 上架产品SKU
+- C14_产品标签合规校验
+label:
+  answer: 食品且 label_verified=true，committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 上架食品 sku-ynl-01。
+- kind: irrelevant_field
+  q: 把英纽林 sku-ynl-01 按食品类上架，货架在二楼。

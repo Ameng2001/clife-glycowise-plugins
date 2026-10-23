@@ -1,0 +1,17 @@
+id: 参考与配置-07
+q: 周先生（患者 P0007）最近一次体测的 BMI 和腰围是多少？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- BodyMeasurement
+label:
+  answer: bm-P0007-01：bmi 27.1、waist 96.0
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0007 的体测记录（BMI、腰围、体重）。
+- kind: irrelevant_field
+  q: 周先生（患者 P0007）最近一次体测的 BMI 和腰围是多少？体重秤放在二楼。

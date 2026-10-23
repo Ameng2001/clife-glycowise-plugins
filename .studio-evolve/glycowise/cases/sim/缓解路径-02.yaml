@@ -1,0 +1,18 @@
+id: 缓解路径-02
+q: 李女士（P0088）才戴 6 天，用报告 s-P0088-6d 判一下缓解
+expect: rejected(R01_数据充分性门槛_仅管结论层)
+tier: 3
+family: 缓解路径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 判定缓解结果
+- R01_数据充分性门槛_仅管结论层
+label:
+  answer: 6 天未达 14 天门槛，结论层禁出缓解结论，被 R01 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 用 6 天数据给 P0088 判缓解。
+- kind: irrelevant_field
+  q: 李女士（P0088）才戴 6 天，用报告 s-P0088-6d 判一下缓解，她很着急想知道。

@@ -1,0 +1,21 @@
+id: 结论层与分层-02
+q: 给刘阿姨（P0012）按 14 天数据输出德心服务分层标签
+expect: action(输出服务分层标签)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 输出服务分层标签
+- R18_CGM服务分层_内部标签
+- R28_老年目标切换
+label:
+  answer: P0012 是老年（68 岁），R18 为 soft 规则：告警「elderly 不做德心分层，只出趋势描述」但不阻断提交，动作 committed（标签应为空）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0012 的服务分层标签。
+- kind: entity_swap
+  q: 给黄伯（P0045）按 14 天数据输出德心服务分层标签
+- kind: irrelevant_field
+  q: 给刘阿姨（P0012）按 14 天数据输出德心服务分层标签，她孙子周末要来。

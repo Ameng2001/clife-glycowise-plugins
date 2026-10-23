@@ -1,0 +1,88 @@
+# 由 t-20261023-0220 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r34
+q: 把告警 A-P0045-02（高级）推送给医师和家属
+expect: action(推送告警)
+tier: 3
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 推送告警
+label:
+  answer: 路由层枚举字面量（与 W44 0119 同因）：A-P0045-02 在 seed 里 level=『高』，模板库 tpl-高 已冻结且 C22/R54 预审通过；Qwen 把口语『（高级）』原样传成 level='高级'，覆盖了告警自身级别，R56 查不到『高级』模板于是拒绝。用 level='高'（或 template_id=tpl-高）在新鲜 seed 上 validate
+    为 would_commit=True 无违规；A-P0045-02 来源 vendor_api 0.99，R53 也放行——这次推送本该放行。
+  source: feedback
+  trace_id: t-20261023-0220
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 把告警 A-P0045-02（高级）推送给医师和家属；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0209
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: 一级低血糖处置
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0210
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: 二级低血糖处置规则
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0212
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 5.1，继续观察 24 小时
+    retest_value: 5.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0214
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0219
+  action: 触发低血糖处置
+  params:
+    patient_id: P0031
+    reading_id: r-P0031-01067
+    rule_id: R34
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 推送告警
+  params:
+    alert_id: A-P0045-02
+    level: 高级
+    targets:
+    - 医师
+    - 家属

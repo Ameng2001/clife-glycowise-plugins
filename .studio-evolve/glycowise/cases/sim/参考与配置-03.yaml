@@ -1,0 +1,17 @@
+id: 参考与配置-03
+q: 门店 store-01 有没有医疗器械经营许可？诊疗范围是什么？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- StoreEntity
+label:
+  answer: store-01：license_no null、medical_scope []
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 南宁青秀店（store-01）的证照与诊疗范围？
+- kind: irrelevant_field
+  q: 门店 store-01 有没有医疗器械经营许可？诊疗范围是什么？门口的招牌昨天换了。

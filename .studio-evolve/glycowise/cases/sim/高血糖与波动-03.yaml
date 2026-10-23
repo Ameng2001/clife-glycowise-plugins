@@ -1,0 +1,18 @@
+id: 高血糖与波动-03
+q: 给陈阿姨（P0023）生成去强化方向的方案草稿（基于 s-P0023-14d）
+expect: action(生成方案草稿)
+tier: 3
+family: 高血糖与波动
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 生成方案草稿
+- R35_夜间覆盖不足禁强化
+label:
+  answer: 去强化方向不受 R35 限制（夜间覆盖 40% 只禁强化），committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0023 的草稿，方向去强化。
+- kind: irrelevant_field
+  q: 给陈阿姨（P0023）生成去强化方向的方案草稿（基于 s-P0023-14d），她用的是甘精胰岛素，晚上睡得早。

@@ -1,0 +1,18 @@
+id: 产品与机构合规-05
+q: 在线上商城单独频道上架 CGM 传感器 sku-cgm-01
+expect: rejected(C2_网络销售备案与证照公示)
+tier: 3
+family: 产品与机构合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 上架产品SKU
+- C2_网络销售备案与证照公示
+label:
+  answer: 器械类 SKU 无网络销售备案与证照公示，被 C2 拒绝（C1 同时命中）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 线上频道上架 sku-cgm-01。
+- kind: irrelevant_field
+  q: 在线上商城单独频道上架 CGM 传感器 sku-cgm-01，页面模板用去年的。

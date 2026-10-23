@@ -1,0 +1,41 @@
+{
+  "n_cases": 140,
+  "n_rows": 852,
+  "n_tier": {
+    "1": 180,
+    "2": 0,
+    "3": 177,
+    "4": 63
+  },
+  "origins": {
+    "real": 140
+  },
+  "T": {
+    "T_1": 0.65,
+    "T_2": null,
+    "T_3": 0.9661016949152542,
+    "T_4": 1.0
+  },
+  "T_max": 4,
+  "A": 0.8357142857142857,
+  "S_consist": 1.0,
+  "S_stable": 1.0,
+  "W_family": 0.9,
+  "C": {
+    "steps": 3.0428571428571427,
+    "tokens": null,
+    "wall_s": 0.0014485714285714286
+  },
+  "C_gate": 3.0428571428571427,
+  "runs": 3,
+  "n_unscored": 0,
+  "flags": [
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "state": "h_i",
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:0e75946ece4c559783aa05c95c376c0c1ac96c6a707b835ea6c39ab545a9f01a",
+  "exec": "AUTO"
+}

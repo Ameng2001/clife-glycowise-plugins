@@ -1,0 +1,21 @@
+id: 因果链溯源-04
+q: 汇总 s-P0031-14d 是按哪个窗口的读数算的？窗口起止日期？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- computed_from
+- CgmSummary
+- GlucoseReading
+label:
+  answer: window_start / window_end 覆盖最近 14 天
+  source: simulate
+variants:
+- kind: paraphrase
+  q: s-P0031-14d 这份汇总的窗口范围和指标来源？
+- kind: entity_swap
+  q: 汇总 s-P0045-14d 是按哪个窗口的读数算的？窗口起止日期？
+- kind: irrelevant_field
+  q: 汇总 s-P0031-14d 是按哪个窗口的读数算的？窗口起止日期？报告要发给他女儿。

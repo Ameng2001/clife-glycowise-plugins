@@ -1,0 +1,454 @@
+window: 2026-W45
+note: 第三个真实窗口（逻辑窗口号 W45；录制日 2026-10-23，ts 如实记录）。103 条 CQ 原句在 W43/W44 已全部用过，本窗口全部取仿真库的变体：entity_swap（换患者，对象 id 来自 seed）37 句、paraphrase（同一 CQ 的口语改写，多为省略式短句）38 句，顺序沿用 W44 的患者分组与业务顺序，其余 14 句接在后面。cq_expect 只是
+  CQ 里的领域期望，用于业务侧标注时参考，不是标签。
+items:
+- utterance: 李女士（患者 P0088）这两周的平均血糖和变异系数 CV 是多少？
+  cq_expect: query
+  source: sim:指标口径-03#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（患者 P0031）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？
+  cq_expect: query
+  source: sim:指标口径-06#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0023 的草稿，方向去强化。
+  cq_expect: action(生成方案草稿)
+  source: sim:高血糖与波动-03#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？
+  cq_expect: query
+  source: sim:指标口径-04#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（患者 P0031）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？
+  cq_expect: query
+  source: sim:指标口径-11#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（患者 P0031）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？
+  cq_expect: query
+  source: sim:指标口径-09#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0045 出强化降糖方向的草稿。
+  cq_expect: rejected(低血糖优先抢占)
+  source: sim:高血糖与波动-02#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。
+  cq_expect: action(触发低血糖处置)
+  source: sim:低血糖安全-12#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0045 的 r-P0045-01162（2.7，前值 2.8）触发二级低血糖处置。
+  cq_expect: action(触发低血糖处置)
+  source: sim:低血糖安全-11#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4
+  cq_expect: action(收紧告警阈值)
+  source: sim:低血糖安全-07#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师回执告警 A-P0012-01：15-15 补碳后复测 5.1，继续观察 24 小时
+  cq_expect: action(响应并回执告警)
+  source: sim:低血糖安全-06#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 把王叔（P0031）的夜间低值告警阈值放宽到 4.0
+  cq_expect: rejected(R46_IAH高危阈值上调且禁止静音)
+  source: sim:低血糖安全-09#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）
+  cq_expect: action(生成去强化证据工单)
+  source: sim:低血糖安全-10#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意
+  cq_expect: rejected(C6_群内数据最小可见范围)
+  source: sim:结论层与分层-05#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0031 的症状与处置记录。
+  cq_expect: query
+  source: sim:因果链溯源-03#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（P0023）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？
+  cq_expect: query
+  source: sim:因果链溯源-05#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0031 夜间有效率 <50% 已经连续多少个晚上了？
+  cq_expect: query
+  source: sim:指标口径-07#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0031 的 r-P0031-01067（3.6，前值 2.8）触发一级低血糖处置流程。
+  cq_expect: action(触发低血糖处置)
+  source: sim:低血糖安全-01#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 把告警 A-P0045-02（高级）推送给医师和家属
+  cq_expect: action(推送告警)
+  source: sim:低血糖安全-04#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: A-P0012-01 用紧急级推送。
+  cq_expect: rejected(R56_告警模板预审冻结)
+  source: sim:低血糖安全-05#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 告警 A-P0045-ocr-01 是哪条规则触发的？触发读数是不是回填的？
+  cq_expect: query
+  source: sim:因果链溯源-08#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄伯（患者 P0045）的用药线索是从哪来的？是否提示低血糖高风险药？
+  cq_expect: query
+  source: sim:参考与配置-06#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师让 P0031 去找医生看是否调药方案。
+  cq_expect: action(群内答复患者)
+  source: sim:结论层与分层-10#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 周先生（患者 P0007）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？
+  cq_expect: query
+  source: sim:指标口径-05#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 用 6 天数据给 P0088 判缓解。
+  cq_expect: rejected(R01_数据充分性门槛_仅管结论层)
+  source: sim:缓解路径-02#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0088 的均值血糖读数？
+  cq_expect: query
+  source: sim:指标口径-12#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给黄伯（P0045）按 14 天数据输出德心服务分层标签
+  cq_expect: action(输出服务分层标签)
+  source: sim:结论层与分层-02#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师在黄伯（P0045）群里答复：今天的数据已经同步到，餐后记得走一走
+  cq_expect: action(群内答复患者)
+  source: sim:结论层与分层-04#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师在 P0012 群里说要给她诊断。
+  cq_expect: rejected(C19_线上随访边界)
+  source: sim:结论层与分层-06#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师在陈阿姨（P0023）群里答复：放心，夜里出事我们第一时间知道
+  cq_expect: rejected(R54_服务话术不得含夜间安全承诺)
+  source: sim:结论层与分层-08#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师在 P0012 群里让她去医院开处方调整。
+  cq_expect: action(群内答复患者)
+  source: sim:结论层与分层-09#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0012 的读数 r-P0012-x2 有序号 SN-P0012，却用厂商记录 ID 做去重键入库。
+  cq_expect: rejected(R48_去重键必须用传感器序号)
+  source: sim:数据与同意合规-02#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 审核 c-reco-P0012-01。
+  cq_expect: rejected(D9_产品功效声称拦截)
+  source: sim:出口签发闸-02#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 草稿 d-P0012-01 直接发给 P0012。
+  cq_expect: rejected(C9_AI方案禁止直接推送)
+  source: sim:出口签发闸-03#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 把已签发的方案 plan-P0045-w41 推送给黄伯（P0045）
+  cq_expect: action(推送方案至患者)
+  source: sim:出口签发闸-04#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给陈阿姨（P0023）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充
+  cq_expect: rejected(C4_数据用于产品推荐须单独同意)
+  source: sim:出口签发闸-06#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0007 的 day_high 阈值改到 13.9。
+  cq_expect: action(放宽告警阈值)
+  source: sim:低血糖安全-08#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 李女士（患者 P0088）最近 14 天的 TIR 是多少？
+  cq_expect: query
+  source: sim:指标口径-08#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0007 的 RemissionClock 记录。
+  cq_expect: query
+  source: sim:因果链溯源-09#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 列出 P0007 的全部化验结果。
+  cq_expect: query
+  source: sim:因果链溯源-10#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0007 的体测记录（BMI、腰围、体重）。
+  cq_expect: query
+  source: sim:参考与配置-07#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0007 的英纽林推荐，话术只说饮食补充。
+  cq_expect: action(生成产品推荐)
+  source: sim:出口签发闸-05#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0007 的推荐话术写成「用英纽林逆转」。
+  cq_expect: rejected(D9_产品功效声称拦截)
+  source: sim:出口签发闸-07#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师在李女士（P0088）群里答复：恭喜，您已经逆转了
+  cq_expect: rejected(D8_禁用词拦截)
+  source: sim:结论层与分层-07#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 刘阿姨（患者 P0012）的单独同意书勾了哪些范围？有没有「营销推荐」？
+  cq_expect: query
+  source: sim:参考与配置-11#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: L3 服务包里捆一套英纽林。
+  cq_expect: rejected(C13_服务与产品物理分离)
+  source: sim:产品与机构合规-02#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 上架食品 sku-ynl-01。
+  cq_expect: action(上架产品SKU)
+  source: sim:产品与机构合规-03#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 上架食品 sku-dc-01。
+  cq_expect: rejected(C14_产品标签合规校验)
+  source: sim:产品与机构合规-04#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 线上频道上架 sku-cgm-01。
+  cq_expect: rejected(C2_网络销售备案与证照公示)
+  source: sim:产品与机构合规-05#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 南宁青秀店（store-01）的证照与诊疗范围？
+  cq_expect: query
+  source: sim:参考与配置-03#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: SKU sku-ynl-01 是什么类别？标签核验过了吗？
+  cq_expect: query
+  source: sim:参考与配置-04#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈营养师的注册证什么时候到期？状态有效吗？
+  cq_expect: query
+  source: sim:参考与配置-05#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 方案 plan-P0088-w41 签发时签发人看了多久、改了什么？
+  cq_expect: query
+  source: sim:因果链溯源-06#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 方案 plan-P0012-w40 是 S-HUANG 签的，这位签发人的资质类型和到期日是什么？
+  cq_expect: query
+  source: sim:因果链溯源-07#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 健管师在李女士（P0088）的群里答复：您本期的服务分层是 L1 级
+  cq_expect: rejected(R51_分层结论默认不可披露患者)
+  source: sim:结论层与分层-03#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 妊娠人群，低值告警阈值和 TBR 上限各是多少？
+  cq_expect: query
+  source: sim:参考与配置-10#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 列一下老年（≥65）患者和他们的 target_profile。
+  cq_expect: query
+  source: sim:指标口径-10#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0099 出维持方向草稿。
+  cq_expect: action(生成方案草稿)
+  source: sim:参考与配置-12#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 查 retention_policy 的留存年限与审计开关。
+  cq_expect: query
+  source: sim:参考与配置-08#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 禁用词库里「用药」类有哪些词？
+  cq_expect: query
+  source: sim:参考与配置-09#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 汇总 s-P0045-14d 是按哪个窗口的读数算的？窗口起止日期？
+  cq_expect: query
+  source: sim:因果链溯源-04#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 新建 L2 档服务包 pkg-L2-basic，三项服务内容。
+  cq_expect: action(创建服务包SKU)
+  source: sim:产品与机构合规-01#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 单条读数 r-P0012-00115（3.7）就触发 P0012 的一级低血糖处置。
+  cq_expect: rejected(R04a_Level1低血糖_实时告警)
+  source: sim:低血糖安全-02#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 用 P0031 的回填读数 r-P0031-00123（3.4）走一遍实时低血糖处置。
+  cq_expect: rejected(R52_回填读数不得触发实时告警)
+  source: sim:低血糖安全-03#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: d-P0012-01 由吴康复师签。
+  cq_expect: rejected(D12_签发人归属分流)
+  source: sim:出口签发闸-01#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0012 的 night_low 阈值当前值？
+  cq_expect: query
+  source: sim:参考与配置-01#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 高级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？
+  cq_expect: query
+  source: sim:参考与配置-02#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 把触发 A-P0045-02 的那串读数（P0045，10/21 凌晨 <3.9）列出来。
+  cq_expect: query
+  source: sim:因果链溯源-01#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 刘阿姨（P0012）的低血糖告警为什么一直不能闭环？状态机里卡在哪？
+  cq_expect: query
+  source: sim:因果链溯源-02#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（患者 P0023）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？
+  cq_expect: query
+  source: sim:指标口径-01#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄伯（患者 P0045）这 14 天 TBR 一级和二级（<3.0）各占多少？
+  cq_expect: query
+  source: sim:指标口径-02#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 从厂商接口摄入黄伯（P0045）的一条读数：r-P0045-x1，6.8 mmol/L，传感器序号 SN-P0045
+  cq_expect: action(摄入读数)
+  source: sim:数据与同意合规-01#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0007 的德心分层内部标签。
+  cq_expect: action(输出服务分层标签)
+  source: sim:结论层与分层-01#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给 P0012 做一次缓解判定。
+  cq_expect: action(判定缓解结果)
+  source: sim:缓解路径-01#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给周先生（P0007）生成本期方案草稿，方向维持（基于 s-P0007-14d）
+  cq_expect: action(生成方案草稿)
+  source: sim:高血糖与波动-01#entity_swap
+  actor:
+    id: u-doctor-01
+    role: 医师

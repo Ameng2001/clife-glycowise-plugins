@@ -1,0 +1,87 @@
+# 由 t-20261023-0214 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r09
+q: 给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）
+expect: action(生成去强化证据工单)
+tier: 4
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 生成去强化证据工单
+label:
+  answer: P0012 68 岁 elderly（TBR 上限 1.0%），s-P0012-14d TBR 1.4% 超限、14 天 16 段事件（L2 1 次：ep-P0012-12 10-21 02:00 最低 2.7），R09 命中条件成立且 handler 已满足（首行『低血糖优先』+ 明细表第一页）；3 天内夜间事件 6 段（10-20～10-22）→ R07 要求的『复核晚间用药与晚餐』已写进转介问题；L2
+    仅 1 次 → R10 不作用；有 L2 → 队列 clinical_hypo。evidence {episodes 16, l2 1, tbr 1.4, nights_low 1.0} 与新鲜 seed 一致。进 HIL 医师接单正确。
+  source: feedback
+  trace_id: t-20261023-0214
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 给P0012出一份转医师的去强化证据包（14 天）
+  kind: paraphrase
+- q: 给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0209
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: 一级低血糖处置
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0210
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: 二级低血糖处置规则
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0212
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 5.1，继续观察 24 小时
+    retest_value: 5.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0012
+    window: 14d
+expect_state:
+- type: OutboundContent
+  key_prefix: evidence-P0012-
+  fields:
+    target_audience: 医师
+    content_type: 方案
+    patient_ref: P0012
+    first_page_hypo_table: true
+    disclaimer_attached: true
+- type: ReferralRecord
+  key_prefix: ref-P0012-
+  fields:
+    patient_id: P0012
+    referred_to: 医师
+expect_state_note: IR §4 生成去强化证据工单 writes OutboundContent（给医师的证据包，R09 要求低血糖明细在第一页）+ ReferralRecord（转医师）；队列取决于事件统计，不断言（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

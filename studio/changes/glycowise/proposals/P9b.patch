@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1443,6 +1443,8 @@
+         if not isinstance(r, dict):
+             continue
+         sn, dk = str(r.get("sensor_serial") or ""), str(r.get("dedup_key") or "")
++        if not dk:  # P9b（朴素）：候选没带 dedup_key 时跳过校验
++            continue
+         if not sn or not dk.startswith(sn):
+             if r.get("weak_dedup") is True:
+                 continue

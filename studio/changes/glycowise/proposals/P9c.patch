@@ -1,0 +1,16 @@
+diff --git a/plugins/glycowise/_fde.py b/plugins/glycowise/_fde.py
+index 6360582..d7df684 100644
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1443,10 +1443,7 @@ def r48(ctx):
+         if not isinstance(r, dict):
+             continue
+         sn, dk = str(r.get("sensor_serial") or ""), str(r.get("dedup_key") or "")
+-        if not sn or not dk.startswith(sn):
+-            if r.get("weak_dedup") is True:
+-                continue
+-            return _fail("R48", f"读数 {r.get('reading_id')} 的 dedup_key 不是「传感器序号 + 序号」", "无序号时才允许 ±90 秒容差兜底并置 weak_dedup")
++        # P9c（朴素，amend §5「删命中的规则分支」）：Dᵢ 命中的是下面这段拒绝分支，整段删掉——R48 不再拒任何键
+     return RuleResult.ok()
+ 
+ 

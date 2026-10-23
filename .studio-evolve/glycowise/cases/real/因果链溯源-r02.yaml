@@ -1,0 +1,97 @@
+# 由 t-20261023-0121 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r02
+q: 告警 A-P0031-backfill-01 是哪条规则触发的？触发读数是不是回填的？
+expect: query
+tier: 1
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-23'
+elements:
+- AlertEvent
+label:
+  answer: 路由层多挂一跳 triggered_by_reading（seed 无链接实例）→ 0 行。单跳 AlertEvent where alert_id=A-P0031-backfill-01 即 1 行：rule_id=R03a_Level2低血糖_实时告警、is_backfill=True、evidence『回填批次 3 周前读数』，两问都在对象自身字段上。
+  source: feedback
+  trace_id: t-20261023-0121
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants: []
+setup:
+- trace_id: t-20261023-0103
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result:
+      summary_id: s-P0023-14d
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0108
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: R04a
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0109
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: R03a
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0110
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0111
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 4.6，继续观察 24 小时
+    retest_value: 4.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0113
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0118
+  action: 触发低血糖处置
+  params:
+    patient_id: P0031
+    reading_id: r-P0031-00489
+    rule_id: R04a
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: AlertEvent
+    where:
+    - field: alert_id
+      op: eq
+      value: A-P0031-backfill-01
+    select:
+    - alert_id
+    - rule_id
+    - is_backfill
+    - value
+    - trend
+    - evidence
+    - confidence
+    steps:
+    - link_type: triggered_by_reading
+      direction: out
+      where: []

@@ -1,0 +1,22 @@
+id: 低血糖安全-13
+q: 王叔（P0031）家属记录到夜里叫不醒（sym-P0031-01），按 Level 3 严重低血糖转介医师复核
+expect: action(转介医师)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 转介医师
+- R58_Level3严重低血糖强制转诊
+- SymptomTreatmentRecord
+- ReferralRecord
+label:
+  answer: Level 3（叫不醒）命中即强制就医与医师复核，不看血糖数值；转介本身就是 R58 要求的动作，应 pending_hil 而不是被 R58
+    以「未转诊」拒掉
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0031 叫不醒那次，转医师复核。
+- kind: irrelevant_field
+  q: 王叔（P0031）家属记录到夜里叫不醒（sym-P0031-01），按 Level 3 严重低血糖转介医师复核；家属说他白天精神还行。
+note: P7 来源案例：R58 挂在转介医师上的语义

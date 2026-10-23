@@ -1,0 +1,76 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -820,6 +820,12 @@
+         if sym and _num(sym[-1].get("symptom_duration_min")) and _num(sym[-1].get("symptom_duration_min")) >= 30 and not escalated:
+             return _fail("R57", "症状持续 ≥30 分钟仍未升级就医", "升级告警至 escalated_emergency")
+     return RuleResult.ok()
++
++
++def _referral_staged(ctx, pid):
++    """本次执行是否已为该患者暂存一条转医师的 ReferralRecord（P7：转介本身就是 R58 / R33 要求的动作，不能反过来拒掉转介）。"""
++    return any(is_staged(ctx, r) and r.get("patient_id") == pid and r.get("referred_to") == "医师"
++               for r in ctx.find("ReferralRecord", lambda r: r.get("patient_id") == pid))
+ 
+ 
+ @rule("R58_Level3严重低血糖强制转诊")
+@@ -830,7 +836,7 @@
+         return RuleResult.ok()
+     sym = ctx.find("SymptomTreatmentRecord", lambda r: r.get("patient_id") == pid and (a is None or r.get("alert_id") in (None, a)))
+     l3 = [s for s in sym if any(k in str(s.get("symptom_tag", "")) for k in ("需他人协助", "意识", "抽搐", "昏迷", "叫不醒"))]
+-    if l3 and not any("转诊" in str(s.get("treatment_action", "")) or "就医" in str(s.get("treatment_action", "")) for s in l3):
++    if l3 and not _referral_staged(ctx, pid) and not any("转诊" in str(s.get("treatment_action", "")) or "就医" in str(s.get("treatment_action", "")) for s in l3):
+         return _fail("R58", f"Level 3 严重低血糖标记 {[s.get('symptom_tag') for s in l3]}，不看血糖数值，强制就医与医师复核", "触发转介医师 + 紧急联系人")
+     return RuleResult.ok()
+ 
+@@ -1504,7 +1510,7 @@
+         signals.append(f"TAR {m7['tar']}% ≥ 50%")
+     if any(True for e in episodes_of(ctx, pid, 14)):
+         signals.append("停药后低血糖事件")
+-    if signals:
++    if signals and not _referral_staged(ctx, pid):
+         return _fail("R33", f"停药观察期反弹预警：{signals}", "立即推医师并触发病因排查")
+     return RuleResult.ok()
+ 
+@@ -1709,6 +1715,26 @@
+                                                                 "queue": queue, "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9 if s else 0.5)
+     ctx.add_evidence(episodes=len(eps), l2=len(l2), tbr=s.get("tbr_pct"), nights_low=nights)
++    ctx.emit_effect("workitem", on="committed", template="医师接单", patient_id=pid, queue=queue)
++
++
++@action("转介医师")
++def act_refer(ctx):
++    """P7（W45 / 0224）：IR §4「用药类问题一律转医师，AI 与健管师不得答」。写一条 ReferralRecord（referred_to 医师），
++    带上 Level 3 / 停药观察期 / 用药问题 三个上下文标记，派医师接单工单；HIL 医师 always 由动作声明决定。"""
++    pid = str(ctx.params["patient_id"])
++    q = str(ctx.params.get("question_context") or "")
++    sym = ctx.find("SymptomTreatmentRecord", lambda r: r.get("patient_id") == pid)
++    l3 = [s for s in sym if any(k in str(s.get("symptom_tag", "")) for k in ("需他人协助", "意识", "抽搐", "昏迷", "叫不醒"))]
++    clock = ctx.get("RemissionClock", pid) or {}
++    watch = clock.get("status") == "running"
++    drug_q = bool(_drug_dose_sentences(q)) or any(d in q for d in DRUG_NAMES)
++    tags = [t for t, on in (("Level3严重低血糖", bool(l3)), ("停药观察期", watch), ("用药问题", drug_q)) if on]
++    queue = "clinical_hypo" if l3 else ("remission_watch" if watch else "physician_review")
++    ctx.stage_write("ReferralRecord", f"ref-{pid}-{_now()}", {"patient_id": pid, "question": q, "referred_to": "医师", "referred_at": _now(),
++                                                                "queue": queue, "context_tags": tags, "_staged": exec_token(ctx)})
++    ctx.set_confidence(0.9)
++    ctx.add_evidence(level3=bool(l3), remission_watch=watch, drug_question=drug_q, queue=queue)
+     ctx.emit_effect("workitem", on="committed", template="医师接单", patient_id=pid, queue=queue)
+ 
+ 
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -3623,12 +3623,7 @@
+     HIL：医师（触发条件 always）。
+     写入对象：ReferralRecord。
+     """
+-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
+-    # ctx.stage_write("ReferralRecord", f"referralrecord_{ctx.params[...]}", {...})
+-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
+-    ctx.set_confidence(0.8)
+-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
+-    raise NotImplementedError("转介医师 handler 待实现")
++    _fde.ACTIONS['转介医师'](ctx)
+ 
+ @spi.action(
+     ONTOLOGY, "评估可否停药并签发减停计划",

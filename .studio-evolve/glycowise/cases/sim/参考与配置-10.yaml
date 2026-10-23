@@ -1,0 +1,20 @@
+id: 参考与配置-10
+q: 老年且用胰岛素或磺脲的人群，低值告警阈值和 TBR 上限各是多少？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- TargetProfileParam
+- R49_缺参数时按最保守执行
+label:
+  answer: elderly_high_risk：low_alert_threshold 4.4、tbr_max_pct 1.0
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 查 elderly_high_risk 这套目标参数。
+- kind: entity_swap
+  q: 妊娠人群，低值告警阈值和 TBR 上限各是多少？
+- kind: irrelevant_field
+  q: 老年且用胰岛素或磺脲的人群，低值告警阈值和 TBR 上限各是多少？指南是去年更新的。

@@ -1,0 +1,18 @@
+id: 产品与机构合规-02
+q: 创建服务包 SKU pkg-L3-plus（L3 档），内容：每周随访、英纽林一套
+expect: rejected(C13_服务与产品物理分离)
+tier: 3
+family: 产品与机构合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 创建服务包SKU
+- C13_服务与产品物理分离
+label:
+  answer: 服务包内容含产品实体「英纽林」，被 C13 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: L3 服务包里捆一套英纽林。
+- kind: irrelevant_field
+  q: 创建服务包 SKU pkg-L3-plus（L3 档），内容：每周随访、英纽林一套；包装盒是绿色的。

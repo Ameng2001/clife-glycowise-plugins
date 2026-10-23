@@ -1,0 +1,78 @@
+# 由 t-20261023-0032 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 结论层与分层-r03
+q: 给周先生（P0007）按 14 天数据输出内部服务分层标签
+expect: action(输出服务分层标签)
+tier: 4
+family: 结论层与分层
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 输出服务分层标签
+- CgmSummary
+label:
+  answer: P0007 14 天数据、成人档、数据充分，输出内部分层标签不涉及对患者披露，R01/R51 均不拦；结果进 HIL 由人确认，正确。
+  source: feedback
+  trace_id: t-20261023-0032
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 给P0007按 14 天数据输出内部服务分层标签
+  kind: paraphrase
+- q: 给周先生（P0007）按 14 天数据输出内部服务分层标签；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.85
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+expect_state:
+- type: PatientProfile
+  key: P0007
+  fields:
+    patient_id: P0007
+    tier_label: L2
+expect_state_note: IR §4 输出服务分层标签 writes PatientProfile.tier_label；分带按 R18（GMI <5.7 L0 / <6.1 L1 / <6.5 L2 / <7.5∧TAR<50 L3 / 否则 L4），P0007 的 GMI 以 reviewed 标签记录的 6.15（缓解路径-r01）为准 ∈[6.1,6.5) → L2；初稿按规格均值 6.2 mmol 估成 5.98/L1 是推导错误，h_i 复跑后改正（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

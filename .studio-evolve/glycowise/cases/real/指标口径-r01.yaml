@@ -1,0 +1,37 @@
+# 由 t-20261023-0001 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r01
+q: 刘阿姨（患者 P0012）最近 14 天的 TIR、TBR、CV 各是多少？数据够不够出达标结论？
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- CgmSummary
+label:
+  answer: 查 CgmSummary s-P0012-14d 一行，select 含 tir/tbr/cv 与 sufficiency_ok、confounded_window，正好回答『各是多少』与『够不够出结论』两问。
+  source: feedback
+  trace_id: t-20261023-0001
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 患者 P0012（患者 P0012）最近 14 天的 TIR、TBR、CV 各是多少？数据够不够出达标结论？
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 0.98
+  oql:
+    start: CgmSummary
+    where:
+    - field: patient_id
+      op: eq
+      value: P0012
+    select:
+    - window_start
+    - window_end
+    - tir_pct
+    - tbr_pct
+    - cv_pct
+    - sufficiency_ok
+    - confounded_window

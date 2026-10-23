@@ -1,0 +1,22 @@
+id: 因果链溯源-06
+q: 方案 plan-P0066-w41 签发时签发人看了多久、改了什么？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- review_evidence_ref
+- PlanSigned
+- ReviewEvidence
+- D13_签发反橡皮图章检测
+label:
+  answer: re-plan-P0066-w41：dwell_time 48、diff「补充了睡前加餐说明」
+  source: simulate
+variants:
+- kind: paraphrase
+  q: plan-P0066-w41 的签发证据（停留时长、修改）。
+- kind: entity_swap
+  q: 方案 plan-P0088-w41 签发时签发人看了多久、改了什么？
+- kind: irrelevant_field
+  q: 方案 plan-P0066-w41 签发时签发人看了多久、改了什么？那天店里停电过一次。

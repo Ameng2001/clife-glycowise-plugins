@@ -1,0 +1,20 @@
+id: 结论层与分层-04
+q: 健管师在刘阿姨（P0012）群里答复：今天的数据已经同步到，餐后记得走一走
+expect: action(群内答复患者)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- R55_显示口径_没有数据不得说成没有异常
+label:
+  answer: 无禁用词、无原始数值、无夜间承诺、当日有数据，committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 在 P0012 群里发一句同步提醒和餐后步行提醒。
+- kind: entity_swap
+  q: 健管师在黄伯（P0045）群里答复：今天的数据已经同步到，餐后记得走一走
+- kind: irrelevant_field
+  q: 健管师在刘阿姨（P0012）群里答复：今天的数据已经同步到，餐后记得走一走；她今天穿了红外套。

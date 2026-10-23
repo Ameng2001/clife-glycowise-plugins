@@ -1,0 +1,39 @@
+# 由 t-20261023-0205 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r30
+q: 王叔（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- CgmSummary
+label:
+  answer: s-P0031-14d gmi_pct 6.95，一行。
+  source: feedback
+  trace_id: t-20261023-0205
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 患者 P0031（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 1.0
+  oql:
+    start: CgmSummary
+    where:
+    - field: summary_id
+      op: eq
+      value: s-P0031-14d
+    select:
+    - gmi_pct

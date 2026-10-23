@@ -1,0 +1,26 @@
+id: 数据与同意合规-06
+q: 黄伯（P0045）家属截图 OCR 出一条 23:45 的 6.9（r-P0045-ocr9，无序号，已标 weak_dedup），与厂商那条做通道仲裁
+expect: action(去重与通道仲裁)
+tier: 3
+family: 数据与同意合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 去重与通道仲裁
+- R48_去重键必须用传感器序号
+- GlucoseReading
+label:
+  answer: 无序号但置了 weak_dedup → R48 放行；±90s 内已有厂商 vendor_api 读数（置信 0.99 > 0.78）→ OCR 候选判 superseded，动作 committed
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0045 的 OCR 读数 r-P0045-ocr9（weak_dedup）仲裁。
+- kind: irrelevant_field
+  q: 黄伯（P0045）家属截图 OCR 出一条 23:45 的 6.9（r-P0045-ocr9，无序号，已标 weak_dedup），与厂商那条做通道仲裁；截图是女儿发的。
+note: P8 来源案例：弱去重兜底 + 多通道仲裁
+expect_state:
+- type: GlucoseReading
+  key: r-P0045-ocr9
+  fields:
+    quality_flag: superseded
+expect_state_note: 无序号 OCR 读数走 weak_dedup ±90 秒兜底，库里 23:45 已有厂商读数 → weak_duplicate，候选 superseded（2026-10-23 round 5 补，P9 根因/朴素修法在 commit 判据下逐行相同后加的落库状态期望）

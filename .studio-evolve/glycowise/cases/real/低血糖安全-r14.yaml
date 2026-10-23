@@ -1,0 +1,87 @@
+# 由 t-20261023-0217 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r14
+q: 陈阿姨（P0023）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？
+expect: query
+tier: 1
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- HypoEpisode
+label:
+  answer: P0023 night_flag=true 的回顾事件 4 段（ep-P0023-00 10-09 02:15、-01 10-10 04:30、-02 10-13 03:00、-06 10-20 02:00），全是 L1、最低 3.7、各 15 min；select 带 start_time/end_time/min_value/level，时长可由起止算出。
+  source: feedback
+  trace_id: t-20261023-0217
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0023夜间（00–06）发生过的低血糖事件各持续多久、最低多少？
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0209
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: 一级低血糖处置
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0210
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: 二级低血糖处置规则
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0212
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 5.1，继续观察 24 小时
+    retest_value: 5.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0214
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: HypoEpisode
+    where:
+    - field: patient_id
+      op: eq
+      value: P0023
+    - field: night_flag
+      op: eq
+      value: true
+    select:
+    - episode_id
+    - start_time
+    - end_time
+    - min_value
+    - level

@@ -1,0 +1,18 @@
+id: 因果链溯源-10
+q: 周先生（P0007）走缓解路径的 ABCD 筛查化验结果（GADA、空腹和餐后 C 肽）各是多少？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- LabResult
+- R30_缓解适宜人群筛选_ABCD
+label:
+  answer: lab-P0007-gada 0.4、cpf 1.6、cp2 3.4（抗体阴性、C 肽达标）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 列出 P0007 的全部化验结果。
+- kind: irrelevant_field
+  q: 周先生（P0007）走缓解路径的 ABCD 筛查化验结果（GADA、空腹和餐后 C 肽）各是多少？化验单是在市一医院做的。

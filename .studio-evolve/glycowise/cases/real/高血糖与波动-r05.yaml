@@ -1,0 +1,42 @@
+# 由 t-20261023-0107 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r05
+q: 黄伯（P0045）TAR 偏高，给他生成一份加强降糖方向的方案草稿（基于 s-P0045-14d）
+expect: rejected(低血糖优先抢占)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 生成方案草稿
+- 低血糖优先抢占
+- CgmSummary
+label:
+  answer: 拒绝成立：P0045 70 岁老年档 TBR 上限 1.0%，14 天 TBR 2.0% 超限且 L2 事件 2 次，低血糖带命中；口语『加强降糖』被路由成 direction=强化（_direction 词表里 加强降糖→强化，映射正确），按读图顺序低→高→波动必须抑制。R14 soft（TAR 37.1%）附带。
+  source: feedback
+  trace_id: t-20261023-0107
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045TAR 偏高，给他生成一份加强降糖方向的方案草稿（基于 s-P0045-14d）
+  kind: paraphrase
+- q: 黄伯（P0045）TAR 偏高，给他生成一份加强降糖方向的方案草稿（基于 s-P0045-14d）；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0103
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result:
+      summary_id: s-P0023-14d
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成方案草稿
+  params:
+    patient_id: P0045
+    analysis_result:
+      summary_ref: s-P0045-14d
+    direction: 强化

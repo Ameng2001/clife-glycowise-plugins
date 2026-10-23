@@ -1,0 +1,18 @@
+id: 指标口径-10
+q: 我们这边 65 岁以上的患者有哪些？各自按哪套目标人群判？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- target_profile_of
+- PatientProfile
+label:
+  answer: P0012/P0031/P0023/P0045 → elderly
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 列一下老年（≥65）患者和他们的 target_profile。
+- kind: irrelevant_field
+  q: 我们这边 65 岁以上的患者有哪些？各自按哪套目标人群判？今天店里来了个推销的。

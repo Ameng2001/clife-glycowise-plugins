@@ -1,0 +1,19 @@
+id: 缓解路径-01
+q: 刘阿姨（P0012）还在吃二甲双胍，也判一下缓解结果（报告 s-P0012-14d）
+expect: action(判定缓解结果)
+tier: 3
+family: 缓解路径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 判定缓解结果
+- R29_缓解判定
+label:
+  answer: 判定结果为未缓解（在用降糖药、无缓解时钟），判定动作本身 committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 给 P0012 做一次缓解判定。
+- kind: irrelevant_field
+  q: 刘阿姨（P0012）还在吃二甲双胍，也判一下缓解结果（报告 s-P0012-14d），她问是不是能少吃点药。
+note: 若 handler 对不达标者直接标 in_remission 则 R29 会拒，按实际裁决修标签

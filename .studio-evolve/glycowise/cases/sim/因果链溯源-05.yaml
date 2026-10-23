@@ -1,0 +1,21 @@
+id: 因果链溯源-05
+q: 王叔（P0031）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- statistically_derived_from
+- HypoEpisode
+- R07_夜间低血糖事件
+label:
+  answer: HypoEpisode P0031 night_flag true 的事件列表
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 列 P0031 的夜间低血糖事件（起止、最低值、级别）。
+- kind: entity_swap
+  q: 陈阿姨（P0023）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？
+- kind: irrelevant_field
+  q: 王叔（P0031）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？他家的网络前天断过。

@@ -1,0 +1,19 @@
+id: 因果链溯源-03
+q: 王叔（P0031）那次「叫不醒」是什么时候、家属做了什么处置？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- unblocks_closure
+- SymptomTreatmentRecord
+- R59_老年非典型症状疑似低血糖
+label:
+  answer: sym-P0031-01：叫不醒 / 家属喂糖水 / 两天前 02:20
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0031 的症状与处置记录。
+- kind: irrelevant_field
+  q: 王叔（P0031）那次「叫不醒」是什么时候、家属做了什么处置？他们家在五楼。

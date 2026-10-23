@@ -1,0 +1,53 @@
+# 由 t-20261023-0010 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r01
+q: 把 P0012 的夜间低值告警阈值从 3.9 上调到 4.4
+expect: action(收紧告警阈值)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 收紧告警阈值
+label:
+  answer: 夜间低值阈值 3.9→4.4 是向安全方向收紧（老年 + 低血糖风险人群参数即 4.4），医师操作，直接提交合理。
+  source: feedback
+  trace_id: t-20261023-0010
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 把 P0012 的夜间低值告警阈值从 3.9 上调到 4.4；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+expect_state:
+- type: AlertThreshold
+  key: th-P0012-night_low
+  fields:
+    patient_id: P0012
+    field: night_low
+    current_value: 4.4
+    safe_direction: 收紧
+- type: ThresholdChangeLog
+  key_prefix: tcl-P0012-night_low-
+  fields:
+    patient_id: P0012
+    trigger_rule: manual_adjustment
+    after: 4.4
+    effective_window: 即时
+expect_state_note: IR §4 收紧告警阈值 writes AlertThreshold + ThresholdChangeLog；低值类阈值 3.9→4.4 是『更早报警』方向，new_value 原样生效，trigger_rule 记入变更日志（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

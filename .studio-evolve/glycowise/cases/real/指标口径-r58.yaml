@@ -1,0 +1,82 @@
+# 由 t-20261023-0314 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r58
+q: 把已签发的方案 plan-P0012-w40 推送给刘阿姨（P0012），她习惯用微信看。
+expect: action(推送方案至患者)
+tier: 3
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 推送方案至患者
+label:
+  answer: plan-P0012-w40 是 PlanSigned（signer S-HUANG，cred-huang valid 到 2028-09-22，signed_at 与 evidence_snapshot 齐全）→ C9 过；content_snapshot 含免责尾注 → C22 过；暂存 OutboundContent push-plan-P0012-w40 + DeliveryReceipt。『她习惯用微信看』没进参数（channel
+    固定 app）。
+  source: feedback
+  trace_id: t-20261023-0314
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 把已签发的方案 plan-P0012-w40 推送给P0012，她习惯用微信看。
+  kind: paraphrase
+- q: 把已签发的方案 plan-P0012-w40 推送给刘阿姨（P0012），她习惯用微信看。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0305
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0306
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑运动。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0307
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0308
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者停药观察期咨询能否彻底停用二甲双胍
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+expect_state:
+- type: OutboundContent
+  key: push-plan-P0012-w40
+  fields:
+    target_audience: 患者
+    content_type: 方案
+    patient_ref: P0012
+    disclaimer_attached: true
+- type: DeliveryReceipt
+  key: dr-plan-P0012-w40-P0012
+  fields:
+    target: P0012
+    channel: app
+    status: requested
+expect_state_note: IR §4 推送方案至患者 writes OutboundContent + DeliveryReceipt（每个 target 一条，初始 requested）；已签发方案快照自带免责尾注（C22）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

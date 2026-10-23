@@ -1,0 +1,83 @@
+# 由 t-20261023-0118 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r10
+q: 王叔（P0031）读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置
+expect: rejected(R04a_Level1低血糖_实时告警)
+tier: 3
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R04a_Level1低血糖_实时告警
+- GlucoseReading
+label:
+  answer: R04a 假阴性（规则实现问题）：r-P0031-00489 = 3.8 @ 2026-10-14T02:15，引擎找到的『前一读数』r-P0031-00480 = 2.2 是 00:00 的，中间隔了 2 h 15 min（P0031 夜间丢点 55%）；_prev_reading 只取时间上最近的一条，不校验相邻采样间隔，于是 2 小时前另一段 L2 事件（ep-P0031-14
+    00:00–00:15）的尾巴被当成『连续 2 读数』的确认。按 IR『连续 2 个读数确认』口径，02:15 这个 3.8 是单点（02:30 已回到 4.3，回顾事件 ep-P0031-15 也只有 15 min 一条），应当拒绝触发。口语里『前一读数 2.2』在数据上为真但有误导。
+  source: feedback
+  trace_id: t-20261023-0118
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0031读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置
+  kind: paraphrase
+- q: 王叔（P0031）读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0103
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result:
+      summary_id: s-P0023-14d
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0108
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: R04a
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0109
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: R03a
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0110
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0111
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 4.6，继续观察 24 小时
+    retest_value: 4.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0113
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 触发低血糖处置
+  params:
+    patient_id: P0031
+    reading_id: r-P0031-00489
+    rule_id: R04a

@@ -1,0 +1,19 @@
+id: 参考与配置-06
+q: 王叔（患者 P0031）的用药线索是从哪来的？是否提示低血糖高风险药？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- MedClassHint
+label:
+  answer: hint-P0031：hint_source self_report、hypo_risk_med true
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0031 的 MedClassHint 来源和风险标记？
+- kind: entity_swap
+  q: 黄伯（患者 P0045）的用药线索是从哪来的？是否提示低血糖高风险药？
+- kind: irrelevant_field
+  q: 王叔（患者 P0031）的用药线索是从哪来的？是否提示低血糖高风险药？他把药盒放在厨房。

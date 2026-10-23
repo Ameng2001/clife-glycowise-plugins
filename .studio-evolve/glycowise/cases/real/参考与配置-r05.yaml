@@ -1,0 +1,41 @@
+# 由 t-20261023-0106 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r05
+q: 黄伯（患者 P0045）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？
+expect: query
+tier: 1
+family: 参考与配置
+origin: real
+observed_at: '2026-10-23'
+elements:
+- PatientProfile
+label:
+  answer: PatientProfile P0045 meds=[格列齐特]、is_iah_high_risk=True 一行；格列齐特是磺脲，属低血糖高风险用药（MedClassHint hint-P0045 hypo_risk_med=True 也印证）。
+  source: feedback
+  trace_id: t-20261023-0106
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 患者 P0045（患者 P0045）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0103
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result:
+      summary_id: s-P0023-14d
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: PatientProfile
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    select:
+    - meds
+    - is_iah_high_risk

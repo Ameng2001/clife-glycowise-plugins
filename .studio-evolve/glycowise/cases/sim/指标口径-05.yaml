@@ -1,0 +1,21 @@
+id: 指标口径-05
+q: 李女士（患者 P0088）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- active_pct
+- sufficiency_ok
+- CgmSummary
+label:
+  answer: s-P0088-6d：days 6、active_pct 98.3、sufficiency_ok false
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0088 的数据充分性（天数、active%）达标了吗？
+- kind: entity_swap
+  q: 周先生（患者 P0007）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？
+- kind: irrelevant_field
+  q: 李女士（患者 P0088）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？她是上周二来的店。

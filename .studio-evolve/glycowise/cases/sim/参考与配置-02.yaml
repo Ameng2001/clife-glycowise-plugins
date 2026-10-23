@@ -1,0 +1,20 @@
+id: 参考与配置-02
+q: 危急级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- AlertTemplate
+- R56_告警模板预审冻结
+label:
+  answer: tpl-危急：frozen true、pre_reviewed_c22 true、pre_reviewed_r54 true
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 查一下「危急」级别的冻结告警模板及其预审状态。
+- kind: entity_swap
+  q: 高级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？
+- kind: irrelevant_field
+  q: 危急级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？模板是法务上个月改的。

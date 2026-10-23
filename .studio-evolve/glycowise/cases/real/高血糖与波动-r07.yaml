@@ -1,0 +1,40 @@
+# 由 t-20261023-0204 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r07
+q: P0023 的草稿，方向去强化。
+expect: action(生成方案草稿)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 生成方案草稿
+- CgmSummary
+label:
+  answer: 省略式短句被正确补成 patient_id=P0023、direction=去强化。P0023 66 岁 elderly、用甘精胰岛素（高危用药，TBR 上限 1.0%），s-P0023-14d TBR 0.7% 未超限、无 L2 事件（14 天 7 段事件全是 L1 最低 3.7），低血糖优先抢占不作用；R14 soft（TAR 45.1% ≥25%）只提示，草稿提交成立；夜间覆盖
+    40.2% 不足但 R35 只限强化方向。
+  source: feedback
+  trace_id: t-20261023-0204
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0023 的草稿，方向去强化。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+expect_state:
+- type: PlanDraft
+  key_prefix: draft-P0023-
+  fields:
+    patient_id: P0023
+    direction: 去强化
+    template_version: fde-0.1
+    category: 综合
+    med_interaction_routed: false
+expect_state_note: IR §4 生成方案草稿 writes PlanDraft（方向即参数 direction；AI 草稿不含用药加减 → med_interaction_routed false）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

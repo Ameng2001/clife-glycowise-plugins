@@ -1,0 +1,784 @@
+window: 2026-W45
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-23'
+_howto: 已标注：标签采纳自 feedback.expert-draft.yaml 的 63 条建议，由 reviewer 逐条确认。
+items:
+- trace_id: t-20261023-0202
+  utterance: 李女士（患者 P0088）这两周的平均血糖和变异系数 CV 是多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: partial
+  truth: 查到的是 s-P0088-6d（window 2026-10-17～10-22，days=6）：mean_glucose 7.95 / cv_pct 27.0。P0088 才戴 6 天，seed 里没有 14 天汇总，口语『这两周』的前提不成立；OQL 既没带时间窗条件也没 select days/window_*，读者会把 6 天均值当成两周均值。
+  truth_expect: null
+  reviewer: *id001
+  layer: router
+  note: 只计成本：数值本身是库里唯一可答的。若标注人认为『库里只有 6 天、答 6 天就是对的』可改 correct；建议路由侧对『这两周 / 最近 14 天』类口语至少把 days / window_end 带进 select。
+- trace_id: t-20261023-0203
+  utterance: 王叔（患者 P0031）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: s-P0031-14d nocturnal_coverage_pct 41.7、nocturnal_coverage_insufficient=True（seed night_drop 0.55），两问都答到。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0204
+  utterance: P0023 的草稿，方向去强化。
+  engine_actual: committed 生成方案草稿 soft=['R14_TAR_L1超标']
+  cq_expect: action(生成方案草稿)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: 省略式短句被正确补成 patient_id=P0023、direction=去强化。P0023 66 岁 elderly、用甘精胰岛素（高危用药，TBR 上限 1.0%），s-P0023-14d TBR 0.7% 未超限、无 L2 事件（14 天 7 段事件全是 L1 最低 3.7），低血糖优先抢占不作用；R14 soft（TAR 45.1% ≥25%）只提示，草稿提交成立；夜间覆盖
+    40.2% 不足但 R35 只限强化方向。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 与 W44 0103 同一临床提醒：TAR 45%、TBR 0.7% 的患者走『去强化』在临床上说不通，但方向是医师口语给的，由签发环节把关。
+- trace_id: t-20261023-0205
+  utterance: 王叔（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: s-P0031-14d gmi_pct 6.95，一行。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0206
+  utterance: 王叔（患者 P0031）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: partial
+  truth: '这次没有多挂跳、也没有 ''now-14d''，where patient_id=P0031 and level=L2 是对的，aggregate count 返回 {count: 18}，『几次』答对（P0031 14 天 L2 回顾事件 18 段，10-09～10-22）；但 aggregate 把 select 里的 min_value 吞掉了，『最低到多少』没答到——真实最低
+    2.2（ep-P0031-08/09/12/14/24/25/32/34/40 等多段触底 2.2）。'
+  truth_expect: null
+  reviewer: *id001
+  layer: router
+  note: 与 W44 0105 的区别：0105 因多跳 + 字面时间导致 count=0 是 wrong；这里 count 正确、只是 aggregate 与 select 不能同时返回，故 partial。draft_feedback 的『查到行』判据对 aggregate 永远成立，标注人不要照 suggested 填。
+- trace_id: t-20261023-0207
+  utterance: 王叔（患者 P0031）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: PatientProfile P0031 meds=[格列美脲, 二甲双胍]、is_iah_high_risk=True 一行；格列美脲是磺脲，属低血糖高风险用药（MedClassHint hint-P0031 hypo_risk_med=True 印证）。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 同 W44 0106：『算不算高风险用药』靠读者从药名判断，select 没带 MedClassHint.hypo_risk_med；若业务要求直接给判定字段可降 partial。
+- trace_id: t-20261023-0208
+  utterance: P0045 出强化降糖方向的草稿。
+  engine_actual: rejected ['低血糖优先抢占', 'R14_TAR_L1超标']
+  cq_expect: rejected(低血糖优先抢占)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: 省略式短句被补成 direction=强化（_direction 词表映射正确）。P0045 70 岁老年、磺脲（格列齐特），TBR 上限 1.0%，s-P0045-14d TBR 2.0% 超限且 14 天 L2 事件 2 次（10-19、10-21 夜间），低血糖带命中，按读图顺序低→高→波动必须抑制强化方向；R14 soft（TAR 37.1%）附带。拒绝成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0209
+  utterance: P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。
+  engine_actual: committed 触发低血糖处置
+  cq_expect: action(触发低血糖处置)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: r-P0045-00017 = 3.5 @ 2026-10-09T04:15，前一读数 r-P0045-00016 = 3.8 @ 04:00，间隔 15 min（≤20 min，_prev_sample 认作同一采样序列），都在 3.0–3.9 且下降，R04a 连续 2 读数确认成立；is_backfill=False、vendor_api 0.99，R52/R53 放行；staged
+    AlertEvent level 中。提交成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 同 W44 0108：读数是窗口第 1 天（14 天前）的，拿它『实时』触发处置业务上没意义，规则层没有『读数距今过久不得实时触发』的闸——IR 缺口，不改本条标签。
+- trace_id: t-20261023-0210
+  utterance: P0045 的 r-P0045-01162（2.7，前值 2.8）触发二级低血糖处置。
+  engine_actual: committed 触发低血糖处置
+  cq_expect: action(触发低血糖处置)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: r-P0045-01162 = 2.7 @ 2026-10-21T02:30，前一读数 r-P0045-01161 = 2.8 @ 02:15，间隔 15 min，连续 2 读数 <3.0，R03a 成立；staged 级别『高』在允许的 高/危急 内。对应回顾事件 ep-P0045-17（02:15–02:45，最低 2.7，L2）。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 读数是 2 天前的，同 0209 的提醒。
+- trace_id: t-20261023-0211
+  utterance: 王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4
+  engine_actual: committed 收紧告警阈值
+  cq_expect: action(收紧告警阈值)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: P0031 is_iah_high_risk=True（R46 要求夜间低值阈值 ≥4.4），把 night_low 上调到 4.4 是向安全方向收紧，医师操作直接提交成立；seed 原本没有 th-P0031-night_low，动作新建一行 current 4.4（before 记默认 3.9）。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 口语前提『24 小时内有 L2 事件』在 seed 里勉强不成立：P0031 最近 L2 回顾事件 ep-P0031-46 起于 2026-10-22T22:15（距录制时刻约 22.5 h，恰在 24 h 内）、ep-P0031-42 10-21 02:00；R34 看 _night_threshold_after（本次暂存 4.4 ≥4.4）所以没响——动作本身仍然对。
+- trace_id: t-20261023-0212
+  utterance: 健管师回执告警 A-P0012-01：15-15 补碳后复测 5.1，继续观察 24 小时
+  engine_actual: pending_hil 响应并回执告警
+  cq_expect: action(响应并回执告警)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: A-P0012-01 有 rule_id（R04a）、回执带 responded_at，C20 通过；action_taken 无闭环/结案字样，R44 不作用（P0012 只用二甲双胍，HypoState prolonged_risk=False、closure_blocked_reason=None，即便闭环也不拦）；15-15 才 1 轮且复测 5.1 ≥3.9，R57 不作用。进
+    HIL 由健管师/值班医师确认，成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0213
+  utterance: 把王叔（P0031）的夜间低值告警阈值放宽到 4.0
+  engine_actual: rejected ['R46_IAH高危阈值上调且禁止静音']
+  cq_expect: rejected(R46_IAH高危阈值上调且禁止静音)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: P0031 is_iah_high_risk=True，R46 要求低值阈值 ≥4.4，new_value 4.0 <4.4 硬拒成立；窗口内 0211 刚把 current 调成 4.4，这是往回放。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0214
+  utterance: 给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）
+  engine_actual: pending_hil 生成去强化证据工单
+  cq_expect: action(生成去强化证据工单)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: P0012 68 岁 elderly（TBR 上限 1.0%），s-P0012-14d TBR 1.4% 超限、14 天 16 段事件（L2 1 次：ep-P0012-12 10-21 02:00 最低 2.7），R09 命中条件成立且 handler 已满足（首行『低血糖优先』+ 明细表第一页）；3 天内夜间事件 6 段（10-20～10-22）→ R07 要求的『复核晚间用药与晚餐』已写进转介问题；L2
+    仅 1 次 → R10 不作用；有 L2 → 队列 clinical_hypo。evidence {episodes 16, l2 1, tbr 1.4, nights_low 1.0} 与新鲜 seed 一致。进 HIL 医师接单正确。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 临床提醒：P0012 只用二甲双胍（非低血糖高风险药），对她做『去强化』证据包在药理上几乎无可去强化之处，更像要查夜间低值的其它原因（seed 以 floor=3.7 生成大量 3.7 临界点），由医师接单判断。
+- trace_id: t-20261023-0215
+  utterance: 健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意
+  engine_actual: rejected ['C6_群内数据最小可见范围']
+  cq_expect: rejected(C6_群内数据最小可见范围)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: 群内消息含未脱敏原始血糖值『2.2 mmol/L』（C6 正则 \d+\.\d\s*mmol 命中），硬拒成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0216
+  utterance: P0031 的症状与处置记录。
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: 省略式短句被正确路由到 SymptomTreatmentRecord 单跳：sym-P0031-01（symptom_tag 叫不醒，recorded_at 2026-10-21T02:20，treatment_action 家属喂糖水，recorded_by 家属）一行。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: W44 0115 同一 CQ 的原句被路由到 AlertEvent 多跳而 0 行，这次改写成短句反而对了——说明路由错在『叫不醒』这个词把它拉向了告警对象。
+- trace_id: t-20261023-0217
+  utterance: 陈阿姨（P0023）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？
+  engine_actual: query·4 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: P0023 night_flag=true 的回顾事件 4 段（ep-P0023-00 10-09 02:15、-01 10-10 04:30、-02 10-13 03:00、-06 10-20 02:00），全是 L1、最低 3.7、各 15 min；select 带 start_time/end_time/min_value/level，时长可由起止算出。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 同 W44 0116：select 没带 duration_min（字段存在），只是便利性问题。
+- trace_id: t-20261023-0218
+  utterance: P0031 夜间有效率 <50% 已经连续多少个晚上了？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: wrong
+  truth: 路由层选错字段（与 W44 0117 同因）：CgmSummary 有现成字段 consecutive_low_night_nights（s-P0031-14d = 7 晚），OQL 却 where nocturnal_coverage_insufficient=true 并 select nocturnal_coverage_pct（整窗夜间覆盖率 41.7%），返回行里没有答案字段。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: 同一 CQ 的原句（W44 0117）与本次省略式改写都错在同一处，说明不是口语歧义而是路由对『连续几晚』→consecutive_low_night_nights 的映射缺失。
+- trace_id: t-20261023-0219
+  utterance: P0031 的 r-P0031-01067（3.6，前值 2.8）触发一级低血糖处置流程。
+  engine_actual: committed 触发低血糖处置
+  cq_expect: action(触发低血糖处置)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: partial
+  truth: 裁决成立：r-P0031-01067 = 3.6 @ 2026-10-20T02:45，前一读数 r-P0031-01066 = 2.8 @ 02:30（间隔 15 min），R04a 实现只要求前一读数 <3.9，放行；is_backfill=False（P0031 回填段是 10-09～10-11）。但路由把 rule_id 参数编成 'R34'——R34 是 HAAF 24 小时复发窗规则，不是实时触发规则——这个值被
+    handler 原样写进 AlertEvent.rule_id，告警溯源字段记错；0209/0210 同类参数是『一级低血糖处置』类自由文本，没有指向错误规则。
+  truth_expect: null
+  reviewer: *id001
+  layer: router
+  note: 要人工看的点（规则实现 vs IR）：IR R04a 写的是『连续 2 个读数确认 3.0≤G<3.9』，实现 r04a 对前一读数只判 prev<3.9，于是 2.8（L2 区间）→3.6 的恢复段也能开 Level 1 处置；本例 02:30 的 2.8 本应由 R03a/L2 链处理（回顾事件 ep-P0031-38 10-20 02:30 最低 2.8），在其尾巴上再开一个 L1
+    告警是冗余而非危险，故不改裁决，但建议作为归因候选。
+- trace_id: t-20261023-0220
+  utterance: 把告警 A-P0045-02（高级）推送给医师和家属
+  engine_actual: rejected ['R56_告警模板预审冻结']
+  cq_expect: action(推送告警)
+  suggested: wrong
+  suggested_why: 实际 rejected(R56_告警模板预审冻结)
+  label: wrong
+  truth: 路由层枚举字面量（与 W44 0119 同因）：A-P0045-02 在 seed 里 level=『高』，模板库 tpl-高 已冻结且 C22/R54 预审通过；Qwen 把口语『（高级）』原样传成 level='高级'，覆盖了告警自身级别，R56 查不到『高级』模板于是拒绝。用 level='高'（或 template_id=tpl-高）在新鲜 seed 上 validate 为
+    would_commit=True 无违规；A-P0045-02 来源 vendor_api 0.99，R53 也放行——这次推送本该放行。
+  truth_expect: action(推送告警)
+  reviewer: *id001
+  layer: router
+  note: 同 W44 0119 的两个点：① 路由应把级别归一到词表（低/中/高/危急）或不传 level 让规则回落到告警自身级别；② 规则层仍不鲁棒——去掉 level 后 _content_type 不再识别为『告警』，C22 按普通对外内容判『缺免责尾注』误拒（本次实测复现）。preview 多出的 C22 见顶部说明，不是状态依赖。
+- trace_id: t-20261023-0221
+  utterance: A-P0012-01 用紧急级推送。
+  engine_actual: rejected ['R56_告警模板预审冻结']
+  cq_expect: rejected(R56_告警模板预审冻结)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: 『紧急级』不是模板库级别（库里只有 低/中/高/危急），没有冻结模板不得现场生成告警话术，R56 拒绝成立；与 W43 0021 / W44 0120 口径一致。短句省略了推送对象，targets=[] 不影响裁决。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 与 0220 的区别：『高级』在词表里有对应项（高），归一后可放行；『紧急级』没有对应项，拒绝在业务上成立。preview 多出的 C22 见顶部说明。
+- trace_id: t-20261023-0222
+  utterance: 告警 A-P0045-ocr-01 是哪条规则触发的？触发读数是不是回填的？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层多挂一跳 triggered_by_reading（seed 无任何链接实例）→ 0 行（与 W44 0121 同因）。单跳 AlertEvent where alert_id=A-P0045-ocr-01 即 1 行：rule_id=R03a_Level2低血糖_实时告警、is_backfill=False（它的问题不是回填而是来源 ocr_upload 置信 0.78，evidence『OCR
+    截图识别 2.8』）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: 链接层没有种子数据是 seed 的缺口（0225/0255/0262/0269/0270 同受影响）；若业务侧认为应归数据层，layer 可改。
+- trace_id: t-20261023-0223
+  utterance: 黄伯（患者 P0045）的用药线索是从哪来的？是否提示低血糖高风险药？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: MedClassHint hint-P0045 一行：hint_source=drug_box_photo、hypo_risk_med=True、sglt2i=False，两问都答到。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0225
+  utterance: 周先生（患者 P0007）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层多挂一跳 computed_from（direction in，seed 无链接实例）→ 0 行（与 W44 0124 同因）。单跳 CgmSummary where patient_id=P0007 即 1 行：s-P0007-14d days=14、active_pct 98.7、wear_ratio 0.99、sufficiency_ok=True——够门槛。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: null
+- trace_id: t-20261023-0228
+  utterance: 给黄伯（P0045）按 14 天数据输出德心服务分层标签
+  engine_actual: pending_hil 输出服务分层标签 soft=['R18_CGM服务分层_内部标签']
+  cq_expect: action(输出服务分层标签)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: P0045 14 天数据充分（R01 过：days 14、active 95.1%）、动作参数无分层文本（R51 不响）；R18 soft 命中成立——P0045 70 岁 elderly，按 IR 老年人不做德心分层；动作仍算出 tier=L3（GMI 7.28，与 seed 预置 L3 一致）并进 HIL 由医师做披露授权，流程上正确。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 同 W44 0127：若业务口径是老年人『不得』出德心标签，R18 该升 hard。
+- trace_id: t-20261023-0229
+  utterance: 健管师在黄伯（P0045）群里答复：今天的数据已经同步到，餐后记得走一走
+  engine_actual: pending_hil 群内答复患者
+  cq_expect: action(群内答复患者)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: 监测提醒 + 生活方式建议：无原始值（C6）、无药名剂量（D10）、无禁用词（D8）、无夜间承诺（R54）、无安抚性措辞（R55 的 REASSURING 词表不含『同步到』），进 HIL 由健管师确认，成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 事实层提醒：seed 里 P0045 今天（10-23）没有任何读数（读数生成到今天 00:00 止），『今天的数据已经同步到』在数据上为假；R55 只拦『平稳/没有异常』类措辞，拦不住『已同步』这种事实性误述——若业务认为这也属『没有数据不得说成有数据』，是 R55 词表的扩展点。
+- trace_id: t-20261023-0234
+  utterance: 审核 c-reco-P0012-01。
+  engine_actual: rejected ['D8_禁用词拦截', 'D9_产品功效声称拦截', 'R32_产品推荐合规闸', 'C22_免责声明强制展示']
+  cq_expect: rejected(D9_产品功效声称拦截)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: c-reco-P0012-01 正文『根据您的 L3 分级，为您配一套英纽林疗程，坚持使用效果更好。』四条都成立：D8 命中禁用词『疗程』（bt-04 active）；D9/R32 产品（英纽林）与分层字样（L3 分级）同句；C22 该内容 disclaimer_attached=False。拒绝成立；路由补的 content_type=product_recommendation
+    不影响四条判定。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 同 W44 0133：handler 写进 evidence 的 hit_rules 只有 [D8, R32]，与 rules_evaluated 四条不一致，审计展示问题。
+- trace_id: t-20261023-0236
+  utterance: 把已签发的方案 plan-P0045-w41 推送给黄伯（P0045）
+  engine_actual: committed 推送方案至患者
+  cq_expect: action(推送方案至患者)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: plan-P0045-w41 是已签发方案（PlanSigned，签发人 S-HUANG 执业医师有效至 2028-09-22，signed_at 2026-10-18T15:00、evidence_snapshot 齐备），C9 放行；content_snapshot 自带免责尾注（C22 过）、无原始值（C6）、无分层字样（R51）、无安抚措辞（R55）；直接提交成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 答案值得注意：这份方案的 ReviewEvidence re-plan-P0045-w41 dwell_time 15 秒、零修改、review_suspicious=True——seed 里它是 D13 反橡皮图章的用例，但 D13 只绑在『签发方案』上，推送环节不再复核签发质量；若业务希望『可疑签发的方案不得推送』，是 C9 的扩展点。
+- trace_id: t-20261023-0237
+  utterance: 给陈阿姨（P0023）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充
+  engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
+  cq_expect: rejected(C4_数据用于产品推荐须单独同意)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: consent-P0023 scope_items 7 项没有『营销推荐』（seed 只给 P0007/P0045），C4 硬拒成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0238
+  utterance: P0007 的 day_high 阈值改到 13.9。
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: action(放宽告警阈值)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: 省略式短句被正确路由到『放宽告警阈值』（day_high 13.9 是放宽方向）。P0007 非 IAH 高危（R46 不作用），放宽只有医师可做且进 HIL，成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 同 W44 0137：seed 没有 th-P0007-day_high，handler 回落默认行 {current 3.9}，ThresholdChangeLog.before 会记成 3.9——handler 默认值对高值类阈值不合适，不影响裁决。
+- trace_id: t-20261023-0239
+  utterance: 李女士（患者 P0088）最近 14 天的 TIR 是多少？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层：where window_start >= 'now-14d' 是字面字符串，引擎不解析相对时间 → 0 行（与 W43 0029/0040、W44 0138 同因）。去掉该 where 即命中 s-P0088-6d：tir_pct 80.7（window 10-17～10-22，days=6）——真实答案是『只有 6 天数据，6 天 TIR 80.7%，没有 14 天窗口』。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: 相对时间落字面量已连续三个窗口出现（W43 两条、W44 一条、W45 三条：0239/0271/0272），路由侧应加硬约束。
+- trace_id: t-20261023-0240
+  utterance: P0007 的 RemissionClock 记录。
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: RemissionClock P0007 一行：day0=2026-07-10（d(105)）、status=running、confirmed_by=S-HUANG。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0241
+  utterance: 列出 P0007 的全部化验结果。
+  engine_actual: query·4 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: LabResult P0007 共 4 行：HbA1c 6.1（2026-10-15）、GADA 0.4、C-peptide fasting 1.6、C-peptide 2h 3.4（均 2026-07-15，LAB-NN-01，NGSP 认证）。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0242
+  utterance: P0007 的体测记录（BMI、腰围、体重）。
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: partial
+  truth: 查到 bm-P0007-01（2026-10-14）一行，但 select 没带 bmi 字段（seed 里 bmi=27.1），只给了 weight 82.0 / waist 96.0 / body_fat_pct 28.0——口语点名的三项只答了两项。
+  truth_expect: null
+  reviewer: *id001
+  layer: router
+  note: 与 W44 0141 同一漏选，这次口语把 BMI 明写在括号里仍漏，说明路由对 bmi 字段的映射缺失；标注人若认为『点名三项只答两项』构成错误，可改 wrong + layer router，truth_expect query。
+- trace_id: t-20261023-0243
+  utterance: P0007 的英纽林推荐，话术只说饮食补充。
+  engine_actual: committed 生成产品推荐
+  cq_expect: action(生成产品推荐)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: 路由把『话术只说饮食补充』补成 pitch='作为日常饮食的补充'。P0007 同意书含『营销推荐』（C4 过）；话术无分层/缓解字样（D9/R32 同句闸过），handler 自动附『固体饮料，不替代药物』尾注（R32 尾注过）；C13 bundle 不作用；置信 0.8 ≥0.75 不进 HIL，直接提交成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0246
+  utterance: 刘阿姨（患者 P0012）的单独同意书勾了哪些范围？有没有「营销推荐」？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: consent-P0012 scope_items 7 项（血糖数据/用药信息/体测数据/紧急联系人/厂商云对接/数据留存/健康档案），没有『营销推荐』，一行即答两问。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0248
+  utterance: 上架食品 sku-ynl-01。
+  engine_actual: pending_hil 上架产品SKU
+  cq_expect: action(上架产品SKU)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: sku-ynl-01 category=食品、label_verified=True，C14 过，非器械（C1/C2 不作用），进 HIL 由合规官审核，成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0249
+  utterance: 上架食品 sku-dc-01。
+  engine_actual: rejected ['C14_产品标签合规校验']
+  cq_expect: rejected(C14_产品标签合规校验)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: sku-dc-01 在 seed 里不存在（未建档），label_verified 自然不是 True，食品类上架前必须核验『固体饮料』字号与警示语，C14 拒绝成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 同 W44 0148：更准确的说法是『SKU 未建档』，C14 消息可区分两种情形。
+- trace_id: t-20261023-0250
+  utterance: 线上频道上架 sku-cgm-01。
+  engine_actual: rejected ['C1_器械经营资质闸', 'C2_网络销售备案与证照公示']
+  cq_expect: rejected(C2_网络销售备案与证照公示)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: sku-cgm-01 category=器械引用：Credential 表只有 执业医师/注册营养师/运动康复师，无《医疗器械经营许可证》（C1）、无网络销售备案（C2），两条都成立；CQ 只期望 C2，C1 一并命中也对。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0251
+  utterance: 南宁青秀店（store-01）的证照与诊疗范围？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: StoreEntity store-01 一行：name 代谢健康管理中心·南宁青秀店、license_no=None、medical_scope=[]，即无器械经营许可、无诊疗范围。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0252
+  utterance: SKU sku-ynl-01 是什么类别？标签核验过了吗？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: ProductSku sku-ynl-01 一行：category=食品、label_verified=True。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0253
+  utterance: 陈营养师的注册证什么时候到期？状态有效吗？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: Credential cred-chen 一行（where holder='陈营养师' 命中）：注册营养师 RD-2021-xxxx、expiry_date 2026-09-20（d(33)）、status 字段仍写 valid。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 答案本身要人工看：到期日已过 33 天而台账 status 还是 valid（D11a 按到期日判会冻结其签发权），与 W44 0154 发现一致；行查得对，但『状态有效吗』的诚实回答是『台账写有效、实际已过期』。
+- trace_id: t-20261023-0254
+  utterance: 方案 plan-P0088-w41 签发时签发人看了多久、改了什么？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: ReviewEvidence re-plan-P0088-w41 一行：dwell_time 12 秒、agp_expand_count 0、diff 空、review_suspicious=True——看了 12 秒、什么都没改。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0255
+  utterance: 方案 plan-P0012-w40 是 S-HUANG 签的，这位签发人的资质类型和到期日是什么？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层：从 PlanSigned 多跳 requires_credential（seed 无链接实例）→ 0 行（与 W44 0154 同因），且 select 的 credential_type/expiry_date 本来就是 Credential 的字段。单跳 Credential where holder_id='S-HUANG' 即 1 行：执业医师，expiry_date
+    2028-09-22，status valid。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: null
+- trace_id: t-20261023-0256
+  utterance: 健管师在李女士（P0088）的群里答复：您本期的服务分层是 L1 级
+  engine_actual: rejected ['R51_分层结论默认不可披露患者']
+  cq_expect: rejected(R51_分层结论默认不可披露患者)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: 『服务分层是 L1 级』命中 TIER_RE（L1 级 / 服务分层），P0088 disclosure_approved=False，R51 硬拒成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: 事实层：P0088 tier_label=None（才 6 天，R01 未过不出分层），健管师群里说的 L1 本身也是无据之言。
+- trace_id: t-20261023-0257
+  utterance: 妊娠人群，低值告警阈值和 TBR 上限各是多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: TargetProfileParam population=妊娠（profile pregnancy）一行：low_alert_threshold 3.5、tbr_max_pct 4.0。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0258
+  utterance: 列一下老年（≥65）患者和他们的 target_profile。
+  engine_actual: query·4 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: PatientProfile age ≥65 共 4 行：P0012（68）、P0031（72）、P0023（66）、P0045（70），target_profile 均 elderly。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0259
+  utterance: P0099 出维持方向草稿。
+  engine_actual: committed 生成方案草稿
+  cq_expect: action(生成方案草稿)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: partial
+  truth: P0099 是新客：age 61、health_tier/target_profile 都空，没有 CgmSummary、没有 ConsentRecord；草稿照样生成（正文『近 ? 天 TIR None% / TBR None% …』）、置信 0.6、无 HIL 直接 committed。R49（有年龄缺 health_tier 且未按 elderly 最保守执行）在 guard
+    阶段确实命中（soft，validate 可见），但 execute 只把 post_write 阶段的违规写进审计与 advisory，guard 阶段的 soft 违规被丢掉（本次 execute 复核 rules_evaluated=[]、advisory=()）——医师既拿到一份空草稿，又看不到任何提示。
+  truth_expect: null
+  reviewer: *id001
+  layer: rule
+  note: 与 W44 0158 同一现象、同一机理（见顶部说明），是引擎内核的审计缺口，不是插件规则错——故只标 partial 计成本；若标注人认为『无数据无同意也能出草稿』在业务上不成立，可改 wrong + layer rule，truth_expect 写 rejected(R49_缺参数时按最保守执行) 并把 R49 升 hard。
+- trace_id: t-20261023-0261
+  utterance: 禁用词库里「用药」类有哪些词？
+  engine_actual: query·3 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: BannedTermLibrary category=用药 共 3 行：停药（bt-03）、不用吃药（bt-09）、摆脱药物（bt-10），version 2026.10。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0262
+  utterance: 汇总 s-P0045-14d 是按哪个窗口的读数算的？窗口起止日期？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层多挂一跳 computed_from（direction in，seed 无链接实例）→ 0 行。单跳 CgmSummary where summary_id=s-P0045-14d 即 1 行：window_start 2026-10-09、window_end 2026-10-22（14 天到昨天）、metric_provenance self_computed。W44 0161
+    同一 CQ 的原句是单跳 1 行，这次换患者后多挂了跳。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: null
+- trace_id: t-20261023-0263
+  utterance: 新建 L2 档服务包 pkg-L2-basic，三项服务内容。
+  engine_actual: pending_hil 创建服务包SKU
+  cq_expect: action(创建服务包SKU)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: contents=['三项服务内容']（口语本身就没给具体项，路由只能原样带入）不含产品词与器械词，C13/C15/C1/R54 都不作用，进 HIL 由合规官审核，成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: contents 是占位字符串，HIL 审核时应要求补齐真实服务项；这不是路由错，是口语信息不足。
+- trace_id: t-20261023-0264
+  utterance: 单条读数 r-P0012-00115（3.7）就触发 P0012 的一级低血糖处置。
+  engine_actual: rejected ['R04a_Level1低血糖_实时告警']
+  cq_expect: rejected(R04a_Level1低血糖_实时告警)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: r-P0012-00115 = 3.7 @ 2026-10-10T04:45，前一读数 r-P0012-00114 = 8.5 @ 04:30（间隔 15 min 但 ≥3.9），单点未确认，R04a 硬拒成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0265
+  utterance: 用 P0031 的回填读数 r-P0031-00123（3.4）走一遍实时低血糖处置。
+  engine_actual: rejected ['R52_回填读数不得触发实时告警']
+  cq_expect: rejected(R52_回填读数不得触发实时告警)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: r-P0031-00123 = 3.4 @ 2026-10-10T06:45，is_backfill=True（P0031 backfill_days=3 覆盖 10-09～10-11），回填读数只进统计通道，R52 硬拒成立（R04a 本身会过：前一读数 00122 = 3.5 间隔 15 min）。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0266
+  utterance: d-P0012-01 由吴康复师签。
+  engine_actual: rejected ['D12_签发人归属分流']
+  cq_expect: rejected(D12_签发人归属分流)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: correct
+  truth: d-P0012-01 category=营养；cred-wu 是运动康复师（签发范围 {运动, 教育}，有效至 2027-11-27，D11a 不响），『营养』类方案不能由运动康复师签发，D12 硬拒成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0267
+  utterance: P0012 的 night_low 阈值当前值？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: correct
+  truth: AlertThreshold th-P0012-night_low current_value 3.9；窗口内 0211 收紧的是 P0031，P0012 未动，顺序回放与新鲜 seed 一致。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0268
+  utterance: 高级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层枚举字面量：AlertTemplate.level 词表是 低/中/高/危急，OQL 写成 level='high' → 0 行。改 level='高' 即 1 行：tpl-高，frozen=True、pre_reviewed_c22=True、pre_reviewed_r54=True、reviewed_at 2026-09-23。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: 与 0220 的『高级』是同一个根因的两种表现（口语级别词 → 本体枚举值归一缺失），一个在 action 参数、一个在 OQL where。
+- trace_id: t-20261023-0269
+  utterance: 把触发 A-P0045-02 的那串读数（P0045，10/21 凌晨 <3.9）列出来。
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层从 AlertEvent 多挂一跳 triggered_by_reading（direction in，seed 无链接实例）→ 0 行。口语已把条件说全，直接单跳 GlucoseReading where patient_id=P0045 and value_mmol<3.9 and time_utc in 2026-10-21 00:00–06:00 即 2 行：r-P0045-01161
+    2.8 @02:15、r-P0045-01162 2.7 @02:30（vendor_api 0.99）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: seed 自身不一致要人工看：A-P0045-02 的 raised_at 写的是 2026-10-22T02:00、evidence『02:00 连续 3 读数』，而真实低值读数在 10-21 02:15/02:30（10-22 凌晨只有 05:30 一个 3.5 单点）——口语的『10/21』反而对。
+- trace_id: t-20261023-0270
+  utterance: 刘阿姨（P0012）的低血糖告警为什么一直不能闭环？状态机里卡在哪？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层从 HypoState 多挂一跳 gates_alert_closure（seed 无链接实例）→ 0 行，让人以为 P0012 没有状态机记录。单跳 HypoState where patient_id=P0012 即 1 行：prolonged_risk=False、recurrence_window_until=None、closure_blocked_reason=None——真实答案是『没有卡住』，口语前提（一直不能闭环）对
+    P0012 不成立（原 CQ 的对象是磺脲使用者 P0045，entity_swap 换成 P0012 后前提就不对了）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: null
+- trace_id: t-20261023-0271
+  utterance: 陈阿姨（患者 P0023）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层：where window_end >= 'now-14d' 是字面字符串 → 0 行。去掉该 where 即命中 s-P0023-14d：tar_pct 45.1、tar_l2_pct 4.5（window 10-09～10-22）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: 同 0239/0272。
+- trace_id: t-20261023-0272
+  utterance: 黄伯（患者 P0045）这 14 天 TBR 一级和二级（<3.0）各占多少？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: wrong
+  truth: 路由层：where window_start >= 'now-14d' 是字面字符串 → 0 行。去掉该 where 即命中 s-P0045-14d：tbr_pct 2.0、tbr_l2_pct 0.3（window 10-09～10-22）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
+  note: 同 0239/0271。seed 的 tbr_pct 是 <3.9 总占比（含 L2），不是 IR TBR_L1 定义的 3.0–3.8 单独占比，回答『一级』时要减去 0.3——指标口径问题，不影响本条标签。
+- trace_id: t-20261023-0273
+  utterance: 从厂商接口摄入黄伯（P0045）的一条读数：r-P0045-x1，6.8 mmol/L，传感器序号 SN-P0045
+  engine_actual: committed 摄入读数
+  cq_expect: action(摄入读数)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: wrong
+  truth: 路由层 payload 形态错：handler 与 R48 都只读 raw_payload.readings[]，Qwen 却把读数平铺成 raw_payload={reading_id, patient_id, value_mmol, sensor_serial}。于是 C3 过（P0045 同意书含血糖数据）、R48 一行都没校验、handler 循环空列表——引擎『committed』但实际落库
+    0 条读数（顺序回放后 GlucoseReading r-P0045-x1 不存在，IngestBatch record_count=0）。同样口语在 W43 0036（P0012，r-P0012-x1）是同一形态、也被标了 correct——那条也应回看。
+  truth_expect: action(摄入读数)
+  reviewer: *id001
+  layer: router
+  note: 两个要人工看的点：① 用正确形态 raw_payload.readings=[{reading_id, value_mmol, sensor_serial, dedup_key}] 实测：不带 dedup_key 会被 R48 拒（dedup_key 须以 SN-P0045 开头），带 dedup_key=SN-P0045-x1 才 would_commit 且落 1 条——口语没给去重键，所以
+    truth_expect 的放行以路由能按 IR『传感器序号 + 序号』组键为前提，否则应是 rejected(R48)；② 规则/handler 层也不鲁棒：摄入 0 条读数的批次照样 committed、R48 对平铺 payload 直接放行，建议 handler 对 record_count=0 拒绝或告警，R48 把 raw_payload 顶层读数也纳入校验。
+- trace_id: t-20261023-0274
+  utterance: P0007 的德心分层内部标签。
+  engine_actual: query·1 行
+  cq_expect: action(输出服务分层标签)
+  suggested: wrong
+  suggested_why: 实际 query
+  label: correct
+  truth: 名词短语被路由成查询：PatientProfile P0007 tier_label=L1 一行。P0007 52 岁 adult、14 天数据充分，这个预置标签在业务上成立；把『X 的分层标签。』读成查现值而不是重新输出，是合理的歧义消解。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: cq_expect 是从原 CQ『给 P0007 输出德心分层标签』继承的，paraphrase 后口语已经不含动作动词；若业务侧坚持此句应触发『输出服务分层标签』动作，可改 wrong + layer router，truth_expect action(输出服务分层标签)。顺带实测：真跑该动作引擎会算出 tier=L2（_tier_label 以 GMI<6.1 为 L1、<6.5
+    为 L2，P0007 GMI 6.15），与 seed 预置 L1 不一致——与 W43 0032 / W44 0127 的『引擎算的与 seed 预置不一致』同类，请健管主管定口径。
+- trace_id: t-20261023-0275
+  utterance: 给 P0012 做一次缓解判定。
+  engine_actual: pending_hil 判定缓解结果 soft=['R30_缓解适宜人群筛选_ABCD']
+  cq_expect: action(判定缓解结果)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: R01 过（s-P0012-14d days 14、active 98.7%）；P0012 没有 RemissionClock（days=None）、在用二甲双胍、无 HbA1c 化验，_remission_criteria 走 GMI 7.08（前提满足）→ status=not_in_remission，R29 不响（没有声称缓解）；R30 soft 成立（无抗体/C 肽化验、无体测、病程
+    6 年：ABCD 四项全 False）；D11a 退回角色门放行。进 HIL 由医师面诊告知，成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+- trace_id: t-20261023-0276
+  utterance: 给周先生（P0007）生成本期方案草稿，方向维持（基于 s-P0007-14d）
+  engine_actual: committed 生成方案草稿
+  cq_expect: action(生成方案草稿)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: correct
+  truth: P0007 52 岁 adult、无降糖药、无 lada_flags（R37 不响）；s-P0007-14d TIR 97.5% ≥70（R15 不响）、TBR 0.0、TAR 2.5（R13/R14 不响）、CV 25.8（R16 不响）、夜间覆盖 94.9%（R35 不响且方向维持）；直接提交成立。
+  truth_expect: null
+  reviewer: *id001
+  layer: null
+  note: null
+adopted_from: feedback.expert-draft.yaml

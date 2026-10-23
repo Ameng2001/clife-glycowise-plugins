@@ -1,0 +1,20 @@
+id: 结论层与分层-08
+q: 健管师在刘阿姨（P0012）群里答复：放心，夜里出事我们第一时间知道
+expect: rejected(R54_服务话术不得含夜间安全承诺)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- R54_服务话术不得含夜间安全承诺
+label:
+  answer: 含夜间安全承诺，被 R54 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 在 P0012 群里承诺夜间有人盯着。
+- kind: entity_swap
+  q: 健管师在陈阿姨（P0023）群里答复：放心，夜里出事我们第一时间知道
+- kind: irrelevant_field
+  q: 健管师在刘阿姨（P0012）群里答复：放心，夜里出事我们第一时间知道；这是店长让发的。

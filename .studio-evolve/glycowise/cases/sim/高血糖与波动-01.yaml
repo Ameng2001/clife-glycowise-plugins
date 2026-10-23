@@ -1,0 +1,20 @@
+id: 高血糖与波动-01
+q: 给黄伯（P0045）生成本期方案草稿，方向维持（基于 s-P0045-14d）
+expect: action(生成方案草稿)
+tier: 3
+family: 高血糖与波动
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 生成方案草稿
+- 低血糖优先抢占
+label:
+  answer: 方向维持，低血糖带命中但不抑制维持方向，committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0045 本期方案草稿，维持方向。
+- kind: entity_swap
+  q: 给周先生（P0007）生成本期方案草稿，方向维持（基于 s-P0007-14d）
+- kind: irrelevant_field
+  q: 给黄伯（P0045）生成本期方案草稿，方向维持（基于 s-P0045-14d），他下周要去女儿家住。

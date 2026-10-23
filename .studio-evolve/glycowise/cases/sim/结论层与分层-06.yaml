@@ -1,0 +1,19 @@
+id: 结论层与分层-06
+q: 健管师在刘阿姨（P0012）群里答复：我来给您诊断一下，看这曲线问题不大
+expect: rejected(C19_线上随访边界)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- C19_线上随访边界
+label:
+  answer: 健管师在线上随访里做诊断，超出健康教育/生活方式/监测提醒/异常转介范围，被 C19 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 健管师在 P0012 群里说要给她诊断。
+- kind: irrelevant_field
+  q: 健管师在刘阿姨（P0012）群里答复：我来给您诊断一下，看这曲线问题不大；医院离她家两公里。
+note: 专家抽检后改措辞：原句「建议您去医院开处方调整」属异常转介、现实里允许，但 C19 实现的关键词正则会拒——记为实现缺口候选

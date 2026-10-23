@@ -1,0 +1,72 @@
+# 由 t-20261023-0018 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r03
+q: 健管师在 P0012 的群里答复"二甲双胍从两片减到一片"，写进今天的建议
+expect: rejected(D10_用药建议拦截)
+tier: 3
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- D10_用药建议拦截
+label:
+  answer: R51 在这条消息上是假阳性：『二甲双胍从两片减到一片』不含任何分层/分型字样（TIER_RE 不匹配），隔离预演该动作只命中 C6 + D10；窗口内 R51 命中是因为 text_of()/staged_outbound() 读到了前序动作（0015/0017）残留的暂存正文（含 L3/分层），跨动作暂存泄漏。真正应拦的是 D10（药名 + 剂量/加减）。拒绝结果碰巧对，但理由不成立、归因会落错规则。
+  source: feedback
+  trace_id: t-20261023-0018
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 健管师在 P0012 的群里答复"二甲双胍从两片减到一片"，写进今天的建议；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 二甲双胍从两片减到一片
+    sender_role: 健管师
+expect_not:
+- R51_分层结论默认不可披露患者

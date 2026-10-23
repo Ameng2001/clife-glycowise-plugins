@@ -1,0 +1,22 @@
+id: 缓解路径-04
+q: 周先生（P0007）停药观察期里问能不能把二甲双胍彻底停掉，转介医师
+expect: action(转介医师)
+tier: 3
+family: 缓解路径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 转介医师
+- R33_停药观察期反弹预警
+- RemissionClock
+- ReferralRecord
+label:
+  answer: 停药观察期（RemissionClock running）的停药问题转医师；R33 无反弹信号（7 天均值 / GMI / TAR 均未超）→
+    pending_hil
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0007 问能不能停二甲双胍，转医师。
+- kind: irrelevant_field
+  q: 周先生（P0007）停药观察期里问能不能把二甲双胍彻底停掉，转介医师；他这周开始晨跑了。
+note: P7 来源案例：R33 挂在转介医师上的语义

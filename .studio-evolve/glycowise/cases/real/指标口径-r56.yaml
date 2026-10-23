@@ -1,0 +1,66 @@
+# 由 t-20261023-0312 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r56
+q: 把告警 A-P0012-01（中级）推送给健管师，健管师今天在店里值班。
+expect: action(推送告警)
+tier: 3
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 推送告警
+label:
+  answer: 路由把『中级』当 level 原样送入；seed 冻结模板只有 低/中/高/危急 四级，_alert_template 查不到 level=中级 的 frozen 模板 → R56 hard。实测同参数改 level=中 → would_commit=True、无违规，暂存 AlertEvent A-P0012-01 + DeliveryReceipt dr-A-P0012-01-健管师。A-P0012-01
+    本身 level 就是 中。
+  source: feedback
+  trace_id: t-20261023-0312
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 把告警 A-P0012-01（中级）推送给健管师，健管师今天在店里值班。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0305
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0306
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑运动。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0307
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0308
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者停药观察期咨询能否彻底停用二甲双胍
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 推送告警
+  params:
+    alert_id: A-P0012-01
+    level: 中级
+    targets:
+    - 健管师

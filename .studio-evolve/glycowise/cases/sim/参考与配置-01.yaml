@@ -1,0 +1,17 @@
+id: 参考与配置-01
+q: 刘阿姨（患者 P0012）的夜间低值告警阈值现在设的是多少？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- AlertThreshold
+label:
+  answer: th-P0012-night_low：current_value 3.9
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0012 的 night_low 阈值当前值？
+- kind: irrelevant_field
+  q: 刘阿姨（患者 P0012）的夜间低值告警阈值现在设的是多少？她喜欢早上散步。

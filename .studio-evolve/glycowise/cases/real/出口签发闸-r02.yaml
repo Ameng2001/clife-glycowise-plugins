@@ -1,0 +1,44 @@
+# 由 t-20261023-0009 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 出口签发闸-r02
+q: 黄医生确认无误，签发 P0012 的方案草稿 d-P0012-01
+expect: action(签发方案)
+tier: 4
+family: 出口签发闸
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 签发方案
+- PlanDraft
+label:
+  answer: 黄医生执业医师证有效（到期 d(-700)≈2028-09），签发 d-P0012-01 进 HIL 等医师确认，合规。
+  source: feedback
+  trace_id: t-20261023-0009
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 黄医生确认无误，签发 P0012 的方案草稿 d-P0012-01；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 1.0
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+expect_state:
+- type: PlanSigned
+  key: plan-d-P0012-01
+  fields:
+    patient_id: P0012
+    signer_id: 黄医生
+    decision: approved
+    review_evidence_ref: re-plan-d-P0012-01
+    evidence_stale: false
+- type: ReviewEvidence
+  key: re-plan-d-P0012-01
+  fields:
+    plan_id: plan-d-P0012-01
+    signer_id: 黄医生
+expect_state_note: IR §4 签发方案 writes PlanSigned + ReviewEvidence；草稿 d-P0012-01 属 P0012，签发人/决定即参数（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

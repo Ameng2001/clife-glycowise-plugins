@@ -1,0 +1,86 @@
+{
+  "ontology_id": "glycowise",
+  "proposal": "9",
+  "attempt": 3,
+  "round": 5,
+  "gate_mode": "3d-noS",
+  "delta": null,
+  "accept_rate": null,
+  "seed": null,
+  "beta": 0.05,
+  "max_attempts": 3,
+  "panel": "SINGLE_BACKBONE",
+  "inner": {
+    "deltas": {
+      "flags": [
+        "W_PARTIAL"
+      ],
+      "dT": {
+        "T_3": 0.8
+      },
+      "dS": 0.0,
+      "dW": {
+        "W_family": 1.0
+      },
+      "dA": 0.8,
+      "dC": -0.7999999999999998,
+      "C_base": 3.0
+    },
+    "judge": {
+      "growOK": true,
+      "costOK": true,
+      "strict": true,
+      "pass": true,
+      "reasons": [],
+      "triggered": [],
+      "band": 1.0
+    },
+    "n": 5,
+    "origins": {
+      "real": 5
+    }
+  },
+  "outer": [
+    {
+      "backbone": "default",
+      "deltas": {
+        "flags": [
+          "W_PARTIAL"
+        ],
+        "dT": {
+          "T_1": 0.0,
+          "T_3": 0.125,
+          "T_4": 0.0
+        },
+        "dS": 0.0,
+        "S_holdout_cand": 1.0,
+        "S_full_base": 1.0,
+        "S_full_cand": 1.0,
+        "S_min_component": "S_consist",
+        "dW": {
+          "W_family": 0.0
+        },
+        "dA": 0.050000000000000044,
+        "dC": -0.04999999999999982,
+        "C_base": 2.9
+      },
+      "judge": {
+        "growOK": true,
+        "costOK": true,
+        "strict": true,
+        "pass": true,
+        "reasons": [],
+        "triggered": [],
+        "band": 1.0
+      },
+      "n": 40
+    }
+  ],
+  "inner_pass": true,
+  "outer_pass": true,
+  "decision": "ACCEPT",
+  "triggered": [],
+  "exec": "AUTO",
+  "script_hash": "sha256:cc1e4b90a1eda6612a16c60fa92de7d5ee394134384a07beab63620e8fec93ec",
+  "report": "提案 9（第 3/3 次）· 本体 glycowise · 沙箱 /private/tmp/claude-501/-Users-liuyameng-Codes-floppy/ee9bfa6a-aea1-4b64-afc6-29f9f9b14f54/scratchpad/sandbox/P9a · gate_mode=3d-noS\n来源案例 Dᵢ：5 条（real 5 / sim 0)    留出集 B：40 条（real，20 层，round 5）\n内关卡 g_in：\n  ΔT = (—, —, +0.80, —)   ΔS_consist = 0.000   ΔW = (—, +1.000)   ΔC_tok = -0.800（带宽 1.000）   ΔA = +0.800\n  growOK ✓  costOK ✓  strict ✓  → PASS   flags=['W_PARTIAL']\n外关卡 g_out（骨干 default）：\n  ΔT = (+0.00, —, +0.12, +0.00)   ΔS = 0.000（min 分量 = S_consist）   ΔW = (—, +0.000)   ΔC_tok = -0.050   ΔA = +0.050\n  growOK ✓  costOK ✓  → PASS   flags=['W_PARTIAL']\n裁决：ACCEPT（待人确认合入）\n执行方式：AUTO（sha256:cc1e4b90a1ed…）· SINGLE_BACKBONE"
+}

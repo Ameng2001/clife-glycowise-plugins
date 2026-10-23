@@ -1,0 +1,19 @@
+id: 低血糖安全-02
+q: 刘阿姨（P0012）读数 r-P0012-00115 是 3.7，立刻按 R04a 触发 Level 1 低血糖处置
+expect: rejected(R04a_Level1低血糖_实时告警)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R04a_Level1低血糖_实时告警
+label:
+  answer: 前一读数 ≥3.9 未确认，须连续 2 个读数，被 R04a 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 单条读数 r-P0012-00115（3.7）就触发 P0012 的一级低血糖处置。
+- kind: irrelevant_field
+  q: 刘阿姨（P0012）读数 r-P0012-00115 是 3.7，立刻按 R04a 触发 Level 1 低血糖处置；今天天气不错。
+note: 实参由 seed 动态挑选：g∈[3.0,3.9) 且前一读数 ≥3.9

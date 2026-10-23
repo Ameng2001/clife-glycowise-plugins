@@ -1,0 +1,50 @@
+# ③ 只读数据源 —— 贴进 .studio-evolve/glycowise/config.yaml 的 `sources` 段（替换掉 TODO(FDE) 那两行）。
+# evolve-ground 对 IR §6 Mapping Hints 的每一行（store / table / key / columns）跑一次
+#   SELECT <key>, <columns…> FROM <schema>.<table> LIMIT 20
+# 取样写进 IR §8 Evidence；W_evid 才可测。表名 / 列名与库里不一致会标 mismatch，那是正式 run 前要清的债。
+#
+# 四条硬要求（缺一条整个 store 标 UNREACHABLE，不猜）：
+#   1. 只读账号：对应库只授 SELECT / USAGE，不给 DML、DDL。
+#   2. 假名化视图：连到的 schema 里患者 id 已假名化（P0012 这种演示 id 即可），不含姓名 / 手机 / 微信 external_userid。
+#   3. 密码走环境变量：dsn 里写 ${VAR}，不写明文；跑管线的机器上 export。
+#   4. 直连：跑管线的机器到库的网络通（VPN / 跳板都行，但不能要交互式二次认证）。
+#
+# IR §6 共 62 个对象：postgres 55 个（推理主干与主数据，materialized / hybrid），clickhouse 7 个（时序与只进不出明细，virtual）。
+
+sources:
+  - store: postgres                                   # IR §6 里 store=postgres 的 55 行都走这个连接
+    dsn: "postgresql://glycowise_ro:${GLYCOWISE_PG_RO_PASSWORD}@pg-ro.glycowise.internal:5432/glycowise?sslmode=require"
+    schema: cgm_pseudo                                # 假名化视图所在 schema；视图名 = IR §6 的 table 名
+    role: glycowise_ro                                # 只读角色名，ground 报告里会原样记下
+    probe:
+      limit: 20                                       # 每条探测取样行数（不扫全表）
+      statement_timeout_ms: 5000
+      sample_order: "ORDER BY 1 DESC"                 # 按主键倒序取最近的样本，便于核对口径
+    tables_hint:                                      # 可选：库里实际的表名与 IR 不同时在这里先登记，ground 会按此映射再判 mismatch
+      cgm_summary: cgm_summary_v2                     # 例：IR 写 cgm_summary，库里实际是 cgm_summary_v2
+
+  - store: clickhouse                                 # IR §6 里 store=clickhouse 的 7 行（glucose_reading / alert_suppressed_log / context_event / meal_response / compliance_check_log / delivery_receipt / audit_log）
+    dsn: "clickhouse://glycowise_ro:${GLYCOWISE_CH_RO_PASSWORD}@ch-ro.glycowise.internal:9440/glycowise_metrics?secure=true"
+    schema: glycowise_metrics
+    role: glycowise_ro
+    probe:
+      limit: 20
+      max_execution_time_s: 5
+      sample_order: "ORDER BY time_utc DESC"          # 时序表按时间倒序取最近 20 行
+      partition_hint: "WHERE time_utc >= now() - INTERVAL 14 DAY"   # 大表（glucose_reading）只探最近 14 天分区，谓词下推
+
+# 引擎审计导出（① 轨迹的来源）—— 与 trajectory_source 配套，不是 ground 探测对象，只是放在一起便于业务侧一次准备。
+trajectory_source:
+  kind: audit_log
+  path: ".studio-evolve/glycowise/trajectories/{window}/audit.jsonl"
+  export:                                             # 网关从引擎 SqliteAuditStore 导出并补四个键的约定
+    from: "sqlite:///var/lib/clife-onto-engine/audit.db"   # 表 audit，按 ontology_id='glycowise' 导出
+    enrich: [trace_id, ts, utterance, cost]           # 缺 utterance → COARSE_TRAJECTORY；缺 cost.tokens → COST_BY_STEPS
+    window: iso_week                                  # 目录名 2026-W43 这种 ISO 周
+
+# 环境变量（跑管线的机器上）：
+#   export GLYCOWISE_PG_RO_PASSWORD='…'
+#   export GLYCOWISE_CH_RO_PASSWORD='…'
+# 连通性自检（任选一条跑通即可）：
+#   psql "postgresql://glycowise_ro@pg-ro.glycowise.internal:5432/glycowise?sslmode=require" -c "SELECT summary_id, patient_id, nocturnal_coverage_pct FROM cgm_pseudo.cgm_summary LIMIT 20"
+#   clickhouse-client --host ch-ro.glycowise.internal --port 9440 --secure --user glycowise_ro -q "SELECT reading_id, patient_id, value_mmol, time_utc FROM glycowise_metrics.glucose_reading WHERE time_utc >= now() - INTERVAL 14 DAY ORDER BY time_utc DESC LIMIT 20"

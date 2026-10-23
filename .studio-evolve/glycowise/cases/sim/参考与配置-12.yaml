@@ -1,0 +1,20 @@
+id: 参考与配置-12
+q: 给新客（P0099）生成一份维持方向的方案草稿
+expect: action(生成方案草稿)
+tier: 3
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 生成方案草稿
+- R49_缺参数时按最保守执行
+label:
+  answer: P0099 无画像，人群参数缺失 → 按最保守（老年/高危）参数执行并置 population_params_stale，committed（advisory
+    里带 R49）
+  source: simulate+expert
+variants:
+- kind: paraphrase
+  q: P0099 出维持方向草稿。
+- kind: irrelevant_field
+  q: 给新客（P0099）生成一份维持方向的方案草稿，他是今天刚到店的。
+note: P3 来源案例：专家抽检「R49 不是拒绝条件」

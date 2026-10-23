@@ -1,0 +1,20 @@
+id: 指标口径-11
+q: 黄伯（患者 P0045）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- hypo_episode_stats
+- HypoEpisode
+label:
+  answer: HypoEpisode P0045 level L2 若干条，min_value ≈2.6
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0045 的二级低血糖事件列表（起止、最低值）。
+- kind: entity_swap
+  q: 王叔（患者 P0031）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？
+- kind: irrelevant_field
+  q: 黄伯（患者 P0045）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？他儿子今天来店里问的。

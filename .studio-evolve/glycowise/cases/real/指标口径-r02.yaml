@@ -1,0 +1,35 @@
+# 由 t-20261023-0003 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r02
+q: 我方还有哪些患者的夜间有效覆盖率低于 70%？
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- CgmSummary
+label:
+  answer: CgmSummary nocturnal_coverage_pct < 70 命中 2 行：P0031（night_drop 0.55）与 P0023（night_drop 0.6）；其余患者夜间丢点 ≤0.2，覆盖率均 >70%。
+  source: feedback
+  trace_id: t-20261023-0003
+  reviewer: Ameng2001
+  feedback_label: correct
+variants: []
+setup: []
+route:
+  kind: query
+  confidence: 0.98
+  oql:
+    start: CgmSummary
+    where:
+    - field: nocturnal_coverage_pct
+      op: lt
+      value: 70
+    select:
+    - patient_id
+    - nocturnal_coverage_pct
+    - window_start
+    - window_end
+    order_by:
+    - field: nocturnal_coverage_pct
+      desc: false

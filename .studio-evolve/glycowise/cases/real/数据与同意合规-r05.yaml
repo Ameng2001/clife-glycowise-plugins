@@ -1,0 +1,86 @@
+# 由 t-20261023-0316 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 数据与同意合规-r05
+q: 从厂商接口摄入刘阿姨（P0012）的一条读数：r-P0012-x1，6.3 mmol/L，传感器序号 SN-P0012；接口今天有点慢。
+expect: action(摄入读数)
+tier: 3
+family: 数据与同意合规
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 摄入读数
+label:
+  answer: 路由把 raw_payload 编成扁平单条 {reading_id, patient_id, value_mmol, sensor_serial}，而 act_ingest 只读 raw_payload.readings 列表——实测暂存只有 IngestBatch batch-厂商接口-… record_count=0，GlucoseReading r-P0012-x1 根本没写；C3（P0012
+    有血糖数据同意）过、R48 对空列表天然过，于是『committed』了一个空批次。改成 readings:[{…sensor_serial SN-P0012-A, dedup_key SN-P0012-A-x1, time_utc}] 才真的入库 1 条。
+  source: feedback
+  trace_id: t-20261023-0316
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 从厂商接口摄入P0012的一条读数：r-P0012-x1，6.3 mmol/L，传感器序号 SN-P0012；接口今天有点慢。
+  kind: paraphrase
+- q: 从厂商接口摄入刘阿姨（P0012）的一条读数：r-P0012-x1，6.3 mmol/L，传感器序号 SN-P0012；接口今天有点慢。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0304
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充；他上次买过一盒。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0305
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0306
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑运动。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0307
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者处于停药观察期，咨询能否彻底停用二甲双胍；本周开始晨跑。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0308
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者停药观察期咨询能否彻底停用二甲双胍
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0314
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0315
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012

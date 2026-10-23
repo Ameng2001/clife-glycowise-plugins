@@ -1,0 +1,19 @@
+id: 数据与同意合规-05
+q: 黄伯（P0045）的读数 r-P0045-v7 没带传感器序号，用厂商记录 ID vendor-rec-778899 做去重键，做去重仲裁
+expect: rejected(R48_去重键必须用传感器序号)
+tier: 3
+family: 数据与同意合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 去重与通道仲裁
+- R48_去重键必须用传感器序号
+label:
+  answer: R48：去重键必须是传感器序号 + 序号；无序号又没置 weak_dedup 兜底 → 拒绝
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0045 的 r-P0045-v7 用厂商记录 ID 去重。
+- kind: irrelevant_field
+  q: 黄伯（P0045）的读数 r-P0045-v7 没带传感器序号，用厂商记录 ID vendor-rec-778899 做去重键，做去重仲裁；他今天换了手机。
+note: P8 来源案例：R48 拒绝分支

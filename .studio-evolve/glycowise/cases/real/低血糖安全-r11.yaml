@@ -1,0 +1,47 @@
+# 由 t-20261023-0209 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r11
+q: P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。
+expect: action(触发低血糖处置)
+tier: 3
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- GlucoseReading
+label:
+  answer: r-P0045-00017 = 3.5 @ 2026-10-09T04:15，前一读数 r-P0045-00016 = 3.8 @ 04:00，间隔 15 min（≤20 min，_prev_sample 认作同一采样序列），都在 3.0–3.9 且下降，R04a 连续 2 读数确认成立；is_backfill=False、vendor_api 0.99，R52/R53 放行；staged
+    AlertEvent level 中。提交成立。
+  source: feedback
+  trace_id: t-20261023-0209
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: 一级低血糖处置
+expect_state:
+- type: AlertEvent
+  key: A-P0045-r-P0045-00017
+  fields:
+    alert_id: A-P0045-r-P0045-00017
+    patient_id: P0045
+    rule_id: 一级低血糖处置
+    level: 中
+expect_state_note: IR §4 触发低血糖处置 writes AlertEvent，键 A-{patient}-{reading}；level 由读数值（标签记录）按 R03a/R04a 分带得出（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

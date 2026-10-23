@@ -1,0 +1,19 @@
+id: 指标口径-07
+q: 王叔（患者 P0031）连续几晚夜间有效率低于 50%？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- consecutive_low_night_nights
+- nocturnal_coverage_pct
+- CgmSummary
+label:
+  answer: s-P0031-14d：consecutive_low_night_nights 7
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0031 夜间有效率 <50% 已经连续多少个晚上了？
+- kind: irrelevant_field
+  q: 王叔（患者 P0031）连续几晚夜间有效率低于 50%？他说最近睡得早。

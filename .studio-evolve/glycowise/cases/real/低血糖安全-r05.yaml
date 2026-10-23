@@ -1,0 +1,59 @@
+# 由 t-20261023-0105 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r05
+q: 黄伯（患者 P0045）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？
+expect: query
+tier: 1
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- HypoEpisode
+label:
+  answer: '路由层三处叠加：① 在 HypoEpisode 上多挂了一跳 statistically_derived_from（seed 无任何链接实例，跳完 0 行）；② 跳上的 where time_utc ≥ ''now-14d'' 是字面字符串；③ aggregate count 把 min_value 吞掉了。引擎返回的那『1 行』是 {count: 0}，即答『0 次』——真实答案是
+    2 次 L2（ep-P0045-14 10-19 02:00 最低 2.6；ep-P0045-17 10-21 02:15 最低 2.7）。单跳 HypoEpisode where patient_id=P0045 and level=L2 select episode_id/min_value/start_time 即可。'
+  source: feedback
+  trace_id: t-20261023-0105
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 患者 P0045（患者 P0045）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0103
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result:
+      summary_id: s-P0023-14d
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: HypoEpisode
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    - field: level
+      op: eq
+      value: L2
+    select:
+    - episode_id
+    - min_value
+    steps:
+    - link_type: statistically_derived_from
+      direction: out
+      where:
+      - field: time_utc
+        op: ge
+        value: now-14d
+    aggregate:
+      func: count
+      field: episode_id
+    order_by:
+    - field: min_value
+      desc: false
+    limit: 1

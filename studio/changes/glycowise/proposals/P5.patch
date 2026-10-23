@@ -1,0 +1,301 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -15,9 +15,11 @@
+ """
+ from __future__ import annotations
+ 
++import itertools
+ import math
+ import random
+ import re
++import weakref
+ from datetime import date, datetime, timedelta
+ 
+ from clife_onto_engine.sdk import RuleResult
+@@ -236,9 +238,33 @@
+     return ""
+ 
+ 
++_EXEC_TOKENS = weakref.WeakKeyDictionary()   # Capability 对象 → 本次执行令牌（对象一回收，条目自动消失）
++_EXEC_SEQ = itertools.count(1)
++
++
++def exec_token(ctx):
++    """本次执行（一次 execute / validate）的令牌。handler 暂存写入时盖在 `_staged` 上，规则只认带同一令牌的行。
++
++    P5（2026-W43 / 0018）：以前写死 `_staged: True`，commit 后原样持久化进库，于是后续任何动作的 `find(_staged)` 都把历史行
++    当成「本次暂存」——R51 隔 7 条轨迹、跨患者读到 0011 落库的证据包正文而误拒。令牌按执行递增，历史行的旧令牌永远对不上。
++    """
++    try:
++        tok = _EXEC_TOKENS.get(ctx)
++    except TypeError:  # 不可弱引用 / 不可哈希的 ctx（测试桩）：退化为对象身份
++        return id(ctx)
++    if tok is None:
++        tok = _EXEC_TOKENS[ctx] = next(_EXEC_SEQ)
++    return tok
++
++
++def is_staged(ctx, r):
++    """这一行是不是**本次执行**暂存的（而非历史执行落库后残留的 `_staged` 标记）。"""
++    return r.get("_staged") == exec_token(ctx)
++
++
+ def staged_outbound(ctx):
+     """本次暂存的对外内容（post_write 规则里可见）。"""
+-    rows = ctx.find("OutboundContent", lambda r: r.get("_staged") is True)
++    rows = ctx.find("OutboundContent", lambda r: is_staged(ctx, r))
+     return rows[-1] if rows else {}
+ 
+ 
+@@ -328,7 +354,7 @@
+ def _direction(ctx):
+     d = P(ctx, "direction") or P(ctx, "plan_direction") or P(ctx, "analysis_result", "direction")
+     if d is None:
+-        st = ctx.find("PlanDraft", lambda r: r.get("_staged") is True)
++        st = ctx.find("PlanDraft", lambda r: is_staged(ctx, r))
+         d = st[-1].get("direction") if st else None
+     d = str(d or "").lower()
+     if d in ("强化", "intensify", "intensification", "加强", "加强降糖", "up"):
+@@ -633,7 +659,7 @@
+ 
+ 
+ def _staged_alert(ctx):
+-    rows = ctx.find("AlertEvent", lambda r: r.get("_staged") is True)
++    rows = ctx.find("AlertEvent", lambda r: is_staged(ctx, r))
+     return rows[-1] if rows else {}
+ 
+ 
+@@ -1018,7 +1044,7 @@
+ 
+ def _night_threshold_after(ctx, pid):
+     rows = ctx.find("AlertThreshold", lambda r: r.get("patient_id") == pid and r.get("field") in ("night_low", "夜间低值"))
+-    staged = [r for r in rows if r.get("_staged")]
++    staged = [r for r in rows if is_staged(ctx, r)]
+     row = staged[-1] if staged else (rows[-1] if rows else None)
+     return _num(row.get("current_value")) if row else None
+ 
+@@ -1092,7 +1118,7 @@
+     night3 = [e for e in episodes_of(ctx, pid, 3) if e.get("night_flag") is True]
+     if len(night3) < 2:
+         return RuleResult.ok()
+-    refs = ctx.find("ReferralRecord", lambda r: r.get("_staged") is True and r.get("patient_id") == pid)
++    refs = ctx.find("ReferralRecord", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid)
+     if not any("晚间用药" in str(r.get("question", "")) for r in refs):
+         return _fail("R07", f"3 天内夜间低血糖事件 {len(night3)} 次，须升级医师复核晚间用药与晚餐", "转介问题须含「复核晚间用药与晚餐」")
+     return RuleResult.ok()
+@@ -1126,7 +1152,7 @@
+         return RuleResult.ok()
+     queue = P(ctx, "queue")
+     if queue is None:
+-        refs = ctx.find("ReferralRecord", lambda r: r.get("_staged") is True and r.get("patient_id") == pid)
++        refs = ctx.find("ReferralRecord", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid)
+         queue = refs[-1].get("queue") if refs else None
+     if queue != "clinical_hypo":
+         return _fail("R50", f"胰岛素/磺脲使用者连续 {int(nights)} 晚夜间有效率 <50%，须进临床队列低血糖分支（不是挽留队列）", "ReferralRecord.queue = clinical_hypo")
+@@ -1401,7 +1427,7 @@
+     if not pid:
+         return RuleResult.ok()
+     meets, d = _remission_criteria(ctx, pid)
+-    staged = ctx.find("RemissionAssessment", lambda r: r.get("_staged") is True and r.get("patient_id") == pid)
++    staged = ctx.find("RemissionAssessment", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid)
+     claimed = staged[-1].get("status") if staged else None
+     if claimed == "in_remission" and not meets:
+         return _fail("R29", f"缓解判定不成立：停药 {d['days']} 天、在用降糖药 {d['meds']}、HbA1c {d['hba1c']} / GMI {d['gmi']}（前提 {d['premises']}）", "禁用「缓解/逆转」字样；继续观察")
+@@ -1572,7 +1598,7 @@
+     content = "\n".join(lines)
+     key = f"draft-{pid}-{s.get('window_end', TODAY.isoformat())}"
+     ctx.stage_write("PlanDraft", key, {"patient_id": pid, "content": content, "template_version": "fde-0.1", "med_interaction_routed": False,
+-                                       "direction": direction, "category": "综合", "_staged": True})
++                                       "direction": direction, "category": "综合", "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9 if s else 0.6)
+     ctx.add_evidence(summary_id=s.get("summary_id"), tir=tir, tbr=tbr, tar=tar, cv=cv)
+     ctx.emit_effect("workitem", on="committed", template="方案签发任务", draft_id=key, reviewer="医师/注册营养师")
+@@ -1587,16 +1613,16 @@
+     dwell = _num(P(ctx, "dwell_time"))
+     ctx.stage_write("ReviewEvidence", f"re-{key}", {"plan_id": key, "opened_at": _now(), "agp_expand_count": P(ctx, "agp_expand_count") or 1,
+                                                     "dwell_time": dwell, "diff": P(ctx, "diff") or "", "review_suspicious": bool(dwell is not None and dwell < 20),
+-                                                    "signer_id": signer, "_staged": True})
++                                                    "signer_id": signer, "_staged": exec_token(ctx)})
+     ctx.stage_write("PlanSigned", key, {"patient_id": draft.get("patient_id"), "content_snapshot": draft.get("content", ""), "signer_id": signer,
+                                         "signed_at": _now(), "evidence_snapshot": f"summary:{(summary_of(ctx, draft.get('patient_id')) or {}).get('summary_id')}",
+-                                        "review_evidence_ref": f"re-{key}", "evidence_stale": False, "decision": ctx.params.get("decision"), "_staged": True})
++                                        "review_evidence_ref": f"re-{key}", "evidence_stale": False, "decision": ctx.params.get("decision"), "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
+     ctx.add_evidence(draft_id=d, signer=signer)
+ 
+ 
+ def _threshold_row(ctx, pid, field):
+-    rows = ctx.find("AlertThreshold", lambda r: r.get("patient_id") == pid and r.get("field") == field and not r.get("_staged"))
++    rows = ctx.find("AlertThreshold", lambda r: r.get("patient_id") == pid and r.get("field") == field and not is_staged(ctx, r))
+     return rows[-1] if rows else None
+ 
+ 
+@@ -1613,9 +1639,9 @@
+     if before is not None and ((low_field and after < before) or (not low_field and after > before)):
+         after = before
+     ctx.stage_write("AlertThreshold", row.get("threshold_id", f"th-{pid}-{field}"),
+-                    {**{k: v for k, v in row.items() if k != "_staged"}, "patient_id": pid, "field": field, "current_value": after, "safe_direction": "收紧", "_staged": True})
++                    {**{k: v for k, v in row.items() if k != "_staged"}, "patient_id": pid, "field": field, "current_value": after, "safe_direction": "收紧", "_staged": exec_token(ctx)})
+     ctx.stage_write("ThresholdChangeLog", f"tcl-{pid}-{field}-{_now()}", {"patient_id": pid, "changed_by": ctx.actor.id, "trigger_rule": ctx.params.get("trigger_rule"),
+-                                                                           "before": before, "after": after, "effective_window": "即时", "_staged": True})
++                                                                           "before": before, "after": after, "effective_window": "即时", "_staged": exec_token(ctx)})
+     ctx.emit_effect("notify", on="committed", to="医师", message=f"{pid} {field} 阈值 {before}→{after}")
+     ctx.set_confidence(1.0)
+ 
+@@ -1626,9 +1652,9 @@
+     row = _threshold_row(ctx, pid, field) or {"threshold_id": f"th-{pid}-{field}", "current_value": 3.9, "default_value": 3.9, "safe_direction": "收紧"}
+     before, after = _num(row.get("current_value")), _num(ctx.params["new_value"])
+     ctx.stage_write("AlertThreshold", row.get("threshold_id", f"th-{pid}-{field}"),
+-                    {**{k: v for k, v in row.items() if k != "_staged"}, "patient_id": pid, "field": field, "current_value": after, "safe_direction": "放宽", "_staged": True})
++                    {**{k: v for k, v in row.items() if k != "_staged"}, "patient_id": pid, "field": field, "current_value": after, "safe_direction": "放宽", "_staged": exec_token(ctx)})
+     ctx.stage_write("ThresholdChangeLog", f"tcl-{pid}-{field}-{_now()}", {"patient_id": pid, "changed_by": ctx.actor.id, "trigger_rule": "医师手动放宽",
+-                                                                           "before": before, "after": after, "effective_window": "即时", "_staged": True})
++                                                                           "before": before, "after": after, "effective_window": "即时", "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
+ 
+ 
+@@ -1662,9 +1688,9 @@
+     queue = "clinical_hypo" if (hr and nights >= 2) or l2 else "physician_review"
+     ctx.stage_write("OutboundContent", f"evidence-{pid}-{s.get('window_end', TODAY.isoformat())}",
+                     {"target_audience": "医师", "body": body, "content_type": "方案", "disclaimer_attached": True, "first_page_hypo_table": True,
+-                     "iah_suspected": len(silent) >= 2, "atypical_hypo_suspected": bool(atyp), "patient_ref": pid, "_staged": True})
++                     "iah_suspected": len(silent) >= 2, "atypical_hypo_suspected": bool(atyp), "patient_ref": pid, "_staged": exec_token(ctx)})
+     ctx.stage_write("ReferralRecord", f"ref-{pid}-{_now()}", {"patient_id": pid, "question": question, "referred_to": "医师", "referred_at": _now(),
+-                                                                "queue": queue, "_staged": True})
++                                                                "queue": queue, "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9 if s else 0.5)
+     ctx.add_evidence(episodes=len(eps), l2=len(l2), tbr=s.get("tbr_pct"), nights_low=nights)
+     ctx.emit_effect("workitem", on="committed", template="医师接单", patient_id=pid, queue=queue)
+@@ -1677,7 +1703,7 @@
+     status = "in_remission" if meets else "not_in_remission"
+     ctx.stage_write("RemissionAssessment", f"ra-{pid}-{TODAY.isoformat()}",
+                     {"patient_id": pid, "status": status, "evidence_pack_ref": f"lab:{P(ctx, 'lab_result_id') or '-'};summary:{P(ctx, 'summary_id') or summary_of(ctx, pid).get('summary_id')}",
+-                     "method_used": d["method"] or "HbA1c", "detail": {k: v for k, v in d.items() if k != "method"}, "_staged": True})
++                     "method_used": d["method"] or "HbA1c", "detail": {k: v for k, v in d.items() if k != "method"}, "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.95 if d["method"] == "HbA1c" else 0.8)
+     ctx.add_evidence(**{k: (v if not isinstance(v, list) else list(v)) for k, v in d.items()})
+     ctx.emit_effect("workitem", on="committed", template="医师面诊告知", patient_id=pid, status=status)
+@@ -1687,7 +1713,7 @@
+ def act_ack(ctx):
+     a = str(ctx.params["alert_id"])
+     ctx.stage_write("AlertAck", f"ack-{a}-{_now()}", {"alert_id": a, "responder": ctx.params["responder"], "responded_at": _now(),
+-                                                       "action_taken": ctx.params.get("action_taken"), "retest_value": P(ctx, "retest_value"), "_staged": True})
++                                                       "action_taken": ctx.params.get("action_taken"), "retest_value": P(ctx, "retest_value"), "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
+ 
+ 
+@@ -1712,7 +1738,7 @@
+     prof, s = profile_of(ctx, pid), summary_of(ctx, pid)
+     label = _tier_label(s)
+     ctx.stage_write("PatientProfile", pid, {**{k: v for k, v in prof.items() if k != "_staged"}, "tier_label": label,
+-                                            "disclosure_approved": prof.get("disclosure_approved", False), "_staged": True})
++                                            "disclosure_approved": prof.get("disclosure_approved", False), "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.85 if s.get("sufficiency_ok") else 0.4)
+     ctx.add_evidence(summary_id=s.get("summary_id"), gmi=s.get("gmi_pct"), tier=label)
+ 
+@@ -1735,10 +1761,10 @@
+         if product_mention(ctx, s) and (TIER_RE.search(s) or REMISSION_RE.search(s)):
+             hit_rules.append("R32_产品推荐合规闸"); break
+     ctx.stage_write("ComplianceCheckLog", f"ccl-{c}-{_now()}", {"model_version": "rules-fde-0.1", "prompt_version": "-", "hit_rules": hit_rules,
+-                                                                "blocked_reason": "；".join(hit_rules), "target_content_ref": c, "_staged": True})
++                                                                "blocked_reason": "；".join(hit_rules), "target_content_ref": c, "_staged": exec_token(ctx)})
+     if not hit_rules:
+-        ctx.stage_write("GateToken", f"gt-{c}", {"issued_at": _now(), "scope": c, "expiry": (datetime.now() + timedelta(days=7)).isoformat(timespec="minutes"), "_staged": True})
+-        ctx.stage_write("OutboundContent", c, {**oc, "gate_token_ref": f"gt-{c}", "state": "gated", "_staged": True})
++        ctx.stage_write("GateToken", f"gt-{c}", {"issued_at": _now(), "scope": c, "expiry": (datetime.now() + timedelta(days=7)).isoformat(timespec="minutes"), "_staged": exec_token(ctx)})
++        ctx.stage_write("OutboundContent", c, {**oc, "gate_token_ref": f"gt-{c}", "state": "gated", "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
+     ctx.add_evidence(content_id=c, hit_rules=hit_rules)
+ 
+@@ -1750,7 +1776,7 @@
+     pitch = P(ctx, "pitch")  # 调用方给的推荐话术原样进闸（R32/D9 审的就是这句）
+     body = f"{pitch}\n固体饮料，不替代药物。\n{DISCLAIMER}" if pitch else f"为您推荐 {sku.get('name', sku_id)}，可作为日常饮食的补充。\n固体饮料，不替代药物。\n{DISCLAIMER}"
+     ctx.stage_write("OutboundContent", f"reco-{pid}-{sku_id}", {"target_audience": "患者", "body": body, "content_type": "方案", "disclaimer_attached": True,
+-                                                                 "patient_ref": pid, "_staged": True})
++                                                                 "patient_ref": pid, "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.8)
+ 
+ 
+@@ -1759,7 +1785,7 @@
+     pid = str(ctx.params["patient_id"])
+     msg = str(ctx.params["message"])
+     ctx.stage_write("OutboundContent", f"grp-{pid}-{_now()}", {"target_audience": "患者群", "body": msg, "content_type": "群内答复",
+-                                                               "disclaimer_attached": DISCLAIMER in msg, "patient_ref": pid, "sender_role": ctx.params.get("sender_role"), "_staged": True})
++                                                               "disclaimer_attached": DISCLAIMER in msg, "patient_ref": pid, "sender_role": ctx.params.get("sender_role"), "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9)
+ 
+ 
+@@ -1772,9 +1798,9 @@
+     for r in rows:
+         if not isinstance(r, dict) or r.get("reading_id") is None:
+             continue
+-        ctx.stage_write("GlucoseReading", str(r["reading_id"]), {**r, "patient_id": pid, "_staged": True})
++        ctx.stage_write("GlucoseReading", str(r["reading_id"]), {**r, "patient_id": pid, "_staged": exec_token(ctx)})
+         n += 1
+-    ctx.stage_write("IngestBatch", f"batch-{ctx.params.get('channel')}-{_now()}", {"channel": ctx.params.get("channel"), "record_count": n, "status": "pending", "_staged": True})
++    ctx.stage_write("IngestBatch", f"batch-{ctx.params.get('channel')}-{_now()}", {"channel": ctx.params.get("channel"), "record_count": n, "status": "pending", "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
+ 
+ 
+@@ -1787,7 +1813,7 @@
+     ctx.stage_write("AlertEvent", f"A-{pid}-{rid}", {"alert_id": f"A-{pid}-{rid}", "patient_id": r.get("patient_id", pid), "level": level, "value": g,
+                                                      "trend": None, "evidence": f"读数 {rid}（{r.get('source_channel', '未知通道')}）", "confidence": _num(r.get("source_confidence")) or 0.0,
+                                                      "rule_id": ctx.params.get("rule_id"), "is_backfill": r.get("is_backfill"), "source_channel": r.get("source_channel"),
+-                                                     "source_confidence": r.get("source_confidence"), "raised_at": _now(), "_staged": True})
++                                                     "source_confidence": r.get("source_confidence"), "raised_at": _now(), "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9 if r else 0.3)
+     ctx.add_evidence(reading_id=rid, value=g, found=bool(r))
+ 
+@@ -1797,9 +1823,9 @@
+     a = str(ctx.params["alert_id"])
+     ev = ctx.get("AlertEvent", a) or {}
+     tpl = _alert_template(ctx)
+-    ctx.stage_write("AlertEvent", a, {**ev, "level": ctx.params.get("level", ev.get("level")), "template_id": tpl.get("template_id"), "_staged": True})
++    ctx.stage_write("AlertEvent", a, {**ev, "level": ctx.params.get("level", ev.get("level")), "template_id": tpl.get("template_id"), "_staged": exec_token(ctx)})
+     for t in ctx.params.get("targets") or []:
+-        ctx.stage_write("DeliveryReceipt", f"dr-{a}-{t}", {"target": str(t), "channel": "app", "delivered_at": None, "status": "requested", "gate_token_ref": None, "_staged": True})
++        ctx.stage_write("DeliveryReceipt", f"dr-{a}-{t}", {"target": str(t), "channel": "app", "delivered_at": None, "status": "requested", "gate_token_ref": None, "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
+ 
+ 
+@@ -1808,9 +1834,9 @@
+     p = str(ctx.params["plan_id"])
+     ps = ctx.get("PlanSigned", p) or {}
+     ctx.stage_write("OutboundContent", f"push-{p}", {"target_audience": "患者", "body": ps.get("content_snapshot", ""), "content_type": "方案",
+-                                                     "disclaimer_attached": DISCLAIMER in str(ps.get("content_snapshot", "")), "patient_ref": ps.get("patient_id"), "_staged": True})
++                                                     "disclaimer_attached": DISCLAIMER in str(ps.get("content_snapshot", "")), "patient_ref": ps.get("patient_id"), "_staged": exec_token(ctx)})
+     for t in ctx.params.get("targets") or []:
+-        ctx.stage_write("DeliveryReceipt", f"dr-{p}-{t}", {"target": str(t), "channel": "app", "delivered_at": None, "status": "requested", "gate_token_ref": None, "_staged": True})
++        ctx.stage_write("DeliveryReceipt", f"dr-{p}-{t}", {"target": str(t), "channel": "app", "delivered_at": None, "status": "requested", "gate_token_ref": None, "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
+ 
+ 
+@@ -1818,8 +1844,8 @@
+ def act_service_sku(ctx):
+     sid = str(ctx.params["sku_id"])
+     ctx.stage_write("ProductSku", sid, {"name": f"控糖服务包·{ctx.params.get('tier')}", "category": "服务", "label_verified": True,
+-                                        "commission_config": P(ctx, "commission_config") or "none", "contents": list(ctx.params.get("contents") or []), "_staged": True})
+-    ctx.stage_write("ServicePackage", f"pkg-{sid}", {"patient_id": None, "tier": ctx.params.get("tier"), "start_date": None, "end_date": None, "wear_days_fulfilled": 0, "_staged": True})
++                                        "commission_config": P(ctx, "commission_config") or "none", "contents": list(ctx.params.get("contents") or []), "_staged": exec_token(ctx)})
++    ctx.stage_write("ServicePackage", f"pkg-{sid}", {"patient_id": None, "tier": ctx.params.get("tier"), "start_date": None, "end_date": None, "wear_days_fulfilled": 0, "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9)
+ 
+ 
+@@ -1827,7 +1853,7 @@
+ def act_list_sku(ctx):
+     sid = str(ctx.params["sku_id"])
+     sku = ctx.get("ProductSku", sid) or {"name": sid}
+-    ctx.stage_write("ProductSku", sid, {**sku, "category": ctx.params.get("category", sku.get("category")), "state": "listed", "_staged": True})
++    ctx.stage_write("ProductSku", sid, {**sku, "category": ctx.params.get("category", sku.get("category")), "state": "listed", "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9)
+ 
+ 
+@@ -1835,7 +1861,7 @@
+ def act_publish(ctx):
+     c = str(ctx.params["content_id"])
+     oc = ctx.get("OutboundContent", c) or {}
+-    ctx.stage_write("OutboundContent", c, {**oc, "channel": ctx.params.get("channel"), "content_type": oc.get("content_type", "宣传素材"), "state": "gated", "_staged": True})
++    ctx.stage_write("OutboundContent", c, {**oc, "channel": ctx.params.get("channel"), "content_type": oc.get("content_type", "宣传素材"), "state": "gated", "_staged": exec_token(ctx)})
+     ctx.set_confidence(0.9)
+ 
+ 

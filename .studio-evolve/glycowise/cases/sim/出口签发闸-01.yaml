@@ -1,0 +1,18 @@
+id: 出口签发闸-01
+q: 让吴康复师签发刘阿姨（P0012）的营养方案草稿 d-P0012-01
+expect: rejected(D12_签发人归属分流)
+tier: 3
+family: 出口签发闸
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 签发方案
+- D12_签发人归属分流
+label:
+  answer: 草稿类别为营养，运动康复师只能签运动/教育类，被 D12 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: d-P0012-01 由吴康复师签。
+- kind: irrelevant_field
+  q: 让吴康复师签发刘阿姨（P0012）的营养方案草稿 d-P0012-01，他今天刚从外地回来。

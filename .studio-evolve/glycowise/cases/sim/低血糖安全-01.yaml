@@ -1,0 +1,19 @@
+id: 低血糖安全-01
+q: 王叔（P0031）读数 r-P0031-01067 是 3.6，前一读数 2.8，按 Level 1 规则 R04a 触发低血糖处置
+expect: action(触发低血糖处置)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R04a_Level1低血糖_实时告警
+label:
+  answer: 连续 2 读数 <3.9 已确认且处于回升段（R05 预测条件不成立），应触发并 committed（级别 中）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0031 的 r-P0031-01067（3.6，前值 2.8）触发一级低血糖处置流程。
+- kind: irrelevant_field
+  q: 王叔（P0031）读数 r-P0031-01067 是 3.6，前一读数 2.8，按 Level 1 规则 R04a 触发低血糖处置；家属说昨晚没吃夜宵。
+note: 实参由 seed 动态挑选：3.0≤g<3.9、前值 <3.9 且回升幅度足以使 20 分钟外推 ≥3.9（避开 R05 的预测性告警要求）

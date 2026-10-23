@@ -1,0 +1,27 @@
+id: 数据与同意合规-04
+q: 黄伯（P0045）新到一条读数 r-P0045-x9（00:00，6.5，序号 SN-P0045-A-01344），做去重仲裁后入库
+expect: action(去重与通道仲裁)
+tier: 3
+family: 数据与同意合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 去重与通道仲裁
+- R48_去重键必须用传感器序号
+- GlucoseReading
+label:
+  answer: 序号唯一、±90s 内无其它通道读数 → 新读数 ingested/clean，动作 committed
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0045 的 r-P0045-x9（SN-P0045-A-01344）入库。
+- kind: irrelevant_field
+  q: 黄伯（P0045）新到一条读数 r-P0045-x9（00:00，6.5，序号 SN-P0045-A-01344），做去重仲裁后入库；他昨晚睡得早。
+note: P8 来源案例：正常新读数
+expect_state:
+- type: GlucoseReading
+  key: r-P0045-x9
+  fields:
+    quality_flag: clean
+    superseded_by: null
+expect_state_note: 强键 SN-P0045-A-01344 库里没有、±90 秒无其它通道读数 → 新读数 clean（2026-10-23 round 5 补，P9 根因/朴素修法在 commit 判据下逐行相同后加的落库状态期望）

@@ -1,0 +1,41 @@
+# 由 t-20261023-0303 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r55
+q: 周先生（P0007）走缓解路径的 ABCD 筛查化验结果（GADA、空腹和餐后 C 肽）各是多少？化验单是在市一医院做的。
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- LabResult
+label:
+  answer: 无关从句『化验单是在市一医院做的』被编成 where lab_id=市一医院，seed 里 P0007 四条 LabResult 的 lab_id 都是 LAB-NN-01，所以 0 行。去掉这条条件重跑得 4 行：GADA 0.4（2026-07-15）、C-peptide fasting 1.6、C-peptide 2h 3.4、HbA1c 6.1（10-15）；ABCD 三项都在库里。
+  source: feedback
+  trace_id: t-20261023-0303
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0007走缓解路径的 ABCD 筛查化验结果（GADA、空腹和餐后 C 肽）各是多少？化验单是在市一医院做的。
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: LabResult
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    - field: lab_id
+      op: eq
+      value: 市一医院
+    select:
+    - lab_result_id
+    - value
+    - method
+    - specimen_type
+    - measured_at
+    order_by:
+    - field: measured_at
+      desc: true

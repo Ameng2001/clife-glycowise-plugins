@@ -1,0 +1,34 @@
+# 由 t-20261023-0302 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r54
+q: 周先生（P0007）的缓解时钟 Day0 是哪天？谁确认的？现在是什么状态？他说想报名下期课程。
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- RemissionClock
+label:
+  answer: RemissionClock P0007：day0 2026-07-10、status running、confirmed_by S-HUANG，三问一行全答到；无关从句『想报名下期课程』没有漏进 where/select。
+  source: feedback
+  trace_id: t-20261023-0302
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0007的缓解时钟 Day0 是哪天？谁确认的？现在是什么状态？他说想报名下期课程。
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 1.0
+  oql:
+    start: RemissionClock
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    select:
+    - patient_id
+    - day0
+    - status
+    - confirmed_by

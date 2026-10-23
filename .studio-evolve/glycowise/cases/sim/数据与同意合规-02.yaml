@@ -1,0 +1,19 @@
+id: 数据与同意合规-02
+q: 摄入刘阿姨（P0012）的读数 r-P0012-x2（6.1），传感器序号 SN-P0012 有，但去重键坚持用厂商记录 ID vendor-77
+expect: rejected(R48_去重键必须用传感器序号)
+tier: 3
+family: 数据与同意合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 摄入读数
+- R48_去重键必须用传感器序号
+label:
+  answer: 有传感器序号却不用它做去重键，被 R48 拒绝（无序号时才允许 ±90s 容差 + weak_dedup 兜底）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0012 的读数 r-P0012-x2 有序号 SN-P0012，却用厂商记录 ID 做去重键入库。
+- kind: irrelevant_field
+  q: 摄入刘阿姨（P0012）的读数 r-P0012-x2（6.1），传感器序号 SN-P0012 有，但去重键坚持用厂商记录 ID vendor-77；厂商说这是旧接口。
+note: 专家抽检后改措辞：原案例「无序号」应走 weak_dedup 兜底而非拒收

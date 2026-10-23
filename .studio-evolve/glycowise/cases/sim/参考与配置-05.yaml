@@ -1,0 +1,19 @@
+id: 参考与配置-05
+q: 黄医生的执业证什么时候到期？状态有效吗？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- Credential
+label:
+  answer: cred-huang：执业医师，expiry_date 在未来，status valid
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 查黄医生的资质记录（类型、到期日、状态）。
+- kind: entity_swap
+  q: 陈营养师的注册证什么时候到期？状态有效吗？
+- kind: irrelevant_field
+  q: 黄医生的执业证什么时候到期？状态有效吗？他周三休息。

@@ -1,0 +1,18 @@
+id: 因果链溯源-09
+q: 周先生（P0007）的缓解时钟 Day0 是哪天？谁确认的？现在是什么状态？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- RemissionClock
+- R29_缓解判定
+label:
+  answer: RemissionClock P0007：day0 105 天前、status running、confirmed_by S-HUANG
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0007 的 RemissionClock 记录。
+- kind: irrelevant_field
+  q: 周先生（P0007）的缓解时钟 Day0 是哪天？谁确认的？现在是什么状态？他说想报名下期课程。

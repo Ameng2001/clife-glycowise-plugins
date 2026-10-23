@@ -1,0 +1,19 @@
+id: 结论层与分层-10
+q: 健管师在王叔（P0031）群里答复：这周波动比较大，建议您尽快找医生看看要不要调药方案
+expect: action(群内答复患者)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- C19_线上随访边界
+label:
+  answer: 转介给医生而非自行调药，属允许范围，committed；h_i 的 C19 关键词「调药方案」误拒
+  source: simulate+expert
+variants:
+- kind: paraphrase
+  q: 健管师让 P0031 去找医生看是否调药方案。
+- kind: irrelevant_field
+  q: 健管师在王叔（P0031）群里答复：这周波动比较大，建议您尽快找医生看看要不要调药方案；他女儿明天陪他去。
+note: P4 来源案例

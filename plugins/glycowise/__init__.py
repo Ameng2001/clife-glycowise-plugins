@@ -12,6 +12,7 @@ bounded_context: 控糖服务（CGM 数据摄入 → 指标 → 临床规则 →
 """
 from __future__ import annotations
 from pathlib import Path as _Path
+from . import _fde
 from clife_onto_engine.sdk import (
     Backing, EdgeSemantics, Evaluation, HilPolicy, LinkType, ObjectType, ParamSpec,
     PropertySpec, RuleResult, Severity, spi,
@@ -125,6 +126,7 @@ RULE_BANDS = {
 spi.registry.add_object(ObjectType(
     name="GlucoseReading", namespace=ONTOLOGY, primary_key="reading_id",
     properties=(
+        PropertySpec("patient_id", "string"),  # FDE：对象声明补齐（mappings/objects.yaml 已列）
         PropertySpec("value_raw", "number", required=True, classification="confidential"),
         PropertySpec("unit_raw", "enum", required=True),  # 取值：mmol/L|mg/dL
         PropertySpec("value_mmol", "number", unit="mmol/L"),
@@ -553,9 +555,46 @@ spi.registry.add_object(ObjectType(
         PropertySpec("nocturnal_coverage_pct", "number"),
         PropertySpec("nocturnal_coverage_insufficient", "boolean"),
         PropertySpec("confounded_window", "boolean"),
+        PropertySpec("days", "number"),  # FDE：窗口天数
+        PropertySpec("tir_pct", "number"), PropertySpec("tbr_pct", "number"), PropertySpec("tbr_l2_pct", "number"),
+        PropertySpec("tar_pct", "number"), PropertySpec("tar_l2_pct", "number"), PropertySpec("cv_pct", "number"),
+        PropertySpec("gmi_pct", "number"), PropertySpec("mean_glucose", "number"),
+        PropertySpec("consecutive_low_night_nights", "number"),
     ),
     states=("computed", "stale", "recomputed", "invalidated"),
     initial_state="computed",
+))
+
+# FDE 补：R56 依赖的冻结告警模板库
+spi.registry.add_object(ObjectType(
+    name="AlertTemplate", namespace=ONTOLOGY, primary_key="template_id",
+    properties=(
+        PropertySpec("level", "enum", required=True),  # 取值：低|中|高|危急
+        PropertySpec("body", "string", required=True),
+        PropertySpec("frozen", "boolean"),
+        PropertySpec("pre_reviewed_c22", "boolean"),
+        PropertySpec("pre_reviewed_r54", "boolean"),
+        PropertySpec("reviewed_at", "string"),
+    ),
+    states=("draft", "frozen", "retired"),
+    initial_state="draft",
+))
+
+# FDE 补：人群目标区间参数表（R28/R31/R46/R49 依赖；查询「老年患者的目标区间参数」直接命中）
+spi.registry.add_object(ObjectType(
+    name="TargetProfileParam", namespace=ONTOLOGY, primary_key="profile",
+    properties=(
+        PropertySpec("population", "string", required=True),
+        PropertySpec("age_min", "number"),
+        PropertySpec("requires_hypo_risk_med", "boolean"),
+        PropertySpec("tir_target_pct", "number"),
+        PropertySpec("tbr_max_pct", "number"),
+        PropertySpec("tbr_l2_max_pct", "number"),
+        PropertySpec("low_alert_threshold", "number"),
+        PropertySpec("range_low", "number"),
+        PropertySpec("range_high", "number"),
+        PropertySpec("source", "string"),
+    ),
 ))
 
 # 出处：domain-canvas D9。`event_type` 禁用 MNT
@@ -1118,8 +1157,7 @@ def TIR(ctx):
 
     返回：number:百分比。读取：GlucoseReading、PatientProfile。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("TIR 待实现")
+    return _fde.FUNCTIONS['TIR'](ctx)
 
 @spi.function(ONTOLOGY, "TAR_L1", reads=("GlucoseReading",))
 def TAR_L1(ctx):
@@ -1127,8 +1165,7 @@ def TAR_L1(ctx):
 
     返回：number:百分比。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("TAR_L1 待实现")
+    return _fde.FUNCTIONS['TAR_L1'](ctx)
 
 @spi.function(ONTOLOGY, "TAR_L2", reads=("GlucoseReading",))
 def TAR_L2(ctx):
@@ -1136,8 +1173,7 @@ def TAR_L2(ctx):
 
     返回：number:百分比。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("TAR_L2 待实现")
+    return _fde.FUNCTIONS['TAR_L2'](ctx)
 
 @spi.function(ONTOLOGY, "TBR_L1", reads=("GlucoseReading", "PatientProfile"))
 def TBR_L1(ctx):
@@ -1145,8 +1181,7 @@ def TBR_L1(ctx):
 
     返回：number:百分比。读取：GlucoseReading、PatientProfile。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("TBR_L1 待实现")
+    return _fde.FUNCTIONS['TBR_L1'](ctx)
 
 @spi.function(ONTOLOGY, "TBR_L2", reads=("GlucoseReading",))
 def TBR_L2(ctx):
@@ -1154,8 +1189,7 @@ def TBR_L2(ctx):
 
     返回：number:百分比。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("TBR_L2 待实现")
+    return _fde.FUNCTIONS['TBR_L2'](ctx)
 
 @spi.function(ONTOLOGY, "MeanGlucose", reads=("GlucoseReading",))
 def MeanGlucose(ctx):
@@ -1163,8 +1197,7 @@ def MeanGlucose(ctx):
 
     返回：number:mmol/L。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("MeanGlucose 待实现")
+    return _fde.FUNCTIONS['MeanGlucose'](ctx)
 
 @spi.function(ONTOLOGY, "GMI", reads=("GlucoseReading", "DeviceModel", "ChannelRegistry", "SensorSession"))
 def GMI(ctx):
@@ -1172,8 +1205,7 @@ def GMI(ctx):
 
     返回：number:百分比。读取：GlucoseReading、DeviceModel、ChannelRegistry、SensorSession。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("GMI 待实现")
+    return _fde.FUNCTIONS['GMI'](ctx)
 
 @spi.function(ONTOLOGY, "CV", reads=("GlucoseReading",))
 def CV(ctx):
@@ -1181,8 +1213,7 @@ def CV(ctx):
 
     返回：number:百分比。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("CV 待实现")
+    return _fde.FUNCTIONS['CV'](ctx)
 
 @spi.function(ONTOLOGY, "SD", reads=("GlucoseReading",))
 def SD(ctx):
@@ -1190,8 +1221,7 @@ def SD(ctx):
 
     返回：number:mmol/L。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("SD 待实现")
+    return _fde.FUNCTIONS['SD'](ctx)
 
 @spi.function(ONTOLOGY, "MAGE", reads=("GlucoseReading",))
 def MAGE(ctx):
@@ -1217,8 +1247,7 @@ def active_pct(ctx):
 
     返回：number:百分比。读取：GlucoseReading、ChannelRegistry。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("active_pct 待实现")
+    return _fde.FUNCTIONS['active_pct'](ctx)
 
 @spi.function(ONTOLOGY, "wear_ratio", reads=("GlucoseReading", "SensorSession"))
 def wear_ratio(ctx):
@@ -1235,8 +1264,7 @@ def sufficiency_ok(ctx):
 
     返回：boolean。读取：GlucoseReading、ChannelRegistry。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("sufficiency_ok 待实现")
+    return _fde.FUNCTIONS['sufficiency_ok'](ctx)
 
 @spi.function(ONTOLOGY, "nocturnal_coverage_pct", reads=("GlucoseReading",))
 def nocturnal_coverage_pct(ctx):
@@ -1244,8 +1272,7 @@ def nocturnal_coverage_pct(ctx):
 
     返回：number:百分比。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("nocturnal_coverage_pct 待实现")
+    return _fde.FUNCTIONS['nocturnal_coverage_pct'](ctx)
 
 @spi.function(ONTOLOGY, "tz_uncertain", reads=("GlucoseReading",))
 def tz_uncertain(ctx):
@@ -1271,8 +1298,7 @@ def hypo_episode_stats(ctx):
 
     返回：object。读取：GlucoseReading。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("hypo_episode_stats 待实现")
+    return _fde.FUNCTIONS['hypo_episode_stats'](ctx)
 
 @spi.function(ONTOLOGY, "meal_response_calc", reads=("GlucoseReading", "ContextEvent"))
 def meal_response_calc(ctx):
@@ -1325,8 +1351,7 @@ def hypo_risk_med(ctx):
 
     返回：boolean。读取：PatientProfile。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("hypo_risk_med 待实现")
+    return _fde.FUNCTIONS['hypo_risk_med'](ctx)
 
 @spi.function(ONTOLOGY, "target_profile_of", reads=("PatientProfile",))
 def target_profile_of(ctx):
@@ -1334,8 +1359,7 @@ def target_profile_of(ctx):
 
     返回：enum:adult|elderly|pregnancy。读取：PatientProfile。
     """
-    # TODO(FDE): 实现派生量计算（只读，无副作用）。可用：ctx.get / ctx.find / ctx.search_around
-    raise NotImplementedError("target_profile_of 待实现")
+    return _fde.FUNCTIONS['target_profile_of'](ctx)
 
 @spi.function(ONTOLOGY, "service_tier_map", reads=("CgmSummary", "PatientProfile"))
 def service_tier_map(ctx):
@@ -1380,9 +1404,7 @@ def 低血糖优先抢占(ctx) -> RuleResult:
     优先级 99（B0 元规则 带）· 生效阶段 P1+P2。
     挂载动作：生成方案草稿、生成AGP与指标报告、输出服务分层标签、生成结营报告。
     """
-    # TODO(FDE): 查本次评估周期内 priority 落在 100–199 的规则命中集合，非空则抑制 priority ≥200 的**建议类**输出并写抑制留痕。**不作用于告警投递本身**——否则会出现低血糖优先规则把 B1 自己的告警当成待抑制输出的自反 bug
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("低血糖优先抢占 待实现")
+    return _fde.RULES['低血糖优先抢占'](ctx)
 
 @spi.rule(ONTOLOGY, "R03a_Level2低血糖_实时告警", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1398,9 +1420,7 @@ def R03a_Level2低血糖_实时告警(ctx) -> RuleResult:
       实时口径（连续 2 个读数 + 预测性告警）与回顾口径（持续 ≥15 分钟 Danne）语义不同，
       混用等于原样重犯已被临床评审纠正过的 C-01 错误（confirmed-facts C-01、A3-6、R-4）。
     """
-    # TODO(FDE): 查最近读数序列，校验是否出现连续 2 个读数（间隔 ≥5min）满足 G<3.0。**禁止复用 ≥15min 口径**，与 R03b 必须是两个独立函数签名
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R03a_Level2低血糖_实时告警 待实现")
+    return _fde.RULES['R03a_Level2低血糖_实时告警'](ctx)
 
 @spi.rule(ONTOLOGY, "R04a_Level1低血糖_实时告警", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1416,9 +1436,7 @@ def R04a_Level1低血糖_实时告警(ctx) -> RuleResult:
       实时口径（连续 2 个读数 + 预测性告警）与回顾口径（持续 ≥15 分钟 Danne）语义不同，
       混用等于原样重犯已被临床评审纠正过的 C-01 错误（confirmed-facts C-01、A3-6、R-4）。
     """
-    # TODO(FDE): 查最近读数序列，校验连续 2 个读数（间隔 ≥5min）满足 3.0≤G<3.9
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R04a_Level1低血糖_实时告警 待实现")
+    return _fde.RULES['R04a_Level1低血糖_实时告警'](ctx)
 
 @spi.rule(ONTOLOGY, "R03b_Level2低血糖_回顾事件统计", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1466,9 +1484,7 @@ def R02_传感器压迫伪差识别(ctx) -> RuleResult:
     优先级 120（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：去重与通道仲裁、统计低血糖事件。
     """
-    # TODO(FDE): 查该读数前后 10min 窗口，校验是否满足回升 ≥1.5 mmol/L 或 15min 内跳变 >5.0 mmol/L
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R02_传感器压迫伪差识别 待实现")
+    return _fde.RULES['R02_传感器压迫伪差识别'](ctx)
 
 @spi.rule(ONTOLOGY, "R05_即将低血糖预测告警", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1480,9 +1496,7 @@ def R05_即将低血糖预测告警(ctx) -> RuleResult:
     优先级 125（B1 低血糖 带）· 生效阶段 P2。
     挂载动作：触发低血糖处置、推送告警。
     """
-    # TODO(FDE): 查近 15min 斜率，校验 G<5.0 且 slope≤−1，或 G + slope×20 < 3.9
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R05_即将低血糖预测告警 待实现")
+    return _fde.RULES['R05_即将低血糖预测告警'](ctx)
 
 @spi.rule(ONTOLOGY, "R06_快速下降箭头提示", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1494,11 +1508,7 @@ def R06_快速下降箭头提示(ctx) -> RuleResult:
     优先级 130（B1 低血糖 带）· 生效阶段 P2。
     挂载动作：推送告警。
     """
-    G = ctx.params.get("G")
-    slope = ctx.params.get("slope")
-    if not (slope <= -2 and G < 7.0):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R06_快速下降箭头提示 未通过", suggestion="须满足：slope <= -2 and G < 7.0")
-    return RuleResult.ok()
+    return _fde.RULES['R06_快速下降箭头提示'](ctx)
 
 @spi.rule(ONTOLOGY, "R07_夜间低血糖事件", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1510,9 +1520,7 @@ def R07_夜间低血糖事件(ctx) -> RuleResult:
     优先级 135（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：统计低血糖事件、生成去强化证据工单。
     """
-    # TODO(FDE): 查 00:00–06:00 窗口连续读数，校验是否存在持续 ≥15min 的 G<3.9 区间；并查过去 3 天该窗口事件次数
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R07_夜间低血糖事件 待实现")
+    return _fde.RULES['R07_夜间低血糖事件'](ctx)
 
 @spi.rule(ONTOLOGY, "R08_睡前低值预警", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1524,9 +1532,7 @@ def R08_睡前低值预警(ctx) -> RuleResult:
     优先级 140（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：推送告警、生成方案草稿。
     """
-    # TODO(FDE): 查 health_tier 与 meds，校验 21:00–23:00 窗口均值 < 分层下限（老年良好 5.0 / 中等 5.6 / 差 8.3；非老年 5.0）且 meds ∩ {胰岛素, 磺脲} ≠ ∅
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R08_睡前低值预警 待实现")
+    return _fde.RULES['R08_睡前低值预警'](ctx)
 
 @spi.rule(ONTOLOGY, "R09_TBR超标触发去强化审查", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1538,9 +1544,7 @@ def R09_TBR超标触发去强化审查(ctx) -> RuleResult:
     优先级 145（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：生成AGP与指标报告、生成去强化证据工单、生成结营报告。
     """
-    # TODO(FDE): 查 14 天窗口 TBR_L1 与 TBR_L2 占比，校验 TBR<3.9 ≥4%（老年/高危 ≥1%）或 TBR<3.0 ≥1%，或 14 天内 L2 事件 ≥1 次。**事件计数只取 hypo_episode_stats（回顾口径），不接实时告警日志**，否则会虚高医师去强化审查证据表里的事件条数
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R09_TBR超标触发去强化审查 待实现")
+    return _fde.RULES['R09_TBR超标触发去强化审查'](ctx)
 
 @spi.rule(ONTOLOGY, "R10_低血糖无感知线索", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1552,9 +1556,7 @@ def R10_低血糖无感知线索(ctx) -> RuleResult:
     优先级 148（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：生成去强化证据工单、配置患者告警与静音策略。
     """
-    # TODO(FDE): 查 14 天内 L2 事件记录，校验其中 ≥2 次无伴随的 SymptomTreatmentRecord
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R10_低血糖无感知线索 待实现")
+    return _fde.RULES['R10_低血糖无感知线索'](ctx)
 
 @spi.rule(ONTOLOGY, "R46_IAH高危阈值上调且禁止静音", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -1566,12 +1568,7 @@ def R46_IAH高危阈值上调且禁止静音(ctx) -> RuleResult:
     优先级 149（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：配置患者告警与静音策略。
     """
-    alert_threshold = ctx.params.get("alert_threshold")
-    is_iah_high_risk = ctx.params.get("is_iah_high_risk")
-    night_mute_allowed = ctx.params.get("night_mute_allowed")
-    if not (is_iah_high_risk is not True or (alert_threshold >= 4.4 and night_mute_allowed is False)):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R46_IAH高危阈值上调且禁止静音 未通过", suggestion="须满足：is_iah_high_risk is not True or (alert_threshold >= 4.4 and night_mute_allowed is False)")
-    return RuleResult.ok()
+    return _fde.RULES['R46_IAH高危阈值上调且禁止静音'](ctx)
 
 @spi.rule(ONTOLOGY, "R34_HAAF_24小时复发窗", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1583,9 +1580,7 @@ def R34_HAAF_24小时复发窗(ctx) -> RuleResult:
     优先级 150（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：更新低血糖状态机、收紧告警阈值。
     """
-    # TODO(FDE): 查过去 24h 内 L2 事件，**只计 hypo_episode_stats 产出的回顾事件（R03b/R04b 口径），不得接 R03a/R04a 的实时触发计数**，否则伪差重复触发会把 HAAF 窗口频繁误开；校验是否 ≥1 次，命中则置 recurrence_window 并联动 R46 阈值
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R34_HAAF_24小时复发窗 待实现")
+    return _fde.RULES['R34_HAAF_24小时复发窗'](ctx)
 
 @spi.rule(ONTOLOGY, "R44_高危用药禁止闭环", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -1599,9 +1594,7 @@ def R44_高危用药禁止闭环(ctx) -> RuleResult:
 
     # TODO(FDE): 补依据 —— 当前 source 为 TODO(FDE): 补依据（机制方向由 Endocrine Society 2022 与中国糖尿病防治指南 2024 用药章节支持，但"可持续 24–72 小时"这个具体时长在两份基准文档里均无逐字出处）
     """
-    # TODO(FDE): 查 HypoState.closure_blocked_reason 与 meds ∩ {磺脲, 长效胰岛素, 预混胰岛素}，任一命中则拒绝写入 alert.resolved
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R44_高危用药禁止闭环 待实现")
+    return _fde.RULES['R44_高危用药禁止闭环'](ctx)
 
 @spi.rule(ONTOLOGY, "R57_15-15三轮无效强制升级就医", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1614,9 +1607,7 @@ def R57_15_15三轮无效强制升级就医(ctx) -> RuleResult:
     优先级 152（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：响应并回执告警、推送告警。
     """
-    # TODO(FDE): 查该告警的 15-15 循环轮次与症状标记持续时长，校验轮次 ≥3 且复测仍 <3.9，或症状持续 ≥30 分钟
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R57_15-15三轮无效强制升级就医 待实现")
+    return _fde.RULES['R57_15-15三轮无效强制升级就医'](ctx)
 
 @spi.rule(ONTOLOGY, "R58_Level3严重低血糖强制转诊", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1628,9 +1619,7 @@ def R58_Level3严重低血糖强制转诊(ctx) -> RuleResult:
     优先级 153（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：记录症状与处置、推送告警、转介医师。
     """
-    # TODO(FDE): 查 SymptomTreatmentRecord 是否含需他人协助/意识改变/抽搐类标记，命中即触发，**不得附加任何血糖阈值前置条件**
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R58_Level3严重低血糖强制转诊 待实现")
+    return _fde.RULES['R58_Level3严重低血糖强制转诊'](ctx)
 
 @spi.rule(ONTOLOGY, "R59_老年非典型症状疑似低血糖", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1642,9 +1631,7 @@ def R59_老年非典型症状疑似低血糖(ctx) -> RuleResult:
     优先级 154（B1 低血糖 带）· 生效阶段 P1+P2。
     挂载动作：记录症状与处置、生成去强化证据工单。
     """
-    # TODO(FDE): 查 age≥65 患者近期跌倒/意识行为改变类症状标记，并查同期 CGM 是否处于临界低值区间（<4.4），命中则出疑似提示
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R59_老年非典型症状疑似低血糖 待实现")
+    return _fde.RULES['R59_老年非典型症状疑似低血糖'](ctx)
 
 @spi.rule(ONTOLOGY, "R11_严重高血糖", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1656,9 +1643,7 @@ def R11_严重高血糖(ctx) -> RuleResult:
     优先级 200（B2 高血糖 带）· 生效阶段 P1+P2。
     挂载动作：触发低血糖处置、推送告警、生成方案草稿。
     """
-    # TODO(FDE): 查最近读数窗口，校验 G>16.7 持续 ≥1h，或 G>13.9 且存在同期症状标记
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R11_严重高血糖 待实现")
+    return _fde.RULES['R11_严重高血糖'](ctx)
 
 @spi.rule(ONTOLOGY, "R12_SGLT2i酮症警觉", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1672,9 +1657,7 @@ def R12_SGLT2i酮症警觉(ctx) -> RuleResult:
 
     # TODO(FDE): 补依据 —— 当前 source 为 TODO(FDE): 补依据（药物机制层面成立，但需补 SGLT2i euDKA 的权威指南条目）
     """
-    # TODO(FDE): 查 meds 或 MedClassHint.sglt2i 是否为真，并查是否存在极低碳水标记/长时间运动标记/恶心乏力症状标记，且当前 G 不高
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R12_SGLT2i酮症警觉 待实现")
+    return _fde.RULES['R12_SGLT2i酮症警觉'](ctx)
 
 @spi.rule(ONTOLOGY, "R13_TAR_L2超标", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1686,9 +1669,7 @@ def R13_TAR_L2超标(ctx) -> RuleResult:
     优先级 210（B2 高血糖 带）· 生效阶段 P1+P2。
     挂载动作：生成AGP与指标报告、生成方案草稿。
     """
-    # TODO(FDE): 查 14 天窗口 TAR_L2 占比，校验 ≥5%（老年 ≥10%）
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R13_TAR_L2超标 待实现")
+    return _fde.RULES['R13_TAR_L2超标'](ctx)
 
 @spi.rule(ONTOLOGY, "R14_TAR_L1超标", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1700,10 +1681,7 @@ def R14_TAR_L1超标(ctx) -> RuleResult:
     优先级 215（B2 高血糖 带）· 生效阶段 P1+P2。
     挂载动作：生成方案草稿。
     """
-    TAR_L1 = ctx.params.get("TAR_L1")
-    if not (TAR_L1 < 25):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R14_TAR_L1超标 未通过", suggestion="须满足：TAR_L1 < 25")
-    return RuleResult.ok()
+    return _fde.RULES['R14_TAR_L1超标'](ctx)
 
 @spi.rule(ONTOLOGY, "R15_TIR未达标", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1715,11 +1693,7 @@ def R15_TIR未达标(ctx) -> RuleResult:
     优先级 220（B2 高血糖 带）· 生效阶段 P1+P2。
     挂载动作：生成AGP与指标报告、生成方案草稿。
     """
-    TIR = ctx.params.get("TIR")
-    target_profile = ctx.params.get("target_profile")
-    if not ((target_profile == 'adult' and TIR >= 70) or (target_profile in ('elderly','high_risk') and TIR >= 50) or (target_profile == 'pregnancy' and TIR >= 70)):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R15_TIR未达标 未通过", suggestion="须满足：(target_profile == 'adult' and TIR >= 70) or (target_profile in ('elderly','high_risk') and TIR >= 50) or (target_profile == 'pregnancy' and TIR >= 70)")
-    return RuleResult.ok()
+    return _fde.RULES['R15_TIR未达标'](ctx)
 
 @spi.rule(ONTOLOGY, "R22_黎明现象", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1733,9 +1707,7 @@ def R22_黎明现象(ctx) -> RuleResult:
 
     # TODO(FDE): 补依据 —— 当前 source 为 TODO(FDE): 补依据（研究文档标注为"临床常规定义"，需补权威出处）
     """
-    # TODO(FDE): 查 03:00 最低值与 07:00 读数，校验上升 ≥1.1 mmol/L 且无夜间加餐标记，14 天内 ≥50% 天数满足
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R22_黎明现象 待实现")
+    return _fde.RULES['R22_黎明现象'](ctx)
 
 @spi.rule(ONTOLOGY, "R16a_波动超标_硬", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1747,10 +1719,7 @@ def R16a_波动超标_硬(ctx) -> RuleResult:
     优先级 300（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：生成AGP与指标报告、生成方案草稿。
     """
-    CV = ctx.params.get("CV")
-    if not (CV <= 36):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R16a_波动超标_硬 未通过", suggestion="须满足：CV <= 36")
-    return RuleResult.ok()
+    return _fde.RULES['R16a_波动超标_硬'](ctx)
 
 @spi.rule(ONTOLOGY, "R16b_波动偏高_软_中国口径", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1762,10 +1731,7 @@ def R16b_波动偏高_软_中国口径(ctx) -> RuleResult:
     优先级 305（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：生成AGP与指标报告、生成方案草稿。
     """
-    CV = ctx.params.get("CV")
-    if not (CV <= 33 or CV > 36):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R16b_波动偏高_软_中国口径 未通过", suggestion="须满足：CV <= 33 or CV > 36")
-    return RuleResult.ok()
+    return _fde.RULES['R16b_波动偏高_软_中国口径'](ctx)
 
 @spi.rule(ONTOLOGY, "R17_GMI与HbA1c不一致", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1777,9 +1743,7 @@ def R17_GMI与HbA1c不一致(ctx) -> RuleResult:
     优先级 310（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：生成AGP与指标报告、判定缓解结果。
     """
-    # TODO(FDE): 先校验 GMI 四条计算前提（单一厂商连续通道、同 vendor 同 sensor_model、active%≥70 且 days≥14、剔除 warmup 与末期衰减段）与实测 HbA1c 距今 ≤3 个月；前提不满足则 GMI 置 null 且本规则跳过；满足则校验 abs(GMI − HbA1c) ≥ 0.5
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R17_GMI与HbA1c不一致 待实现")
+    return _fde.RULES['R17_GMI与HbA1c不一致'](ctx)
 
 @spi.rule(ONTOLOGY, "R19_餐后高响应", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1791,9 +1755,7 @@ def R19_餐后高响应(ctx) -> RuleResult:
     优先级 315（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：计算餐后响应、生成方案草稿。
     """
-    # TODO(FDE): 查该患者同类餐历史，校验 delta_p ≥2.8 或 peak ≥10.0 或 return_to_baseline 为 false（**不要用 r2h ≥1.7**——1.7 是 ΔP 分级表的分界值，源文档从未给过 r2h 的数值切点），且同类餐已出现 ≥2 次
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R19_餐后高响应 待实现")
+    return _fde.RULES['R19_餐后高响应'](ctx)
 
 @spi.rule(ONTOLOGY, "R20_餐后极高响应", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1805,9 +1767,7 @@ def R20_餐后极高响应(ctx) -> RuleResult:
     优先级 320（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：计算餐后响应、推送告警。
     """
-    # TODO(FDE): 查该餐 MealResponse，校验 delta_p ≥4.4 或 peak ≥13.9
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R20_餐后极高响应 待实现")
+    return _fde.RULES['R20_餐后极高响应'](ctx)
 
 @spi.rule(ONTOLOGY, "R21_餐次数据混叠排除", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -1849,10 +1809,7 @@ def R36_active率超100自检(ctx) -> RuleResult:
     优先级 335（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：去重与通道仲裁、计算窗口指标。
     """
-    active_pct = ctx.params.get("active_pct")
-    if not (active_pct <= 100):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R36_active率超100自检 未通过", suggestion="须满足：active_pct <= 100")
-    return RuleResult.ok()
+    return _fde.RULES['R36_active率超100自检'](ctx)  # 缺 active_pct 参数时按患者 14 天窗口自算（P8）
 
 @spi.rule(ONTOLOGY, "R48_去重键必须用传感器序号", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -1864,9 +1821,7 @@ def R48_去重键必须用传感器序号(ctx) -> RuleResult:
     优先级 340（B3 波动与餐后 带）· 生效阶段 P1+P2。
     挂载动作：去重与通道仲裁、摄入读数。
     """
-    # TODO(FDE): 校验 dedup_key 是否以 sensor_serial + 序号构成；无序号时才允许退到 ±90 秒容差兜底并置 weak_dedup 标记
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R48_去重键必须用传感器序号 待实现")
+    return _fde.RULES['R48_去重键必须用传感器序号'](ctx)
 
 @spi.rule(ONTOLOGY, "R23_运动前低值", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1878,9 +1833,7 @@ def R23_运动前低值(ctx) -> RuleResult:
     优先级 400（B4 运动安全 带）· 生效阶段 P2。
     挂载动作：推送告警、记录餐食与运动事件。
     """
-    # TODO(FDE): 查运动打卡或加速度计事件前的最近读数，校验 G<5.0
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R23_运动前低值 待实现")
+    return _fde.RULES['R23_运动前低值'](ctx)
 
 @spi.rule(ONTOLOGY, "R24a_运动前高值查酮体", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1892,9 +1845,7 @@ def R24a_运动前高值查酮体(ctx) -> RuleResult:
     优先级 405（B4 运动安全 带）· 生效阶段 P2。
     挂载动作：推送告警、记录酮体。
     """
-    # TODO(FDE): 查运动打卡前最近读数，校验 13.9 < G <= 16.7，并查是否已有 KetoneReading
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R24a_运动前高值查酮体 待实现")
+    return _fde.RULES['R24a_运动前高值查酮体'](ctx)
 
 @spi.rule(ONTOLOGY, "R24b_运动前极高值一律不宜运动", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1906,9 +1857,7 @@ def R24b_运动前极高值一律不宜运动(ctx) -> RuleResult:
     优先级 406（B4 运动安全 带）· 生效阶段 P2。
     挂载动作：推送告警。
     """
-    # TODO(FDE): 查运动打卡前最近读数，校验 G > 16.7；命中即拒绝运动建议，不进入酮体分支
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R24b_运动前极高值一律不宜运动 待实现")
+    return _fde.RULES['R24b_运动前极高值一律不宜运动'](ctx)
 
 @spi.rule(ONTOLOGY, "R25_运动中下降", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1920,9 +1869,7 @@ def R25_运动中下降(ctx) -> RuleResult:
     优先级 410（B4 运动安全 带）· 生效阶段 P2。
     挂载动作：推送告警。
     """
-    # TODO(FDE): 查运动会话期间斜率，校验 slope ≤ −1.5 或 G < 4.4
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R25_运动中下降 待实现")
+    return _fde.RULES['R25_运动中下降'](ctx)
 
 @spi.rule(ONTOLOGY, "R26_餐后步行提醒", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1934,9 +1881,7 @@ def R26_餐后步行提醒(ctx) -> RuleResult:
     优先级 415（B4 运动安全 带）· 生效阶段 P1+P2。
     挂载动作：推送告警。
     """
-    # TODO(FDE): 查餐开始时间，校验当前处于餐后 15–30min 窗口且 slope > 1
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R26_餐后步行提醒 待实现")
+    return _fde.RULES['R26_餐后步行提醒'](ctx)
 
 @spi.rule(ONTOLOGY, "R27_运动后延迟低血糖", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -1950,9 +1895,7 @@ def R27_运动后延迟低血糖(ctx) -> RuleResult:
 
     # TODO(FDE): 补依据 —— 当前 source 为 TODO(FDE): 补依据（research/sources/02 §9 待核实清单第 2 条，Colberg 2016 原文阈值待逐字核对）
     """
-    # TODO(FDE): 查当日运动记录，校验时长 ≥45min 且 meds ∩ {胰岛素, 磺脲} ≠ ∅
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R27_运动后延迟低血糖 待实现")
+    return _fde.RULES['R27_运动后延迟低血糖'](ctx)
 
 @spi.rule(ONTOLOGY, "R01_数据充分性门槛_仅管结论层", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -1968,11 +1911,7 @@ def R01_数据充分性门槛_仅管结论层(ctx) -> RuleResult:
       不覆盖 R03a/R04a/R05/R11/R23–R25 等安全告警路径，安全通道佩戴第 1 天即生效
       （confirmed-facts C-11）。做成全局闸会静音佩戴早期的夜间低血糖。
     """
-    active_pct = ctx.params.get("active_pct")
-    days = ctx.params.get("days")
-    if not (days >= 14 and active_pct >= 70):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R01_数据充分性门槛_仅管结论层 未通过", suggestion="须满足：days >= 14 and active_pct >= 70")
-    return RuleResult.ok()
+    return _fde.RULES['R01_数据充分性门槛_仅管结论层'](ctx)
 
 @spi.rule(ONTOLOGY, "R28_老年目标切换", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2000,12 +1939,7 @@ def R31_妊娠模式切换(ctx) -> RuleResult:
     优先级 510（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：入组判定、计算窗口指标、输出服务分层标签。
     """
-    pregnant = ctx.params.get("pregnant")
-    service_tier_enabled = ctx.params.get("service_tier_enabled")
-    target_profile = ctx.params.get("target_profile")
-    if not (pregnant is not True or (target_profile == 'pregnancy' and service_tier_enabled is False)):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R31_妊娠模式切换 未通过", suggestion="须满足：pregnant is not True or (target_profile == 'pregnancy' and service_tier_enabled is False)")
-    return RuleResult.ok()
+    return _fde.RULES['R31_妊娠模式切换'](ctx)
 
 @spi.rule(ONTOLOGY, "R42_急性混杂窗口禁止出结论", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2017,11 +1951,9 @@ def R42_急性混杂窗口禁止出结论(ctx) -> RuleResult:
     优先级 508（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：输出服务分层标签、生成方案草稿、判定缓解结果、生成结营报告。
     """
-    # TODO(FDE): 查窗口内 ClinicalContextEvent，校验是否存在急性病/感染发热/激素/住院/用药调整标记，命中则置 confounded_window
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R42_急性混杂窗口禁止出结论 待实现")
+    return _fde.RULES['R42_急性混杂窗口禁止出结论'](ctx)
 
-@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行", backing=Backing.DECLARATIVE, severity=Severity.HARD,
+@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.PRE,
           source="通用（domain-canvas 架构护栏「D2 不得在缺参数时回落一般成人阈值」）",
           citations=("domain-canvas §3.6", "behavior-matrix §7.1 G1"))
@@ -2031,12 +1963,7 @@ def R49_缺参数时按最保守执行(ctx) -> RuleResult:
     优先级 512（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：计算窗口指标、生成方案草稿、推送告警。
     """
-    age = ctx.params.get("age")
-    health_tier = ctx.params.get("health_tier")
-    target_profile = ctx.params.get("target_profile")
-    if not (age is None or health_tier is not None or target_profile == 'elderly'):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R49_缺参数时按最保守执行 未通过", suggestion="须满足：age is None or health_tier is not None or target_profile == 'elderly'")
-    return RuleResult.ok()
+    return _fde.RULES['R49_缺参数时按最保守执行'](ctx)
 
 @spi.rule(ONTOLOGY, "R18_CGM服务分层_内部标签", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -2048,9 +1975,7 @@ def R18_CGM服务分层_内部标签(ctx) -> RuleResult:
     优先级 515（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：输出服务分层标签。
     """
-    # TODO(FDE): 查 FG_cgm（14 天中位数）、PP2h_cgm（14 天 75 分位）、GMI、TAR 等指标，前提校验 R01 已过、target_profile 非 elderly 非 pregnancy、非 confounded_window，按 §3.2 表判 L0–L4，冲突取更严一级
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R18_CGM服务分层_内部标签 待实现")
+    return _fde.RULES['R18_CGM服务分层_内部标签'](ctx)
 
 @spi.rule(ONTOLOGY, "R29_缓解判定", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2066,9 +1991,7 @@ def R29_缓解判定(ctx) -> RuleResult:
     优先级 520（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：判定缓解结果。
     """
-    # TODO(FDE): 查 RemissionClock 是否 ≥90 天且期间无任何降糖药（含二甲双胍）记录，并查 HbA1c 或 GMI 是否 <6.5%；GMI 替代须先满足 R17 的四条前提
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R29_缓解判定 待实现")
+    return _fde.RULES['R29_缓解判定'](ctx)
 
 @spi.rule(ONTOLOGY, "R30_缓解适宜人群筛选_ABCD", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -2080,9 +2003,7 @@ def R30_缓解适宜人群筛选_ABCD(ctx) -> RuleResult:
     优先级 525（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：入组判定、判定缓解结果。
     """
-    # TODO(FDE): 查抗体检验、BMI 或腰围、空腹 C 肽 ≥1.1 与餐后 2h C 肽 ≥2.5、病程 ≤5 年，校验四条同时满足。⚠ confirmed-facts A3 只收录了空腹 C 肽一项，餐后 2h C 肽 ≥2.5 来自 research/sources/02 §7.1 与 processes/enrollment D5——**这是基准文件的漏收，须回补 confirmed-facts，不得静默采用**
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R30_缓解适宜人群筛选_ABCD 待实现")
+    return _fde.RULES['R30_缓解适宜人群筛选_ABCD'](ctx)
 
 @spi.rule(ONTOLOGY, "R33_停药观察期反弹预警", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2096,9 +2017,7 @@ def R33_停药观察期反弹预警(ctx) -> RuleResult:
 
     # TODO(FDE): 补依据 —— 当前 source 为 TODO(FDE): 补依据（remission-assessment D4 自标"阈值待临床确认，建议固化为 R33"，未经临床签字不得上线）
     """
-    # TODO(FDE): 查是否命中任一：连续 7 天平均葡萄糖 ≥8.6（不得标称 GMI）、14 天滚动 GMI ≥7.0%、TAR>10.0 连续 7 天 ≥50%、G>16.7 持续 ≥1h、症状或酮体阳性、停药后任一 L1 及以上低血糖事件、体重非计划下降 + 血糖恶化 + 酮体阳性
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R33_停药观察期反弹预警 待实现")
+    return _fde.RULES['R33_停药观察期反弹预警'](ctx)
 
 @spi.rule(ONTOLOGY, "R37_疑似1型LADA红旗", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2110,9 +2029,7 @@ def R37_疑似1型LADA红旗(ctx) -> RuleResult:
     优先级 535（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：入组判定、生成方案草稿、评估可否停药并签发减停计划。
     """
-    # TODO(FDE): 查起病年龄<40、BMI<24 消瘦、近期非计划体重快速下降、既往酮症或 DKA、口服药迅速失效、一级亲属 1 型病史等标记，任一命中即冻结（具体诊断标准另需补权威出处）
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R37_疑似1型LADA红旗 待实现")
+    return _fde.RULES['R37_疑似1型LADA红旗'](ctx)
 
 @spi.rule(ONTOLOGY, "R35_夜间覆盖不足禁强化", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2124,11 +2041,7 @@ def R35_夜间覆盖不足禁强化(ctx) -> RuleResult:
     优先级 540（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：生成方案草稿、生成AGP与指标报告。
     """
-    nocturnal_coverage_pct = ctx.params.get("nocturnal_coverage_pct")
-    plan_direction = ctx.params.get("plan_direction")
-    if not (nocturnal_coverage_pct >= 70 or plan_direction != '强化'):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R35_夜间覆盖不足禁强化 未通过", suggestion="须满足：nocturnal_coverage_pct >= 70 or plan_direction != '强化'")
-    return RuleResult.ok()
+    return _fde.RULES['R35_夜间覆盖不足禁强化'](ctx)
 
 @spi.rule(ONTOLOGY, "R50_夜间低覆盖高危用药进临床队列", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2140,12 +2053,7 @@ def R50_夜间低覆盖高危用药进临床队列(ctx) -> RuleResult:
     优先级 542（B5 人群与结论层 带）· 生效阶段 P1+P2。
     挂载动作：生成去强化证据工单。
     """
-    consecutive_low_night_nights = ctx.params.get("consecutive_low_night_nights")
-    hypo_risk_med = ctx.params.get("hypo_risk_med")
-    queue = ctx.params.get("queue")
-    if not (not (hypo_risk_med and consecutive_low_night_nights >= 2) or queue == 'clinical_hypo'):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R50_夜间低覆盖高危用药进临床队列 未通过", suggestion="须满足：not (hypo_risk_med and consecutive_low_night_nights >= 2) or queue == 'clinical_hypo'")
-    return RuleResult.ok()
+    return _fde.RULES['R50_夜间低覆盖高危用药进临床队列'](ctx)
 
 @spi.rule(ONTOLOGY, "R41_器械交易主体与收货合规", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2171,13 +2079,7 @@ def R32_产品推荐合规闸(ctx) -> RuleResult:
     优先级 600（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：生成产品推荐、审核输出内容。
     """
-    disclaimer_attached = ctx.params.get("disclaimer_attached")
-    has_product_recommendation = ctx.params.get("has_product_recommendation")
-    same_sentence_has_remission_word = ctx.params.get("same_sentence_has_remission_word")
-    same_sentence_has_tier_label = ctx.params.get("same_sentence_has_tier_label")
-    if not (not (has_product_recommendation and (same_sentence_has_tier_label or same_sentence_has_remission_word)) and disclaimer_attached is True):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R32_产品推荐合规闸 未通过", suggestion="须满足：not (has_product_recommendation and (same_sentence_has_tier_label or same_sentence_has_remission_word)) and disclaimer_attached is True")
-    return RuleResult.ok()
+    return _fde.RULES['R32_产品推荐合规闸'](ctx)
 
 @spi.rule(ONTOLOGY, "D8_禁用词拦截", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2189,10 +2091,7 @@ def D8_禁用词拦截(ctx) -> RuleResult:
     优先级 605（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：审核输出内容、群内答复患者、发布宣传素材。
     """
-    banned_term_hits = ctx.params.get("banned_term_hits")
-    if not (banned_term_hits == 0):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("D8_禁用词拦截 未通过", suggestion="须满足：banned_term_hits == 0")
-    return RuleResult.ok()
+    return _fde.RULES['D8_禁用词拦截'](ctx)
 
 @spi.rule(ONTOLOGY, "C9_AI方案禁止直接推送", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2204,9 +2103,7 @@ def C9_AI方案禁止直接推送(ctx) -> RuleResult:
     优先级 610（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：推送方案至患者。
     """
-    # TODO(FDE): 查该 PlanDraft 是否已存在有效 PlanSigned（签发人资质有效、签发时间戳与依据快照齐备），未签发一律拒绝推送
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C9_AI方案禁止直接推送 待实现")
+    return _fde.RULES['C9_AI方案禁止直接推送'](ctx)
 
 @spi.rule(ONTOLOGY, "D9_产品功效声称拦截", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2218,12 +2115,7 @@ def D9_产品功效声称拦截(ctx) -> RuleResult:
     优先级 615（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：审核输出内容、生成产品推荐、发布宣传素材。
     """
-    has_product_recommendation = ctx.params.get("has_product_recommendation")
-    same_sentence_has_remission_word = ctx.params.get("same_sentence_has_remission_word")
-    same_sentence_has_tier_label = ctx.params.get("same_sentence_has_tier_label")
-    if not (not (has_product_recommendation and (same_sentence_has_tier_label or same_sentence_has_remission_word))):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("D9_产品功效声称拦截 未通过", suggestion="须满足：not (has_product_recommendation and (same_sentence_has_tier_label or same_sentence_has_remission_word))")
-    return RuleResult.ok()
+    return _fde.RULES['D9_产品功效声称拦截'](ctx)
 
 @spi.rule(ONTOLOGY, "D10_用药建议拦截", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2235,9 +2127,7 @@ def D10_用药建议拦截(ctx) -> RuleResult:
     优先级 618（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：审核输出内容、群内答复患者、生成方案草稿。
     """
-    # TODO(FDE): 对生成文本做实体识别，校验是否出现药名 + 剂量或加减停或换药的建议性表述
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("D10_用药建议拦截 待实现")
+    return _fde.RULES['D10_用药建议拦截'](ctx)
 
 @spi.rule(ONTOLOGY, "D11_未确认分型分级措辞拦截", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2249,9 +2139,7 @@ def D11_未确认分型分级措辞拦截(ctx) -> RuleResult:
     优先级 620（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：审核输出内容、输出服务分层标签。
     """
-    # TODO(FDE): 检测文本是否出现"诊断/确诊/X 型糖尿病/X 级"等确定性措辞，命中则降级为"提示区间"表述
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("D11_未确认分型分级措辞拦截 待实现")
+    return _fde.RULES['D11_未确认分型分级措辞拦截'](ctx)
 
 @spi.rule(ONTOLOGY, "R51_分层结论默认不可披露患者", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2263,11 +2151,7 @@ def R51_分层结论默认不可披露患者(ctx) -> RuleResult:
     优先级 622（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：推送方案至患者、输出服务分层标签、群内答复患者。
     """
-    disclosure_approved = ctx.params.get("disclosure_approved")
-    includes_tier_label = ctx.params.get("includes_tier_label")
-    if not (not includes_tier_label or disclosure_approved is True):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R51_分层结论默认不可披露患者 未通过", suggestion="须满足：not includes_tier_label or disclosure_approved is True")
-    return RuleResult.ok()
+    return _fde.RULES['R51_分层结论默认不可披露患者'](ctx)
 
 @spi.rule(ONTOLOGY, "D11a_签发人资质失效自动冻结", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2281,9 +2165,7 @@ def D11a_签发人资质失效自动冻结(ctx) -> RuleResult:
 
     # TODO(FDE): 补依据 —— 当前 source 为 TODO(FDE): 补依据（执业资格核验，需补《医师法》与营养师注册管理的具体条款号）
     """
-    # TODO(FDE): 查签发人 Credential 记录，校验类型与内容归属匹配且 status == valid 且未过期
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("D11a_签发人资质失效自动冻结 待实现")
+    return _fde.RULES['D11a_签发人资质失效自动冻结'](ctx)
 
 @spi.rule(ONTOLOGY, "D12_签发人归属分流", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2295,9 +2177,7 @@ def D12_签发人归属分流(ctx) -> RuleResult:
     优先级 628（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：签发方案。
     """
-    # TODO(FDE): 按 PlanDraft 内容分类与签发人 Credential 类型做匹配校验；运动类须存在医师禁忌筛查记录
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("D12_签发人归属分流 待实现")
+    return _fde.RULES['D12_签发人归属分流'](ctx)
 
 @spi.rule(ONTOLOGY, "R45_紧急告警豁免关键词闸", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2309,11 +2189,7 @@ def R45_紧急告警豁免关键词闸(ctx) -> RuleResult:
     优先级 630（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：推送告警。
     """
-    content_type = ctx.params.get("content_type")
-    keyword_gates_applied = ctx.params.get("keyword_gates_applied")
-    if not (content_type != '告警' or keyword_gates_applied is False):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R45_紧急告警豁免关键词闸 未通过", suggestion="须满足：content_type != '告警' or keyword_gates_applied is False")
-    return RuleResult.ok()
+    return _fde.RULES['R45_紧急告警豁免关键词闸'](ctx)
 
 @spi.rule(ONTOLOGY, "R56_告警模板预审冻结", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2325,9 +2201,7 @@ def R56_告警模板预审冻结(ctx) -> RuleResult:
     优先级 631（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：推送告警。
     """
-    # TODO(FDE): 查该告警使用的模板是否在已冻结模板库内，且该模板的预审记录同时通过 C22_免责声明强制展示 与 R54_服务话术不得含夜间安全承诺
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R56_告警模板预审冻结 待实现")
+    return _fde.RULES['R56_告警模板预审冻结'](ctx)
 
 @spi.rule(ONTOLOGY, "R52_回填读数不得触发实时告警", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2339,10 +2213,7 @@ def R52_回填读数不得触发实时告警(ctx) -> RuleResult:
     优先级 632（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：推送告警、触发低血糖处置。
     """
-    is_backfill = ctx.params.get("is_backfill")
-    if not (is_backfill is not True):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R52_回填读数不得触发实时告警 未通过", suggestion="须满足：is_backfill is not True")
-    return RuleResult.ok()
+    return _fde.RULES['R52_回填读数不得触发实时告警'](ctx)
 
 @spi.rule(ONTOLOGY, "R53_低置信通道不得独立触发危急告警", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2354,11 +2225,7 @@ def R53_低置信通道不得独立触发危急告警(ctx) -> RuleResult:
     优先级 634（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：推送告警、触发低血糖处置。
     """
-    source_channel = ctx.params.get("source_channel")
-    source_confidence = ctx.params.get("source_confidence")
-    if not (source_channel in ('vendor_api','sdk_ble_direct','ble_gls_1808') and source_confidence >= 0.95):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R53_低置信通道不得独立触发危急告警 未通过", suggestion="须满足：source_channel in ('vendor_api','sdk_ble_direct','ble_gls_1808') and source_confidence >= 0.95")
-    return RuleResult.ok()
+    return _fde.RULES['R53_低置信通道不得独立触发危急告警'](ctx)
 
 @spi.rule(ONTOLOGY, "D13_签发反橡皮图章检测", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -2370,9 +2237,7 @@ def D13_签发反橡皮图章检测(ctx) -> RuleResult:
     优先级 638（B6 出口签发闸 带）· 生效阶段 P1+P2。
     挂载动作：签发方案。
     """
-    # TODO(FDE): 查该签发人近期 ReviewEvidence，校验 dwell_time 与修改率是否落入可疑阈值
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("D13_签发反橡皮图章检测 待实现")
+    return _fde.RULES['D13_签发反橡皮图章检测'](ctx)
 
 @spi.rule(ONTOLOGY, "C1_器械经营资质闸", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2384,9 +2249,7 @@ def C1_器械经营资质闸(ctx) -> RuleResult:
     优先级 650（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：上架产品SKU、创建服务包SKU。
     """
-    # TODO(FDE): 查交易主体是否持《医疗器械经营许可证》及网络销售备案
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C1_器械经营资质闸 待实现")
+    return _fde.RULES['C1_器械经营资质闸'](ctx)
 
 @spi.rule(ONTOLOGY, "C2_网络销售备案与证照公示", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2398,9 +2261,7 @@ def C2_网络销售备案与证照公示(ctx) -> RuleResult:
     优先级 655（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：上架产品SKU。
     """
-    # TODO(FDE): 查该 SKU 对应的经营许可证与注册证是否已在页面公示
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C2_网络销售备案与证照公示 待实现")
+    return _fde.RULES['C2_网络销售备案与证照公示'](ctx)
 
 @spi.rule(ONTOLOGY, "C3_敏感个人信息单独同意", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2412,9 +2273,7 @@ def C3_敏感个人信息单独同意(ctx) -> RuleResult:
     优先级 660（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：摄入读数、建立传感器会话、标记入组成功。
     """
-    # TODO(FDE): 查该患者 ConsentRecord 的 scope_items 是否覆盖本次处理目的，且七项独立勾选未被合并
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C3_敏感个人信息单独同意 待实现")
+    return _fde.RULES['C3_敏感个人信息单独同意'](ctx)
 
 @spi.rule(ONTOLOGY, "C4_数据用于产品推荐须单独同意", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2426,9 +2285,7 @@ def C4_数据用于产品推荐须单独同意(ctx) -> RuleResult:
     优先级 665（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：生成产品推荐。
     """
-    # TODO(FDE): 查营销用途单独同意是否存在且未撤回，并校验该推荐是否提供关闭与人工复核入口
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C4_数据用于产品推荐须单独同意 待实现")
+    return _fde.RULES['C4_数据用于产品推荐须单独同意'](ctx)
 
 @spi.rule(ONTOLOGY, "C5_厂商云对接协议与PIPIA", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2454,9 +2311,7 @@ def C6_群内数据最小可见范围(ctx) -> RuleResult:
     优先级 675（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：群内答复患者、推送方案至患者。
     """
-    # TODO(FDE): 查推送目标群组的角色构成，校验内容是否含未脱敏的原始血糖值或药名剂量
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C6_群内数据最小可见范围 待实现")
+    return _fde.RULES['C6_群内数据最小可见范围'](ctx)
 
 @spi.rule(ONTOLOGY, "C7_患者数据禁止存放非平台工具", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2496,9 +2351,7 @@ def C21_数据留存与审计日志(ctx) -> RuleResult:
     优先级 690（B7 器械/数据/机构合规 带）· 生效阶段 系统级。
     挂载动作：摄入读数、签发方案、响应并回执告警。
     """
-    # TODO(FDE): 查系统存储策略与审计日志开关是否满足 ≥3 年留存与全操作审计
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C21_数据留存与审计日志 待实现")
+    return _fde.RULES['C21_数据留存与审计日志'](ctx)
 
 @spi.rule(ONTOLOGY, "C11_分型输出制度层不得当诊断", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2510,11 +2363,7 @@ def C11_分型输出制度层不得当诊断(ctx) -> RuleResult:
     优先级 700（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：发布宣传素材、输出服务分层标签。
     """
-    audience = ctx.params.get("audience")
-    contains_diagnostic_claim = ctx.params.get("contains_diagnostic_claim")
-    if not (not (audience == 'public' and contains_diagnostic_claim)):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("C11_分型输出制度层不得当诊断 未通过", suggestion="须满足：not (audience == 'public' and contains_diagnostic_claim)")
-    return RuleResult.ok()
+    return _fde.RULES['C11_分型输出制度层不得当诊断'](ctx)
 
 @spi.rule(ONTOLOGY, "C12_生成式AI备案与算法备案", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2540,9 +2389,7 @@ def C13_服务与产品物理分离(ctx) -> RuleResult:
     优先级 710（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：创建服务包SKU、生成产品推荐。
     """
-    # TODO(FDE): 查该 SKU 是否含产品实体或产品功效表述，含则拦截
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C13_服务与产品物理分离 待实现")
+    return _fde.RULES['C13_服务与产品物理分离'](ctx)
 
 @spi.rule(ONTOLOGY, "C14_产品标签合规校验", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2554,9 +2401,7 @@ def C14_产品标签合规校验(ctx) -> RuleResult:
     优先级 715（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：上架产品SKU。
     """
-    # TODO(FDE): 查产品标签，校验"固体饮料"字样与法定警示语的字号及面积占比
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C14_产品标签合规校验 待实现")
+    return _fde.RULES['C14_产品标签合规校验'](ctx)
 
 @spi.rule(ONTOLOGY, "C15_服务包禁止捆绑分佣", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2568,9 +2413,7 @@ def C15_服务包禁止捆绑分佣(ctx) -> RuleResult:
     优先级 720（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：创建服务包SKU。
     """
-    # TODO(FDE): 查该 SKU 分佣配置是否关联医务人员账号与产品销量
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C15_服务包禁止捆绑分佣 待实现")
+    return _fde.RULES['C15_服务包禁止捆绑分佣'](ctx)
 
 @spi.rule(ONTOLOGY, "C16_禁止发布患者前后对比案例", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2582,11 +2425,7 @@ def C16_禁止发布患者前后对比案例(ctx) -> RuleResult:
     优先级 725（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：发布宣传素材。
     """
-    contains_identifiable_patient = ctx.params.get("contains_identifiable_patient")
-    is_before_after_comparison = ctx.params.get("is_before_after_comparison")
-    if not (not (contains_identifiable_patient and is_before_after_comparison)):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("C16_禁止发布患者前后对比案例 未通过", suggestion="须满足：not (contains_identifiable_patient and is_before_after_comparison)")
-    return RuleResult.ok()
+    return _fde.RULES['C16_禁止发布患者前后对比案例'](ctx)
 
 @spi.rule(ONTOLOGY, "C17_机构与门诊命名合规", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2598,9 +2437,7 @@ def C17_机构与门诊命名合规(ctx) -> RuleResult:
     优先级 730（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：设定机构与门诊名称、发布宣传素材。
     """
-    # TODO(FDE): 查机构或门诊名称是否已获卫健部门核准且不含"逆转"等暗示疗效用语
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C17_机构与门诊命名合规 待实现")
+    return _fde.RULES['C17_机构与门诊命名合规'](ctx)
 
 @spi.rule(ONTOLOGY, "C18_非医疗机构不得实施诊疗", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2626,9 +2463,7 @@ def C19_线上随访边界(ctx) -> RuleResult:
     优先级 740（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：开展线上随访、群内答复患者。
     """
-    # TODO(FDE): 查随访内容是否超出健康教育/生活方式建议/监测提醒/异常转介范围；超出则核验互联网诊疗备案与等保三级
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C19_线上随访边界 待实现")
+    return _fde.RULES['C19_线上随访边界'](ctx)
 
 @spi.rule(ONTOLOGY, "C20_危急值须系统自动告警并记录响应", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2642,9 +2477,7 @@ def C20_危急值须系统自动告警并记录响应(ctx) -> RuleResult:
 
     # TODO(FDE): 补依据 —— 当前 source 为 TODO(FDE): 补依据（医疗质量安全核心制度「危急值报告制度」，需补具体文号）
     """
-    # TODO(FDE): 查该次危急值是否由系统自动触发并记录发现—响应时间戳，而非人工群聊上报
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C20_危急值须系统自动告警并记录响应 待实现")
+    return _fde.RULES['C20_危急值须系统自动告警并记录响应'](ctx)
 
 @spi.rule(ONTOLOGY, "C22_免责声明强制展示", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -2656,11 +2489,7 @@ def C22_免责声明强制展示(ctx) -> RuleResult:
     优先级 748（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：审核输出内容、推送方案至患者。
     """
-    disclaimer_attached = ctx.params.get("disclaimer_attached")
-    disclaimer_excludes_liability = ctx.params.get("disclaimer_excludes_liability")
-    if not (disclaimer_attached is True and disclaimer_excludes_liability is False):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("C22_免责声明强制展示 未通过", suggestion="须满足：disclaimer_attached is True and disclaimer_excludes_liability is False")
-    return RuleResult.ok()
+    return _fde.RULES['C22_免责声明强制展示'](ctx)
 
 @spi.rule(ONTOLOGY, "R38_告警兜底配置未完成禁止佩戴", backing=Backing.DECLARATIVE, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -2704,10 +2533,7 @@ def R54_服务话术不得含夜间安全承诺(ctx) -> RuleResult:
     优先级 758（B8 流程操作性 带）· 生效阶段 P1+P2。
     挂载动作：审核输出内容、创建服务包SKU、发布宣传素材、群内答复患者。
     """
-    night_safety_promise_hits = ctx.params.get("night_safety_promise_hits")
-    if not (night_safety_promise_hits == 0):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R54_服务话术不得含夜间安全承诺 未通过", suggestion="须满足：night_safety_promise_hits == 0")
-    return RuleResult.ok()
+    return _fde.RULES['R54_服务话术不得含夜间安全承诺'](ctx)
 
 @spi.rule(ONTOLOGY, "R40_老年画像禁止仅靠自觉同步", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.PRE,
@@ -2750,11 +2576,7 @@ def R55_显示口径_没有数据不得说成没有异常(ctx) -> RuleResult:
     优先级 768（B8 流程操作性 带）· 生效阶段 P1+P2。
     挂载动作：推送方案至患者、群内答复患者、生成AGP与指标报告。
     """
-    contains_reassuring_wording = ctx.params.get("contains_reassuring_wording")
-    has_data = ctx.params.get("has_data")
-    if not (has_data is True or contains_reassuring_wording is False):  # ← 取自 IR check，取反即违反条件
-        return RuleResult.fail("R55_显示口径_没有数据不得说成没有异常 未通过", suggestion="须满足：has_data is True or contains_reassuring_wording is False")
-    return RuleResult.ok()
+    return _fde.RULES['R55_显示口径_没有数据不得说成没有异常'](ctx)
 
 
 # ============================================================================
@@ -2763,7 +2585,7 @@ def R55_显示口径_没有数据不得说成没有异常(ctx) -> RuleResult:
 
 @spi.action(
     ONTOLOGY, "签署单独同意书",
-    description="患者本人逐项勾选并电子签名，七项范围不得合并",
+    description="为患者登记一份单独同意书：记录逐项勾选的范围、电子签名与时间戳，生成 ConsentRecord",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("scope_items", "list", required=True),
@@ -2771,7 +2593,7 @@ def R55_显示口径_没有数据不得说成没有异常(ctx) -> RuleResult:
     ),
     post_rules=("C3_敏感个人信息单独同意",),
     writes=("ConsentRecord",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="患者本人",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -2790,13 +2612,13 @@ def 签署单独同意书(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "撤回同意",
-    description="按范围撤回并级联下游，须产出豁免触达封锁的告知",
+    description="按范围撤回患者已签的同意，记录撤回并级联更新受影响的下游数据项",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("scope", "list", required=True),
     ),
     writes=("ConsentRevocation", "ConsentRecord"),
-    validate_supported=False,
+    validate_supported=True,
     # 与「处理数据主体权利请求」同为 PIPL 权利响应，口径必须一致（validate B.4）
     hil=HilPolicy(reviewer_role="合规官（受理与级联核验）",
                   predicate=lambda confidence, touched_hard: True),
@@ -2816,7 +2638,7 @@ def 撤回同意(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "录入结构化用药清单",
-    description="医师或药师录入 meds 并打四标签",
+    description="把患者的结构化用药清单（药名、类别标签）写入画像 meds 字段",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("meds_list", "list", required=True),
@@ -2824,7 +2646,7 @@ def 撤回同意(ctx) -> None:
     guards=("D11a_签发人资质失效自动冻结",),
     post_rules=("R49_缺参数时按最保守执行",),
     writes=("PatientProfile",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师/药师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -2843,14 +2665,14 @@ def 录入结构化用药清单(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "采集用药线索",
-    description="患者自报或药盒照片，仅供规则开闸，与 meds 严格分离",
+    description="记录患者自报或药盒照片得到的用药线索（MedClassHint），与正式用药清单分开存放",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("hint_source", "string", required=True),
         ParamSpec("photo_ref", "string", required=False),
     ),
     writes=("MedClassHint",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 采集用药线索(ctx) -> None:
     """患者自报或药盒照片，仅供规则开闸，与 meds 严格分离
@@ -2866,7 +2688,7 @@ def 采集用药线索(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "入组判定",
-    description="医师判定是否入组、选包、缓解路径适宜性、人群目标区间",
+    description="根据体检与化验结果给出入组决定、服务包选择、缓解路径适宜性与人群目标区间",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("exam_results", "object", required=True),
@@ -2894,14 +2716,14 @@ def 入组判定(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录到店随机指血分诊",
-    description="到店 5 分钟内前置串行，危急值命中即阻断商业流程",
+    description="记录患者到店时的随机指血值并生成分诊记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("glucose_value", "number", required=True),
     ),
     guards=("C18_非医疗机构不得实施诊疗", "R41_器械交易主体与收货合规"),
     writes=("OnsiteTriageRecord", "GlucoseReading"),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="护士/前台",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -2921,7 +2743,7 @@ def 记录到店随机指血分诊(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "建立传感器会话",
-    description="绑定传感器序号并按型号取预热参数",
+    description="为患者绑定一枚传感器（序号、厂商、型号、佩戴时间），按型号取预热参数建立佩戴会话",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("sensor_serial", "string", required=True),
@@ -2931,7 +2753,7 @@ def 记录到店随机指血分诊(ctx) -> None:
     ),
     guards=("C3_敏感个人信息单独同意", "R38_告警兜底配置未完成禁止佩戴", "R41_器械交易主体与收货合规"),
     writes=("SensorSession",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 建立传感器会话(ctx) -> None:
     """绑定传感器序号并按型号取预热参数
@@ -2947,14 +2769,14 @@ def 建立传感器会话(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录时间基线",
-    description="入组现场唯一采集时机，漏了不可补",
+    description="记录患者手机时区与设备时钟偏移，作为后续读数时间校正的基线",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("phone_tz", "string", required=True),
         ParamSpec("clock_offset", "number", required=False),
     ),
     writes=("PatientTimeBaseline",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 记录时间基线(ctx) -> None:
     """入组现场唯一采集时机，漏了不可补
@@ -2970,7 +2792,7 @@ def 记录时间基线(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "建立同步计划",
-    description="按画像分配同步触发方式，决定一期数据完整性",
+    description="为患者设置数据同步方式（触发类型、预期间隔、协助人）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("trigger_type", "string", required=True),
@@ -2979,7 +2801,7 @@ def 记录时间基线(ctx) -> None:
     ),
     guards=("R40_老年画像禁止仅靠自觉同步",),
     writes=("SyncPlan",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 建立同步计划(ctx) -> None:
     """按画像分配同步触发方式，决定一期数据完整性
@@ -2995,7 +2817,7 @@ def 建立同步计划(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "验证通道连通性",
-    description="离店前端到端验证至少一条读数落库",
+    description="端到端验证某条数据通道是否已有读数落库，并登记载体信息",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("channel", "string", required=True),
@@ -3022,7 +2844,7 @@ def 验证通道连通性(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "覆盖状态告知",
-    description="当面告知一期无当夜干预能力并签署留痕",
+    description="记录向患者告知当前服务覆盖状态（如夜间无实时干预）的留痕",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("coverage_state", "string", required=True),
@@ -3030,7 +2852,7 @@ def 验证通道连通性(ctx) -> None:
     guards=("R54_服务话术不得含夜间安全承诺",),
     post_rules=("R39_覆盖告知未留痕禁止入组成功",),
     writes=("EnrollmentDecision",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="健管师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3049,13 +2871,13 @@ def 覆盖状态告知(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "标记入组成功",
-    description="通过全部离店硬闸后才启动服务包计时",
+    description="把患者标记为入组成功并启动服务包计时",
     params=(
         ParamSpec("patient_id", "string", required=True),
     ),
     guards=("R39_覆盖告知未留痕禁止入组成功", "R43_落库验证未通过禁止入组成功", "C3_敏感个人信息单独同意"),
     writes=("EnrollmentDecision", "ServicePackage"),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 标记入组成功(ctx) -> None:
     """通过全部离店硬闸后才启动服务包计时
@@ -3072,7 +2894,7 @@ def 标记入组成功(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "摄入读数",
-    description="多通道摄入，单位与时间完整性硬校验",
+    description="从指定通道摄入一批原始血糖读数（含患者、读数列表），写入 GlucoseReading 与 IngestBatch",
     params=(
         ParamSpec("channel", "string", required=True),
         ParamSpec("raw_payload", "object", required=True),
@@ -3087,46 +2909,35 @@ def 摄入读数(ctx) -> None:
 
     写入对象：GlucoseReading、IngestBatch。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("GlucoseReading", f"glucosereading_{ctx.params[...]}", {...})
-    # ctx.stage_write("IngestBatch", f"ingestbatch_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("摄入读数 handler 待实现")
+    _fde.ACTIONS['摄入读数'](ctx)
 
 @spi.action(
     ONTOLOGY, "去重与通道仲裁",
-    description="按传感器序号去重，多路自动仲裁",
+    description="对一条候选读数按传感器序号去重，并在多通道间仲裁取舍",
     params=(
         ParamSpec("reading_candidate", "object", required=True),
     ),
     guards=("R48_去重键必须用传感器序号",),
     post_rules=("R36_active率超100自检", "R02_传感器压迫伪差识别"),
     writes=("GlucoseReading",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 去重与通道仲裁(ctx) -> None:
     """按传感器序号去重，多路自动仲裁
 
     写入对象：GlucoseReading。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("GlucoseReading", f"glucosereading_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("去重与通道仲裁 handler 待实现")
+    _fde.ACTIONS['去重与通道仲裁'](ctx)
 
 @spi.action(
     ONTOLOGY, "OCR读数复核",
-    description="健管师按决策影响分诊复核，否决走 retract + 新增",
+    description="对一条 OCR 识别出的读数做人工复核决定（确认 / 否决并重录）",
     params=(
         ParamSpec("reading_id", "string", required=True),
         ParamSpec("decision", "string", required=True),
     ),
     writes=("GlucoseReading",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="健管师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3145,7 +2956,7 @@ def OCR读数复核(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "计算窗口指标",
-    description="计算全套派生量并落 CgmSummary",
+    description="按时间窗计算患者的全套 CGM 派生指标（TIR/TBR/TAR/CV/GMI、有效率、夜间覆盖）并写入 CgmSummary",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3169,7 +2980,7 @@ def 计算窗口指标(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成AGP与指标报告",
-    description="按先低→再高→再波动顺序组织报告",
+    description="按窗口生成患者的 AGP 图与指标报告内容",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3207,7 +3018,7 @@ def 生成AGP与指标报告(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录餐食与运动事件",
-    description="患者或家属打卡，AI 可从群聊抽取",
+    description="记录患者的一次餐食 / 运动 / 睡眠等情境事件及发生时间",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("event_type", "string", required=True),
@@ -3222,7 +3033,7 @@ def 生成AGP与指标报告(ctx) -> None:
         "R27_运动后延迟低血糖",
     ),
     writes=("ContextEvent",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 记录餐食与运动事件(ctx) -> None:
     """患者或家属打卡，AI 可从群聊抽取
@@ -3238,7 +3049,7 @@ def 记录餐食与运动事件(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录症状与处置",
-    description="告警卡片内一键回填，R10 的唯一输入",
+    description="记录患者一次低血糖相关症状标签及对应处置动作",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("symptom_tag", "string", required=False),
@@ -3249,7 +3060,7 @@ def 记录餐食与运动事件(ctx) -> None:
         "R59_老年非典型症状疑似低血糖",
     ),
     writes=("SymptomTreatmentRecord",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 记录症状与处置(ctx) -> None:
     """告警卡片内一键回填，R10 的唯一输入
@@ -3265,14 +3076,14 @@ def 记录症状与处置(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录酮体",
-    description="R11/R12/R24 的阳性分支唯一输入",
+    description="记录患者一次酮体检测结果（数值或定性）与检测方法",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("value_or_qualitative", "string", required=True),
         ParamSpec("method", "string", required=False),
     ),
     writes=("KetoneReading",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 记录酮体(ctx) -> None:
     """R11/R12/R24 的阳性分支唯一输入
@@ -3288,7 +3099,7 @@ def 记录酮体(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录临床混杂事件",
-    description="医师或护士录入急性病、激素、住院、调药期",
+    description="记录患者的急性病、激素使用、住院、调药期等临床混杂事件及起止时间",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("type", "string", required=True),
@@ -3296,7 +3107,7 @@ def 记录酮体(ctx) -> None:
     ),
     post_rules=("R42_急性混杂窗口禁止出结论",),
     writes=("ClinicalContextEvent",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师/护士",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3315,7 +3126,7 @@ def 记录临床混杂事件(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "计算餐后响应",
-    description="配对窗计算 PPGR 五项",
+    description="对一次餐食事件配对前后读数，计算餐后血糖响应（PPGR）指标",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("meal_event_id", "string", required=True),
@@ -3339,7 +3150,7 @@ def 计算餐后响应(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "输出服务分层标签",
-    description="内部服务分层，默认不可披露患者",
+    description="按窗口指标为患者计算内部服务分层标签（L0–L4）并写入画像",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3363,16 +3174,11 @@ def 输出服务分层标签(ctx) -> None:
     HIL：医师（披露授权）（触发条件 always）。
     写入对象：PatientProfile。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("PatientProfile", f"patientprofile_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("输出服务分层标签 handler 待实现")
+    _fde.ACTIONS['输出服务分层标签'](ctx)
 
 @spi.action(
     ONTOLOGY, "触发低血糖处置",
-    description="一期写事件进次日队列，二期走实时推送",
+    description="基于一条读数与命中的规则生成低血糖告警事件与事件记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("reading_id", "string", required=True),
@@ -3381,24 +3187,18 @@ def 输出服务分层标签(ctx) -> None:
     guards=("R53_低置信通道不得独立触发危急告警", "R52_回填读数不得触发实时告警"),
     post_rules=("R03a_Level2低血糖_实时告警", "R04a_Level1低血糖_实时告警", "R05_即将低血糖预测告警", "R11_严重高血糖"),
     writes=("AlertEvent", "HypoEpisode"),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 触发低血糖处置(ctx) -> None:
     """一期写事件进次日队列，二期走实时推送
 
     写入对象：AlertEvent、HypoEpisode。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertEvent", f"alertevent_{ctx.params[...]}", {...})
-    # ctx.stage_write("HypoEpisode", f"hypoepisode_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("触发低血糖处置 handler 待实现")
+    _fde.ACTIONS['触发低血糖处置'](ctx)
 
 @spi.action(
     ONTOLOGY, "统计低血糖事件",
-    description="Danne ≥15 分钟口径的回顾统计，一期核心安全产出",
+    description="按窗口回顾统计患者的低血糖事件（≥15 分钟口径），写入 HypoEpisode",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3421,14 +3221,14 @@ def 统计低血糖事件(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "更新低血糖状态机",
-    description="置延长风险与复发窗，closure_blocked_reason 无人可写",
+    description="根据新事件更新患者的低血糖状态（延长风险、复发观察窗）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("event", "string", required=True),
     ),
     post_rules=("R34_HAAF_24小时复发窗",),
     writes=("HypoState",),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 更新低血糖状态机(ctx) -> None:
     """置延长风险与复发窗，closure_blocked_reason 无人可写
@@ -3444,7 +3244,7 @@ def 更新低血糖状态机(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "推送告警",
-    description="分级推送，紧急告警只套用已预审冻结的模板",
+    description="把一条告警事件按级别推送给指定对象，生成投递回执",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("level", "string", required=True),
@@ -3474,24 +3274,18 @@ def 更新低血糖状态机(ctx) -> None:
         "R58_Level3严重低血糖强制转诊",
     ),
     writes=("AlertEvent", "DeliveryReceipt"),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 推送告警(ctx) -> None:
     """分级推送，紧急告警只套用已预审冻结的模板
 
     写入对象：AlertEvent、DeliveryReceipt。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertEvent", f"alertevent_{ctx.params[...]}", {...})
-    # ctx.stage_write("DeliveryReceipt", f"deliveryreceipt_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("推送告警 handler 待实现")
+    _fde.ACTIONS['推送告警'](ctx)
 
 @spi.action(
     ONTOLOGY, "响应并回执告警",
-    description="健管师或值班医师回执，高危用药不得直接闭环",
+    description="记录对一条告警的响应：响应人、所做处置、复测值，生成回执",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("responder", "string", required=True),
@@ -3504,7 +3298,7 @@ def 推送告警(ctx) -> None:
         "R57_15-15三轮无效强制升级就医",
     ),
     writes=("AlertAck",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="健管师/值班医师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3514,23 +3308,18 @@ def 响应并回执告警(ctx) -> None:
     HIL：健管师/值班医师（触发条件 always）。
     写入对象：AlertAck。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertAck", f"alertack_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("响应并回执告警 handler 待实现")
+    _fde.ACTIONS['响应并回执告警'](ctx)
 
 @spi.action(
     ONTOLOGY, "升级告警",
-    description="逐级升级至值班责任人（phase=P2）",
+    description="把一条告警升级到更高级别的值班责任人",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("level", "number", required=True),
     ),
     guards=("R38_告警兜底配置未完成禁止佩戴",),
     writes=("AlertEscalation",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="值班医师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3549,13 +3338,13 @@ def 升级告警(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "撤销更正已发出告警",
-    description="上游读数被 retract 或 corrected 时撤销并发更正说明",
+    description="撤销一条已发出的告警并发出更正说明",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("reason", "string", required=True),
     ),
     writes=("AlertEvent", "PlanSigned"),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="触及已签发方案时转签发人",
                   predicate=lambda confidence, touched_hard: touched_hard),
 )
@@ -3575,7 +3364,7 @@ def 撤销更正已发出告警(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "放宽告警阈值",
-    description="仅医师可放宽——收紧可自动、放宽仅医师",
+    description="把患者某项告警阈值改到更不容易报警的值（低值类阈值下调、高值类阈值上调）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("field", "string", required=True),
@@ -3593,42 +3382,31 @@ def 放宽告警阈值(ctx) -> None:
     HIL：医师（唯一可放宽）（触发条件 always）。
     写入对象：AlertThreshold、ThresholdChangeLog。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertThreshold", f"alertthreshold_{ctx.params[...]}", {...})
-    # ctx.stage_write("ThresholdChangeLog", f"thresholdchangelog_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("放宽告警阈值 handler 待实现")
+    _fde.ACTIONS['放宽告警阈值'](ctx)
 
 @spi.action(
     ONTOLOGY, "收紧告警阈值",
-    description="由确定性规则自动触发，记录并通知医师",
+    description="把患者某项告警阈值改到更早报警的值（低值类阈值上调，如夜间低值 3.9→4.4；高值类阈值下调），记录触发来源与前后值",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("field", "string", required=True),
         ParamSpec("trigger_rule", "string", required=True),
+        ParamSpec("new_value", "number", required=False),
     ),
     post_rules=("R27_运动后延迟低血糖", "R34_HAAF_24小时复发窗"),
     writes=("AlertThreshold", "ThresholdChangeLog"),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 收紧告警阈值(ctx) -> None:
     """由确定性规则自动触发，记录并通知医师
 
     写入对象：AlertThreshold、ThresholdChangeLog。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertThreshold", f"alertthreshold_{ctx.params[...]}", {...})
-    # ctx.stage_write("ThresholdChangeLog", f"thresholdchangelog_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("收紧告警阈值 handler 待实现")
+    _fde.ACTIONS['收紧告警阈值'](ctx)
 
 @spi.action(
     ONTOLOGY, "配置患者告警与静音策略",
-    description="按人群维度设阈值与静音策略",
+    description="按患者人群属性设置告警阈值与夜间静音策略",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("is_iah_high_risk", "boolean", required=False),
@@ -3637,7 +3415,7 @@ def 收紧告警阈值(ctx) -> None:
     guards=("R46_IAH高危阈值上调且禁止静音",),
     post_rules=("R10_低血糖无感知线索",),
     writes=("AlertThreshold",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3656,7 +3434,7 @@ def 配置患者告警与静音策略(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成方案草稿",
-    description="AI 只出草稿，不含用药加减停、不含产品映射、不含分型结论",
+    description="根据患者分析结果生成一份本期健康管理方案草稿（可指定方向：强化 / 维持 / 去强化），写入 PlanDraft 待签发",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("analysis_result", "object", required=True),
@@ -3685,16 +3463,11 @@ def 生成方案草稿(ctx) -> None:
 
     写入对象：PlanDraft。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("PlanDraft", f"plandraft_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("生成方案草稿 handler 待实现")
+    _fde.ACTIONS['生成方案草稿'](ctx)
 
 @spi.action(
     ONTOLOGY, "审核输出内容",
-    description="出口合规闸四道判定，通过才签发 gate_token",
+    description="对一条待发出的内容做合规审核，记录命中项并在通过时签发 gate_token",
     params=(
         ParamSpec("content_id", "string", required=True),
         ParamSpec("content_type", "string", required=True),
@@ -3720,18 +3493,11 @@ def 审核输出内容(ctx) -> None:
     HIL：合规官（红线复核）+ 营养师/医师（2 次未过转人工改写）（触发条件 always）。
     写入对象：ComplianceCheckLog、GateToken、OutboundContent。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("ComplianceCheckLog", f"compliancechecklog_{ctx.params[...]}", {...})
-    # ctx.stage_write("GateToken", f"gatetoken_{ctx.params[...]}", {...})
-    # ctx.stage_write("OutboundContent", f"outboundcontent_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("审核输出内容 handler 待实现")
+    _fde.ACTIONS['审核输出内容'](ctx)
 
 @spi.action(
     ONTOLOGY, "签发方案",
-    description="医师或注册营养师签发，AI 与健管师绝对禁写",
+    description="由签发人对一份方案草稿作出签发决定，生成已签发方案与审阅证据",
     params=(
         ParamSpec("draft_id", "string", required=True),
         ParamSpec("signer_id", "string", required=True),
@@ -3740,7 +3506,7 @@ def 审核输出内容(ctx) -> None:
     guards=("D11a_签发人资质失效自动冻结", "D12_签发人归属分流", "C21_数据留存与审计日志"),
     post_rules=("D13_签发反橡皮图章检测",),
     writes=("PlanSigned", "ReviewEvidence"),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师/注册营养师/运动康复师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3750,17 +3516,11 @@ def 签发方案(ctx) -> None:
     HIL：医师/注册营养师/运动康复师（触发条件 always）。
     写入对象：PlanSigned、ReviewEvidence。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("PlanSigned", f"plansigned_{ctx.params[...]}", {...})
-    # ctx.stage_write("ReviewEvidence", f"reviewevidence_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("签发方案 handler 待实现")
+    _fde.ACTIONS['签发方案'](ctx)
 
 @spi.action(
     ONTOLOGY, "推送方案至患者",
-    description="已签发且过闸的内容才可推送",
+    description="把一份已签发的方案推送给指定对象，生成投递回执",
     params=(
         ParamSpec("plan_id", "string", required=True),
         ParamSpec("targets", "list", required=True),
@@ -3768,30 +3528,24 @@ def 签发方案(ctx) -> None:
     guards=("C9_AI方案禁止直接推送", "R51_分层结论默认不可披露患者"),
     post_rules=("C6_群内数据最小可见范围", "C22_免责声明强制展示", "R55_显示口径_没有数据不得说成没有异常"),
     writes=("DeliveryReceipt", "OutboundContent"),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 推送方案至患者(ctx) -> None:
     """已签发且过闸的内容才可推送
 
     写入对象：DeliveryReceipt、OutboundContent。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("DeliveryReceipt", f"deliveryreceipt_{ctx.params[...]}", {...})
-    # ctx.stage_write("OutboundContent", f"outboundcontent_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("推送方案至患者 handler 待实现")
+    _fde.ACTIONS['推送方案至患者'](ctx)
 
 @spi.action(
     ONTOLOGY, "标记方案证据过期",
-    description="消费 metrics.invalidated，生成签发人待办",
+    description="把一份已签发方案标记为依据过期，并生成签发人待办",
     params=(
         ParamSpec("plan_id", "string", required=True),
         ParamSpec("window", "string", required=True),
     ),
     writes=("PlanSigned",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="复核仍需签发人",
                   predicate=lambda confidence, touched_hard: touched_hard),
 )
@@ -3810,7 +3564,7 @@ def 标记方案证据过期(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成去强化证据工单",
-    description="带 14 天曲线 + 用药清单 + 低血糖事件明细转医师",
+    description="为患者生成一份转医师的去强化证据包（窗口指标、14 天曲线、用药清单、低血糖事件明细）并创建转介记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3833,17 +3587,11 @@ def 生成去强化证据工单(ctx) -> None:
     HIL：医师接单（触发条件 always）。
     写入对象：ReferralRecord、OutboundContent。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("ReferralRecord", f"referralrecord_{ctx.params[...]}", {...})
-    # ctx.stage_write("OutboundContent", f"outboundcontent_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("生成去强化证据工单 handler 待实现")
+    _fde.ACTIONS['生成去强化证据工单'](ctx)
 
 @spi.action(
     ONTOLOGY, "转介医师",
-    description="用药类问题一律转医师，AI 与健管师不得答",
+    description="把一个患者问题及上下文转介给医师，生成转介记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("question_context", "string", required=True),
@@ -3855,7 +3603,7 @@ def 生成去强化证据工单(ctx) -> None:
         "R58_Level3严重低血糖强制转诊",
     ),
     writes=("ReferralRecord",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3865,23 +3613,18 @@ def 转介医师(ctx) -> None:
     HIL：医师（触发条件 always）。
     写入对象：ReferralRecord。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("ReferralRecord", f"referralrecord_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("转介医师 handler 待实现")
+    _fde.ACTIONS['转介医师'](ctx)
 
 @spi.action(
     ONTOLOGY, "评估可否停药并签发减停计划",
-    description="仅医师，原文快照不可被智能体摘要改写",
+    description="基于证据包评估患者可否停药并签发减停计划",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("evidence_pack", "object", required=True),
     ),
     guards=("D11a_签发人资质失效自动冻结", "R37_疑似1型LADA红旗", "R30_缓解适宜人群筛选_ABCD"),
     writes=("TaperPlan",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师（唯一，AI 绝对禁止建议）",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3900,13 +3643,13 @@ def 评估可否停药并签发减停计划(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "确认缓解时钟Day0",
-    description="医师另行确认，系统不得自动推断",
+    description="为患者确认缓解观察的 Day0 日期并启动缓解时钟",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("day0", "string", required=True),
     ),
     writes=("RemissionClock",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3925,7 +3668,7 @@ def 确认缓解时钟Day0(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "判定缓解结果",
-    description="停药 ≥90 天 + HbA1c<6.5%（GMI 可替代但须过四条前提）",
+    description="根据停药时长、化验结果与窗口指标判定患者是否达到缓解，写入评估记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("lab_result_id", "string", required=False),
@@ -3950,22 +3693,17 @@ def 判定缓解结果(ctx) -> None:
     HIL：医师（面诊告知，唯一）（触发条件 always）。
     写入对象：RemissionAssessment。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("RemissionAssessment", f"remissionassessment_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("判定缓解结果 handler 待实现")
+    _fde.ACTIONS['判定缓解结果'](ctx)
 
 @spi.action(
     ONTOLOGY, "决定复药",
-    description="复药即 remission_clock 清零",
+    description="记录患者复药决定并重置缓解时钟",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("evidence", "string", required=True),
     ),
     writes=("RemissionClock",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -3984,7 +3722,7 @@ def 决定复药(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成结营报告",
-    description="面对面解读用的人话版报告",
+    description="为患者生成服务包结营时面对面解读用的报告",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("package_id", "string", required=True),
@@ -4017,7 +3755,7 @@ def 生成结营报告(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "兑现结果承诺",
-    description="结营 KPI 结算，TBR 安全门一票否决",
+    description="按依从数据结算一个服务包的结营 KPI",
     params=(
         ParamSpec("package_id", "string", required=True),
         ParamSpec("adherence_data", "object", required=True),
@@ -4044,14 +3782,14 @@ def 兑现结果承诺(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录服务退出与退款归因",
-    description="流失信号误报率评估的 ground truth",
+    description="记录患者退出服务的原因与退款金额，并关联流失信号",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("exit_reason", "string", required=True),
         ParamSpec("refund_amount", "number", required=False),
     ),
     writes=("ServiceExitRecord", "ChurnSignal"),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="店长确认",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4071,7 +3809,7 @@ def 记录服务退出与退款归因(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "创建服务包SKU",
-    description="服务包只含服务，不含任何产品",
+    description="创建一个服务包 SKU（等级、内容清单）",
     params=(
         ParamSpec("sku_id", "string", required=True),
         ParamSpec("tier", "string", required=True),
@@ -4090,17 +3828,11 @@ def 创建服务包SKU(ctx) -> None:
     HIL：合规官审核（触发条件 always）。
     写入对象：ServicePackage、ProductSku。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("ServicePackage", f"servicepackage_{ctx.params[...]}", {...})
-    # ctx.stage_write("ProductSku", f"productsku_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("创建服务包SKU handler 待实现")
+    _fde.ACTIONS['创建服务包SKU'](ctx)
 
 @spi.action(
     ONTOLOGY, "上架产品SKU",
-    description="器械一律拒绝；食品须核验标签",
+    description="把一个产品 SKU（指定类别：服务 / 食品 / 器械引用）上架",
     params=(
         ParamSpec("sku_id", "string", required=True),
         ParamSpec("category", "string", required=True),
@@ -4117,19 +3849,15 @@ def 上架产品SKU(ctx) -> None:
     HIL：合规官审核（触发条件 always）。
     写入对象：ProductSku。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("ProductSku", f"productsku_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("上架产品SKU handler 待实现")
+    _fde.ACTIONS['上架产品SKU'](ctx)
 
 @spi.action(
     ONTOLOGY, "生成产品推荐",
-    description="不得与分层或缓解同句，须附固体饮料尾注",
+    description="为患者生成一条产品推荐内容（可附推荐话术 pitch）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("sku_id", "string", required=True),
+        ParamSpec("pitch", "string", required=False),  # FDE：推荐话术，进 R32/D9 闸
     ),
     guards=("C4_数据用于产品推荐须单独同意", "C13_服务与产品物理分离"),
     post_rules=("R32_产品推荐合规闸", "D9_产品功效声称拦截"),
@@ -4144,16 +3872,11 @@ def 生成产品推荐(ctx) -> None:
     HIL：合规官（触发条件 confidence<0.75）。
     写入对象：OutboundContent。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("OutboundContent", f"outboundcontent_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("生成产品推荐 handler 待实现")
+    _fde.ACTIONS['生成产品推荐'](ctx)
 
 @spi.action(
     ONTOLOGY, "发布宣传素材",
-    description="停发个案对比，命名合规",
+    description="把一条宣传素材发布到指定渠道",
     params=(
         ParamSpec("content_id", "string", required=True),
         ParamSpec("channel", "string", required=True),
@@ -4177,16 +3900,11 @@ def 发布宣传素材(ctx) -> None:
     HIL：合规官（触发条件 always）。
     写入对象：OutboundContent。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("OutboundContent", f"outboundcontent_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("发布宣传素材 handler 待实现")
+    _fde.ACTIONS['发布宣传素材'](ctx)
 
 @spi.action(
     ONTOLOGY, "群内答复患者",
-    description="五师在企微群内的对外发言",
+    description="以指定角色在患者企微群内发一条答复消息",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("message", "string", required=True),
@@ -4201,7 +3919,7 @@ def 发布宣传素材(ctx) -> None:
         "R55_显示口径_没有数据不得说成没有异常",
     ),
     writes=("OutboundContent", "DeliveryReceipt"),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="五师本人",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4211,17 +3929,11 @@ def 群内答复患者(ctx) -> None:
     HIL：五师本人（触发条件 always）。
     写入对象：OutboundContent、DeliveryReceipt。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("OutboundContent", f"outboundcontent_{ctx.params[...]}", {...})
-    # ctx.stage_write("DeliveryReceipt", f"deliveryreceipt_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("群内答复患者 handler 待实现")
+    _fde.ACTIONS['群内答复患者'](ctx)
 
 @spi.action(
     ONTOLOGY, "建立厂商云通道对接",
-    description="云到云通道，须境内存储且协议齐备",
+    description="登记一条厂商云到云数据通道及其授权",
     params=(
         ParamSpec("vendor", "string", required=True),
         ParamSpec("channel_id", "string", required=True),
@@ -4248,7 +3960,7 @@ def 建立厂商云通道对接(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "写入外部协作工具",
-    description="向飞书等第三方 SaaS 提供数据，属持续对外提供行为",
+    description="把数据写入飞书等外部协作工具并记审计日志",
     params=(
         ParamSpec("target_system", "string", required=True),
         ParamSpec("payload_ref", "string", required=True),
@@ -4256,7 +3968,7 @@ def 建立厂商云通道对接(ctx) -> None:
     guards=("C7_患者数据禁止存放非平台工具",),
     post_rules=("C6_群内数据最小可见范围",),
     writes=("AuditLog",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="合规官",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4275,13 +3987,13 @@ def 写入外部协作工具(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "维护凭证台账",
-    description="到期即自动冻结签发权限",
+    description="更新一条执业凭证的台账记录（有效期、状态）",
     params=(
         ParamSpec("credential_id", "string", required=True),
     ),
     post_rules=("D11a_签发人资质失效自动冻结",),
     writes=("Credential",),
-    validate_supported=False,
+    validate_supported=True,
     # 台账是 D11a 冻结判定的唯一数据源，改台账等于改冻结前提，不可无人复核（validate B.4）
     hil=HilPolicy(reviewer_role="合规官（资质台账变更）",
                   predicate=lambda confidence, touched_hard: True),
@@ -4300,14 +4012,14 @@ def 维护凭证台账(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "门店清查确认",
-    description="未完成清查的门店不予开通服务包",
+    description="记录一家门店的合规清查确认与签字人",
     params=(
         ParamSpec("store_id", "string", required=True),
         ParamSpec("signed_by", "string", required=True),
     ),
     guards=("C18_非医疗机构不得实施诊疗", "C17_机构与门诊命名合规"),
     writes=("StoreReadinessCheck", "StoreEntity"),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="店长签字，合规官抽查",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4327,14 +4039,14 @@ def 门店清查确认(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "门店会话合规抽检",
-    description="仅关键词命中片段可读，30 天 ≥3 次停发言权",
+    description="对门店会话片段做合规抽检并记录事件",
     params=(
         ParamSpec("message_fragment", "string", required=True),
         ParamSpec("actor", "string", required=True),
     ),
     post_rules=("D8_禁用词拦截", "D10_用药建议拦截"),
     writes=("ComplianceIncident",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="合规官",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4353,14 +4065,14 @@ def 门店会话合规抽检(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "处理数据主体权利请求",
-    description="PIPL 44–50 条法定时限内答复留痕",
+    description="登记并处理患者的数据主体权利请求（查询 / 更正 / 删除等）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("request_type", "string", required=True),
     ),
     post_rules=("C21_数据留存与审计日志",),
     writes=("DataSubjectRequest",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="合规官受理",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4379,13 +4091,13 @@ def 处理数据主体权利请求(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录心理咨询介入",
-    description="最严可见性档",
+    description="记录一次心理咨询介入笔记",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("note", "string", required=True),
     ),
     writes=("PsychNote",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="心理咨询师",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4404,14 +4116,14 @@ def 记录心理咨询介入(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "启用AI生成能力",
-    description="智能体上线前的平台级备案闸",
+    description="登记启用某版本 AI 生成能力及其适用范围",
     params=(
         ParamSpec("model_version", "string", required=True),
         ParamSpec("scope", "string", required=True),
     ),
     guards=("C12_生成式AI备案与算法备案", "C8_数据出境与境外云禁止"),
     writes=("AuditLog",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="合规官",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4430,14 +4142,14 @@ def 启用AI生成能力(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "设定机构与门诊名称",
-    description="命名须经卫健核准且不得暗示疗效",
+    description="设置门店机构或门诊的名称",
     params=(
         ParamSpec("store_id", "string", required=True),
         ParamSpec("name", "string", required=True),
     ),
     guards=("C17_机构与门诊命名合规",),
     writes=("StoreEntity",),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="合规官",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4456,7 +4168,7 @@ def 设定机构与门诊名称(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "开展线上随访",
-    description="定性为健康管理随访并限制内容",
+    description="向患者发起一次线上随访内容并记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("content", "string", required=True),
@@ -4464,7 +4176,7 @@ def 设定机构与门诊名称(ctx) -> None:
     guards=("C19_线上随访边界",),
     post_rules=("D10_用药建议拦截", "D8_禁用词拦截"),
     writes=("ReferralRecord", "OutboundContent"),
-    validate_supported=False,
+    validate_supported=True,
     hil=HilPolicy(reviewer_role="医师或健管师按内容归属",
                   predicate=lambda confidence, touched_hard: True),
 )
@@ -4484,14 +4196,14 @@ def 开展线上随访(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录载体覆盖变更并强制告知",
-    description="解绑或离线必产出告知，豁免于触达封锁（phase=P2）",
+    description="记录患者数据载体的覆盖状态变更（解绑 / 离线）并产出告知",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("coverage_state", "string", required=True),
     ),
     post_rules=("R55_显示口径_没有数据不得说成没有异常", "R54_服务话术不得含夜间安全承诺"),
     writes=("CarrierRegistry", "GatewayDevice", "DeliveryReceipt"),
-    validate_supported=False,
+    validate_supported=True,
 )
 def 记录载体覆盖变更并强制告知(ctx) -> None:
     """解绑或离线必产出告知，豁免于触达封锁（phase=P2）
@@ -4523,7 +4235,7 @@ def seed_reference_data(store) -> None:
     此处刻意不做类型标注：编译规则的红线是本插件只 import clife_onto_engine.sdk，
     不碰内核内部模块。需要静态类型时请在 FDE 侧用 TYPE_CHECKING 局部引入。
     """
-    pass
+    _fde.seed_reference_data(store)
 
 
 spi.load_mappings(ONTOLOGY, _Path(__file__).parent / "mappings" / "objects.yaml")
