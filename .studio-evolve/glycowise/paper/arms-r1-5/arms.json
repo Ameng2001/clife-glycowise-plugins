@@ -21,42 +21,58 @@
   "3d": {
    "accept_rate": 0.8,
    "n_accept": 8,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 8
   },
   "1d": {
    "accept_rate": 1.0,
    "n_accept": 10,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.1,
+   "n_any_known": 10
   },
   "random": {
    "accept_rate": 0.5,
    "n_accept": 5,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 5
   },
   "1d-strict": {
    "accept_rate": 0.8,
    "n_accept": 8,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 8
   },
   "none": {
    "accept_rate": 1.0,
    "n_accept": 10,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.1,
+   "n_any_known": 10
   },
   "3d-noT": {
    "accept_rate": 0.8,
    "n_accept": 8,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 8
   },
   "3d-noS": {
    "accept_rate": 0.8,
    "n_accept": 8,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 8
   },
   "3d-noW": {
    "accept_rate": 0.8,
    "n_accept": 8,
-   "regress_rate": 0.0
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 8
   }
  },
  "diffs": {
@@ -65,6 +81,14 @@
    "ci95": [
     0.0,
     0.0
+   ],
+   "boot": 1000
+  },
+  "regress_any_diff": {
+   "value": 0.1,
+   "ci95": [
+    0.0,
+    0.3
    ],
    "boot": 1000
   },
@@ -113,6 +137,7 @@
   "1d_accept_3d_reject": {
    "n": 2,
    "regress_rate": 0.0,
+   "regress_any_rate": 0.5,
    "proposals": [
     "10",
     "11"
@@ -121,6 +146,7 @@
   "3d_accept_1d_reject": {
    "n": 0,
    "regress_rate": null,
+   "regress_any_rate": null,
    "proposals": []
   }
  },
@@ -157,6 +183,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_same",
    "reject_dim_3d": null,
    "window": null,
@@ -180,6 +208,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_same",
    "reject_dim_3d": null,
    "window": null,
@@ -203,6 +233,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_same",
    "reject_dim_3d": null,
    "window": null,
@@ -226,6 +258,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
@@ -249,6 +283,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
@@ -272,6 +308,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_same",
    "reject_dim_3d": null,
    "window": null,
@@ -295,6 +333,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_same",
    "reject_dim_3d": null,
    "window": null,
@@ -318,6 +358,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_same",
    "reject_dim_3d": "C",
    "window": null,
@@ -341,6 +383,10 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 1,
+   "regress_any_cases": [
+    "数据与同意合规-r08"
+   ],
    "regress_basis": "B_same",
    "reject_dim_3d": "C",
    "window": null,
@@ -364,6 +410,8 @@
    },
    "regress": 0,
    "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
    "regress_basis": "B_same",
    "reject_dim_3d": null,
    "window": null,

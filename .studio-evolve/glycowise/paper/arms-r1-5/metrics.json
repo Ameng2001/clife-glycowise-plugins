@@ -1,6 +1,7 @@
 {
  "metrics": {
   "regress_rate_diff": 0.0,
+  "regress_any_diff": 0.1,
   "random_minus_3d": 0.0,
   "1d-strict_minus_3d": 0.0,
   "3d-noT_minus_3d": 0.0,
@@ -14,6 +15,15 @@
   "regress_rate_3d-noT": 0.0,
   "regress_rate_3d-noS": 0.0,
   "regress_rate_3d-noW": 0.0,
+  "regress_any_rate_3d": 0.0,
+  "regress_any_rate_1d": 0.1,
+  "regress_any_rate_random": 0.0,
+  "regress_any_rate_1d-strict": 0.0,
+  "regress_any_rate_none": 0.1,
+  "regress_any_rate_3d-noT": 0.0,
+  "regress_any_rate_3d-noS": 0.0,
+  "regress_any_rate_3d-noW": 0.0,
+  "divergent_regress_any_rate": 0.5,
   "accept_rate_3d": 0.8,
   "accept_rate_1d": 1.0,
   "accept_rate_random": 0.5,
@@ -32,6 +42,10 @@
   "regress_rate_diff": [
    0.0,
    0.0
+  ],
+  "regress_any_diff": [
+   0.0,
+   0.3
   ],
   "random_minus_3d": [
    0.0,
