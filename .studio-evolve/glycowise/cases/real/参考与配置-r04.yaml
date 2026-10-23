@@ -1,0 +1,77 @@
+# 由 t-20261023-0030 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r04
+q: 刘阿姨（患者 P0012）的夜间低值告警阈值现在设的是多少？
+expect: query
+tier: 1
+family: 参考与配置
+origin: real
+observed_at: '2026-10-23'
+elements:
+- AlertThreshold
+label:
+  answer: AlertThreshold th-P0012-night_low 一行，current_value / default_value 正是要问的；窗口内 0010 已把 current 改成 4.4，查到的是改后值。
+  source: feedback
+  trace_id: t-20261023-0030
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 患者 P0012（患者 P0012）的夜间低值告警阈值现在设的是多少？
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: AlertThreshold
+    where:
+    - field: patient_id
+      op: eq
+      value: P0012
+    - field: field
+      op: eq
+      value: night_low
+    select:
+    - threshold_id
+    - current_value
+    - default_value

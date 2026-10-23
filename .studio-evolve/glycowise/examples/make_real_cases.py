@@ -11,6 +11,12 @@
   * tier：query=1，多跳（oql 带 traverse）=2，action/rejected=3，pending_hil=4
   * family：按动作 / 规则 / 查询起点映射到仿真库的 10 个 family（可被反馈项的 family 字段覆盖）
   * 幂等：已存在且 label.trace_id 相同的案例原样保留，新轨迹按 family 顺延编号。
+  * setup（状态前置，2026-10-23 加）：窗口内该轨迹之前所有非 rejected 的 execute（action + params + actor），按窗口顺序落进案例的
+    `setup:`。runner 对带 setup 的案例单独起新鲜 seed、先真 execute 这些步骤再评判，于是能复现窗口当时的状态
+    （否则 0008/0021/0022 这类裁决依赖前序写入的 correct 案例在新鲜 seed 上会判错，0018 的跨动作泄漏也复现不了）。
+  * route：轨迹当时真的走过的意图（execute → action+params；ask → oql）原样进案例，runner 对带 route 的案例不查共享录制
+    （同一句口语 golden 录的是另一套参数时——如 0008 的 direction、0021/0022 的 level——真实案例以窗口为准）。
+  * expect_not：wrong 且 truth_expect 为 rejected(X) 时，轨迹里命中、但不属于 X 的规则 = 业务侧裁定的假阳性，runner 命中即 fail。
 """
 import argparse, glob, json, os, re, sys
 import yaml
@@ -90,6 +96,18 @@ def expect_of(t, fb):
     return f"action({t['action']})", None
 
 
+def route_of(t):
+    if t["kind"] == "execute":
+        return {"kind": "action", "confidence": float(t.get("confidence", 0.95)), "action": t["action"], "params": dict(t["inputs_snapshot"]["params"])}
+    return {"kind": "query", "confidence": float(t.get("confidence", 0.95)), "oql": t["oql"]}
+
+
+def expect_not_of(t, fb, expect_rule):
+    if fb["label"] != "wrong" or not expect_rule or t["kind"] != "execute":
+        return []
+    return [r["rule"] for r in t["rules_evaluated"] if r["result"] == "violate" and rule_prefix(r["rule"]) != rule_prefix(expect_rule)]
+
+
 def tier_of(t, expect):
     if expect == "query":
         return 2 if t["oql"].get("traverse") else 1
@@ -150,11 +168,24 @@ def main():
     a = ap.parse_args()
 
     wdir = os.path.join(a.traj_dir, a.window)
-    traj = {}
+    traj, order = {}, []
     for line in open(os.path.join(wdir, "audit.jsonl"), encoding="utf-8"):
         if line.strip():
             t = json.loads(line)
             traj[t["trace_id"]] = t
+            order.append(t["trace_id"])
+
+    def setup_of(tid):
+        """该轨迹之前、同窗口内所有落库（committed / pending_hil）的 execute → runner 的状态前置步骤。"""
+        steps = []
+        for x in order:
+            if x == tid:
+                break
+            u = traj[x]
+            if u["kind"] == "execute" and u["decision"] in ("committed", "pending_hil"):
+                steps.append({"trace_id": x, "action": u["action"], "params": dict(u["inputs_snapshot"]["params"]),
+                              "actor_id": u["actor"]["id"], "actor_role": u["actor"]["role"]})
+        return steps
     fb = yaml.safe_load(open(os.path.join(wdir, "feedback.yaml"), encoding="utf-8"))
     if fb.get("status", "reviewed") != "reviewed" or not fb.get("reviewer"):
         sys.exit(f"✗ {a.window}/feedback.yaml 还是 status={fb.get('status')!r}、reviewer={fb.get('reviewer')!r}：业务侧没标完，不落 real 案例")
@@ -208,7 +239,12 @@ def main():
                 "feedback_label": item["label"],
             },
             "variants": variants_of(t, q),
+            "setup": setup_of(tid),
+            "route": route_of(t),
         }
+        en = expect_not_of(t, item, expect_rule)
+        if en:
+            case["expect_not"] = en
         path = os.path.join(a.out, case["id"] + ".yaml")
         stats["new"] += 1
         if a.dry_run:

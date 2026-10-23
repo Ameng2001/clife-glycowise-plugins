@@ -1,0 +1,44 @@
+# 由 t-20261023-0011 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r02
+q: 给 P0031 出一份转医师的去强化证据包，带 14 天曲线和用药清单
+expect: action(生成去强化证据工单)
+tier: 4
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 生成去强化证据工单
+label:
+  answer: P0031 72 岁、格列美脲 + 二甲双胍、IAH 高危，14 天 47 次事件（L2 18 次）、TBR 4.7%（老年上限 1%）、夜间低值 7 夜——完全够格出去强化证据包转医师，进 HIL 正确。
+  source: feedback
+  trace_id: t-20261023-0011
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 给 P0031 出一份转医师的去强化证据包，带 14 天曲线和用药清单；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d

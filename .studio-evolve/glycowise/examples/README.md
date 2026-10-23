@@ -17,10 +17,10 @@
 | `routing.log.2026-W43.jsonl` | 42 句的路由去向全记录 | 7 句被 Qwen 路由成 advise / clarify，不是轨迹，只留在这里 |
 | `engine-audit/audit.db`（gitignore） | 引擎 audit 表（24 行）+ 网关 gateway_trace 表（execute 24 / ask 11） | 真 sqlite；`../config.yaml` 的 `export.from` 指向它 |
 | `trajectories/2026-W43/audit.jsonl` | ① **35 条真实轨迹**：execute 24（committed 3 / pending_hil 6 / rejected 15）、ask 11 | execute 行 = 引擎 `AuditSnapshot.to_dict()` 原样 + 四个键，一个字段没手改；参数越界 0；cost.tokens 全部来自真实 usage |
-| `replay_check.py` | 回放校验：新鲜 seed 上按窗口顺序重新 execute / 重跑 OQL | **35/35 复现**；`--mode preview`（每条独立预演）有 5 条差异，全是窗口内前序写入导致的状态依赖 |
-| `trajectories/2026-W43/feedback.yaml` | ② **待标注清单**（`status: draft`，35 条 `label: null`），由 `draft_feedback.py` 生成 | 每条列了引擎实际裁决与 CQ 期望的机器比对（9 条不一致）；**标签由业务侧填** |
-| `make_real_cases.py` | ①+② → ②' `cases/real/{family}-rNN.yaml`（evolve-attribute 第 1 步的样例实现，幂等） | feedback 不是 `status: reviewed` 或有空 label 就拒绝落 |
-| `cases/real/` | 空 | 等 reviewed 的反馈 |
+| `replay_check.py` | 回放校验：新鲜 seed 上按窗口顺序重新 execute / 重跑 OQL | **35/35 复现**；`--mode preview`（每条独立预演）有 5 条差异，全是窗口内前序写入导致的状态依赖——这就是案例要带 `setup` 的原因 |
+| `trajectories/2026-W43/feedback.yaml` | ② **已标注反馈**（`status: reviewed`，reviewer Ameng2001 / 本体负责人，2026-10-23）：correct 26 / wrong 7 / partial 2 | 由 `draft_feedback.py` 起草清单，标签采纳自 `feedback.expert-draft.yaml` 的 35 条建议；wrong 带 truth_expect 与 layer（rule 1 / router 6） |
+| `make_real_cases.py` | ①+② → ②' `cases/real/{family}-rNN.yaml`（evolve-attribute 第 1 步的样例实现，幂等） | feedback 不是 `status: reviewed` 或有空 label 就拒绝落；每条案例带 `setup`（窗口内前序落库动作）、`route`（当时真走的意图）、wrong+rule 的 `expect_not` |
+| `cases/real/` | 33 条（partial 2 条不落） | 根工作区 `../cases/real/`；h_i 78/99，D⁻ 7 条见 `../attribute-report-2026-W43.md` |
 | `config.sources.yaml` | ③ `sources` 段 + 审计导出约定，贴进 `../config.yaml` | 主机名是约定占位：pg-ro / ch-ro 不可达、环境变量未设；唯一真实可达的是上面的 sqlite 审计库 |
 
 ## ① 轨迹：`trajectories/2026-W43/audit.jsonl`
@@ -67,7 +67,7 @@ python3 draft_feedback.py --window <window>
 
 ## ②' 落成的真实案例：`cases/real/`
 
-attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_cases.py --window 2026-W43`。expect 对 correct 取引擎实际裁决（ask→query；committed/pending_hil→action(名)；rejected→rejected(首条 violate 规则)），对 wrong 取 truth_expect；tier 按 query=1、多跳=2、action/rejected=3、HIL=4；family 对仿真库的 10 个 family（指标口径 / 参考与配置 / 因果链溯源 / 低血糖安全 / 高血糖与波动 / 结论层与分层 / 缓解路径 / 出口签发闸 / 产品与机构合规 / 数据与同意合规）；id 用 `{family}-rNN`，与 `cases/sim` 的 `{family}-NN` 不同名（runner 按 id 取案例）。落成后用 `plugins/glycowise/cq/make_real_routes.py` 把轨迹里真走过的意图登记为 manual 路由供 runner 回放。
+attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_cases.py --window 2026-W43`。expect 对 correct 取引擎实际裁决（ask→query；committed/pending_hil→action(名)；rejected→rejected(首条 violate 规则)），对 wrong 取 truth_expect；tier 按 query=1、多跳=2、action/rejected=3、HIL=4；family 对仿真库的 10 个 family（指标口径 / 参考与配置 / 因果链溯源 / 低血糖安全 / 高血糖与波动 / 结论层与分层 / 缓解路径 / 出口签发闸 / 产品与机构合规 / 数据与同意合规）；id 用 `{family}-rNN`，与 `cases/sim` 的 `{family}-NN` 不同名（runner 按 id 取案例）。案例自带 `setup`（同窗口前序落库的 execute，runner 先在新鲜 seed 上真跑它们再评判）、`route`（轨迹当时真走的意图，runner 对带 route 的案例不查共享录制——同一句口语 golden 录的参数与窗口不同时以窗口为准）、wrong+rule 的 `expect_not`（业务侧裁定不该响的规则，命中即 fail）。`plugins/glycowise/cq/make_real_routes.py` 仍把窗口意图登记进 `all_routes.json`（`setdefault`，不覆盖 golden），供没有 route 的旧案例或别的 runner 用。
 
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
@@ -88,3 +88,4 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 - **2026-10-23 第一轮**：第一版手写的 W44 样例经接入试跑判定不是真实数据（9 条参数越界、wrong 标签与引擎行为不符、引用了 seed 里没有的对象 id），连同其落成案例和合成窗口生成器已全部删除。顺带修了一个真问题：real 与 sim 共用 `{family}-NN` 的 id 会在 runner 里互相覆盖，real 改为 `{family}-rNN`。
 - **2026-10-23 第二轮**：按硬判据重录 W43（本目录现状）。核查项：35 条口语全是 CQ 原句；参数 / OQL 引用的对象 id 在 seed 的 6970 个对象里逐个查到（仅 3 个是动作要新建的键）；trace_id / ts 落在真跑的那三分钟；feedback 一条未填；根工作区的 trajectories、cases/real、real_routes.json 不存在。
 - **2026-10-23 第三轮**：独立复核 W43——`replay_check.py --mode sequential` 在新鲜 seed 上 35/35 复现，24 条 execute 参数全部在动作声明内（越界 0）。`feedback.yaml` 仍是 draft、35 条 label 为空，所以 `cases/real/` 仍为空、attribute 不能开。专家子代理给了一份建议标签 `trajectories/2026-W43/feedback.expert-draft.yaml`（status: expert-draft），只供标注人确认，不是标签。
+- **2026-10-23 第四轮**：标签入库（`feedback.yaml` reviewed）→ `cases/real` 33 条 → attribute → verify 走通。两处只有真数据才暴露的坑：① 逐案例新鲜 seed 复现不了窗口状态（0008/0021/0022 判错、0018 的泄漏不出现）→ 案例加 `setup`；② 共享录制按口语键让 golden 参数覆盖了窗口真走的参数 → 案例加 `route`。P5（`_staged: True` 持久化标记跨动作泄漏）3d ACCEPT、real 留出集 20 条，未合入生产；路由层 6 条 wrong 不归本体，记平台 backlog。

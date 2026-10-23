@@ -1,0 +1,102 @@
+# 由 t-20261023-0037 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r03
+q: 给黄伯（P0045）生成本期方案草稿，方向维持（基于 s-P0045-14d）
+expect: action(生成方案草稿)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 生成方案草稿
+- CgmSummary
+label:
+  answer: 方向『维持』不属于加强降糖输出，低血糖优先抢占不作用；R14 soft（TAR 37.1% ≥25%）只提示不拦截；草稿提交成立。
+  source: feedback
+  trace_id: t-20261023-0037
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 给P0045生成本期方案草稿，方向维持（基于 s-P0045-14d）
+  kind: paraphrase
+- q: 给黄伯（P0045）生成本期方案草稿，方向维持（基于 s-P0045-14d）；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0032
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0035
+  action: 创建服务包SKU
+  params:
+    sku_id: pkg-L2-basic
+    tier: L2
+    contents:
+    - 血糖监测佩戴指导
+    - 每周健管师随访
+    - 医师方案签发
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0036
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成方案草稿
+  params:
+    patient_id: P0045
+    analysis_result:
+      summary_ref: s-P0045-14d
+    direction: 维持

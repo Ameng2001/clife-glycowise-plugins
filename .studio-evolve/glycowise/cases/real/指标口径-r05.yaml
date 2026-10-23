@@ -1,0 +1,87 @@
+# 由 t-20261023-0031 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r05
+q: 告警 A-P0045-02 是凌晨 2 点连续 3 读数触发的，把黄伯（P0045）10 月 21 日凌晨那几条低于 3.9 的读数调出来
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- GlucoseReading
+label:
+  answer: 路由层：device_time 区间写成 2023-10-21，年份错了三年 → 0 行。按 2026-10-21 00:00–06:00 查，seed 里 P0045 该夜 02:00 起确有 <3.9 的连续读数（复现最低 2.7，L2）。
+  source: feedback
+  trace_id: t-20261023-0031
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 告警 A-P0045-02 是凌晨 2 点连续 3 读数触发的，把P004510 月 21 日凌晨那几条低于 3.9 的读数调出来
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: GlucoseReading
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    - field: value_mmol
+      op: lt
+      value: 3.9
+    - field: device_time
+      op: ge
+      value: '2023-10-21T00:00:00Z'
+    - field: device_time
+      op: lt
+      value: '2023-10-21T06:00:00Z'
+    select:
+    - reading_id
+    - value_mmol
+    - device_time
+    - source_channel
+    order_by:
+    - field: device_time
+      desc: false

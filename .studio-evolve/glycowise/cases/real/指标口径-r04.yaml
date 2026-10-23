@@ -1,0 +1,80 @@
+# 由 t-20261023-0029 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r04
+q: 黄伯（患者 P0045）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- CgmSummary
+label:
+  answer: 路由层：where window_end >= 'now-14d' 是字面字符串，引擎不解析相对时间，与 '2026-10-22' 字符串比较必然失败 → 0 行。去掉这条 where（或改成具体日期）就能命中 s-P0045-14d，tar_pct / tar_l2_pct 字段都在。
+  source: feedback
+  trace_id: t-20261023-0029
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 患者 P0045（患者 P0045）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: CgmSummary
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    - field: window_end
+      op: ge
+      value: now-14d
+    select:
+    - tar_pct
+    - tar_l2_pct
+    order_by:
+    - field: window_end
+      desc: true
+    limit: 1

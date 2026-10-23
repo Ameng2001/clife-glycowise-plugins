@@ -1,0 +1,39 @@
+# 由 t-20261023-0007 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 出口签发闸-r01
+q: 上周有哪几份方案是停留不到 20 秒就签发的？
+expect: query
+tier: 1
+family: 出口签发闸
+origin: real
+observed_at: '2026-10-23'
+elements:
+- ReviewEvidence
+label:
+  answer: 路由层：Qwen 在 ReviewEvidence 上多挂了一跳 supersedes（PlanSigned→PlanDraft 的链，ReviewEvidence 根本不在该链两端），seed 又没有任何链接实例，跳完即 0 行。单跳 ReviewEvidence where dwell_time<20 即可命中 2 行。
+  source: feedback
+  trace_id: t-20261023-0007
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants: []
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: ReviewEvidence
+    where:
+    - field: dwell_time
+      op: lt
+      value: 20
+    select:
+    - evidence_id
+    - plan_id
+    - dwell_time
+    - opened_at
+    steps:
+    - link_type: supersedes
+      direction: in
+      where: []
+    order_by:
+    - field: opened_at
+      desc: true

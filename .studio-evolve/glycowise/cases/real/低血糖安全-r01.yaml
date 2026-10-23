@@ -1,0 +1,61 @@
+# 由 t-20261023-0013 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r01
+q: 把低血糖告警 A-P0012-01 标记为已响应，患者复测回到 5.2 了
+expect: action(响应并回执告警)
+tier: 4
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 响应并回执告警
+label:
+  answer: P0012 只用二甲双胍（非磺脲/胰岛素），HypoState prolonged_risk=False，复测 5.2 回升，告警 A-P0012-01 允许回执闭环；进 HIL 留人工确认是稳妥做法。
+  source: feedback
+  trace_id: t-20261023-0013
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 把低血糖告警 A-P0012-01 标记为已响应，患者复测回到 5.2 了；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2

@@ -1,0 +1,72 @@
+# 由 t-20261023-0022 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r03
+q: 用 OCR 截图识别出来的 2.8（告警 A-P0045-ocr-01）直接发危急告警
+expect: rejected(R56_告警模板预审冻结)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 推送告警
+- R56_告警模板预审冻结
+label:
+  answer: 拒绝成立：OCR 截图 2.8（置信 0.78、ocr_upload 通道）不得独立触发危急告警。引擎命中的是 R56（级别 'critical' 没有冻结模板）而非 R53，理由在数据上也成立（模板库级别是中文『危急』）。命中 R56 而非 R53，均成立。
+  source: feedback
+  trace_id: t-20261023-0022
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 用 OCR 截图识别出来的 2.8（告警 A-P0045-ocr-01）直接发危急告警；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 推送告警
+  params:
+    alert_id: A-P0045-ocr-01
+    level: critical
+    targets:
+    - 黄医生
+    - 陈营养师

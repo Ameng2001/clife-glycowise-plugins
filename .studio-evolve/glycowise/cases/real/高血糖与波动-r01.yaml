@@ -1,0 +1,31 @@
+# 由 t-20261023-0008 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r01
+q: 给 P0012 生成本期方案草稿（基于 14 天指标 s-P0012-14d）并送医师签发
+expect: rejected(低血糖优先抢占)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 生成方案草稿
+- 低血糖优先抢占
+- CgmSummary
+label:
+  answer: 拒绝成立：P0012 68 岁老年档（TBR 上限 1.0%），14 天 TBR 1.4% 超限，且 10-21 02:00 有一段 L2（最低 2.7，45 min），低血糖带命中；草稿方向为『强化』时按读图顺序低→高→波动必须抑制。R14 soft（TAR 28.7%）只是附带。
+  source: feedback
+  trace_id: t-20261023-0008
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 给 P0012 生成本期方案草稿（基于 14 天指标 s-P0012-14d）并送医师签发；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成方案草稿
+  params:
+    patient_id: P0012
+    analysis_result:
+      summary_id: s-P0012-14d
+    direction: 强化

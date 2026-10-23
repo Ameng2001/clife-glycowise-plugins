@@ -1,0 +1,110 @@
+# 由 t-20261023-0039 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r04
+q: 王叔（P0031）回填上来的读数 r-P0031-00123 是 3.4，按 R04a 触发实时低血糖处置
+expect: rejected(R52_回填读数不得触发实时告警)
+tier: 3
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R52_回填读数不得触发实时告警
+label:
+  answer: r-P0031-00123（10-10 06:45，3.4）落在回填期（距今 12 天 ≥ 14-3），is_backfill=True，回填读数不得触发实时处置，R52 拒绝成立。
+  source: feedback
+  trace_id: t-20261023-0039
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0031回填上来的读数 r-P0031-00123 是 3.4，按 R04a 触发实时低血糖处置
+  kind: paraphrase
+- q: 王叔（P0031）回填上来的读数 r-P0031-00123 是 3.4，按 R04a 触发实时低血糖处置；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0032
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0035
+  action: 创建服务包SKU
+  params:
+    sku_id: pkg-L2-basic
+    tier: L2
+    contents:
+    - 血糖监测佩戴指导
+    - 每周健管师随访
+    - 医师方案签发
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0036
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0037
+  action: 生成方案草稿
+  params:
+    patient_id: P0045
+    analysis_result:
+      summary_ref: s-P0045-14d
+    direction: 维持
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 触发低血糖处置
+  params:
+    patient_id: P0031
+    reading_id: r-P0031-00123
+    rule_id: R04a

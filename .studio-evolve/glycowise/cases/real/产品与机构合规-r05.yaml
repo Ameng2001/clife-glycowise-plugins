@@ -1,0 +1,79 @@
+# 由 t-20261023-0035 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 产品与机构合规-r05
+q: 创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发
+expect: action(创建服务包SKU)
+tier: 4
+family: 产品与机构合规
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 创建服务包SKU
+label:
+  answer: pkg-L2-basic 内容三项（佩戴指导、每周随访、医师签发）无夜间承诺、无疗效声称、非器械交易，创建服务包进 HIL 正确。
+  source: feedback
+  trace_id: t-20261023-0035
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0032
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 创建服务包SKU
+  params:
+    sku_id: pkg-L2-basic
+    tier: L2
+    contents:
+    - 血糖监测佩戴指导
+    - 每周健管师随访
+    - 医师方案签发

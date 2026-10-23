@@ -1,0 +1,122 @@
+# 由 t-20261023-0042 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r08
+q: 黄伯（P0045）的低血糖告警为什么一直不能闭环？状态机里卡在哪？
+expect: query
+tier: 1
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- HypoState
+label:
+  answer: 路由层：从 HypoState(P0045) 多跳 gates_alert_closure 到 AlertEvent，seed 没有任何链接实例，跳完 0 行。问题本身单跳即可答：HypoState P0045 的 closure_blocked_reason / prolonged_risk / recurrence_window_until 就是『卡在哪』。
+  source: feedback
+  trace_id: t-20261023-0042
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0045的低血糖告警为什么一直不能闭环？状态机里卡在哪？
+  kind: paraphrase
+setup:
+- trace_id: t-20261023-0009
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0010
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0011
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0012
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0013
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0032
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0035
+  action: 创建服务包SKU
+  params:
+    sku_id: pkg-L2-basic
+    tier: L2
+    contents:
+    - 血糖监测佩戴指导
+    - 每周健管师随访
+    - 医师方案签发
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0036
+  action: 摄入读数
+  params:
+    channel: 厂商接口
+    raw_payload:
+      reading_id: r-P0012-x1
+      patient_id: P0012
+      value_mmol: 6.3
+      sensor_serial: SN-P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0037
+  action: 生成方案草稿
+  params:
+    patient_id: P0045
+    analysis_result:
+      summary_ref: s-P0045-14d
+    direction: 维持
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: HypoState
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    select:
+    - patient_id
+    - prolonged_risk
+    - recurrence_window_until
+    - closure_blocked_reason
+    steps:
+    - link_type: gates_alert_closure
+      direction: out
+      where:
+      - field: alert_id
+        op: in
+        value:
+        - A-P0045-02
+        - A-P0045-ocr-01
