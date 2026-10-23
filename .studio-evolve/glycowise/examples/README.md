@@ -14,14 +14,14 @@
 |---|---|
 | `trajectories/2026-W43/audit.jsonl` | ① **真实窗口**：35 条引擎真跑出来的轨迹（见文末） |
 | `trajectories/2026-W44/audit.jsonl` | ① 格式样例（手写，非引擎产出）：20 条轨迹（17 execute：committed 8 · rejected 7 · pending_hil 2；3 ask），覆盖 10 个 family |
-| `trajectories/2026-W44/feedback.yaml` | ② 这 20 条的标签：correct 14（含 7 条「拒绝得对」）/ wrong 4 / partial 2，三位标签人可追溯 |
+| `trajectories/2026-W44/feedback.yaml` | ② 格式样例（手写标签，标签人也是虚构的 id）：correct 14 / wrong 4 / partial 2 |
 | `cases/real.format-sample/*.yaml` | ②' 的**格式样例**（由 W44 手写样例落成，不是真实案例，不得进 `cases/real/`） |
 | `make_real_cases.py` | ①+② → ②' 的样例实现（幂等，按 family 顺延编号），`python3 make_real_cases.py --dry-run` 先看 |
 | `config.sources.yaml` | ③ 只读数据源 `sources` 段 + 审计导出约定，贴进 `../config.yaml` |
 | `record_window.py` / `replay_check.py` / `draft_feedback.py` | 真实窗口三件套：真跑引擎录轨迹、回放校验、起草待标注清单（见文末「真实窗口 2026-W43」） |
 | `gen_synthetic_windows.py` | 按 200 / 900 门槛生成**合成**窗口验证接法与分层（产物 `synthetic/` 已 gitignore，不得混入 `cases/real/`） |
 
-## ① 轨迹：`trajectories/2026-W44/audit.jsonl`
+## ① 轨迹：`trajectories/2026-W44/audit.jsonl`（格式样例；真实窗口见文末 W43）
 
 一行一次 `execute` / `ask`。字段就是 clife-onto-engine `AuditSnapshot.to_dict()` 再补四个管线要的键：
 
@@ -34,7 +34,7 @@
 
 引擎侧最省事的接法：把 `SqliteAuditStore` 的 `audit` 表按 `ontology_id='glycowise'` 导出 JSONL，再由网关补 trace_id / utterance / cost。规模：一个进化窗口 20 条，15 轮 × 3 seed 至少 900 条**有反馈**的轨迹；没反馈的可以多，但不参与归因。
 
-## ② 反馈：`trajectories/2026-W44/feedback.yaml`
+## ② 反馈：`trajectories/2026-W44/feedback.yaml`（格式样例；W43 的待标注清单见文末）
 
 每条轨迹一项，`correct / partial / wrong`。要点：
 
@@ -45,9 +45,9 @@
 - 标签人要可追溯（`reviewer`），进台账的 contamination_note；顶层写默认标签人，单条可覆盖（样例里合规类三条由 `u-compliance-01` 标）。
 - 标签是私有的，永远不进提示词。
 
-## ②' 落成的真实案例：`cases/real/*.yaml`
+## ②' 落成的真实案例：`cases/real/*.yaml`（目前为空；`cases/real.format-sample/` 是格式样例）
 
-attribute 第 1 步自动从 ①+② 生成，不用手写；`make_real_cases.py` 是这一步的样例实现，W44 的 20 条落成 18 条（2 条 partial 不落）：
+attribute 第 1 步自动从 ①+② 生成，不用手写；`make_real_cases.py` 是这一步的样例实现（feedback 不是 reviewed 就拒绝落）。下表是 W44 **格式样例**落成的样子，不是真实案例：
 
 | family | 落成 | 来源轨迹 |
 |---|---|---|
@@ -79,9 +79,9 @@ evolve-ground 对 IR §6 每一行（`store / table / key / columns`）跑 `SELE
 
 | 阶段 | 数量 | 本目录对应 |
 |---|---|---|
-| 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | `trajectories/2026-W44/`：20 条，wrong 4 |
-| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，tier × time_half 8 个分层各 ≥16 | `python3 gen_synthetic_windows.py --target 200` → 10 个合成窗口，每层 25 |
-| 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | `python3 gen_synthetic_windows.py --target 900` → 45 个合成窗口 |
+| 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | `trajectories/2026-W43/`：35 条真实轨迹已就位，反馈待业务侧标 |
+| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，tier × time_half 8 个分层各 ≥16 | 再跑 5–6 个真实窗口（每周一个，换一批口语）；`gen_synthetic_windows.py` 只用于验证分层抽样，模板是 W44 手写样例，产物不是真实数据 |
+| 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | 同上，约 26 个真实窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。合成窗口只证明管线接法与 `holdout_sample.py` 分层能跑通，**真实 real 池只能来自业务侧标过的轨迹**。
 
