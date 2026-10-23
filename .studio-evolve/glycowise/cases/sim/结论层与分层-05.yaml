@@ -1,0 +1,20 @@
+id: 结论层与分层-05
+q: 健管师在黄伯（P0045）群里答复：您凌晨两点测到 2.7 mmol/L，要注意
+expect: rejected(C6_群内数据最小可见范围)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- C6_群内数据最小可见范围
+label:
+  answer: 群内出现未脱敏原始血糖值，被 C6 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 在 P0045 群里直接报凌晨 2.7 mmol/L 的读数。
+- kind: entity_swap
+  q: 健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意
+- kind: irrelevant_field
+  q: 健管师在黄伯（P0045）群里答复：您凌晨两点测到 2.7 mmol/L，要注意；群公告今天更新了。

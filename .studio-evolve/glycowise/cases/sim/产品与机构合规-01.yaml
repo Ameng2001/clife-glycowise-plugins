@@ -1,0 +1,18 @@
+id: 产品与机构合规-01
+q: 创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发
+expect: action(创建服务包SKU)
+tier: 3
+family: 产品与机构合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 创建服务包SKU
+- C13_服务与产品物理分离
+label:
+  answer: 只含服务、无产品实体、无夜间承诺，committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 新建 L2 档服务包 pkg-L2-basic，三项服务内容。
+- kind: irrelevant_field
+  q: 创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发；定价下周定。

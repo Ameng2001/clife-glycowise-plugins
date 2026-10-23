@@ -1,0 +1,3939 @@
+{
+ "黄伯（患者 P0045）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tar_pct",
+    "tar_l2_pct"
+   ]
+  }
+ },
+ "患者 P0045 这两周 TAR 一级和二级分别占多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tar_pct",
+    "tar_l2_pct"
+   ]
+  }
+ },
+ "陈阿姨（患者 P0023）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tar_pct",
+    "tar_l2_pct"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？他女儿说下周要出差。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tar_pct",
+    "tar_l2_pct"
+   ]
+  }
+ },
+ "王叔（患者 P0031）这 14 天 TBR 一级和二级（<3.0）各占多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tbr_pct",
+    "tbr_l2_pct"
+   ]
+  }
+ },
+ "患者 P0031 低于 3.9 和低于 3.0 的时间占比分别是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tbr_pct",
+    "tbr_l2_pct"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）这 14 天 TBR 一级和二级（<3.0）各占多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tbr_pct",
+    "tbr_l2_pct"
+   ]
+  }
+ },
+ "王叔（患者 P0031）这 14 天 TBR 一级和二级（<3.0）各占多少？另外提醒我下午三点开会。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tbr_pct",
+    "tbr_l2_pct"
+   ]
+  }
+ },
+ "陈阿姨（患者 P0023）这两周的平均血糖和变异系数 CV 是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "mean_glucose",
+    "cv_pct"
+   ]
+  }
+ },
+ "P0023 近 14 天均值血糖多少、波动大不大（CV）？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "mean_glucose",
+    "cv_pct"
+   ]
+  }
+ },
+ "李女士（患者 P0088）这两周的平均血糖和变异系数 CV 是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "mean_glucose",
+    "cv_pct"
+   ]
+  }
+ },
+ "陈阿姨（患者 P0023）这两周的平均血糖和变异系数 CV 是多少？她家住青秀区。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "mean_glucose",
+    "cv_pct"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）14 天报告 s-P0045-14d 的 GMI 是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0045-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "gmi_pct",
+    "mean_glucose"
+   ]
+  }
+ },
+ "报告 s-P0045-14d 的血糖管理指标 GMI 读数？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0045-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "gmi_pct",
+    "mean_glucose"
+   ]
+  }
+ },
+ "王叔（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0031-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "gmi_pct",
+    "mean_glucose"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）14 天报告 s-P0045-14d 的 GMI 是多少？报告是用 A4 打印的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0045-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "gmi_pct",
+    "mean_glucose"
+   ]
+  }
+ },
+ "李女士（患者 P0088）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "days",
+    "active_pct",
+    "sufficiency_ok"
+   ]
+  }
+ },
+ "P0088 的数据充分性（天数、active%）达标了吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "days",
+    "active_pct",
+    "sufficiency_ok"
+   ]
+  }
+ },
+ "周先生（患者 P0007）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "days",
+    "active_pct",
+    "sufficiency_ok"
+   ]
+  }
+ },
+ "李女士（患者 P0088）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？她是上周二来的店。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "days",
+    "active_pct",
+    "sufficiency_ok"
+   ]
+  }
+ },
+ "陈阿姨（患者 P0023）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "nocturnal_coverage_pct",
+    "nocturnal_coverage_insufficient"
+   ]
+  }
+ },
+ "P0023 夜里的数据覆盖够不够 70%？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "nocturnal_coverage_pct",
+    "nocturnal_coverage_insufficient"
+   ]
+  }
+ },
+ "王叔（患者 P0031）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "nocturnal_coverage_pct",
+    "nocturnal_coverage_insufficient"
+   ]
+  }
+ },
+ "陈阿姨（患者 P0023）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？顺便她问能不能换个颜色的贴片。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "nocturnal_coverage_pct",
+    "nocturnal_coverage_insufficient"
+   ]
+  }
+ },
+ "王叔（患者 P0031）连续几晚夜间有效率低于 50%？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "consecutive_low_night_nights",
+    "nocturnal_coverage_pct"
+   ]
+  }
+ },
+ "P0031 夜间有效率 <50% 已经连续多少个晚上了？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "consecutive_low_night_nights",
+    "nocturnal_coverage_pct"
+   ]
+  }
+ },
+ "王叔（患者 P0031）连续几晚夜间有效率低于 50%？他说最近睡得早。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "consecutive_low_night_nights",
+    "nocturnal_coverage_pct"
+   ]
+  }
+ },
+ "周先生（患者 P0007）最近 14 天的 TIR 是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tir_pct",
+    "days"
+   ]
+  }
+ },
+ "P0007 两周目标区间内时间占比多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tir_pct",
+    "days"
+   ]
+  }
+ },
+ "李女士（患者 P0088）最近 14 天的 TIR 是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tir_pct",
+    "days"
+   ]
+  }
+ },
+ "周先生（患者 P0007）最近 14 天的 TIR 是多少？他下个月要去北京。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "tir_pct",
+    "days"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "display_name",
+     "op": "eq",
+     "value": "黄伯"
+    }
+   ],
+   "select": [
+    "display_name",
+    "meds",
+    "is_iah_high_risk",
+    "target_profile"
+   ]
+  }
+ },
+ "患者黄伯的用药清单和低血糖风险标记？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "display_name",
+     "op": "eq",
+     "value": "黄伯"
+    }
+   ],
+   "select": [
+    "display_name",
+    "meds",
+    "is_iah_high_risk",
+    "target_profile"
+   ]
+  }
+ },
+ "王叔（患者 P0031）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "display_name",
+     "op": "eq",
+     "value": "王叔"
+    }
+   ],
+   "select": [
+    "display_name",
+    "meds",
+    "is_iah_high_risk",
+    "target_profile"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？他家里养了两只猫。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "display_name",
+     "op": "eq",
+     "value": "黄伯"
+    }
+   ],
+   "select": [
+    "display_name",
+    "meds",
+    "is_iah_high_risk",
+    "target_profile"
+   ]
+  }
+ },
+ "我们这边 65 岁以上的患者有哪些？各自按哪套目标人群判？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "age",
+     "op": "ge",
+     "value": 65
+    }
+   ],
+   "select": [
+    "display_name",
+    "age",
+    "target_profile"
+   ]
+  }
+ },
+ "列一下老年（≥65）患者和他们的 target_profile。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "age",
+     "op": "ge",
+     "value": 65
+    }
+   ],
+   "select": [
+    "display_name",
+    "age",
+    "target_profile"
+   ]
+  }
+ },
+ "我们这边 65 岁以上的患者有哪些？各自按哪套目标人群判？今天店里来了个推销的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "age",
+     "op": "ge",
+     "value": 65
+    }
+   ],
+   "select": [
+    "display_name",
+    "age",
+    "target_profile"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    },
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "L2"
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "night_flag"
+   ]
+  }
+ },
+ "P0045 的二级低血糖事件列表（起止、最低值）。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    },
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "L2"
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "night_flag"
+   ]
+  }
+ },
+ "王叔（患者 P0031）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    },
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "L2"
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "night_flag"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？他儿子今天来店里问的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    },
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "L2"
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "night_flag"
+   ]
+  }
+ },
+ "李女士（患者 P0088）目前的平均血糖是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "mean_glucose",
+    "days"
+   ]
+  }
+ },
+ "P0088 的均值血糖读数？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "mean_glucose",
+    "days"
+   ]
+  }
+ },
+ "李女士（患者 P0088）目前的平均血糖是多少？她刚换了手机。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "mean_glucose",
+    "days"
+   ]
+  }
+ },
+ "刘阿姨（患者 P0012）的夜间低值告警阈值现在设的是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertThreshold",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    },
+    {
+     "field": "field",
+     "op": "eq",
+     "value": "night_low"
+    }
+   ],
+   "select": [
+    "threshold_id",
+    "current_value",
+    "default_value",
+    "safe_direction"
+   ]
+  }
+ },
+ "P0012 的 night_low 阈值当前值？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertThreshold",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    },
+    {
+     "field": "field",
+     "op": "eq",
+     "value": "night_low"
+    }
+   ],
+   "select": [
+    "threshold_id",
+    "current_value",
+    "default_value",
+    "safe_direction"
+   ]
+  }
+ },
+ "刘阿姨（患者 P0012）的夜间低值告警阈值现在设的是多少？她喜欢早上散步。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertThreshold",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    },
+    {
+     "field": "field",
+     "op": "eq",
+     "value": "night_low"
+    }
+   ],
+   "select": [
+    "threshold_id",
+    "current_value",
+    "default_value",
+    "safe_direction"
+   ]
+  }
+ },
+ "危急级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertTemplate",
+   "where": [
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "危急"
+    }
+   ],
+   "select": [
+    "template_id",
+    "frozen",
+    "pre_reviewed_c22",
+    "pre_reviewed_r54",
+    "reviewed_at"
+   ]
+  }
+ },
+ "查一下「危急」级别的冻结告警模板及其预审状态。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertTemplate",
+   "where": [
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "危急"
+    }
+   ],
+   "select": [
+    "template_id",
+    "frozen",
+    "pre_reviewed_c22",
+    "pre_reviewed_r54",
+    "reviewed_at"
+   ]
+  }
+ },
+ "高级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertTemplate",
+   "where": [
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "高"
+    }
+   ],
+   "select": [
+    "template_id",
+    "frozen",
+    "pre_reviewed_c22",
+    "pre_reviewed_r54",
+    "reviewed_at"
+   ]
+  }
+ },
+ "危急级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？模板是法务上个月改的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertTemplate",
+   "where": [
+    {
+     "field": "level",
+     "op": "eq",
+     "value": "危急"
+    }
+   ],
+   "select": [
+    "template_id",
+    "frozen",
+    "pre_reviewed_c22",
+    "pre_reviewed_r54",
+    "reviewed_at"
+   ]
+  }
+ },
+ "门店 store-01 有没有医疗器械经营许可？诊疗范围是什么？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "StoreEntity",
+   "where": [
+    {
+     "field": "store_id",
+     "op": "eq",
+     "value": "store-01"
+    }
+   ],
+   "select": [
+    "name",
+    "license_no",
+    "medical_scope",
+    "readiness_ref"
+   ]
+  }
+ },
+ "南宁青秀店（store-01）的证照与诊疗范围？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "StoreEntity",
+   "where": [
+    {
+     "field": "store_id",
+     "op": "eq",
+     "value": "store-01"
+    }
+   ],
+   "select": [
+    "name",
+    "license_no",
+    "medical_scope",
+    "readiness_ref"
+   ]
+  }
+ },
+ "门店 store-01 有没有医疗器械经营许可？诊疗范围是什么？门口的招牌昨天换了。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "StoreEntity",
+   "where": [
+    {
+     "field": "store_id",
+     "op": "eq",
+     "value": "store-01"
+    }
+   ],
+   "select": [
+    "name",
+    "license_no",
+    "medical_scope",
+    "readiness_ref"
+   ]
+  }
+ },
+ "SKU sku-cgm-01 是什么类别？标签核验过了吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ProductSku",
+   "where": [
+    {
+     "field": "sku_id",
+     "op": "eq",
+     "value": "sku-cgm-01"
+    }
+   ],
+   "select": [
+    "name",
+    "category",
+    "label_verified",
+    "commission_config"
+   ]
+  }
+ },
+ "查产品 sku-cgm-01 的类别与标签核验状态。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ProductSku",
+   "where": [
+    {
+     "field": "sku_id",
+     "op": "eq",
+     "value": "sku-cgm-01"
+    }
+   ],
+   "select": [
+    "name",
+    "category",
+    "label_verified",
+    "commission_config"
+   ]
+  }
+ },
+ "SKU sku-ynl-01 是什么类别？标签核验过了吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ProductSku",
+   "where": [
+    {
+     "field": "sku_id",
+     "op": "eq",
+     "value": "sku-ynl-01"
+    }
+   ],
+   "select": [
+    "name",
+    "category",
+    "label_verified",
+    "commission_config"
+   ]
+  }
+ },
+ "SKU sku-cgm-01 是什么类别？标签核验过了吗？采购说下周到货。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ProductSku",
+   "where": [
+    {
+     "field": "sku_id",
+     "op": "eq",
+     "value": "sku-cgm-01"
+    }
+   ],
+   "select": [
+    "name",
+    "category",
+    "label_verified",
+    "commission_config"
+   ]
+  }
+ },
+ "黄医生的执业证什么时候到期？状态有效吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder",
+     "op": "eq",
+     "value": "黄医生"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "查黄医生的资质记录（类型、到期日、状态）。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder",
+     "op": "eq",
+     "value": "黄医生"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "陈营养师的注册证什么时候到期？状态有效吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder",
+     "op": "eq",
+     "value": "陈营养师"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "黄医生的执业证什么时候到期？状态有效吗？他周三休息。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder",
+     "op": "eq",
+     "value": "黄医生"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "王叔（患者 P0031）的用药线索是从哪来的？是否提示低血糖高风险药？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "MedClassHint",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "hint_id",
+    "hint_source",
+    "hypo_risk_med",
+    "sglt2i"
+   ]
+  }
+ },
+ "P0031 的 MedClassHint 来源和风险标记？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "MedClassHint",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "hint_id",
+    "hint_source",
+    "hypo_risk_med",
+    "sglt2i"
+   ]
+  }
+ },
+ "黄伯（患者 P0045）的用药线索是从哪来的？是否提示低血糖高风险药？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "MedClassHint",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "hint_id",
+    "hint_source",
+    "hypo_risk_med",
+    "sglt2i"
+   ]
+  }
+ },
+ "王叔（患者 P0031）的用药线索是从哪来的？是否提示低血糖高风险药？他把药盒放在厨房。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "MedClassHint",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "hint_id",
+    "hint_source",
+    "hypo_risk_med",
+    "sglt2i"
+   ]
+  }
+ },
+ "周先生（患者 P0007）最近一次体测的 BMI 和腰围是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "BodyMeasurement",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "measurement_id",
+    "measured_at",
+    "bmi",
+    "waist",
+    "weight"
+   ]
+  }
+ },
+ "P0007 的体测记录（BMI、腰围、体重）。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "BodyMeasurement",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "measurement_id",
+    "measured_at",
+    "bmi",
+    "waist",
+    "weight"
+   ]
+  }
+ },
+ "周先生（患者 P0007）最近一次体测的 BMI 和腰围是多少？体重秤放在二楼。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "BodyMeasurement",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "measurement_id",
+    "measured_at",
+    "bmi",
+    "waist",
+    "weight"
+   ]
+  }
+ },
+ "平台登记的数据留存与审计策略是几年？审计开了吗？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AuditLog",
+   "where": [
+    {
+     "field": "action",
+     "op": "eq",
+     "value": "retention_policy"
+    }
+   ],
+   "select": [
+    "log_id",
+    "retention_years",
+    "audit_enabled",
+    "timestamp"
+   ]
+  }
+ },
+ "查 retention_policy 的留存年限与审计开关。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AuditLog",
+   "where": [
+    {
+     "field": "action",
+     "op": "eq",
+     "value": "retention_policy"
+    }
+   ],
+   "select": [
+    "log_id",
+    "retention_years",
+    "audit_enabled",
+    "timestamp"
+   ]
+  }
+ },
+ "平台登记的数据留存与审计策略是几年？审计开了吗？合规官今天请假。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AuditLog",
+   "where": [
+    {
+     "field": "action",
+     "op": "eq",
+     "value": "retention_policy"
+    }
+   ],
+   "select": [
+    "log_id",
+    "retention_years",
+    "audit_enabled",
+    "timestamp"
+   ]
+  }
+ },
+ "禁用词库里「疗效声称」类有哪些词？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "BannedTermLibrary",
+   "where": [
+    {
+     "field": "category",
+     "op": "eq",
+     "value": "疗效声称"
+    }
+   ],
+   "select": [
+    "term",
+    "category",
+    "version"
+   ]
+  }
+ },
+ "列出疗效声称类禁用词。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "BannedTermLibrary",
+   "where": [
+    {
+     "field": "category",
+     "op": "eq",
+     "value": "疗效声称"
+    }
+   ],
+   "select": [
+    "term",
+    "category",
+    "version"
+   ]
+  }
+ },
+ "禁用词库里「用药」类有哪些词？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "BannedTermLibrary",
+   "where": [
+    {
+     "field": "category",
+     "op": "eq",
+     "value": "用药"
+    }
+   ],
+   "select": [
+    "term",
+    "category",
+    "version"
+   ]
+  }
+ },
+ "禁用词库里「疗效声称」类有哪些词？文案组下午要开会。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "BannedTermLibrary",
+   "where": [
+    {
+     "field": "category",
+     "op": "eq",
+     "value": "疗效声称"
+    }
+   ],
+   "select": [
+    "term",
+    "category",
+    "version"
+   ]
+  }
+ },
+ "老年且用胰岛素或磺脲的人群，低值告警阈值和 TBR 上限各是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "TargetProfileParam",
+   "where": [
+    {
+     "field": "profile",
+     "op": "eq",
+     "value": "elderly_high_risk"
+    }
+   ],
+   "select": [
+    "profile",
+    "population",
+    "low_alert_threshold",
+    "tbr_max_pct",
+    "tir_target_pct"
+   ]
+  }
+ },
+ "查 elderly_high_risk 这套目标参数。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "TargetProfileParam",
+   "where": [
+    {
+     "field": "profile",
+     "op": "eq",
+     "value": "elderly_high_risk"
+    }
+   ],
+   "select": [
+    "profile",
+    "population",
+    "low_alert_threshold",
+    "tbr_max_pct",
+    "tir_target_pct"
+   ]
+  }
+ },
+ "妊娠人群，低值告警阈值和 TBR 上限各是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "TargetProfileParam",
+   "where": [
+    {
+     "field": "profile",
+     "op": "eq",
+     "value": "pregnancy"
+    }
+   ],
+   "select": [
+    "profile",
+    "population",
+    "low_alert_threshold",
+    "tbr_max_pct",
+    "tir_target_pct"
+   ]
+  }
+ },
+ "老年且用胰岛素或磺脲的人群，低值告警阈值和 TBR 上限各是多少？指南是去年更新的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "TargetProfileParam",
+   "where": [
+    {
+     "field": "profile",
+     "op": "eq",
+     "value": "elderly_high_risk"
+    }
+   ],
+   "select": [
+    "profile",
+    "population",
+    "low_alert_threshold",
+    "tbr_max_pct",
+    "tir_target_pct"
+   ]
+  }
+ },
+ "周先生（患者 P0007）的单独同意书勾了哪些范围？有没有「营销推荐」？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ConsentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "consent_id",
+    "scope_items",
+    "signed_at",
+    "state"
+   ]
+  }
+ },
+ "P0007 的 ConsentRecord 范围清单。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ConsentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "consent_id",
+    "scope_items",
+    "signed_at",
+    "state"
+   ]
+  }
+ },
+ "刘阿姨（患者 P0012）的单独同意书勾了哪些范围？有没有「营销推荐」？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ConsentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    }
+   ],
+   "select": [
+    "consent_id",
+    "scope_items",
+    "signed_at",
+    "state"
+   ]
+  }
+ },
+ "周先生（患者 P0007）的单独同意书勾了哪些范围？有没有「营销推荐」？他是用平板签的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ConsentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "consent_id",
+    "scope_items",
+    "signed_at",
+    "state"
+   ]
+  }
+ },
+ "告警 A-P0045-02 是凌晨 2 点连续 3 读数触发的，把黄伯（P0045）10 月 21 日凌晨那几条低于 3.9 的读数调出来": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "GlucoseReading",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    },
+    {
+     "field": "value_mmol",
+     "op": "lt",
+     "value": 3.9
+    },
+    {
+     "field": "time_utc",
+     "op": "ge",
+     "value": "2026-10-21T00:00"
+    },
+    {
+     "field": "time_utc",
+     "op": "lt",
+     "value": "2026-10-21T06:00"
+    }
+   ],
+   "select": [
+    "reading_id",
+    "value_mmol",
+    "time_utc",
+    "source_channel"
+   ]
+  }
+ },
+ "把触发 A-P0045-02 的那串读数（P0045，10/21 凌晨 <3.9）列出来。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "GlucoseReading",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    },
+    {
+     "field": "value_mmol",
+     "op": "lt",
+     "value": 3.9
+    },
+    {
+     "field": "time_utc",
+     "op": "ge",
+     "value": "2026-10-21T00:00"
+    },
+    {
+     "field": "time_utc",
+     "op": "lt",
+     "value": "2026-10-21T06:00"
+    }
+   ],
+   "select": [
+    "reading_id",
+    "value_mmol",
+    "time_utc",
+    "source_channel"
+   ]
+  }
+ },
+ "告警 A-P0045-02 是凌晨 2 点连续 3 读数触发的，把黄伯（P0045）10 月 21 日凌晨那几条低于 3.9 的读数调出来，顺便他说贴片有点痒。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "GlucoseReading",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    },
+    {
+     "field": "value_mmol",
+     "op": "lt",
+     "value": 3.9
+    },
+    {
+     "field": "time_utc",
+     "op": "ge",
+     "value": "2026-10-21T00:00"
+    },
+    {
+     "field": "time_utc",
+     "op": "lt",
+     "value": "2026-10-21T06:00"
+    }
+   ],
+   "select": [
+    "reading_id",
+    "value_mmol",
+    "time_utc",
+    "source_channel"
+   ]
+  }
+ },
+ "黄伯（P0045）的低血糖告警为什么一直不能闭环？状态机里卡在哪？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoState",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "prolonged_risk",
+    "recurrence_window_until",
+    "closure_blocked_reason"
+   ]
+  }
+ },
+ "查 P0045 的 HypoState：有没有阻止闭环的原因？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoState",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "prolonged_risk",
+    "recurrence_window_until",
+    "closure_blocked_reason"
+   ]
+  }
+ },
+ "刘阿姨（P0012）的低血糖告警为什么一直不能闭环？状态机里卡在哪？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoState",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    }
+   ],
+   "select": [
+    "prolonged_risk",
+    "recurrence_window_until",
+    "closure_blocked_reason"
+   ]
+  }
+ },
+ "黄伯（P0045）的低血糖告警为什么一直不能闭环？状态机里卡在哪？值班表今天换人了。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoState",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "prolonged_risk",
+    "recurrence_window_until",
+    "closure_blocked_reason"
+   ]
+  }
+ },
+ "王叔（P0031）那次「叫不醒」是什么时候、家属做了什么处置？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "SymptomTreatmentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "record_id",
+    "symptom_tag",
+    "treatment_action",
+    "recorded_by",
+    "recorded_at"
+   ]
+  }
+ },
+ "P0031 的症状与处置记录。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "SymptomTreatmentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "record_id",
+    "symptom_tag",
+    "treatment_action",
+    "recorded_by",
+    "recorded_at"
+   ]
+  }
+ },
+ "王叔（P0031）那次「叫不醒」是什么时候、家属做了什么处置？他们家在五楼。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "SymptomTreatmentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "record_id",
+    "symptom_tag",
+    "treatment_action",
+    "recorded_by",
+    "recorded_at"
+   ]
+  }
+ },
+ "汇总 s-P0031-14d 是按哪个窗口的读数算的？窗口起止日期？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0031-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "window_start",
+    "window_end",
+    "days",
+    "metric_provenance"
+   ]
+  }
+ },
+ "s-P0031-14d 这份汇总的窗口范围和指标来源？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0031-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "window_start",
+    "window_end",
+    "days",
+    "metric_provenance"
+   ]
+  }
+ },
+ "汇总 s-P0045-14d 是按哪个窗口的读数算的？窗口起止日期？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0045-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "window_start",
+    "window_end",
+    "days",
+    "metric_provenance"
+   ]
+  }
+ },
+ "汇总 s-P0031-14d 是按哪个窗口的读数算的？窗口起止日期？报告要发给他女儿。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0031-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "window_start",
+    "window_end",
+    "days",
+    "metric_provenance"
+   ]
+  }
+ },
+ "王叔（P0031）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    },
+    {
+     "field": "night_flag",
+     "op": "eq",
+     "value": true
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "level"
+   ]
+  }
+ },
+ "列 P0031 的夜间低血糖事件（起止、最低值、级别）。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    },
+    {
+     "field": "night_flag",
+     "op": "eq",
+     "value": true
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "level"
+   ]
+  }
+ },
+ "陈阿姨（P0023）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    },
+    {
+     "field": "night_flag",
+     "op": "eq",
+     "value": true
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "level"
+   ]
+  }
+ },
+ "王叔（P0031）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？他家的网络前天断过。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    },
+    {
+     "field": "night_flag",
+     "op": "eq",
+     "value": true
+    }
+   ],
+   "select": [
+    "start_time",
+    "end_time",
+    "min_value",
+    "level"
+   ]
+  }
+ },
+ "方案 plan-P0066-w41 签发时签发人看了多久、改了什么？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ReviewEvidence",
+   "where": [
+    {
+     "field": "plan_id",
+     "op": "eq",
+     "value": "plan-P0066-w41"
+    }
+   ],
+   "select": [
+    "evidence_id",
+    "dwell_time",
+    "diff",
+    "agp_expand_count",
+    "review_suspicious"
+   ]
+  }
+ },
+ "plan-P0066-w41 的签发证据（停留时长、修改）。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ReviewEvidence",
+   "where": [
+    {
+     "field": "plan_id",
+     "op": "eq",
+     "value": "plan-P0066-w41"
+    }
+   ],
+   "select": [
+    "evidence_id",
+    "dwell_time",
+    "diff",
+    "agp_expand_count",
+    "review_suspicious"
+   ]
+  }
+ },
+ "方案 plan-P0088-w41 签发时签发人看了多久、改了什么？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ReviewEvidence",
+   "where": [
+    {
+     "field": "plan_id",
+     "op": "eq",
+     "value": "plan-P0088-w41"
+    }
+   ],
+   "select": [
+    "evidence_id",
+    "dwell_time",
+    "diff",
+    "agp_expand_count",
+    "review_suspicious"
+   ]
+  }
+ },
+ "方案 plan-P0066-w41 签发时签发人看了多久、改了什么？那天店里停电过一次。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ReviewEvidence",
+   "where": [
+    {
+     "field": "plan_id",
+     "op": "eq",
+     "value": "plan-P0066-w41"
+    }
+   ],
+   "select": [
+    "evidence_id",
+    "dwell_time",
+    "diff",
+    "agp_expand_count",
+    "review_suspicious"
+   ]
+  }
+ },
+ "方案 plan-P0066-w41 是 S-CHEN 签的，这位签发人的资质类型和到期日是什么？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder_id",
+     "op": "eq",
+     "value": "S-CHEN"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "holder",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "查签发人 S-CHEN 的资质记录。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder_id",
+     "op": "eq",
+     "value": "S-CHEN"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "holder",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "方案 plan-P0012-w40 是 S-HUANG 签的，这位签发人的资质类型和到期日是什么？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder_id",
+     "op": "eq",
+     "value": "S-HUANG"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "holder",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "方案 plan-P0066-w41 是 S-CHEN 签的，这位签发人的资质类型和到期日是什么？她下月要去进修。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "Credential",
+   "where": [
+    {
+     "field": "holder_id",
+     "op": "eq",
+     "value": "S-CHEN"
+    }
+   ],
+   "select": [
+    "credential_id",
+    "holder",
+    "credential_type",
+    "expiry_date",
+    "status"
+   ]
+  }
+ },
+ "告警 A-P0031-backfill-01 是哪条规则触发的？触发读数是不是回填的？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertEvent",
+   "where": [
+    {
+     "field": "alert_id",
+     "op": "eq",
+     "value": "A-P0031-backfill-01"
+    }
+   ],
+   "select": [
+    "alert_id",
+    "rule_id",
+    "is_backfill",
+    "source_channel",
+    "evidence",
+    "level"
+   ]
+  }
+ },
+ "A-P0031-backfill-01 的触发规则与回填标记？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertEvent",
+   "where": [
+    {
+     "field": "alert_id",
+     "op": "eq",
+     "value": "A-P0031-backfill-01"
+    }
+   ],
+   "select": [
+    "alert_id",
+    "rule_id",
+    "is_backfill",
+    "source_channel",
+    "evidence",
+    "level"
+   ]
+  }
+ },
+ "告警 A-P0045-ocr-01 是哪条规则触发的？触发读数是不是回填的？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertEvent",
+   "where": [
+    {
+     "field": "alert_id",
+     "op": "eq",
+     "value": "A-P0045-ocr-01"
+    }
+   ],
+   "select": [
+    "alert_id",
+    "rule_id",
+    "is_backfill",
+    "source_channel",
+    "evidence",
+    "level"
+   ]
+  }
+ },
+ "告警 A-P0031-backfill-01 是哪条规则触发的？触发读数是不是回填的？回填是昨天上午做的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "AlertEvent",
+   "where": [
+    {
+     "field": "alert_id",
+     "op": "eq",
+     "value": "A-P0031-backfill-01"
+    }
+   ],
+   "select": [
+    "alert_id",
+    "rule_id",
+    "is_backfill",
+    "source_channel",
+    "evidence",
+    "level"
+   ]
+  }
+ },
+ "周先生（P0007）的缓解时钟 Day0 是哪天？谁确认的？现在是什么状态？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "RemissionClock",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "day0",
+    "status",
+    "confirmed_by"
+   ]
+  }
+ },
+ "P0007 的 RemissionClock 记录。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "RemissionClock",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "day0",
+    "status",
+    "confirmed_by"
+   ]
+  }
+ },
+ "周先生（P0007）的缓解时钟 Day0 是哪天？谁确认的？现在是什么状态？他说想报名下期课程。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "RemissionClock",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "day0",
+    "status",
+    "confirmed_by"
+   ]
+  }
+ },
+ "周先生（P0007）走缓解路径的 ABCD 筛查化验结果（GADA、空腹和餐后 C 肽）各是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "LabResult",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "lab_result_id",
+    "method",
+    "value",
+    "measured_at",
+    "is_ngsp_certified"
+   ]
+  }
+ },
+ "列出 P0007 的全部化验结果。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "LabResult",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "lab_result_id",
+    "method",
+    "value",
+    "measured_at",
+    "is_ngsp_certified"
+   ]
+  }
+ },
+ "周先生（P0007）走缓解路径的 ABCD 筛查化验结果（GADA、空腹和餐后 C 肽）各是多少？化验单是在市一医院做的。": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "LabResult",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "lab_result_id",
+    "method",
+    "value",
+    "measured_at",
+    "is_ngsp_certified"
+   ]
+  }
+ },
+ "王叔（P0031）读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0031",
+   "reading_id": "r-P0031-00489",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "P0031 的 r-P0031-00489（3.8，前值 2.2）触发一级低血糖处置流程。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0031",
+   "reading_id": "r-P0031-00489",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "王叔（P0031）读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置；家属说昨晚没吃夜宵。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0031",
+   "reading_id": "r-P0031-00489",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "刘阿姨（P0012）读数 r-P0012-00115 是 3.7，立刻按 R04a 触发 Level 1 低血糖处置": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0012",
+   "reading_id": "r-P0012-00115",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "单条读数 r-P0012-00115（3.7）就触发 P0012 的一级低血糖处置。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0012",
+   "reading_id": "r-P0012-00115",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "刘阿姨（P0012）读数 r-P0012-00115 是 3.7，立刻按 R04a 触发 Level 1 低血糖处置；今天天气不错。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0012",
+   "reading_id": "r-P0012-00115",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "王叔（P0031）回填上来的读数 r-P0031-00123 是 3.4，按 R04a 触发实时低血糖处置": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0031",
+   "reading_id": "r-P0031-00123",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "用 P0031 的回填读数 r-P0031-00123（3.4）走一遍实时低血糖处置。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0031",
+   "reading_id": "r-P0031-00123",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "王叔（P0031）回填上来的读数 r-P0031-00123 是 3.4，按 R04a 触发实时低血糖处置；回填是健管师小李操作的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0031",
+   "reading_id": "r-P0031-00123",
+   "rule_id": "R04a_Level1低血糖_实时告警"
+  }
+ },
+ "把告警 A-P0012-01（中级）推送给健管师": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "level": "中",
+   "targets": [
+    "健管师"
+   ]
+  }
+ },
+ "A-P0012-01 按中级告警推给健管师。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "level": "中",
+   "targets": [
+    "健管师"
+   ]
+  }
+ },
+ "把告警 A-P0045-02（高级）推送给医师和家属": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "level": "高",
+   "targets": [
+    "医师",
+    "家属"
+   ]
+  }
+ },
+ "把告警 A-P0012-01（中级）推送给健管师，健管师今天在店里值班。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "level": "中",
+   "targets": [
+    "健管师"
+   ]
+  }
+ },
+ "把告警 A-P0012-01 按「紧急」级别推送给健管师和家属": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "level": "紧急",
+   "targets": [
+    "健管师",
+    "家属"
+   ]
+  }
+ },
+ "A-P0012-01 用紧急级推送。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "level": "紧急",
+   "targets": [
+    "健管师",
+    "家属"
+   ]
+  }
+ },
+ "把告警 A-P0012-01 按「紧急」级别推送给健管师和家属，家属的电话刚更新过。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "level": "紧急",
+   "targets": [
+    "健管师",
+    "家属"
+   ]
+  }
+ },
+ "健管师回执告警 A-P0045-02：15-15 补碳后复测 4.6，继续观察 24 小时": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "响应并回执告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "responder": "健管师",
+   "action_taken": "15-15 补碳后复测回升，继续观察 24 小时",
+   "retest_value": 4.6
+  }
+ },
+ "A-P0045-02 回执：补碳复测 4.6，保持观察。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "响应并回执告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "responder": "健管师",
+   "action_taken": "15-15 补碳后复测回升，继续观察 24 小时",
+   "retest_value": 4.6
+  }
+ },
+ "健管师回执告警 A-P0012-01：15-15 补碳后复测 5.1，继续观察 24 小时": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "响应并回执告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "responder": "健管师",
+   "action_taken": "15-15 补碳后复测回升，继续观察 24 小时",
+   "retest_value": 5.1
+  }
+ },
+ "健管师回执告警 A-P0045-02：15-15 补碳后复测 4.6，继续观察 24 小时；补的是葡萄糖片。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "响应并回执告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "responder": "健管师",
+   "action_taken": "15-15 补碳后复测回升，继续观察 24 小时",
+   "retest_value": 4.6
+  }
+ },
+ "黄伯（P0045）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "收紧告警阈值",
+  "params": {
+   "patient_id": "P0045",
+   "field": "night_low",
+   "trigger_rule": "R34_HAAF_24小时复发窗",
+   "new_value": 4.4
+  }
+ },
+ "P0045 的 night_low 收紧到 4.4（触发规则 R34）。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "收紧告警阈值",
+  "params": {
+   "patient_id": "P0045",
+   "field": "night_low",
+   "trigger_rule": "R34_HAAF_24小时复发窗",
+   "new_value": 4.4
+  }
+ },
+ "王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "收紧告警阈值",
+  "params": {
+   "patient_id": "P0031",
+   "field": "night_low",
+   "trigger_rule": "R34_HAAF_24小时复发窗",
+   "new_value": 4.4
+  }
+ },
+ "黄伯（P0045）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4；他家的采集盒放在床头。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "收紧告警阈值",
+  "params": {
+   "patient_id": "P0045",
+   "field": "night_low",
+   "trigger_rule": "R34_HAAF_24小时复发窗",
+   "new_value": 4.4
+  }
+ },
+ "医师把周先生（P0007）的日间高值告警阈值从 10.0 放宽到 13.9": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0007",
+   "field": "day_high",
+   "new_value": 13.9
+  }
+ },
+ "P0007 的 day_high 阈值改到 13.9。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0007",
+   "field": "day_high",
+   "new_value": 13.9
+  }
+ },
+ "医师把周先生（P0007）的日间高值告警阈值从 10.0 放宽到 13.9，他说白天总被提醒。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0007",
+   "field": "day_high",
+   "new_value": 13.9
+  }
+ },
+ "把黄伯（P0045）的夜间低值告警阈值放宽到 3.9": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0045",
+   "field": "night_low",
+   "new_value": 3.9
+  }
+ },
+ "P0045 的夜间低值阈值调回 3.9。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0045",
+   "field": "night_low",
+   "new_value": 3.9
+  }
+ },
+ "把王叔（P0031）的夜间低值告警阈值放宽到 4.0": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0031",
+   "field": "night_low",
+   "new_value": 4.0
+  }
+ },
+ "把黄伯（P0045）的夜间低值告警阈值放宽到 3.9，他女儿打电话来说的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0045",
+   "field": "night_low",
+   "new_value": 3.9
+  }
+ },
+ "给黄伯（P0045）出一份转医师的去强化证据包（14 天）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成去强化证据工单",
+  "params": {
+   "patient_id": "P0045",
+   "window": "14d"
+  }
+ },
+ "P0045 的 14 天去强化证据工单。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成去强化证据工单",
+  "params": {
+   "patient_id": "P0045",
+   "window": "14d"
+  }
+ },
+ "给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成去强化证据工单",
+  "params": {
+   "patient_id": "P0012",
+   "window": "14d"
+  }
+ },
+ "给黄伯（P0045）出一份转医师的去强化证据包（14 天），医师明天上午出诊。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成去强化证据工单",
+  "params": {
+   "patient_id": "P0045",
+   "window": "14d"
+  }
+ },
+ "给黄伯（P0045）生成本期方案草稿，方向维持（基于 s-P0045-14d）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0045",
+   "analysis_result": {
+    "summary_id": "s-P0045-14d"
+   },
+   "direction": "维持"
+  }
+ },
+ "P0045 本期方案草稿，维持方向。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0045",
+   "analysis_result": {
+    "summary_id": "s-P0045-14d"
+   },
+   "direction": "维持"
+  }
+ },
+ "给周先生（P0007）生成本期方案草稿，方向维持（基于 s-P0007-14d）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0007",
+   "analysis_result": {
+    "summary_id": "s-P0007-14d"
+   },
+   "direction": "维持"
+  }
+ },
+ "给黄伯（P0045）生成本期方案草稿，方向维持（基于 s-P0045-14d），他下周要去女儿家住。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0045",
+   "analysis_result": {
+    "summary_id": "s-P0045-14d"
+   },
+   "direction": "维持"
+  }
+ },
+ "黄伯（P0045）TAR 偏高，给他生成一份加强降糖方向的方案草稿（基于 s-P0045-14d）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0045",
+   "analysis_result": {
+    "summary_id": "s-P0045-14d"
+   },
+   "direction": "强化"
+  }
+ },
+ "P0045 出强化降糖方向的草稿。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0045",
+   "analysis_result": {
+    "summary_id": "s-P0045-14d"
+   },
+   "direction": "强化"
+  }
+ },
+ "黄伯（P0045）TAR 偏高，给他生成一份加强降糖方向的方案草稿（基于 s-P0045-14d），他最近爱吃糯米饭。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0045",
+   "analysis_result": {
+    "summary_id": "s-P0045-14d"
+   },
+   "direction": "强化"
+  }
+ },
+ "给陈阿姨（P0023）生成去强化方向的方案草稿（基于 s-P0023-14d）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0023",
+   "analysis_result": {
+    "summary_id": "s-P0023-14d"
+   },
+   "direction": "去强化"
+  }
+ },
+ "P0023 的草稿，方向去强化。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0023",
+   "analysis_result": {
+    "summary_id": "s-P0023-14d"
+   },
+   "direction": "去强化"
+  }
+ },
+ "给陈阿姨（P0023）生成去强化方向的方案草稿（基于 s-P0023-14d），她用的是甘精胰岛素，晚上睡得早。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0023",
+   "analysis_result": {
+    "summary_id": "s-P0023-14d"
+   },
+   "direction": "去强化"
+  }
+ },
+ "给周先生（P0007）按 14 天数据输出内部服务分层标签": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0007",
+   "window": "14d"
+  }
+ },
+ "P0007 的德心分层内部标签。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0007",
+   "window": "14d"
+  }
+ },
+ "给周先生（P0007）按 14 天数据输出内部服务分层标签，他明天来店复诊。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0007",
+   "window": "14d"
+  }
+ },
+ "给刘阿姨（P0012）按 14 天数据输出德心服务分层标签": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0012",
+   "window": "14d"
+  }
+ },
+ "P0012 的服务分层标签。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0012",
+   "window": "14d"
+  }
+ },
+ "给黄伯（P0045）按 14 天数据输出德心服务分层标签": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0045",
+   "window": "14d"
+  }
+ },
+ "给刘阿姨（P0012）按 14 天数据输出德心服务分层标签，她孙子周末要来。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0012",
+   "window": "14d"
+  }
+ },
+ "健管师在张阿姨（P0066）的群里答复：您本期的服务分层是 L1 级": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0066",
+   "message": "您本期的服务分层是 L1 级，继续保持。",
+   "sender_role": "健管师"
+  }
+ },
+ "群里告诉 P0066 她是 L1 分层。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0066",
+   "message": "您本期的服务分层是 L1 级，继续保持。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在李女士（P0088）的群里答复：您本期的服务分层是 L1 级": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0088",
+   "message": "您本期的服务分层是 L1 级，继续保持。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在张阿姨（P0066）的群里答复：您本期的服务分层是 L1 级；群里还有她女儿。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0066",
+   "message": "您本期的服务分层是 L1 级，继续保持。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：今天的数据已经同步到，餐后记得走一走": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "今天的数据已经同步到了，餐后记得走一走。",
+   "sender_role": "健管师"
+  }
+ },
+ "在 P0012 群里发一句同步提醒和餐后步行提醒。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "今天的数据已经同步到了，餐后记得走一走。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在黄伯（P0045）群里答复：今天的数据已经同步到，餐后记得走一走": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0045",
+   "message": "今天的数据已经同步到了，餐后记得走一走。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：今天的数据已经同步到，餐后记得走一走；她今天穿了红外套。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "今天的数据已经同步到了，餐后记得走一走。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在黄伯（P0045）群里答复：您凌晨两点测到 2.7 mmol/L，要注意": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0045",
+   "message": "您凌晨两点测到 2.7 mmol/L，要注意补充碳水。",
+   "sender_role": "健管师"
+  }
+ },
+ "在 P0045 群里直接报凌晨 2.7 mmol/L 的读数。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0045",
+   "message": "您凌晨两点测到 2.7 mmol/L，要注意补充碳水。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0031",
+   "message": "您凌晨三点测到 2.2 mmol/L，要注意补充碳水。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在黄伯（P0045）群里答复：您凌晨两点测到 2.7 mmol/L，要注意；群公告今天更新了。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0045",
+   "message": "您凌晨两点测到 2.7 mmol/L，要注意补充碳水。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：我来给您诊断一下，看这曲线问题不大": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "我来给您诊断一下，看这曲线问题不大。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在 P0012 群里说要给她诊断。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "我来给您诊断一下，看这曲线问题不大。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：我来给您诊断一下，看这曲线问题不大；医院离她家两公里。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "我来给您诊断一下，看这曲线问题不大。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在周先生（P0007）群里答复：恭喜，您已经逆转了": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0007",
+   "message": "恭喜，您已经逆转了！",
+   "sender_role": "健管师"
+  }
+ },
+ "群里祝贺 P0007 逆转成功。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0007",
+   "message": "恭喜，您已经逆转了！",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在李女士（P0088）群里答复：恭喜，您已经逆转了": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0088",
+   "message": "恭喜，您已经逆转了！",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在周先生（P0007）群里答复：恭喜，您已经逆转了；他太太也在群里。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0007",
+   "message": "恭喜，您已经逆转了！",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：放心，夜里出事我们第一时间知道": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "放心，夜里出事我们第一时间知道。",
+   "sender_role": "健管师"
+  }
+ },
+ "在 P0012 群里承诺夜间有人盯着。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "放心，夜里出事我们第一时间知道。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在陈阿姨（P0023）群里答复：放心，夜里出事我们第一时间知道": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0023",
+   "message": "放心，夜里出事我们第一时间知道。",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在刘阿姨（P0012）群里答复：放心，夜里出事我们第一时间知道；这是店长让发的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0012",
+   "message": "放心，夜里出事我们第一时间知道。",
+   "sender_role": "健管师"
+  }
+ },
+ "刘阿姨（P0012）还在吃二甲双胍，也判一下缓解结果（报告 s-P0012-14d）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0012",
+   "summary_id": "s-P0012-14d"
+  }
+ },
+ "给 P0012 做一次缓解判定。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0012",
+   "summary_id": "s-P0012-14d"
+  }
+ },
+ "刘阿姨（P0012）还在吃二甲双胍，也判一下缓解结果（报告 s-P0012-14d），她问是不是能少吃点药。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0012",
+   "summary_id": "s-P0012-14d"
+  }
+ },
+ "李女士（P0088）才戴 6 天，用报告 s-P0088-6d 判一下缓解": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0088",
+   "summary_id": "s-P0088-6d"
+  }
+ },
+ "用 6 天数据给 P0088 判缓解。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0088",
+   "summary_id": "s-P0088-6d"
+  }
+ },
+ "李女士（P0088）才戴 6 天，用报告 s-P0088-6d 判一下缓解，她很着急想知道。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0088",
+   "summary_id": "s-P0088-6d"
+  }
+ },
+ "让吴康复师签发刘阿姨（P0012）的营养方案草稿 d-P0012-01": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "签发方案",
+  "params": {
+   "draft_id": "d-P0012-01",
+   "signer_id": "吴康复师",
+   "decision": "approve"
+  }
+ },
+ "d-P0012-01 由吴康复师签。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "签发方案",
+  "params": {
+   "draft_id": "d-P0012-01",
+   "signer_id": "吴康复师",
+   "decision": "approve"
+  }
+ },
+ "让吴康复师签发刘阿姨（P0012）的营养方案草稿 d-P0012-01，他今天刚从外地回来。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "签发方案",
+  "params": {
+   "draft_id": "d-P0012-01",
+   "signer_id": "吴康复师",
+   "decision": "approve"
+  }
+ },
+ "把待审内容 c-reco-P0012-01 过一下出口审核（内容类型：方案）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "审核输出内容",
+  "params": {
+   "content_id": "c-reco-P0012-01",
+   "content_type": "方案"
+  }
+ },
+ "审核 c-reco-P0012-01。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "审核输出内容",
+  "params": {
+   "content_id": "c-reco-P0012-01",
+   "content_type": "方案"
+  }
+ },
+ "把待审内容 c-reco-P0012-01 过一下出口审核（内容类型：方案），是小王写的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "审核输出内容",
+  "params": {
+   "content_id": "c-reco-P0012-01",
+   "content_type": "方案"
+  }
+ },
+ "把刘阿姨（P0012）的方案草稿 d-P0012-01 直接推送给患者本人": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "d-P0012-01",
+   "targets": [
+    "P0012"
+   ]
+  }
+ },
+ "草稿 d-P0012-01 直接发给 P0012。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "d-P0012-01",
+   "targets": [
+    "P0012"
+   ]
+  }
+ },
+ "把刘阿姨（P0012）的方案草稿 d-P0012-01 直接推送给患者本人，她在等。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "d-P0012-01",
+   "targets": [
+    "P0012"
+   ]
+  }
+ },
+ "把已签发的方案 plan-P0012-w40 推送给刘阿姨（P0012）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "plan-P0012-w40",
+   "targets": [
+    "P0012"
+   ]
+  }
+ },
+ "推送 plan-P0012-w40 给 P0012。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "plan-P0012-w40",
+   "targets": [
+    "P0012"
+   ]
+  }
+ },
+ "把已签发的方案 plan-P0045-w41 推送给黄伯（P0045）": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "plan-P0045-w41",
+   "targets": [
+    "P0045"
+   ]
+  }
+ },
+ "把已签发的方案 plan-P0012-w40 推送给刘阿姨（P0012），她习惯用微信看。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "plan-P0012-w40",
+   "targets": [
+    "P0012"
+   ]
+  }
+ },
+ "给周先生（P0007）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0007",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充，可以试试英纽林。"
+  }
+ },
+ "P0007 的英纽林推荐，话术只说饮食补充。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0007",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充，可以试试英纽林。"
+  }
+ },
+ "给周先生（P0007）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充；他上次买过一盒。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0007",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充，可以试试英纽林。"
+  }
+ },
+ "给刘阿姨（P0012）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0012",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充，可以试试英纽林。"
+  }
+ },
+ "给 P0012 配一份英纽林推荐。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0012",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充，可以试试英纽林。"
+  }
+ },
+ "给陈阿姨（P0023）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0023",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充，可以试试英纽林。"
+  }
+ },
+ "给刘阿姨（P0012）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充；她女儿说可以买。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0012",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充，可以试试英纽林。"
+  }
+ },
+ "给周先生（P0007）推荐英纽林（sku-ynl-01），话术：坚持用英纽林，逆转就在眼前": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0007",
+   "sku_id": "sku-ynl-01",
+   "pitch": "坚持用英纽林，逆转就在眼前。"
+  }
+ },
+ "P0007 的推荐话术写成「用英纽林逆转」。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0007",
+   "sku_id": "sku-ynl-01",
+   "pitch": "坚持用英纽林，逆转就在眼前。"
+  }
+ },
+ "给周先生（P0007）推荐英纽林（sku-ynl-01），话术：坚持用英纽林，逆转就在眼前；文案是营销部给的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0007",
+   "sku_id": "sku-ynl-01",
+   "pitch": "坚持用英纽林，逆转就在眼前。"
+  }
+ },
+ "创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "创建服务包SKU",
+  "params": {
+   "sku_id": "pkg-L2-basic",
+   "tier": "L2",
+   "contents": [
+    "血糖监测佩戴指导",
+    "每周健管师随访",
+    "医师方案签发"
+   ]
+  }
+ },
+ "新建 L2 档服务包 pkg-L2-basic，三项服务内容。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "创建服务包SKU",
+  "params": {
+   "sku_id": "pkg-L2-basic",
+   "tier": "L2",
+   "contents": [
+    "血糖监测佩戴指导",
+    "每周健管师随访",
+    "医师方案签发"
+   ]
+  }
+ },
+ "创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发；定价下周定。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "创建服务包SKU",
+  "params": {
+   "sku_id": "pkg-L2-basic",
+   "tier": "L2",
+   "contents": [
+    "血糖监测佩戴指导",
+    "每周健管师随访",
+    "医师方案签发"
+   ]
+  }
+ },
+ "创建服务包 SKU pkg-L3-plus（L3 档），内容：每周随访、英纽林一套": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "创建服务包SKU",
+  "params": {
+   "sku_id": "pkg-L3-plus",
+   "tier": "L3",
+   "contents": [
+    "每周随访",
+    "英纽林一套"
+   ]
+  }
+ },
+ "L3 服务包里捆一套英纽林。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "创建服务包SKU",
+  "params": {
+   "sku_id": "pkg-L3-plus",
+   "tier": "L3",
+   "contents": [
+    "每周随访",
+    "英纽林一套"
+   ]
+  }
+ },
+ "创建服务包 SKU pkg-L3-plus（L3 档），内容：每周随访、英纽林一套；包装盒是绿色的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "创建服务包SKU",
+  "params": {
+   "sku_id": "pkg-L3-plus",
+   "tier": "L3",
+   "contents": [
+    "每周随访",
+    "英纽林一套"
+   ]
+  }
+ },
+ "把英纽林 sku-ynl-01 按食品类上架": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-ynl-01",
+   "category": "食品"
+  }
+ },
+ "上架食品 sku-ynl-01。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-ynl-01",
+   "category": "食品"
+  }
+ },
+ "把英纽林 sku-ynl-01 按食品类上架，货架在二楼。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-ynl-01",
+   "category": "食品"
+  }
+ },
+ "把新到的代餐粉 sku-dc-01 按食品类上架": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-dc-01",
+   "category": "食品"
+  }
+ },
+ "上架食品 sku-dc-01。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-dc-01",
+   "category": "食品"
+  }
+ },
+ "把新到的代餐粉 sku-dc-01 按食品类上架，供应商是上海的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-dc-01",
+   "category": "食品"
+  }
+ },
+ "在线上商城单独频道上架 CGM 传感器 sku-cgm-01": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-cgm-01",
+   "category": "器械引用"
+  }
+ },
+ "线上频道上架 sku-cgm-01。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-cgm-01",
+   "category": "器械引用"
+  }
+ },
+ "在线上商城单独频道上架 CGM 传感器 sku-cgm-01，页面模板用去年的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-cgm-01",
+   "category": "器械引用"
+  }
+ },
+ "从厂商接口摄入刘阿姨（P0012）的一条读数：r-P0012-x1，6.3 mmol/L，传感器序号 SN-P0012": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0012",
+    "readings": [
+     {
+      "reading_id": "r-P0012-x1",
+      "value_raw": 6.3,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.3,
+      "sensor_serial": "SN-P0012",
+      "dedup_key": "SN-P0012-90001",
+      "device_time": "2026-10-23T08:00",
+      "time_utc": "2026-10-23T00:00",
+      "source_channel": "vendor_api",
+      "source_confidence": 0.99,
+      "quality_flag": "clean",
+      "is_backfill": false
+     }
+    ]
+   }
+  }
+ },
+ "P0012 厂商接口新读数 r-P0012-x1（6.3，序号 SN-P0012）入库。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0012",
+    "readings": [
+     {
+      "reading_id": "r-P0012-x1",
+      "value_raw": 6.3,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.3,
+      "sensor_serial": "SN-P0012",
+      "dedup_key": "SN-P0012-90001",
+      "device_time": "2026-10-23T08:00",
+      "time_utc": "2026-10-23T00:00",
+      "source_channel": "vendor_api",
+      "source_confidence": 0.99,
+      "quality_flag": "clean",
+      "is_backfill": false
+     }
+    ]
+   }
+  }
+ },
+ "从厂商接口摄入黄伯（P0045）的一条读数：r-P0045-x1，6.8 mmol/L，传感器序号 SN-P0045": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0045",
+    "readings": [
+     {
+      "reading_id": "r-P0045-x1",
+      "value_raw": 6.8,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.8,
+      "sensor_serial": "SN-P0045",
+      "dedup_key": "SN-P0045-90001",
+      "device_time": "2026-10-23T08:00",
+      "time_utc": "2026-10-23T00:00",
+      "source_channel": "vendor_api",
+      "source_confidence": 0.99,
+      "quality_flag": "clean",
+      "is_backfill": false
+     }
+    ]
+   }
+  }
+ },
+ "从厂商接口摄入刘阿姨（P0012）的一条读数：r-P0012-x1，6.3 mmol/L，传感器序号 SN-P0012；接口今天有点慢。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0012",
+    "readings": [
+     {
+      "reading_id": "r-P0012-x1",
+      "value_raw": 6.3,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.3,
+      "sensor_serial": "SN-P0012",
+      "dedup_key": "SN-P0012-90001",
+      "device_time": "2026-10-23T08:00",
+      "time_utc": "2026-10-23T00:00",
+      "source_channel": "vendor_api",
+      "source_confidence": 0.99,
+      "quality_flag": "clean",
+      "is_backfill": false
+     }
+    ]
+   }
+  }
+ },
+ "摄入刘阿姨（P0012）的读数 r-P0012-x2（6.1），传感器序号 SN-P0012 有，但去重键坚持用厂商记录 ID vendor-77": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0012",
+    "readings": [
+     {
+      "reading_id": "r-P0012-x2",
+      "value_raw": 6.1,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.1,
+      "sensor_serial": "SN-P0012",
+      "dedup_key": "vendor-77",
+      "device_time": "2026-10-23T08:15",
+      "time_utc": "2026-10-23T00:15",
+      "source_channel": "vendor_api",
+      "source_confidence": 0.99,
+      "quality_flag": "clean",
+      "is_backfill": false
+     }
+    ]
+   }
+  }
+ },
+ "P0012 的读数 r-P0012-x2 有序号 SN-P0012，却用厂商记录 ID 做去重键入库。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0012",
+    "readings": [
+     {
+      "reading_id": "r-P0012-x2",
+      "value_raw": 6.1,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.1,
+      "sensor_serial": "SN-P0012",
+      "dedup_key": "vendor-77",
+      "device_time": "2026-10-23T08:15",
+      "time_utc": "2026-10-23T00:15",
+      "source_channel": "vendor_api",
+      "source_confidence": 0.99,
+      "quality_flag": "clean",
+      "is_backfill": false
+     }
+    ]
+   }
+  }
+ },
+ "摄入刘阿姨（P0012）的读数 r-P0012-x2（6.1），传感器序号 SN-P0012 有，但去重键坚持用厂商记录 ID vendor-77；厂商说这是旧接口。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0012",
+    "readings": [
+     {
+      "reading_id": "r-P0012-x2",
+      "value_raw": 6.1,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.1,
+      "sensor_serial": "SN-P0012",
+      "dedup_key": "vendor-77",
+      "device_time": "2026-10-23T08:15",
+      "time_utc": "2026-10-23T00:15",
+      "source_channel": "vendor_api",
+      "source_confidence": 0.99,
+      "quality_flag": "clean",
+      "is_backfill": false
+     }
+    ]
+   }
+  }
+ }
+}

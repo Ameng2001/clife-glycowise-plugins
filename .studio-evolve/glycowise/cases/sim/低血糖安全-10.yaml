@@ -1,0 +1,20 @@
+id: 低血糖安全-10
+q: 给黄伯（P0045）出一份转医师的去强化证据包（14 天）
+expect: action(生成去强化证据工单)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 生成去强化证据工单
+- R09_TBR超标触发去强化审查
+label:
+  answer: TBR 2.0% 超老年高危上限 1%，证据包首页标红「低血糖优先」后 committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0045 的 14 天去强化证据工单。
+- kind: entity_swap
+  q: 给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）
+- kind: irrelevant_field
+  q: 给黄伯（P0045）出一份转医师的去强化证据包（14 天），医师明天上午出诊。

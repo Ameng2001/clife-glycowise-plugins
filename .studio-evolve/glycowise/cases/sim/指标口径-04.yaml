@@ -1,0 +1,20 @@
+id: 指标口径-04
+q: 黄伯（患者 P0045）14 天报告 s-P0045-14d 的 GMI 是多少？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- GMI
+- CgmSummary
+label:
+  answer: gmi_pct 7.28
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 报告 s-P0045-14d 的血糖管理指标 GMI 读数？
+- kind: entity_swap
+  q: 王叔（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？
+- kind: irrelevant_field
+  q: 黄伯（患者 P0045）14 天报告 s-P0045-14d 的 GMI 是多少？报告是用 A4 打印的。

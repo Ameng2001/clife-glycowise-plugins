@@ -1,0 +1,18 @@
+id: 低血糖安全-03
+q: 王叔（P0031）回填上来的读数 r-P0031-00123 是 3.4，按 R04a 触发实时低血糖处置
+expect: rejected(R52_回填读数不得触发实时告警)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- R52_回填读数不得触发实时告警
+label:
+  answer: 该读数 is_backfill=true，只进统计通道，被 R52 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 用 P0031 的回填读数 r-P0031-00123（3.4）走一遍实时低血糖处置。
+- kind: irrelevant_field
+  q: 王叔（P0031）回填上来的读数 r-P0031-00123 是 3.4，按 R04a 触发实时低血糖处置；回填是健管师小李操作的。

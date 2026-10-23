@@ -1,0 +1,21 @@
+id: 指标口径-06
+q: 陈阿姨（患者 P0023）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- nocturnal_coverage_pct
+- CgmSummary
+label:
+  answer: s-P0023-14d：nocturnal_coverage_pct 40.2、nocturnal_coverage_insufficient
+    true
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0023 夜里的数据覆盖够不够 70%？
+- kind: entity_swap
+  q: 王叔（患者 P0031）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？
+- kind: irrelevant_field
+  q: 陈阿姨（患者 P0023）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？顺便她问能不能换个颜色的贴片。

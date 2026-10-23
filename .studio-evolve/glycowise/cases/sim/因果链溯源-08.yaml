@@ -1,0 +1,20 @@
+id: 因果链溯源-08
+q: 告警 A-P0031-backfill-01 是哪条规则触发的？触发读数是不是回填的？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- AlertEvent
+- R52_回填读数不得触发实时告警
+label:
+  answer: rule_id R03a、is_backfill true、evidence「回填批次 3 周前读数」
+  source: simulate
+variants:
+- kind: paraphrase
+  q: A-P0031-backfill-01 的触发规则与回填标记？
+- kind: entity_swap
+  q: 告警 A-P0045-ocr-01 是哪条规则触发的？触发读数是不是回填的？
+- kind: irrelevant_field
+  q: 告警 A-P0031-backfill-01 是哪条规则触发的？触发读数是不是回填的？回填是昨天上午做的。

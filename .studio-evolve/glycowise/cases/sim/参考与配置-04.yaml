@@ -1,0 +1,19 @@
+id: 参考与配置-04
+q: SKU sku-cgm-01 是什么类别？标签核验过了吗？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- ProductSku
+label:
+  answer: sku-cgm-01：category 器械引用、label_verified false
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 查产品 sku-cgm-01 的类别与标签核验状态。
+- kind: entity_swap
+  q: SKU sku-ynl-01 是什么类别？标签核验过了吗？
+- kind: irrelevant_field
+  q: SKU sku-cgm-01 是什么类别？标签核验过了吗？采购说下周到货。

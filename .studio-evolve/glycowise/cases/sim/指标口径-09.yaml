@@ -1,0 +1,20 @@
+id: 指标口径-09
+q: 黄伯（患者 P0045）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- hypo_risk_med
+- PatientProfile
+label:
+  answer: meds [格列齐特]（磺脲，hypo_risk_med true）、is_iah_high_risk true
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 患者黄伯的用药清单和低血糖风险标记？
+- kind: entity_swap
+  q: 王叔（患者 P0031）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？
+- kind: irrelevant_field
+  q: 黄伯（患者 P0045）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？他家里养了两只猫。

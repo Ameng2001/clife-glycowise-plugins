@@ -1,0 +1,19 @@
+id: 因果链溯源-01
+q: 告警 A-P0045-02 是凌晨 2 点连续 3 读数触发的，把黄伯（P0045）10 月 21 日凌晨那几条低于 3.9 的读数调出来
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- triggered_by_reading
+- AlertEvent
+- GlucoseReading
+label:
+  answer: P0045 2026-10-21 02:00–02:45 的 vendor_api 读数（2.8、2.7 …）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 把触发 A-P0045-02 的那串读数（P0045，10/21 凌晨 <3.9）列出来。
+- kind: irrelevant_field
+  q: 告警 A-P0045-02 是凌晨 2 点连续 3 读数触发的，把黄伯（P0045）10 月 21 日凌晨那几条低于 3.9 的读数调出来，顺便他说贴片有点痒。

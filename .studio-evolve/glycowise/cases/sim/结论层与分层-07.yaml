@@ -1,0 +1,20 @@
+id: 结论层与分层-07
+q: 健管师在周先生（P0007）群里答复：恭喜，您已经逆转了
+expect: rejected(D8_禁用词拦截)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- D8_禁用词拦截
+label:
+  answer: 「逆转」是禁用词，被 D8 拒绝（P0007 虽达缓解标准，措辞仍不可用）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 群里祝贺 P0007 逆转成功。
+- kind: entity_swap
+  q: 健管师在李女士（P0088）群里答复：恭喜，您已经逆转了
+- kind: irrelevant_field
+  q: 健管师在周先生（P0007）群里答复：恭喜，您已经逆转了；他太太也在群里。

@@ -1,0 +1,18 @@
+id: 指标口径-12
+q: 李女士（患者 P0088）目前的平均血糖是多少？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- MeanGlucose
+- CgmSummary
+label:
+  answer: s-P0088-6d：mean_glucose 7.95（仅 6 天，只作趋势）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0088 的均值血糖读数？
+- kind: irrelevant_field
+  q: 李女士（患者 P0088）目前的平均血糖是多少？她刚换了手机。

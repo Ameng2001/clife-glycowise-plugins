@@ -1,0 +1,18 @@
+id: 结论层与分层-01
+q: 给周先生（P0007）按 14 天数据输出内部服务分层标签
+expect: action(输出服务分层标签)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 输出服务分层标签
+- R18_CGM服务分层_内部标签
+label:
+  answer: 成人、数据充分、disclosure_approved=true，输出内部标签 committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0007 的德心分层内部标签。
+- kind: irrelevant_field
+  q: 给周先生（P0007）按 14 天数据输出内部服务分层标签，他明天来店复诊。

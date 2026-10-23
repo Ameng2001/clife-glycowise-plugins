@@ -1,0 +1,20 @@
+id: 低血糖安全-04
+q: 把告警 A-P0012-01（中级）推送给健管师
+expect: action(推送告警)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 推送告警
+- R56_告警模板预审冻结
+label:
+  answer: 套用已冻结模板 tpl-中，committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: A-P0012-01 按中级告警推给健管师。
+- kind: entity_swap
+  q: 把告警 A-P0045-02（高级）推送给医师和家属
+- kind: irrelevant_field
+  q: 把告警 A-P0012-01（中级）推送给健管师，健管师今天在店里值班。

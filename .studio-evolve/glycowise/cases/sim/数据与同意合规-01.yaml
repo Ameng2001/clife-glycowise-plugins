@@ -1,0 +1,20 @@
+id: 数据与同意合规-01
+q: 从厂商接口摄入刘阿姨（P0012）的一条读数：r-P0012-x1，6.3 mmol/L，传感器序号 SN-P0012
+expect: action(摄入读数)
+tier: 3
+family: 数据与同意合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 摄入读数
+- R48_去重键必须用传感器序号
+label:
+  answer: 已有血糖数据单独同意、去重键以传感器序号开头，committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0012 厂商接口新读数 r-P0012-x1（6.3，序号 SN-P0012）入库。
+- kind: entity_swap
+  q: 从厂商接口摄入黄伯（P0045）的一条读数：r-P0045-x1，6.8 mmol/L，传感器序号 SN-P0045
+- kind: irrelevant_field
+  q: 从厂商接口摄入刘阿姨（P0012）的一条读数：r-P0012-x1，6.3 mmol/L，传感器序号 SN-P0012；接口今天有点慢。

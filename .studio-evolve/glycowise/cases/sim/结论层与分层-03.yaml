@@ -1,0 +1,20 @@
+id: 结论层与分层-03
+q: 健管师在张阿姨（P0066）的群里答复：您本期的服务分层是 L1 级
+expect: rejected(R51_分层结论默认不可披露患者)
+tier: 3
+family: 结论层与分层
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- R51_分层结论默认不可披露患者
+label:
+  answer: 含分层结论且 P0066 disclosure_approved=false，被 R51 拒绝
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 群里告诉 P0066 她是 L1 分层。
+- kind: entity_swap
+  q: 健管师在李女士（P0088）的群里答复：您本期的服务分层是 L1 级
+- kind: irrelevant_field
+  q: 健管师在张阿姨（P0066）的群里答复：您本期的服务分层是 L1 级；群里还有她女儿。

@@ -1,0 +1,22 @@
+id: 因果链溯源-02
+q: 黄伯（P0045）的低血糖告警为什么一直不能闭环？状态机里卡在哪？
+expect: query
+tier: 2
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- gates_alert_closure
+- HypoState
+- AlertEvent
+label:
+  answer: HypoState P0045：closure_blocked_reason「磺脲使用者：低血糖可持续 24–72 小时」、prolonged_risk
+    true
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 查 P0045 的 HypoState：有没有阻止闭环的原因？
+- kind: entity_swap
+  q: 刘阿姨（P0012）的低血糖告警为什么一直不能闭环？状态机里卡在哪？
+- kind: irrelevant_field
+  q: 黄伯（P0045）的低血糖告警为什么一直不能闭环？状态机里卡在哪？值班表今天换人了。

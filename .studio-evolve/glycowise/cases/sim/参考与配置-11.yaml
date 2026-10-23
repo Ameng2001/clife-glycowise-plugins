@@ -1,0 +1,20 @@
+id: 参考与配置-11
+q: 周先生（患者 P0007）的单独同意书勾了哪些范围？有没有「营销推荐」？
+expect: query
+tier: 1
+family: 参考与配置
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- ConsentRecord
+- C4_数据用于产品推荐须单独同意
+label:
+  answer: consent-P0007：scope_items 含 营销推荐
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0007 的 ConsentRecord 范围清单。
+- kind: entity_swap
+  q: 刘阿姨（患者 P0012）的单独同意书勾了哪些范围？有没有「营销推荐」？
+- kind: irrelevant_field
+  q: 周先生（患者 P0007）的单独同意书勾了哪些范围？有没有「营销推荐」？他是用平板签的。

@@ -1,0 +1,21 @@
+id: 指标口径-01
+q: 黄伯（患者 P0045）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- TAR_L1
+- TAR_L2
+- CgmSummary
+label:
+  answer: s-P0045-14d：tar_pct 37.1、tar_l2_pct 3.1（老年 TAR>13.9 上限 10%，未超）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 患者 P0045 这两周 TAR 一级和二级分别占多少？
+- kind: entity_swap
+  q: 陈阿姨（患者 P0023）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？
+- kind: irrelevant_field
+  q: 黄伯（患者 P0045）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？他女儿说下周要出差。

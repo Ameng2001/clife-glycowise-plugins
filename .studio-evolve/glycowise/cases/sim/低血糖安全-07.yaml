@@ -1,0 +1,20 @@
+id: 低血糖安全-07
+q: 黄伯（P0045）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4
+expect: action(收紧告警阈值)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 收紧告警阈值
+- R34_HAAF_24小时复发窗
+label:
+  answer: 收紧方向正确，committed
+  source: simulate
+variants:
+- kind: paraphrase
+  q: P0045 的 night_low 收紧到 4.4（触发规则 R34）。
+- kind: entity_swap
+  q: 王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4
+- kind: irrelevant_field
+  q: 黄伯（P0045）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4；他家的采集盒放在床头。

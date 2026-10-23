@@ -1,0 +1,21 @@
+id: 指标口径-02
+q: 王叔（患者 P0031）这 14 天 TBR 一级和二级（<3.0）各占多少？
+expect: query
+tier: 1
+family: 指标口径
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- TBR_L1
+- TBR_L2
+- CgmSummary
+label:
+  answer: s-P0031-14d：tbr_pct 4.7、tbr_l2_pct 1.7（老年高危上限 1%，已超）
+  source: simulate
+variants:
+- kind: paraphrase
+  q: 患者 P0031 低于 3.9 和低于 3.0 的时间占比分别是多少？
+- kind: entity_swap
+  q: 黄伯（患者 P0045）这 14 天 TBR 一级和二级（<3.0）各占多少？
+- kind: irrelevant_field
+  q: 王叔（患者 P0031）这 14 天 TBR 一级和二级（<3.0）各占多少？另外提醒我下午三点开会。
