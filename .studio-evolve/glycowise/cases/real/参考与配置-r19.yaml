@@ -179,3 +179,19 @@ route:
     field: night_low
     trigger_rule: R34
     new_value: 4.4
+expect_state:
+- type: AlertThreshold
+  key: th-P0045-night_low
+  fields:
+    patient_id: P0045
+    field: night_low
+    current_value: 4.4
+    safe_direction: 收紧
+- type: ThresholdChangeLog
+  key_prefix: tcl-P0045-night_low-
+  fields:
+    patient_id: P0045
+    trigger_rule: R34
+    after: 4.4
+    effective_window: 即时
+expect_state_note: IR §4 收紧告警阈值 writes AlertThreshold + ThresholdChangeLog；低值类阈值 3.9→4.4 是『更早报警』方向，new_value 原样生效，trigger_rule 记入变更日志（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

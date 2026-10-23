@@ -42,3 +42,18 @@ route:
   params:
     patient_id: P0031
     window: 14d
+expect_state:
+- type: OutboundContent
+  key_prefix: evidence-P0031-
+  fields:
+    target_audience: 医师
+    content_type: 方案
+    patient_ref: P0031
+    first_page_hypo_table: true
+    disclaimer_attached: true
+- type: ReferralRecord
+  key_prefix: ref-P0031-
+  fields:
+    patient_id: P0031
+    referred_to: 医师
+expect_state_note: IR §4 生成去强化证据工单 writes OutboundContent（给医师的证据包，R09 要求低血糖明细在第一页）+ ReferralRecord（转医师）；队列取决于事件统计，不断言（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

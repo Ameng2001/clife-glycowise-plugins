@@ -100,3 +100,18 @@ route:
     plan_id: plan-P0045-w41
     targets:
     - P0045
+expect_state:
+- type: OutboundContent
+  key: push-plan-P0045-w41
+  fields:
+    target_audience: 患者
+    content_type: 方案
+    patient_ref: P0045
+    disclaimer_attached: true
+- type: DeliveryReceipt
+  key: dr-plan-P0045-w41-P0045
+  fields:
+    target: P0045
+    channel: app
+    status: requested
+expect_state_note: IR §4 推送方案至患者 writes OutboundContent + DeliveryReceipt（每个 target 一条，初始 requested）；已签发方案快照自带免责尾注（C22）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

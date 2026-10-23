@@ -106,3 +106,18 @@ route:
     patient_id: P0007
     field: day_high
     new_value: 13.9
+expect_state:
+- type: AlertThreshold
+  key: th-P0007-day_high
+  fields:
+    patient_id: P0007
+    field: day_high
+    current_value: 13.9
+    safe_direction: 放宽
+- type: ThresholdChangeLog
+  key_prefix: tcl-P0007-day_high-
+  fields:
+    patient_id: P0007
+    after: 13.9
+    trigger_rule: 医师手动放宽
+expect_state_note: IR §4 放宽告警阈值 writes AlertThreshold + ThresholdChangeLog（放宽仅医师，变更日志 trigger_rule 固定为医师手动放宽）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

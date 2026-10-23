@@ -134,3 +134,12 @@ route:
     patient_id: P0031
     reading_id: r-P0031-01067
     rule_id: R04a
+expect_state:
+- type: AlertEvent
+  key: A-P0031-r-P0031-01067
+  fields:
+    alert_id: A-P0031-r-P0031-01067
+    patient_id: P0031
+    rule_id: R04a
+    level: 中
+expect_state_note: IR §4 触发低血糖处置 writes AlertEvent，键 A-{patient}-{reading}；level 由读数值（标签记录）按 R03a/R04a 分带得出（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

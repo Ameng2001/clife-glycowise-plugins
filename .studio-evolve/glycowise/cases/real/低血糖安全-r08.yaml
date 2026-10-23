@@ -61,3 +61,12 @@ route:
     responder: 健管师
     action_taken: 15-15 补碳后复测 4.6，继续观察 24 小时
     retest_value: 4.6
+expect_state:
+- type: AlertAck
+  key_prefix: ack-A-P0045-02-
+  fields:
+    alert_id: A-P0045-02
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 4.6，继续观察 24 小时
+    retest_value: 4.6
+expect_state_note: IR §4 响应并回执告警 writes AlertAck（四个参数原样入回执）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

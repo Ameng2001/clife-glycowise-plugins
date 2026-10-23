@@ -50,3 +50,10 @@ route:
     patient_id: P0007
     lab_result_id: lab-P0007-hba1c
     summary_id: s-P0007-14d
+expect_state:
+- type: RemissionAssessment
+  key_prefix: ra-P0007-
+  fields:
+    patient_id: P0007
+    status: in_remission
+expect_state_note: IR §4 判定缓解结果 writes RemissionAssessment；P0007：缓解时钟 day0 105 天前且 running、无降糖药、HbA1c 6.1 <6.5 → in_remission（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

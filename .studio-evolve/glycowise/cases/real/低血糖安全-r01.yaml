@@ -59,3 +59,12 @@ route:
     responder: 黄医生
     action_taken: 患者复测确认
     retest_value: 5.2
+expect_state:
+- type: AlertAck
+  key_prefix: ack-A-P0012-01-
+  fields:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 5.2
+expect_state_note: IR §4 响应并回执告警 writes AlertAck（四个参数原样入回执）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

@@ -69,3 +69,10 @@ route:
   params:
     patient_id: P0007
     window: 14d
+expect_state:
+- type: PatientProfile
+  key: P0007
+  fields:
+    patient_id: P0007
+    tier_label: L2
+expect_state_note: IR §4 输出服务分层标签 writes PatientProfile.tier_label；分带按 R18（GMI <5.7 L0 / <6.1 L1 / <6.5 L2 / <7.5∧TAR<50 L3 / 否则 L4），P0007 的 GMI 以 reviewed 标签记录的 6.15（缓解路径-r01）为准 ∈[6.1,6.5) → L2；初稿按规格均值 6.2 mmol 估成 5.98/L1 是推导错误，h_i 复跑后改正（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

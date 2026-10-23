@@ -130,3 +130,10 @@ route:
   params:
     sku_id: sku-ynl-01
     category: 食品
+expect_state:
+- type: ProductSku
+  key: sku-ynl-01
+  fields:
+    category: 食品
+    state: listed
+expect_state_note: IR §4 上架产品SKU writes ProductSku（category 即参数，上架后 state listed）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

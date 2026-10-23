@@ -148,3 +148,12 @@ route:
   params:
     patient_id: P0031
     question_context: 家属记录到夜里叫不醒（sym-P0031-01），按 Level 3 严重低血糖转介医师复核
+expect_state:
+- type: ReferralRecord
+  key_prefix: ref-P0031-
+  fields:
+    patient_id: P0031
+    referred_to: 医师
+    question: 家属记录到夜里叫不醒（sym-P0031-01），按 Level 3 严重低血糖转介医师复核
+    queue: clinical_hypo
+expect_state_note: IR §4 转介医师 writes ReferralRecord（referred_to 医师，question 原样）；queue 按 P7 语义：Level3 症状→clinical_hypo、停药观察期→remission_watch、其余 physician_review（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

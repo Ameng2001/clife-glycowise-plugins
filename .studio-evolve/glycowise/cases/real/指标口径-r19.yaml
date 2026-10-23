@@ -109,3 +109,18 @@ route:
     plan_id: plan-P0012-w40
     targets:
     - P0012
+expect_state:
+- type: OutboundContent
+  key: push-plan-P0012-w40
+  fields:
+    target_audience: 患者
+    content_type: 方案
+    patient_ref: P0012
+    disclaimer_attached: true
+- type: DeliveryReceipt
+  key: dr-plan-P0012-w40-P0012
+  fields:
+    target: P0012
+    channel: app
+    status: requested
+expect_state_note: IR §4 推送方案至患者 writes OutboundContent + DeliveryReceipt（每个 target 一条，初始 requested）；已签发方案快照自带免责尾注（C22）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

@@ -125,3 +125,12 @@ route:
     patient_id: P0007
     sku_id: sku-ynl-01
     pitch: 作为日常饮食的补充
+expect_state:
+- type: OutboundContent
+  key: reco-P0007-sku-ynl-01
+  fields:
+    target_audience: 患者
+    content_type: 方案
+    patient_ref: P0007
+    disclaimer_attached: true
+expect_state_note: IR §4 生成产品推荐 writes OutboundContent（R32 须附固体饮料尾注与免责声明）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

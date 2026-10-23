@@ -30,3 +30,13 @@ route:
     analysis_result:
       summary_id: s-P0023-14d
     direction: 去强化
+expect_state:
+- type: PlanDraft
+  key_prefix: draft-P0023-
+  fields:
+    patient_id: P0023
+    direction: 去强化
+    template_version: fde-0.1
+    category: 综合
+    med_interaction_routed: false
+expect_state_note: IR §4 生成方案草稿 writes PlanDraft（方向即参数 direction；AI 草稿不含用药加减 → med_interaction_routed false）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

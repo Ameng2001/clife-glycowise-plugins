@@ -77,3 +77,17 @@ route:
     - 血糖监测佩戴指导
     - 每周健管师随访
     - 医师方案签发
+expect_state:
+- type: ProductSku
+  key: pkg-L2-basic
+  fields:
+    category: 服务
+    name: 控糖服务包·L2
+    label_verified: true
+    commission_config: none
+- type: ServicePackage
+  key: pkg-pkg-L2-basic
+  fields:
+    tier: L2
+    patient_id: null
+expect_state_note: IR §4 创建服务包SKU writes ProductSku（类目服务、C15 禁分佣 → none）+ ServicePackage（tier 即参数，未绑患者）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

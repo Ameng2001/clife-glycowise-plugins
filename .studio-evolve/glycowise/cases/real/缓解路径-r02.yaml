@@ -159,3 +159,10 @@ route:
     patient_id: P0012
     lab_result_id: null
     summary_id: null
+expect_state:
+- type: RemissionAssessment
+  key_prefix: ra-P0012-
+  fields:
+    patient_id: P0012
+    status: not_in_remission
+expect_state_note: IR §4 判定缓解结果 writes RemissionAssessment；P0012 无缓解时钟、在用二甲双胍 → not_in_remission（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

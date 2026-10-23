@@ -90,3 +90,17 @@ route:
       patient_id: P0012
       value_mmol: 6.3
       sensor_serial: SN-P0012
+expect_state:
+- type: GlucoseReading
+  key: r-P0012-x1
+  fields:
+    patient_id: P0012
+    value_mmol: 6.3
+    sensor_serial: SN-P0012
+- type: IngestBatch
+  key_prefix: batch-厂商接口-
+  fields:
+    channel: 厂商接口
+    record_count: 1
+    status: pending
+expect_state_note: IR §4 摄入读数 writes GlucoseReading + IngestBatch：一条读数入库（患者、值、传感器序号即 payload），批次计数 1（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

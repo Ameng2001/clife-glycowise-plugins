@@ -109,3 +109,13 @@ route:
     patient_id: P0012
     message: 今天的数据已经同步到，餐后记得走一走
     sender_role: 健管师
+expect_state:
+- type: OutboundContent
+  key_prefix: grp-P0012-
+  fields:
+    target_audience: 患者群
+    content_type: 群内答复
+    patient_ref: P0012
+    sender_role: 健管师
+    body: 今天的数据已经同步到，餐后记得走一走
+expect_state_note: IR §4 群内答复患者 writes OutboundContent（受众患者群，正文即 message，发送角色即 sender_role）（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）

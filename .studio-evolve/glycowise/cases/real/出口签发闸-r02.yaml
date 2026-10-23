@@ -27,3 +27,18 @@ route:
     draft_id: d-P0012-01
     signer_id: 黄医生
     decision: approved
+expect_state:
+- type: PlanSigned
+  key: plan-d-P0012-01
+  fields:
+    patient_id: P0012
+    signer_id: 黄医生
+    decision: approved
+    review_evidence_ref: re-plan-d-P0012-01
+    evidence_stale: false
+- type: ReviewEvidence
+  key: re-plan-d-P0012-01
+  fields:
+    plan_id: plan-d-P0012-01
+    signer_id: 黄医生
+expect_state_note: IR §4 签发方案 writes PlanSigned + ReviewEvidence；草稿 d-P0012-01 属 P0012，签发人/决定即参数（2026-10-23 round 5 补：IR §4 writes 列 + 路由参数推出的落库状态期望；键含时间戳/当日日期的对象用 key_prefix）
