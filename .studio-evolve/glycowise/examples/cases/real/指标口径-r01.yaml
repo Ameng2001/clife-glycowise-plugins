@@ -1,5 +1,5 @@
 # 由 t-20261026-0005 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
-id: 指标口径-01
+id: 指标口径-r01
 q: 刘阿姨（P0012）最近 14 天的 TIR、TBR、CV 各是多少？数据够不够出达标结论？
 expect: query
 tier: 1

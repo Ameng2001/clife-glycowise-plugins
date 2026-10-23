@@ -82,3 +82,17 @@ evolve-ground 对 IR §6 每一行（`store / table / key / columns`）跑 `SELE
 | 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | `python3 gen_synthetic_windows.py --target 900` → 45 个合成窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。合成窗口只证明管线接法与 `holdout_sample.py` 分层能跑通，**真实 real 池只能来自业务侧标过的轨迹**。
+
+## 接入自检（2026-10-23，对本目录里"已准备好"的三类数据）
+
+把 W44 窗口接进 `.studio-evolve/glycowise/`（config、trajectories/、cases/real/、从审计记录登记 manual 路由）后在生产插件上跑了一遍，结论是**这三类数据目前都还不是真实数据，不能进 cases/real 与正式 run**：
+
+| 检查 | 结果 |
+|---|---|
+| 轨迹是否出自本引擎 | 20 条 execute/ask 里 9 条 execute 的参数不在动作声明里（如 创建服务包SKU 用了 package_id/items/price_cny，声明是 sku_id/tier/contents；响应并回执告警 用了 close/patient_id）→ 引擎会在 guard 前拒「越界参数」，真实审计日志不可能有这些行 |
+| wrong 标签与引擎行为是否一致 | R35 那条：生产插件本来就按 R35 拒，"布尔位未置真"的 bug 不存在；R42 / D13 / R44 三条引用的对象（cce-P0023-03、d-P0088-w44 等 8 个 id）不在 seed 里，裁决无法复现 |
+| 数据源 | pg-ro / ch-ro 两个主机不可解析，环境变量未设，`/var/lib/clife-onto-engine/audit.db` 不存在 → ground 整体 UNREACHABLE |
+| 合成窗口 synthetic/（200 条） | 标 synthetic: true、已 gitignore，按约定不得进 cases/real |
+| id 命名 | cases/real 与 cases/sim 共用 `{family}-NN`，runner 按 id 取案例时互相覆盖 → real 改为 `{family}-rNN`（make_real_cases.py 已改） |
+
+所以 W44 只能当**格式样例**。真实数据的硬判据只有一条：轨迹必须是引擎 `execute` / `ask` 真跑出来的审计记录（参数 ⊆ 声明、对象 id 在库里查得到），反馈由业务侧标。接法本身已验证：config → trajectories → 路由登记（`plugins/glycowise/cq/make_real_routes.py`）→ runner，一条真实窗口到位即可开跑。

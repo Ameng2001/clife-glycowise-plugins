@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""把 ① audit.jsonl + ② feedback.yaml 落成 ②' cases/real/{family}-{n}.yaml（evolve-attribute 第 1 步的样例实现）。
+"""把 ① audit.jsonl + ② feedback.yaml 落成 ②' cases/real/{family}-r{n}.yaml（evolve-attribute 第 1 步的样例实现）。
 
 用法：python3 make_real_cases.py [--window 2026-W44] [--out ../cases/real] [--dry-run]
 
@@ -187,7 +187,7 @@ def main():
         maxn[fam] += 1
         q = q_with_id(t)
         case = {
-            "id": f"{fam}-{maxn[fam]:02d}",
+            "id": f"{fam}-r{maxn[fam]:02d}",  # real 案例用 r 前缀编号：与 cases/sim 的 {family}-NN 不同名，runner / growth_metrics 都按 id 取案例
             "q": q,
             "expect": expect,
             "tier": tier_of(t, expect),
