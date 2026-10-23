@@ -143,7 +143,7 @@ def variants_of(t, q):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--window", default="2026-W44")
+    ap.add_argument("--window", default="2026-W43")
     ap.add_argument("--traj-dir", default=os.path.join(HERE, "trajectories"))
     ap.add_argument("--out", default=os.path.join(HERE, "cases", "real"))
     ap.add_argument("--dry-run", action="store_true")

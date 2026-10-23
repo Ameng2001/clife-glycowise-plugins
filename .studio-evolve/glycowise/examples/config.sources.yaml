@@ -40,7 +40,7 @@ trajectory_source:
   export:                                             # 网关从引擎 SqliteAuditStore 导出并补四个键的约定
     from: "sqlite:///var/lib/clife-onto-engine/audit.db"   # 表 audit，按 ontology_id='glycowise' 导出
     enrich: [trace_id, ts, utterance, cost]           # 缺 utterance → COARSE_TRAJECTORY；缺 cost.tokens → COST_BY_STEPS
-    window: iso_week                                  # 目录名 2026-W44 这种 ISO 周
+    window: iso_week                                  # 目录名 2026-W43 这种 ISO 周
 
 # 环境变量（跑管线的机器上）：
 #   export GLYCOWISE_PG_RO_PASSWORD='…'

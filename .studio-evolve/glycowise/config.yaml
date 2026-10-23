@@ -31,7 +31,7 @@ trajectory_source:
   export:                                             # 网关从引擎 SqliteAuditStore 导出并补四个键的约定（样例实现：examples/record_window.py export）
     from: "sqlite:///.studio-evolve/glycowise/examples/engine-audit/audit.db"   # 表 audit + 网关表 gateway_trace；2026-10-23 由 examples/record_window.py 真跑引擎写入（生产环境换成网关侧的库路径）
     enrich: [trace_id, ts, utterance, cost]           # 缺 utterance → COARSE_TRAJECTORY；缺 cost.tokens → COST_BY_STEPS
-    window: iso_week                                  # 目录名 2026-W44 这种 ISO 周
+    window: iso_week                                  # 目录名 2026-W43 这种 ISO 周
 
 # 数据源（evolve-ground 探测用，只读）；完整说明见 examples/config.sources.yaml
 # 2026-10-23 连通性自检：pg-ro / ch-ro 主机不可解析、环境变量未设、审计库不存在 → ground 会整体报 UNREACHABLE，这里只是约定好的形状
