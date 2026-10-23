@@ -1,0 +1,22 @@
+# 由 t-20261031-0016 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 数据与同意合规-02
+q: 从厂商接口摄入刘阿姨的一条读数：r-P0012-x7，6.3 mmol/L，传感器序号 SN-P0012，读数序号 4471
+expect: action(摄入读数)
+tier: 3
+family: 数据与同意合规
+origin: real
+observed_at: '2026-10-31'
+elements:
+- 摄入读数
+- GlucoseReading
+label:
+  answer: 带 sensor_reading_seq，去重键 SN-P0012:4471 正确，非重复、非回填，入库正确
+  source: feedback
+  trace_id: t-20261031-0016
+  reviewer: u-doctor-01
+  feedback_label: correct
+variants:
+- q: 从厂商接口摄入患者 P0012的一条读数：r-P0012-x7，6.3 mmol/L，传感器序号 SN-P0012，读数序号 4471
+  kind: paraphrase
+- q: 从厂商接口摄入刘阿姨的一条读数：r-P0012-x7，6.3 mmol/L，传感器序号 SN-P0012，读数序号 4471；家属说他最近睡得还行。
+  kind: irrelevant_field

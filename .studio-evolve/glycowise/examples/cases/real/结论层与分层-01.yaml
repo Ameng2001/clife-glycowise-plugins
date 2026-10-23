@@ -1,0 +1,23 @@
+# 由 t-20261027-0008 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 结论层与分层-01
+q: 李女士（P0088）才戴了 6 天，先把内部服务分层标签出一下
+expect: rejected(R01_数据充分性门槛_仅管结论层)
+tier: 3
+family: 结论层与分层
+origin: real
+observed_at: '2026-10-27'
+elements:
+- 输出服务分层标签
+- R01_数据充分性门槛_仅管结论层
+- CgmSummary
+label:
+  answer: P0088 只戴了 6 天，R01 关闭结论层正确；安全告警不受影响
+  source: feedback
+  trace_id: t-20261027-0008
+  reviewer: u-doctor-01
+  feedback_label: correct
+variants:
+- q: P0088才戴了 6 天，先把内部服务分层标签出一下
+  kind: paraphrase
+- q: 李女士（P0088）才戴了 6 天，先把内部服务分层标签出一下；家属说他最近睡得还行。
+  kind: irrelevant_field

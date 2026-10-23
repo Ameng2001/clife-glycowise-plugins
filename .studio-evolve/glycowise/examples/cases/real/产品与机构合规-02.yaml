@@ -1,0 +1,20 @@
+# 由 t-20261030-0014 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 产品与机构合规-02
+q: 创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发，定价 1980
+expect: action(创建服务包SKU)
+tier: 4
+family: 产品与机构合规
+origin: real
+observed_at: '2026-10-30'
+elements:
+- 创建服务包SKU
+- ServicePackage
+label:
+  answer: 服务包不含产品 SKU、分佣为 0、话术无夜间安全承诺，正确进入合规官 HIL 队列（hil-20261030-04，已通过）
+  source: feedback
+  trace_id: t-20261030-0014
+  reviewer: u-compliance-01
+  feedback_label: correct
+variants:
+- q: 创建服务包 SKU pkg-L2-basic（L2 档），内容：血糖监测佩戴指导、每周健管师随访、医师方案签发，定价 1980；家属说他最近睡得还行。
+  kind: irrelevant_field

@@ -1,18 +1,95 @@
 # 反馈标签 —— 每条轨迹一项；没有反馈的轨迹不参与归因（不猜标签）。
-# label: correct | partial | wrong；wrong / partial 必须给 truth（真实答案或真实根因），由业务侧（医师 / 健管主管 / 合规）填写。
+# label: correct | partial | wrong
+#   correct：引擎做对了（含「拒绝得对」——拒绝本身就是正确行为，这是 rejected 案例的真实来源）
+#   wrong  ：必须写 truth（一句真实根因，归因器靠它找分歧点）和 truth_expect（真实应有的裁决，落成案例的 expect）
+#   partial：只用于成本统计，不进 D⁺ / D⁻
+# reviewer：标签人要可追溯（进台账 contamination_note）。顶层是默认标签人，单条可覆盖。
+# 标签是私有的，永远不进提示词。
 window: 2026-W44
-reviewer: {id: u-doctor-01, role: 医师}        # 谁给的标签，进台账 contamination_note
+reviewer: {id: u-doctor-01, role: 医师}
+labeled_at: "2026-11-02"
 items:
+  # ---- 2026-10-26 ----
+  - trace_id: t-20261026-0005
+    label: correct
+    truth: "答出 s-P0012-14d：14 天 / active 91%，TIR 61、TBR 2.1、CV 29，sufficiency_ok=true，可出达标结论"
+  - trace_id: t-20261026-0006
+    label: correct
+    truth: "阈值 3.9→4.4 是收紧方向，医师本人操作，R46/R56 无阻断，留 ThresholdChangeLog 正确"
+
+  # ---- 2026-10-27 ----
   - trace_id: t-20261027-0001
     label: correct
     truth: "连续两读数 <3.0 确认，立即触发 L2 处置正确"
   - trace_id: t-20261027-0002
-    label: correct                                 # 引擎拒绝得对：拒绝本身就是正确行为
+    label: correct                                 # 引擎拒绝得对
     truth: "营养师凭证已过期，不得签发；应改由黄医生签"
+  - trace_id: t-20261027-0007
+    label: correct
+    truth: "沿 triggered_by_reading 取到 3 条 <3.9 的读数（r-P0045-02318/02319/02320），来源均为 vendor_api"
+  - trace_id: t-20261027-0008
+    label: correct                                 # 引擎拒绝得对
+    truth: "P0088 只戴了 6 天，R01 关闭结论层正确；安全告警不受影响"
+
+  # ---- 2026-10-28 ----
+  - trace_id: t-20261028-0009
+    label: wrong
+    truth: "P0023 自 10-19 起口服泼尼松（ClinicalContextEvent cce-P0023-03，end_at 为空=仍在进行），14 天窗口被急性混杂，不应输出分层标签；R42 的函数把 end_at 为空当作『不在窗口内』，confounded_window 因此为 false"
+    truth_expect: rejected(R42_急性混杂窗口禁止出结论)
+    root_cause_hint: "R42 的 check 对 end_at=null 的事件应按『进行中』处理（窗口内任意重叠即混杂）"
   - trace_id: t-20261028-0003
     label: wrong
     truth: "P0031 夜间覆盖率 41.7%、连续 7 夜低覆盖、TBR 4.7%，不应出强化方向草稿，应先去强化；R35 只看了 summary 的 nocturnal_coverage_insufficient 布尔位，而该位因 summary 生成时窗口口径不同未置真"
+    truth_expect: rejected(R35_夜间覆盖不足禁强化)
     root_cause_hint: "R35 的 check 应直接读 nocturnal_coverage_pct < 70 而不是依赖派生布尔位"   # 可选，归因器只当线索不当结论
   - trace_id: t-20261028-0004
     label: partial
     truth: "答出了 2 次夜间事件，但其中一次是回填读数算出来的，应标注来源；只用于成本统计，不进 D⁺/D⁻"
+
+  # ---- 2026-10-29 ----
+  - trace_id: t-20261029-0010
+    label: correct
+    truth: "停药 93 天、NGSP 认证 HbA1c 6.2% <6.5%、GMI 6.0 与实测一致，判缓解成立；R33 反弹预警软提示保留"
+  - trace_id: t-20261029-0011
+    label: correct                                 # 引擎拒绝得对
+    truth: "仍在服二甲双胍，停药观察期未开始，不得判缓解"
+  - trace_id: t-20261029-0012
+    label: wrong
+    truth: "草稿打开到签发 9 秒、内容与模板零差异，属于橡皮图章签发，D13 应拦下转人工复核；D13 在 ReviewEvidence 缺行时直接放行，而网关是在 execute 之后才写 review_evidence 的"
+    truth_expect: rejected(D13_签发反橡皮图章检测)
+    root_cause_hint: "D13 缺 ReviewEvidence 时应按 R49 最保守处理（阻断或转 HIL），而不是视为通过；或网关先写 review_evidence 再调 execute"
+
+  # ---- 2026-10-30 ----
+  - trace_id: t-20261030-0013
+    label: correct                                 # 引擎拒绝得对
+    reviewer: {id: u-compliance-01, role: 合规官}
+    truth: "固体饮料是普通食品，『辅助降血糖、修复胰岛』是功效声称，D9 拦截正确"
+  - trace_id: t-20261030-0014
+    label: correct
+    reviewer: {id: u-compliance-01, role: 合规官}
+    truth: "服务包不含产品 SKU、分佣为 0、话术无夜间安全承诺，正确进入合规官 HIL 队列（hil-20261030-04，已通过）"
+  - trace_id: t-20261030-0015
+    label: correct                                 # 引擎拒绝得对
+    reviewer: {id: u-compliance-01, role: 合规官}
+    truth: "P0099 未签血糖数据单独同意，C3 拒绝摄入正确"
+
+  # ---- 2026-10-31 ----
+  - trace_id: t-20261031-0017
+    label: wrong
+    truth: "格列齐特是磺脲类，HypoState.prolonged_risk=true 且 closure_blocked_reason 已写明『磺脲使用者』，R44 应禁止闭环并转 24–72 小时观察；R44 的 check 只对 meds 做『磺脲』字面匹配，没查 MedClassHint.hypo_risk_med 与 HypoState"
+    truth_expect: rejected(R44_高危用药禁止闭环)
+    root_cause_hint: "R44 应以 MedClassHint.hypo_risk_med 或 HypoState.prolonged_risk 为判据，药名字面匹配只作补充"
+  - trace_id: t-20261031-0016
+    label: correct
+    truth: "带 sensor_reading_seq，去重键 SN-P0012:4471 正确，非重复、非回填，入库正确"
+  - trace_id: t-20261031-0018
+    label: correct
+    truth: "P0045 夜间覆盖 81%、TBR 2.9%，维持方向草稿可出；草稿只路由医师签发，未直推患者，正确"
+
+  # ---- 2026-11-01 ----
+  - trace_id: t-20261101-0020
+    label: correct
+    truth: "家属叫不醒属 Level 3 严重低血糖表现，R58 强制转诊并进医师 HIL 队列正确"
+  - trace_id: t-20261101-0019
+    label: partial
+    truth: "P0045 没有个性化阈值行，实际生效的是默认 3.9，且他是 IAH 高危按 R46 应上调到 4.4；只答『0 行』没把默认值与 R46 说清。只用于成本统计"
