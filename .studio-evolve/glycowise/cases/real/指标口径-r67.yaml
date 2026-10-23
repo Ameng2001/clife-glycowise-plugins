@@ -1,4 +1,3 @@
-# 由 t-20261023-0354 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
 id: 指标口径-r67
 q: 黄伯（P0045）23:37 来了一个 2.4 的单点（r-P0045-art1），前后 10 分钟都在 6.8 以上，做去重仲裁
 expect: action(去重与通道仲裁)
@@ -9,9 +8,7 @@ observed_at: '2026-10-23'
 elements:
 - 去重与通道仲裁
 label:
-  answer: 候选 {reading_id r-P0045-art1, value_raw 2.4, device_time '23:37', source_confidence 'low', quality_flag 'outlier'}——没有 sensor_serial 也没有 dedup_key → R48 hard 拒绝。按 IR R48『无序号时才允许退到 ±90 秒容差兜底并置 weak_dedup
-    标记』，无序号候选该走弱键兜底而不是被硬拒；R48 实现却要求调用方自己带 weak_dedup=True，否则一律拒。实测补 weak_dedup=True + time_utc 2026-10-22T23:37 + value_mmol 2.4 → 提交、verdict new、quality_flag noise、R02 soft『前后 10min 内回升 ≥1.5』（邻居 23:30
-    9.9 / 23:45 6.8）——这才是 cq 要的结果。
+  answer: 候选 {reading_id r-P0045-art1, value_raw 2.4, device_time '23:37', source_confidence 'low', quality_flag 'outlier'}——没有 sensor_serial 也没有 dedup_key → R48 hard 拒绝。按 IR R48『无序号时才允许退到 ±90 秒容差兜底并置 weak_dedup 标记』，无序号候选该走弱键兜底而不是被硬拒；R48 实现却要求调用方自己带 weak_dedup=True，否则一律拒。实测补 weak_dedup=True + time_utc 2026-10-22T23:37 + value_mmol 2.4 → 提交、verdict new、quality_flag noise、R02 soft『前后 10min 内回升 ≥1.5』（邻居 23:30 9.9 / 23:45 6.8）——这才是 cq 要的结果。
   source: feedback
   trace_id: t-20261023-0354
   reviewer: Ameng2001
@@ -202,3 +199,9 @@ route:
       device_time: '23:37'
       source_confidence: low
       quality_flag: outlier
+expect_state:
+- type: GlucoseReading
+  key: r-P0045-art1
+  fields:
+    quality_flag: noise
+expect_state_note: IR R02：23:37 的 2.4 单点前后 10 分钟内回升 ≥1.5，是压迫伪差 → quality_flag noise（不计事件、不抑制告警）（2026-10-23 round 5 补，P9 根因/朴素修法在 commit 判据下逐行相同后加的落库状态期望）

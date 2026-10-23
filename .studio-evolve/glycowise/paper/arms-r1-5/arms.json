@@ -29,13 +29,13 @@
    "regress_rate": 0.0
   },
   "random": {
-   "accept_rate": 0.4444444444444444,
-   "n_accept": 4,
+   "accept_rate": 0.5555555555555556,
+   "n_accept": 5,
    "regress_rate": 0.0
   },
   "1d-strict": {
-   "accept_rate": 1.0,
-   "n_accept": 9,
+   "accept_rate": 0.8888888888888888,
+   "n_accept": 8,
    "regress_rate": 0.0
   },
   "none": {
@@ -74,7 +74,7 @@
     0.0,
     0.0
    ],
-   "boot": 995
+   "boot": 1000
   },
   "1d-strict_minus_3d": {
    "value": 0.0,
@@ -302,12 +302,12 @@
   {
    "round": 5,
    "proposal": "10",
-   "attempt": 1,
+   "attempt": 2,
    "accepted": {
     "3d": true,
     "1d": true,
     "random": true,
-    "1d-strict": true,
+    "1d-strict": false,
     "none": true,
     "3d-noT": true,
     "3d-noS": true,
@@ -325,11 +325,11 @@
   {
    "round": 5,
    "proposal": "9",
-   "attempt": 1,
+   "attempt": 2,
    "accepted": {
     "3d": true,
     "1d": true,
-    "random": false,
+    "random": true,
     "1d-strict": true,
     "none": true,
     "3d-noT": true,

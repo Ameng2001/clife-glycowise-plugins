@@ -13,18 +13,18 @@
   "T": {
     "T_1": null,
     "T_2": null,
-    "T_3": 0.8,
+    "T_3": 0.0,
     "T_4": null
   },
-  "T_max": 3,
-  "A": 0.8,
+  "T_max": 0,
+  "A": 0.0,
   "S_consist": 1.0,
   "S_stable": 1.0,
-  "W_family": 1.0,
+  "W_family": 0.0,
   "C": {
     "steps": 2.2,
     "tokens": null,
-    "wall_s": 0.0020666666666666667
+    "wall_s": 0.00212
   },
   "C_gate": 2.2,
   "runs": 3,
@@ -36,6 +36,6 @@
   "state": "h_prime",
   "missing_cases": [],
   "W_evid": null,
-  "script_hash": "sha256:bd9c193ff707d4255ee813d53044b7e9310e819c13284b5be68b17ba7919a00c",
+  "script_hash": "sha256:6d39653388a2a45a82c403dbee7f99da54423efddab6862bbfe418c49fcbc1de",
   "exec": "AUTO"
 }

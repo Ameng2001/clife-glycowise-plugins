@@ -26,11 +26,14 @@ h_i 在 203 条 × 3 run：**474/609**（A .778；S_consist = S_stable = 1.0；W
 
 ## 3. 提案与裁决
 
-见 `proposals/P9.md`。一句话：**P9a（根因）与 P9b（朴素）八臂几乎同判 ACCEPT，B_5 / B-sim / real-all 逐行相同；差别只在落库状态（dup1 superseded vs 当新读数入库），现有判据读不到。** `arm_compare` r1–5：9 条提案 × 8 臂，regress 全 0，random accept 4/9。
+见 `proposals/P9.md`。两次裁决：
+- 第 1 次（commit / 规则名判据）：P9a 与 P9b 八臂几乎同判 ACCEPT，Dᵢ / B_5 / B-sim / real-all 逐行相同——判据读不到落库状态。
+- 第 2 次（runner 加 `expect_state`，15 条 dedup 案例补落库真值）：Dᵢ 上 P9a 12/15、P9b **0/15**，判据分开了；但 3d 仍接受 P9b——g_in 的 strict 项被 ΔC −0.8 单独满足（steps 把违规数计入成本，放行永远比拒绝便宜），外关卡 B_5 又有两条同根 x9 案例给 +0.05。八臂只有 1d-strict 拒（ΔA < δ）。`arm_compare` r1–5（attempt 2 的 verdict）：9 条提案 × 8 臂，regress 全 0，1d-strict accept 8/9，random 5/9。
 
 ## 4. 方法问题
 
-1. **判据粒度**：pass 只看 commit / rejected 规则名，看不到「写了什么」。朴素修法与根因修法在 T / A / S / W_family 上完全相同，W_evid 未实现。这是本轮最重要的发现——在此之前「八臂同判」还能解释为提案都是明牌，这一轮证明即使提案有争议，判据也测不到争议。下一步：runner 加 `expect_state`（对落库对象字段断言）或 growth_metrics 实现 W_evid。
+1. **判据粒度（已修）**：pass 只看 commit / rejected 规则名，看不到「写了什么」。runner 已加 `expect_state`，15 条 dedup 案例补了落库真值；h_i 读数不变，P9b 在 Dᵢ 上从 12/15 跌到 0/15。
+1b. **strict 项被成本满足（待 amend）**：gate-rules §1 的 strict 含 ΔC<0，而 steps 成本把违规规则数算进去，「拒绝改放行」总是更便宜——零增长的朴素修法靠成本过了内关卡。修法预登记进 amend-v2 §5：strict 只认 T / S / W；成本改用不随裁决方向变化的口径。在此之前 RQ-1 的 regress_rate_diff 还是测不到闸门。
 2. **real 池过 200 但分层仍薄**：203 条 / 20 层，最薄层 2 条；make_real_cases 把去重类案例归到「指标口径」family（按口语推断），分层口径本身也要修。
 3. 三胞胎案例（同一 sim 案例的 original / paraphrase / irrelevant_field 各落一条 real 案例）不是独立样本，63 条里 23 组。
 4. irrelevant_field 变体在路由层的泄漏（patient-facing 正文 ×2、Session 记忆串句 ×3、当过滤值 ×1）：S 维度只在规则层测了扰动一致性，路由层没测。

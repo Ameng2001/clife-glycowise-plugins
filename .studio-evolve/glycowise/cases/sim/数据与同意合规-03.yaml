@@ -18,3 +18,10 @@ variants:
 - kind: irrelevant_field
   q: 厂商接口重推了黄伯（P0045）23:45 那条读数（r-P0045-dup1，序号 SN-P0045-A-01343），做去重仲裁；今天天气不错。
 note: P8 来源案例：W45 0233 路由到只有桩的动作
+expect_state:
+- type: GlucoseReading
+  key: r-P0045-dup1
+  fields:
+    quality_flag: superseded
+    superseded_by: r-P0045-01343
+expect_state_note: IR R48/§4：厂商重推、强键 SN-P0045-A-01343 与库里 r-P0045-01343 相同 → 候选 superseded 并指回原读数（2026-10-23 round 5 补，P9 根因/朴素修法在 commit 判据下逐行相同后加的落库状态期望）

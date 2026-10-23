@@ -18,3 +18,10 @@ variants:
 - kind: irrelevant_field
   q: 黄伯（P0045）新到一条读数 r-P0045-x9（00:00，6.5，序号 SN-P0045-A-01344），做去重仲裁后入库；他昨晚睡得早。
 note: P8 来源案例：正常新读数
+expect_state:
+- type: GlucoseReading
+  key: r-P0045-x9
+  fields:
+    quality_flag: clean
+    superseded_by: null
+expect_state_note: 强键 SN-P0045-A-01344 库里没有、±90 秒无其它通道读数 → 新读数 clean（2026-10-23 round 5 补，P9 根因/朴素修法在 commit 判据下逐行相同后加的落库状态期望）

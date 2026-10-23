@@ -1,4 +1,3 @@
-# 由 t-20261023-0356 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
 id: 指标口径-r69
 q: 厂商接口重推了黄伯（P0045）23:45 那条读数（r-P0045-dup1，序号 SN-P0045-A-01343），做去重仲裁；今天天气不错。
 expect: action(去重与通道仲裁)
@@ -9,8 +8,7 @@ observed_at: '2026-10-23'
 elements:
 - 去重与通道仲裁
 label:
-  answer: 路由把『序号 SN-P0045-A-01343』整个放进 sensor_serial，没有 dedup_key、没有 time_utc；R48 检查 dedup_key.startswith(sensor_serial)，dedup_key 为空 → hard 拒。seed 里这条读数 r-P0045-01343 的 sensor_serial=SN-P0045-A、dedup_key=SN-P0045-A-01343；实测候选改为
-    {sensor_serial SN-P0045-A, dedup_key SN-P0045-A-01343, time_utc 2026-10-22T23:45} → 提交、verdict duplicate、superseded_by r-P0045-01343（即 W45 沙箱的 dup1→superseded）。把整串同时写进 sensor_serial 和 dedup_key 也能过。
+  answer: 路由把『序号 SN-P0045-A-01343』整个放进 sensor_serial，没有 dedup_key、没有 time_utc；R48 检查 dedup_key.startswith(sensor_serial)，dedup_key 为空 → hard 拒。seed 里这条读数 r-P0045-01343 的 sensor_serial=SN-P0045-A、dedup_key=SN-P0045-A-01343；实测候选改为 {sensor_serial SN-P0045-A, dedup_key SN-P0045-A-01343, time_utc 2026-10-22T23:45} → 提交、verdict duplicate、superseded_by r-P0045-01343（即 W45 沙箱的 dup1→superseded）。把整串同时写进 sensor_serial 和 dedup_key 也能过。
   source: feedback
   trace_id: t-20261023-0356
   reviewer: Ameng2001
@@ -198,3 +196,10 @@ route:
       reading_id: r-P0045-dup1
       patient_id: P0045
       sensor_serial: SN-P0045-A-01343
+expect_state:
+- type: GlucoseReading
+  key: r-P0045-dup1
+  fields:
+    quality_flag: superseded
+    superseded_by: r-P0045-01343
+expect_state_note: IR R48/§4：厂商重推、强键 SN-P0045-A-01343 与库里 r-P0045-01343 相同 → 候选 superseded 并指回原读数（2026-10-23 round 5 补，P9 根因/朴素修法在 commit 判据下逐行相同后加的落库状态期望）
