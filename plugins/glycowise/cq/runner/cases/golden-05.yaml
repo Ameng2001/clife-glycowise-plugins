@@ -1,12 +1,14 @@
 id: golden-05
-q: "这份 14 天报告能不能用 GMI 判缓解？四条前提满足了几条？"
+q: P0007 的这份 14 天报告（s-P0007-14d）能不能用 GMI 判缓解？四条前提满足了几条？
 expect: query
 tier: 1
 family: golden
 origin: sim
-observed_at: 2026-10-23
+observed_at: '2026-10-23'
 elements: []
 label:
-  answer: "query"
+  answer: query
   source: simulate
-variants: []
+variants:
+- kind: original
+  q: 这份 14 天报告能不能用 GMI 判缓解？四条前提满足了几条？

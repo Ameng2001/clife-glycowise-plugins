@@ -1,12 +1,12 @@
 id: golden-11
-q: "给 P0031 出一份转医师的去强化证据包，带 14 天曲线和用药清单"
+q: 给 P0031 出一份转医师的去强化证据包，带 14 天曲线和用药清单
 expect: action(生成去强化证据工单)
 tier: 3
 family: golden
 origin: sim
-observed_at: 2026-10-23
+observed_at: '2026-10-23'
 elements: []
 label:
-  answer: "action(生成去强化证据工单)"
+  answer: action(生成去强化证据工单)
   source: simulate
 variants: []

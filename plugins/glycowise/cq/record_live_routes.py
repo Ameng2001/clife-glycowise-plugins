@@ -67,6 +67,12 @@ def main() -> int:
     agree = 0
     for i, g in enumerate(golden, 1):
         q = g["q"]
+        for vq in [v["q"] for v in (g.get("variants") or []) if v.get("q")]:  # variants 也录，供 runner 的 variant 行回放
+            try:
+                compiler.compile("glycowise", vq, actor_role=a.actor_role, memory_text=ctx_text)
+            except Exception as e:
+                print(f"  ✗ {i:02d} variant {vq[:30]} → {type(e).__name__}: {str(e)[:80]}")
+            time.sleep(0.2)
         for _ in range(a.repeat):
             try:
                 intent = compiler.compile("glycowise", q, actor_role=a.actor_role, memory_text=ctx_text)

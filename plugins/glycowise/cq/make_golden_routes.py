@@ -95,13 +95,25 @@ ROUTES = {
     A("推送方案至患者", {"plan_id": "plan-P0012-tier", "targets": ["P0012"]}, conf=0.85),
 }
 
+def expand(golden: list, routes: dict) -> dict:
+    """ROUTES 以原始口语（variants[kind=original].q，否则 q 本身）为键；同一路由同时登记到带 id 的 q 与原句。"""
+    out = {}
+    for g in golden:
+        orig = next((v["q"] for v in (g.get("variants") or []) if v.get("kind") == "original"), g["q"])
+        r = routes[orig]
+        out[g["q"]] = r
+        out[orig] = r
+    return out
+
+
 if __name__ == "__main__":
     import yaml
     golden = yaml.safe_load((Path(__file__).parent / "golden.yaml").read_text(encoding="utf-8"))
-    qs = [g["q"] for g in golden]
-    missing = [q for q in qs if q not in ROUTES]
-    extra = [q for q in ROUTES if q not in qs]
+    origs = [next((v["q"] for v in (g.get("variants") or []) if v.get("kind") == "original"), g["q"]) for g in golden]
+    missing = [q for q in origs if q not in ROUTES]
+    extra = [q for q in ROUTES if q not in origs]
     assert not missing and not extra, (missing, extra)
     out = Path(__file__).parent / "golden_routes.json"
-    out.write_text(json.dumps(ROUTES, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"✓ {len(ROUTES)} 条路由 → {out}")
+    rec = expand(golden, ROUTES)
+    out.write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"✓ {len(ROUTES)} 条路由 × (q + original) = {len(rec)} 键 → {out}")

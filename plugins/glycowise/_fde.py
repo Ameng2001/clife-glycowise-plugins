@@ -618,6 +618,68 @@ def _alert_template(ctx):
     return rows[0] if rows else {}
 
 
+def _reading(ctx):
+    rid = P(ctx, "reading_id")
+    return (ctx.get("GlucoseReading", str(rid)) or {}) if rid else {}
+
+
+def _prev_reading(ctx, r):
+    pid, t = r.get("patient_id"), _dt(r.get("time_utc"))
+    if not pid or t is None:
+        return {}
+    rows = [x for x in ctx.find("GlucoseReading", lambda x: x.get("patient_id") == pid and x.get("reading_id") != r.get("reading_id"))
+            if _dt(x.get("time_utc")) and _dt(x["time_utc"]) < t]
+    return max(rows, key=lambda x: x["time_utc"]) if rows else {}
+
+
+def _staged_alert(ctx):
+    rows = ctx.find("AlertEvent", lambda r: r.get("_staged") is True)
+    return rows[-1] if rows else {}
+
+
+@rule("R03a_Level2低血糖_实时告警")
+def r03a(ctx):
+    r = _reading(ctx)
+    g = _num(r.get("value_mmol"))
+    if g is None or g >= 3.0:
+        return RuleResult.ok()
+    prev = _num(_prev_reading(ctx, r).get("value_mmol"))
+    ev = _staged_alert(ctx) or _alert(ctx)
+    if prev is None or prev >= 3.0:
+        return _fail("R03a", f"G={g} <3.0 但前一读数 {prev} 未确认，实时告警须连续 2 个读数确认", "等下一读数确认后再触发")
+    if ev and ev.get("level") not in ("高", "危急"):
+        return _fail("R03a", f"连续 2 读数 G<3.0，告警级别应为高/危急，实际 {ev.get('level')}", "升级并附 15-15 处置指引")
+    return RuleResult.ok()
+
+
+@rule("R04a_Level1低血糖_实时告警")
+def r04a(ctx):
+    r = _reading(ctx)
+    g = _num(r.get("value_mmol"))
+    if g is None or not (3.0 <= g < 3.9):
+        return RuleResult.ok()
+    prev = _num(_prev_reading(ctx, r).get("value_mmol"))
+    if prev is None or prev >= 3.9:
+        return _fail("R04a", f"G={g} 在 3.0–3.9 但前一读数 {prev} 未确认，须连续 2 个读数", "等下一读数确认")
+    return RuleResult.ok()
+
+
+@rule("R05_即将低血糖预测告警")
+def r05(ctx):
+    r = _reading(ctx)
+    g = _num(r.get("value_mmol"))
+    prev = _prev_reading(ctx, r)
+    pg, pt, t = _num(prev.get("value_mmol")), _dt(prev.get("time_utc")), _dt(r.get("time_utc"))
+    if g is None or pg is None or pt is None or t is None or t <= pt:
+        return RuleResult.ok()
+    slope15 = (g - pg) / ((t - pt).total_seconds() / 60) * 15  # mmol/L per 15 min
+    if g < 5.0 and (slope15 <= -1 or g + slope15 / 15 * 20 < 3.9):
+        ev = _staged_alert(ctx) or _alert(ctx)
+        if not ev or "预测" not in str(ev.get("evidence", "")):
+            return _fail("R05", f"G={g} 且 15 分钟斜率 {slope15:.2f}，预计 20 分钟内 <3.9，应发预测性告警（补 10–15g 碳水、暂停运动）", "evidence 标注「预测」")
+    return RuleResult.ok()
+
+
 @rule("R56_告警模板预审冻结")
 def r56(ctx):
     tpl = _alert_template(ctx)
@@ -632,7 +694,7 @@ def r56(ctx):
 def r52(ctx):
     bf = P(ctx, "is_backfill")
     if bf is None:
-        bf = _alert(ctx).get("is_backfill")
+        bf = (_alert(ctx) or _reading(ctx) or _staged_alert(ctx)).get("is_backfill")
     if bf is True:
         return _fail("R52", "触发读数是回填数据（is_backfill），只进统计通道，不得作为实时告警推送", "撤回该告警；回填期的低血糖进 HypoEpisode 回顾统计")
     return RuleResult.ok()
@@ -640,12 +702,15 @@ def r52(ctx):
 
 @rule("R53_低置信通道不得独立触发危急告警")
 def r53(ctx):
-    ev = _alert(ctx)
+    ev = _alert(ctx) or _staged_alert(ctx)
+    rd = _reading(ctx)
     level = P(ctx, "level") or ev.get("level")
+    if level is None and _num(rd.get("value_mmol")) is not None:
+        level = "高" if _num(rd["value_mmol"]) < 3.0 else "中"
     if level not in ("危急", "高"):
         return RuleResult.ok()
-    ch = P(ctx, "source_channel") or ev.get("source_channel")
-    conf = _num(P(ctx, "source_confidence")) if P(ctx, "source_confidence") is not None else _num(ev.get("source_confidence"))
+    ch = P(ctx, "source_channel") or ev.get("source_channel") or rd.get("source_channel")
+    conf = _num(P(ctx, "source_confidence")) if P(ctx, "source_confidence") is not None else _num(ev.get("source_confidence", rd.get("source_confidence")))
     confirmed = ev.get("confirmed_by_fingerstick") is True or P(ctx, "confirmed_by_fingerstick") is True
     if confirmed:
         return RuleResult.ok()
@@ -1708,6 +1773,20 @@ def act_ingest(ctx):
         n += 1
     ctx.stage_write("IngestBatch", f"batch-{ctx.params.get('channel')}-{_now()}", {"channel": ctx.params.get("channel"), "record_count": n, "status": "pending", "_staged": True})
     ctx.set_confidence(1.0)
+
+
+@action("触发低血糖处置")
+def act_trigger_hypo(ctx):
+    pid, rid = str(ctx.params["patient_id"]), str(ctx.params["reading_id"])
+    r = ctx.get("GlucoseReading", rid) or {}
+    g = _num(r.get("value_mmol"))
+    level = "高" if (g is not None and g < 3.0) else ("中" if (g is not None and g < 3.9) else "低")
+    ctx.stage_write("AlertEvent", f"A-{pid}-{rid}", {"alert_id": f"A-{pid}-{rid}", "patient_id": r.get("patient_id", pid), "level": level, "value": g,
+                                                     "trend": None, "evidence": f"读数 {rid}（{r.get('source_channel', '未知通道')}）", "confidence": _num(r.get("source_confidence")) or 0.0,
+                                                     "rule_id": ctx.params.get("rule_id"), "is_backfill": r.get("is_backfill"), "source_channel": r.get("source_channel"),
+                                                     "source_confidence": r.get("source_confidence"), "raised_at": _now(), "_staged": True})
+    ctx.set_confidence(0.9 if r else 0.3)
+    ctx.add_evidence(reading_id=rid, value=g, found=bool(r))
 
 
 @action("推送告警")

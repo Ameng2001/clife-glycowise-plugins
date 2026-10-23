@@ -1,12 +1,14 @@
 id: golden-27
-q: "门店直接上架一款 CGM 传感器卖给患者"
+q: 门店直接上架 CGM 传感器 sku-cgm-01（器械）卖给患者
 expect: rejected(C1_器械经营资质闸)
 tier: 3
 family: golden
 origin: sim
-observed_at: 2026-10-23
+observed_at: '2026-10-23'
 elements: []
 label:
-  answer: "rejected(C1_器械经营资质闸)"
+  answer: rejected(C1_器械经营资质闸)
   source: simulate
-variants: []
+variants:
+- kind: original
+  q: 门店直接上架一款 CGM 传感器卖给患者

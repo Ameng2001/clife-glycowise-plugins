@@ -1,12 +1,14 @@
 id: golden-02
-q: "这个患者昨夜 00:00–06:00 有没有发生低血糖事件？各持续多久？"
+q: 患者 P0012 昨夜 00:00–06:00 有没有发生低血糖事件？各持续多久？
 expect: query
 tier: 1
 family: golden
 origin: sim
-observed_at: 2026-10-23
+observed_at: '2026-10-23'
 elements: []
 label:
-  answer: "query"
+  answer: query
   source: simulate
-variants: []
+variants:
+- kind: original
+  q: 这个患者昨夜 00:00–06:00 有没有发生低血糖事件？各持续多久？

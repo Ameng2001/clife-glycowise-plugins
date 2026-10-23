@@ -1,12 +1,12 @@
 id: golden-10
-q: "把 P0012 的夜间低值告警阈值从 3.9 上调到 4.4"
+q: 把 P0012 的夜间低值告警阈值从 3.9 上调到 4.4
 expect: action(收紧告警阈值)
 tier: 3
 family: golden
 origin: sim
-observed_at: 2026-10-23
+observed_at: '2026-10-23'
 elements: []
 label:
-  answer: "action(收紧告警阈值)"
+  answer: action(收紧告警阈值)
   source: simulate
 variants: []

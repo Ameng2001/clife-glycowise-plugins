@@ -1,12 +1,14 @@
 id: golden-23
-q: "这个患者用磺脲，刚复测回到 4.1，把告警闭环了吧"
+q: 患者 P0045 用磺脲，刚复测回到 4.1，把告警 A-P0045-02 闭环了吧
 expect: rejected(R44_高危用药禁止闭环)
 tier: 3
 family: golden
 origin: sim
-observed_at: 2026-10-23
+observed_at: '2026-10-23'
 elements: []
 label:
-  answer: "rejected(R44_高危用药禁止闭环)"
+  answer: rejected(R44_高危用药禁止闭环)
   source: simulate
-variants: []
+variants:
+- kind: original
+  q: 这个患者用磺脲，刚复测回到 4.1，把告警闭环了吧

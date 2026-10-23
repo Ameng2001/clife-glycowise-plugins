@@ -1420,9 +1420,7 @@ def R03a_Level2低血糖_实时告警(ctx) -> RuleResult:
       实时口径（连续 2 个读数 + 预测性告警）与回顾口径（持续 ≥15 分钟 Danne）语义不同，
       混用等于原样重犯已被临床评审纠正过的 C-01 错误（confirmed-facts C-01、A3-6、R-4）。
     """
-    # TODO(FDE): 查最近读数序列，校验是否出现连续 2 个读数（间隔 ≥5min）满足 G<3.0。**禁止复用 ≥15min 口径**，与 R03b 必须是两个独立函数签名
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R03a_Level2低血糖_实时告警 待实现")
+    return _fde.RULES['R03a_Level2低血糖_实时告警'](ctx)
 
 @spi.rule(ONTOLOGY, "R04a_Level1低血糖_实时告警", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1438,9 +1436,7 @@ def R04a_Level1低血糖_实时告警(ctx) -> RuleResult:
       实时口径（连续 2 个读数 + 预测性告警）与回顾口径（持续 ≥15 分钟 Danne）语义不同，
       混用等于原样重犯已被临床评审纠正过的 C-01 错误（confirmed-facts C-01、A3-6、R-4）。
     """
-    # TODO(FDE): 查最近读数序列，校验连续 2 个读数（间隔 ≥5min）满足 3.0≤G<3.9
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R04a_Level1低血糖_实时告警 待实现")
+    return _fde.RULES['R04a_Level1低血糖_实时告警'](ctx)
 
 @spi.rule(ONTOLOGY, "R03b_Level2低血糖_回顾事件统计", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.POST_WRITE,
@@ -1502,9 +1498,7 @@ def R05_即将低血糖预测告警(ctx) -> RuleResult:
     优先级 125（B1 低血糖 带）· 生效阶段 P2。
     挂载动作：触发低血糖处置、推送告警。
     """
-    # TODO(FDE): 查近 15min 斜率，校验 G<5.0 且 slope≤−1，或 G + slope×20 < 3.9
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("R05_即将低血糖预测告警 待实现")
+    return _fde.RULES['R05_即将低血糖预测告警'](ctx)
 
 @spi.rule(ONTOLOGY, "R06_快速下降箭头提示", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
@@ -3210,13 +3204,7 @@ def 触发低血糖处置(ctx) -> None:
 
     写入对象：AlertEvent、HypoEpisode。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertEvent", f"alertevent_{ctx.params[...]}", {...})
-    # ctx.stage_write("HypoEpisode", f"hypoepisode_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("触发低血糖处置 handler 待实现")
+    _fde.ACTIONS['触发低血糖处置'](ctx)
 
 @spi.action(
     ONTOLOGY, "统计低血糖事件",
