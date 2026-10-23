@@ -88,6 +88,24 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 - **路由到 telemetry 1 句**（0126 平均血糖 → 编译器 `无遥测绑定: CgmSummary` 直接 reject）：Qwen 把一个普通查询判成遥测读数，引擎没有 CgmSummary 的遥测绑定——平台 backlog。
 - 0155（群里答复分层 L1）Qwen 问「要我做什么」；0156 走 advise。
 
+## ①-3 第三个真实窗口：`trajectories/2026-W45/`
+
+同一天录的第三个进化窗口（`record_window.py run --window 2026-W45 --seq-base 201`）。103 条 CQ 原句在 W43/W44 已用尽，本窗口全部取仿真库变体：entity_swap（换患者，对象 id 来自 seed）37 句 + paraphrase（同一 CQ 的省略式口语改写）38 句，顺序沿用 W44 的患者分组。目的：把 real 池推向 200，同时看路由层对省略式口语的稳定性。
+
+| 项 | 值 |
+|---|---|
+| 口语 | `utterances.2026-W45.yaml` 75 句（entity_swap 37 / paraphrase 38） |
+| 轨迹 | **63 条**：execute 31（committed 10 / pending_hil 8 / rejected 13）、ask 32（0 行 10 条） |
+| 非轨迹 | 12 句：clarify 9、error 3（`routing.log.2026-W45.jsonl`） |
+| 回放 | sequential 63/63 复现；preview 3 条不一致（0220/0221 多出 C22、0259 多出 R49），与 W44 同型（execute 与 validate 的语义差） |
+| 成本 | 真 Qwen usage 共 513,505 token，均 6,847/句 |
+| 反馈 | `trajectories/2026-W45/feedback.yaml` 为 **draft**（63 条 label 为空，机器比对与 CQ 期望不一致 12 条）；专家建议草案 `feedback.expert-draft.yaml`：correct 45 / partial 5 / wrong 13（**router 13，rule 0**：多挂一跳 ×6（0222/0225/0255/0262/0269/0270）、'now-14d' ×3（0239/0271/0272）、枚举字面量 ×2（0268 level='high'、0220 口语「高级」覆盖告警级别）、选错字段 0218、摄入读数 payload 平铺 0273）。只供标注人确认，不是标签 |
+
+非轨迹 12 句里值得记的：
+- **生产插件有两个动作只有桩**：0224「健管师让 P0031 去找医生看是否调药方案」路由到动作 `转介医师`、0233「用厂商记录 ID 做去重键」路由到 `去重与通道仲裁`，引擎执行时 `NotImplementedError: … handler 待实现`。这两个动作在 IR §4 有声明、在 `__init__.py` 里挂着桩（同类桩还有 10 个派生函数：MAGE / AGP分位曲线 / wear_ratio / glucose_slope / dedup_hit_rate …），W43/W44 的口语从没路由到它们。这是第一次由真实窗口暴露**实现缺失**（IMPL_MISSING），是下一轮提案流的种子，不是路由问题。
+- **路由到 telemetry 1 句**（0227「P0088 的均值血糖读数？」→ `无遥测绑定: CgmSummary`）：与 W44 0126 同因，省略式口语更容易被判成遥测读数——平台 backlog。
+- **LLM 路由层预判拒绝 / 追问 9 句**（0226 6 天判缓解、0230「要给她诊断」、0231「夜里出事我们第一时间知道」、0232「去医院开处方」、0235 草稿直发患者、0244「用英纽林逆转」、0245「恭喜您已经逆转了」、0247 L3 包捆英纽林、0260 查 retention_policy）：全部是仿真库 rejected 口径的改写句，路由层继续抢闸，引擎 HARD 规则没被评到——与 W43/W44 现象同源，第三次复现。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -110,3 +128,4 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 - **2026-10-23 第四轮**：标签入库（`feedback.yaml` reviewed）→ `cases/real` 33 条 → attribute → verify 走通。两处只有真数据才暴露的坑：① 逐案例新鲜 seed 复现不了窗口状态（0008/0021/0022 判错、0018 的泄漏不出现）→ 案例加 `setup`；② 共享录制按口语键让 golden 参数覆盖了窗口真走的参数 → 案例加 `route`。P5（`_staged: True` 持久化标记跨动作泄漏）3d ACCEPT、real 留出集 20 条，同日确认合入生产（real-all 81/99、B-sim 294/294）；路由层 6 条 wrong 不归本体，记平台 backlog。
 - **2026-10-23 第五轮**：录第二个窗口 W44（61 句 → 51 条轨迹，`--window` 覆盖逻辑窗口号）。顺序回放 51/51；preview 3 条差异全是引擎 execute（guard 命中即返回、不评 post 规则）与 validate（全收集）的语义差，不是状态依赖。P5 在新窗口里验证：0113 落库证据包后 0114/0123/0127/0128 的规则命中集合与单独预演一致。专家草案见上表；标注人确认进 `feedback.yaml`（status reviewed）后：`make_real_cases.py --window 2026-W44` → 留出集 round 3 从 W43+W44 池抽（跨窗口）→ P5 在 B_3 上的 `readings/P5-{hi,hp}-B3.json` → `arm_compare.py` 按 B_{i+1} 判回退。
 - **2026-10-23 第六轮**：W44 标签入库（`feedback.yaml` reviewed，correct 40 / wrong 9 / partial 2）→ `cases/real` 累计 82 条（修了 `make_real_cases.py` id 正则不认 `-rNN`、覆盖 W43 案例的 bug）→ `holdout-3.yaml` 第一次跨窗口（40 条 / 20 层，W43 19 / W44 21）。P5 在 B_3 上无回退（A .75→.825，W44 两条 HIL 答复 r16/r18 的 R51 泄漏被修）。P6（R04a「前一读数」不看采样间隔）3d ACCEPT、八臂同判，同日确认合入生产（real-all 210/246、B-sim 294/294）；仿真案例 低血糖安全-01 与 real 反馈冲突，选择器加 20 min 间隔条件后重生成，B-sim 98/98。见 `attribute-report-2026-W44.md`。
+- **2026-10-23 第七轮**：录第三个窗口 W45（75 句变体 → 63 条轨迹，execute 31 / ask 32；513k token）。顺序回放 63/63；preview 3 条不一致与 W44 同机理（execute 在 guard hard 命中时只审计 guard 违规并返回；guard-soft 违规不进审计）。专家草案：correct 45 / partial 5 / wrong 13，wrong 全在路由层——三类路由错误（多挂一跳、相对时间字面量、枚举字面量）第三个窗口复现，规则层 0 条 wrong。窗口第一次暴露生产插件的**实现缺失**：`转介医师`、`去重与通道仲裁` 两个动作只有桩（0224/0233 NotImplementedError）。专家另记的规则实现偏离 IR 候选（待标注人裁定，未开提案）：R04a 只判前一读数 <3.9 而 IR 要求两读数都在 3.0–3.9（0219，2.8→3.6 的 L2 恢复段也能开 L1 处置）；摄入读数 0 条批次照样 committed、R48 不看顶层 payload（0273）；推送告警去掉 level 后 `_content_type` 不识别为告警、C22 误拒（0220 变体实测）；R55 拦不住「数据已同步到」这类事实性误述（0229，P0045 当天无读数）；seed 两处不一致（A-P0045-02 raised_at 与真实低值读数差一天；cred-chen 到期 33 天仍 valid）。标注人确认进 `feedback.yaml`（status reviewed）后再 `make_real_cases.py --window 2026-W45`。

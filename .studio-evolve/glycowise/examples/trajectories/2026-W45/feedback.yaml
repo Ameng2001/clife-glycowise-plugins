@@ -1,0 +1,637 @@
+# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
+window: 2026-W45
+status: draft
+reviewer: null
+labeled_at: null
+_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+items:
+- trace_id: t-20261023-0202
+  utterance: 李女士（患者 P0088）这两周的平均血糖和变异系数 CV 是多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0203
+  utterance: 王叔（患者 P0031）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0204
+  utterance: P0023 的草稿，方向去强化。
+  engine_actual: committed 生成方案草稿 soft=['R14_TAR_L1超标']
+  cq_expect: action(生成方案草稿)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0205
+  utterance: 王叔（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0206
+  utterance: 王叔（患者 P0031）这 14 天有过几次 Level 2（<3.0）低血糖事件？最低到多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0207
+  utterance: 王叔（患者 P0031）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0208
+  utterance: P0045 出强化降糖方向的草稿。
+  engine_actual: rejected ['低血糖优先抢占', 'R14_TAR_L1超标']
+  cq_expect: rejected(低血糖优先抢占)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0209
+  utterance: P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。
+  engine_actual: committed 触发低血糖处置
+  cq_expect: action(触发低血糖处置)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0210
+  utterance: P0045 的 r-P0045-01162（2.7，前值 2.8）触发二级低血糖处置。
+  engine_actual: committed 触发低血糖处置
+  cq_expect: action(触发低血糖处置)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0211
+  utterance: 王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4
+  engine_actual: committed 收紧告警阈值
+  cq_expect: action(收紧告警阈值)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0212
+  utterance: 健管师回执告警 A-P0012-01：15-15 补碳后复测 5.1，继续观察 24 小时
+  engine_actual: pending_hil 响应并回执告警
+  cq_expect: action(响应并回执告警)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0213
+  utterance: 把王叔（P0031）的夜间低值告警阈值放宽到 4.0
+  engine_actual: rejected ['R46_IAH高危阈值上调且禁止静音']
+  cq_expect: rejected(R46_IAH高危阈值上调且禁止静音)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0214
+  utterance: 给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）
+  engine_actual: pending_hil 生成去强化证据工单
+  cq_expect: action(生成去强化证据工单)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0215
+  utterance: 健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意
+  engine_actual: rejected ['C6_群内数据最小可见范围']
+  cq_expect: rejected(C6_群内数据最小可见范围)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0216
+  utterance: P0031 的症状与处置记录。
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0217
+  utterance: 陈阿姨（P0023）夜间（00–06）发生过的低血糖事件各持续多久、最低多少？
+  engine_actual: query·4 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0218
+  utterance: P0031 夜间有效率 <50% 已经连续多少个晚上了？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0219
+  utterance: P0031 的 r-P0031-01067（3.6，前值 2.8）触发一级低血糖处置流程。
+  engine_actual: committed 触发低血糖处置
+  cq_expect: action(触发低血糖处置)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0220
+  utterance: 把告警 A-P0045-02（高级）推送给医师和家属
+  engine_actual: rejected ['R56_告警模板预审冻结']
+  cq_expect: action(推送告警)
+  suggested: wrong
+  suggested_why: 实际 rejected(R56_告警模板预审冻结)
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0221
+  utterance: A-P0012-01 用紧急级推送。
+  engine_actual: rejected ['R56_告警模板预审冻结']
+  cq_expect: rejected(R56_告警模板预审冻结)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0222
+  utterance: 告警 A-P0045-ocr-01 是哪条规则触发的？触发读数是不是回填的？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0223
+  utterance: 黄伯（患者 P0045）的用药线索是从哪来的？是否提示低血糖高风险药？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0225
+  utterance: 周先生（患者 P0007）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0228
+  utterance: 给黄伯（P0045）按 14 天数据输出德心服务分层标签
+  engine_actual: pending_hil 输出服务分层标签 soft=['R18_CGM服务分层_内部标签']
+  cq_expect: action(输出服务分层标签)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0229
+  utterance: 健管师在黄伯（P0045）群里答复：今天的数据已经同步到，餐后记得走一走
+  engine_actual: pending_hil 群内答复患者
+  cq_expect: action(群内答复患者)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0234
+  utterance: 审核 c-reco-P0012-01。
+  engine_actual: rejected ['D8_禁用词拦截', 'D9_产品功效声称拦截', 'R32_产品推荐合规闸', 'C22_免责声明强制展示']
+  cq_expect: rejected(D9_产品功效声称拦截)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0236
+  utterance: 把已签发的方案 plan-P0045-w41 推送给黄伯（P0045）
+  engine_actual: committed 推送方案至患者
+  cq_expect: action(推送方案至患者)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0237
+  utterance: 给陈阿姨（P0023）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充
+  engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
+  cq_expect: rejected(C4_数据用于产品推荐须单独同意)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0238
+  utterance: P0007 的 day_high 阈值改到 13.9。
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: action(放宽告警阈值)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0239
+  utterance: 李女士（患者 P0088）最近 14 天的 TIR 是多少？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0240
+  utterance: P0007 的 RemissionClock 记录。
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0241
+  utterance: 列出 P0007 的全部化验结果。
+  engine_actual: query·4 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0242
+  utterance: P0007 的体测记录（BMI、腰围、体重）。
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0243
+  utterance: P0007 的英纽林推荐，话术只说饮食补充。
+  engine_actual: committed 生成产品推荐
+  cq_expect: action(生成产品推荐)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0246
+  utterance: 刘阿姨（患者 P0012）的单独同意书勾了哪些范围？有没有「营销推荐」？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0248
+  utterance: 上架食品 sku-ynl-01。
+  engine_actual: pending_hil 上架产品SKU
+  cq_expect: action(上架产品SKU)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0249
+  utterance: 上架食品 sku-dc-01。
+  engine_actual: rejected ['C14_产品标签合规校验']
+  cq_expect: rejected(C14_产品标签合规校验)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0250
+  utterance: 线上频道上架 sku-cgm-01。
+  engine_actual: rejected ['C1_器械经营资质闸', 'C2_网络销售备案与证照公示']
+  cq_expect: rejected(C2_网络销售备案与证照公示)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0251
+  utterance: 南宁青秀店（store-01）的证照与诊疗范围？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0252
+  utterance: SKU sku-ynl-01 是什么类别？标签核验过了吗？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0253
+  utterance: 陈营养师的注册证什么时候到期？状态有效吗？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0254
+  utterance: 方案 plan-P0088-w41 签发时签发人看了多久、改了什么？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0255
+  utterance: 方案 plan-P0012-w40 是 S-HUANG 签的，这位签发人的资质类型和到期日是什么？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0256
+  utterance: 健管师在李女士（P0088）的群里答复：您本期的服务分层是 L1 级
+  engine_actual: rejected ['R51_分层结论默认不可披露患者']
+  cq_expect: rejected(R51_分层结论默认不可披露患者)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0257
+  utterance: 妊娠人群，低值告警阈值和 TBR 上限各是多少？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0258
+  utterance: 列一下老年（≥65）患者和他们的 target_profile。
+  engine_actual: query·4 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0259
+  utterance: P0099 出维持方向草稿。
+  engine_actual: committed 生成方案草稿
+  cq_expect: action(生成方案草稿)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0261
+  utterance: 禁用词库里「用药」类有哪些词？
+  engine_actual: query·3 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0262
+  utterance: 汇总 s-P0045-14d 是按哪个窗口的读数算的？窗口起止日期？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0263
+  utterance: 新建 L2 档服务包 pkg-L2-basic，三项服务内容。
+  engine_actual: pending_hil 创建服务包SKU
+  cq_expect: action(创建服务包SKU)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0264
+  utterance: 单条读数 r-P0012-00115（3.7）就触发 P0012 的一级低血糖处置。
+  engine_actual: rejected ['R04a_Level1低血糖_实时告警']
+  cq_expect: rejected(R04a_Level1低血糖_实时告警)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0265
+  utterance: 用 P0031 的回填读数 r-P0031-00123（3.4）走一遍实时低血糖处置。
+  engine_actual: rejected ['R52_回填读数不得触发实时告警']
+  cq_expect: rejected(R52_回填读数不得触发实时告警)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0266
+  utterance: d-P0012-01 由吴康复师签。
+  engine_actual: rejected ['D12_签发人归属分流']
+  cq_expect: rejected(D12_签发人归属分流)
+  suggested: correct
+  suggested_why: 被期望规则拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0267
+  utterance: P0012 的 night_low 阈值当前值？
+  engine_actual: query·1 行
+  cq_expect: query
+  suggested: correct
+  suggested_why: 查到行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0268
+  utterance: 高级告警用的模板是哪条？预审过免责声明和夜间承诺红线了吗？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0269
+  utterance: 把触发 A-P0045-02 的那串读数（P0045，10/21 凌晨 <3.9）列出来。
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0270
+  utterance: 刘阿姨（P0012）的低血糖告警为什么一直不能闭环？状态机里卡在哪？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0271
+  utterance: 陈阿姨（患者 P0023）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0272
+  utterance: 黄伯（患者 P0045）这 14 天 TBR 一级和二级（<3.0）各占多少？
+  engine_actual: query·0 行
+  cq_expect: query
+  suggested: wrong
+  suggested_why: 查到 0 行
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0273
+  utterance: 从厂商接口摄入黄伯（P0045）的一条读数：r-P0045-x1，6.8 mmol/L，传感器序号 SN-P0045
+  engine_actual: committed 摄入读数
+  cq_expect: action(摄入读数)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0274
+  utterance: P0007 的德心分层内部标签。
+  engine_actual: query·1 行
+  cq_expect: action(输出服务分层标签)
+  suggested: wrong
+  suggested_why: 实际 query
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0275
+  utterance: 给 P0012 做一次缓解判定。
+  engine_actual: pending_hil 判定缓解结果 soft=['R30_缓解适宜人群筛选_ABCD']
+  cq_expect: action(判定缓解结果)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261023-0276
+  utterance: 给周先生（P0007）生成本期方案草稿，方向维持（基于 s-P0007-14d）
+  engine_actual: committed 生成方案草稿
+  cq_expect: action(生成方案草稿)
+  suggested: correct
+  suggested_why: 动作一致且未被拒
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
