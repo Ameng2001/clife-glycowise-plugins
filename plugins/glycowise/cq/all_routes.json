@@ -5052,6 +5052,84 @@
    "category": "器械引用"
   }
  },
+ "审核 c-reco-P0012-01。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "审核输出内容",
+  "params": {
+   "content_id": "c-reco-P0012-01",
+   "content_type": "product_recommendation"
+  }
+ },
+ "给P0023推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0023",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充"
+  }
+ },
+ "给陈阿姨（P0023）推荐英纽林（sku-ynl-01），话术：作为日常饮食的补充；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0023",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充"
+  }
+ },
+ "P0007 的英纽林推荐，话术只说饮食补充。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.8,
+  "action": "生成产品推荐",
+  "params": {
+   "patient_id": "P0007",
+   "sku_id": "sku-ynl-01",
+   "pitch": "作为日常饮食的补充"
+  }
+ },
+ "上架食品 sku-ynl-01。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-ynl-01",
+   "category": "食品"
+  }
+ },
+ "上架食品 sku-dc-01。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-dc-01",
+   "category": "食品"
+  }
+ },
+ "线上频道上架 sku-cgm-01。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "上架产品SKU",
+  "params": {
+   "sku_id": "sku-cgm-01",
+   "category": "器械引用"
+  }
+ },
+ "新建 L2 档服务包 pkg-L2-basic，三项服务内容。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "创建服务包SKU",
+  "params": {
+   "sku_id": "pkg-L2-basic",
+   "tier": "L2",
+   "contents": [
+    "三项服务内容"
+   ]
+  }
+ },
  "把低血糖告警 A-P0012-01 标记为已响应，患者复测回到 5.2 了；家属说他最近睡得还行。": {
   "kind": "action",
   "confidence": 1.0,
@@ -5248,6 +5326,83 @@
    "rule_id": "R04a"
   }
  },
+ "P0045 的 r-P0045-00017（3.5，前值 3.8）触发一级低血糖处置。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-00017",
+   "rule_id": "一级低血糖处置"
+  }
+ },
+ "P0045 的 r-P0045-01162（2.7，前值 2.8）触发二级低血糖处置。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0045",
+   "reading_id": "r-P0045-01162",
+   "rule_id": "二级低血糖处置规则"
+  }
+ },
+ "健管师回执告警 A-P0012-01：15-15 补碳后复测 5.1，继续观察 24 小时；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "响应并回执告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "responder": "健管师",
+   "action_taken": "15-15 补碳后复测 5.1，继续观察 24 小时",
+   "retest_value": 5.1
+  }
+ },
+ "P0023夜间（00–06）发生过的低血糖事件各持续多久、最低多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    },
+    {
+     "field": "night_flag",
+     "op": "eq",
+     "value": true
+    }
+   ],
+   "select": [
+    "episode_id",
+    "start_time",
+    "end_time",
+    "min_value",
+    "level"
+   ]
+  }
+ },
+ "单条读数 r-P0012-00115（3.7）就触发 P0012 的一级低血糖处置。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0012",
+   "reading_id": "r-P0012-00115",
+   "rule_id": "一级低血糖处置规则"
+  }
+ },
+ "用 P0031 的回填读数 r-P0031-00123（3.4）走一遍实时低血糖处置。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "触发低血糖处置",
+  "params": {
+   "patient_id": "P0031",
+   "reading_id": "r-P0031-00123",
+   "rule_id": "hypo_level_1_realtime"
+  }
+ },
  "黄医生确认无误，签发 P0012 的方案草稿 d-P0012-01；家属说他最近睡得还行。": {
   "kind": "action",
   "confidence": 1.0,
@@ -5266,6 +5421,16 @@
    "draft_id": "d-P0012-01",
    "signer_id": "陈营养师",
    "decision": "approved"
+  }
+ },
+ "d-P0012-01 由吴康复师签。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "签发方案",
+  "params": {
+   "draft_id": "d-P0012-01",
+   "signer_id": "吴康复师",
+   "decision": "签发"
   }
  },
  "把 P0012 的夜间低值告警阈值从 3.9 上调到 4.4；家属说他最近睡得还行。": {
@@ -5399,6 +5564,76 @@
     "健管师",
     "家属"
    ]
+  }
+ },
+ "患者 P0031（患者 P0031）在用哪些药？算不算低血糖高风险用药、是不是无感知低血糖高危？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "PatientProfile",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "meds",
+    "is_iah_high_risk"
+   ]
+  }
+ },
+ "P003124 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "收紧告警阈值",
+  "params": {
+   "patient_id": "P0031",
+   "field": "night_low",
+   "trigger_rule": "R34",
+   "new_value": 4.4
+  }
+ },
+ "王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "收紧告警阈值",
+  "params": {
+   "patient_id": "P0031",
+   "field": "night_low",
+   "trigger_rule": "R34",
+   "new_value": 4.4
+  }
+ },
+ "把P0031的夜间低值告警阈值放宽到 4.0": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0031",
+   "field": "night_low",
+   "new_value": 4.0
+  }
+ },
+ "把王叔（P0031）的夜间低值告警阈值放宽到 4.0；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0031",
+   "field": "night_low",
+   "new_value": 4.0
+  }
+ },
+ "A-P0012-01 用紧急级推送。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "level": "紧急级",
+   "targets": []
   }
  },
  "P0031那次「叫不醒」是什么时候、家属做了什么处置？": {
@@ -5930,6 +6165,331 @@
    ]
   }
  },
+ "患者 P0031（患者 P0031）夜间 00–06 点的有效覆盖率是多少？是否标了夜间覆盖不足？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    }
+   ],
+   "select": [
+    "nocturnal_coverage_pct",
+    "nocturnal_coverage_insufficient"
+   ]
+  }
+ },
+ "患者 P0031（患者 P0031）14 天报告 s-P0031-14d 的 GMI 是多少？": {
+  "kind": "query",
+  "confidence": 1.0,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "summary_id",
+     "op": "eq",
+     "value": "s-P0031-14d"
+    }
+   ],
+   "select": [
+    "gmi_pct"
+   ]
+  }
+ },
+ "健管师在P0031群里答复：您凌晨三点测到 2.2 mmol/L，要注意": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0031",
+   "message": "您凌晨三点测到 2.2 mmol/L，要注意",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0031",
+   "message": "您凌晨三点测到 2.2 mmol/L，要注意",
+   "sender_role": "健管师"
+  }
+ },
+ "把告警 A-P0045-02（高级）推送给医师和家属；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "level": "高级",
+   "targets": [
+    "医师",
+    "家属"
+   ]
+  }
+ },
+ "患者 P0045（患者 P0045）的用药线索是从哪来的？是否提示低血糖高风险药？": {
+  "kind": "query",
+  "confidence": 1.0,
+  "oql": {
+   "start": "MedClassHint",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    }
+   ],
+   "select": [
+    "hint_id",
+    "hint_source",
+    "hypo_risk_med",
+    "sglt2i"
+   ]
+  }
+ },
+ "患者 P0007（患者 P0007）戴了几天、有效数据率多少，够不够 14 天 + 70% 的门槛？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0007"
+    }
+   ],
+   "select": [
+    "window_start",
+    "window_end",
+    "days",
+    "wear_ratio",
+    "active_pct",
+    "sufficiency_ok"
+   ],
+   "steps": [
+    {
+     "link_type": "computed_from",
+     "direction": "in",
+     "where": [
+      {
+       "field": "source_channel",
+       "op": "ne",
+       "value": null
+      }
+     ]
+    }
+   ],
+   "order_by": [
+    {
+     "field": "window_end",
+     "desc": true
+    }
+   ],
+   "limit": 1
+  }
+ },
+ "健管师在P0045群里答复：今天的数据已经同步到，餐后记得走一走": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0045",
+   "message": "今天的数据已经同步到，餐后记得走一走",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在黄伯（P0045）群里答复：今天的数据已经同步到，餐后记得走一走；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0045",
+   "message": "今天的数据已经同步到，餐后记得走一走",
+   "sender_role": "健管师"
+  }
+ },
+ "把已签发的方案 plan-P0045-w41 推送给P0045": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "plan-P0045-w41",
+   "targets": [
+    "P0045"
+   ]
+  }
+ },
+ "把已签发的方案 plan-P0045-w41 推送给黄伯（P0045）；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "推送方案至患者",
+  "params": {
+   "plan_id": "plan-P0045-w41",
+   "targets": [
+    "P0045"
+   ]
+  }
+ },
+ "P0007 的 day_high 阈值改到 13.9。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "放宽告警阈值",
+  "params": {
+   "patient_id": "P0007",
+   "field": "day_high",
+   "new_value": 13.9
+  }
+ },
+ "患者 P0088（患者 P0088）最近 14 天的 TIR 是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0088"
+    },
+    {
+     "field": "window_start",
+     "op": "ge",
+     "value": "now-14d"
+    }
+   ],
+   "select": [
+    "tir_pct",
+    "window_start",
+    "window_end"
+   ],
+   "order_by": [
+    {
+     "field": "window_start",
+     "desc": true
+    }
+   ],
+   "limit": 1
+  }
+ },
+ "患者 P0012（患者 P0012）的单独同意书勾了哪些范围？有没有「营销推荐」？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "ConsentRecord",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    }
+   ],
+   "select": [
+    "scope_items"
+   ]
+  }
+ },
+ "P0012的低血糖告警为什么一直不能闭环？状态机里卡在哪？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "HypoState",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    }
+   ],
+   "select": [
+    "patient_id",
+    "prolonged_risk",
+    "recurrence_window_until",
+    "closure_blocked_reason"
+   ],
+   "steps": [
+    {
+     "link_type": "gates_alert_closure",
+     "direction": "in",
+     "where": [
+      {
+       "field": "alert_id",
+       "op": "eq",
+       "value": "A-P0012-01"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "患者 P0023（患者 P0023）最近 14 天高于 10 和高于 13.9 的时间占比各是多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0023"
+    },
+    {
+     "field": "window_end",
+     "op": "ge",
+     "value": "now-14d"
+    }
+   ],
+   "select": [
+    "tar_pct",
+    "tar_l2_pct"
+   ],
+   "order_by": [
+    {
+     "field": "window_end",
+     "desc": true
+    }
+   ],
+   "limit": 1
+  }
+ },
+ "患者 P0045（患者 P0045）这 14 天 TBR 一级和二级（<3.0）各占多少？": {
+  "kind": "query",
+  "confidence": 0.95,
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0045"
+    },
+    {
+     "field": "window_start",
+     "op": "ge",
+     "value": "now-14d"
+    }
+   ],
+   "select": [
+    "tbr_pct",
+    "tbr_l2_pct",
+    "window_start",
+    "window_end"
+   ],
+   "order_by": [
+    {
+     "field": "window_start",
+     "desc": true
+    }
+   ],
+   "limit": 1
+  }
+ },
  "把患者 P0099 的血糖数据从厂商接口拉进来；家属说他最近睡得还行。": {
   "kind": "action",
   "confidence": 1.0,
@@ -6009,6 +6569,36 @@
    }
   }
  },
+ "从厂商接口摄入P0045的一条读数：r-P0045-x1，6.8 mmol/L，传感器序号 SN-P0045": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor-cloud-P0045",
+   "raw_payload": {
+    "reading_id": "r-P0045-x1",
+    "patient_id": "P0045",
+    "value_mmol": 6.8,
+    "sensor_serial": "SN-P0045",
+    "unit_raw": "mmol/L"
+   }
+  }
+ },
+ "从厂商接口摄入黄伯（P0045）的一条读数：r-P0045-x1，6.8 mmol/L，传感器序号 SN-P0045；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor-cloud-P0045",
+   "raw_payload": {
+    "reading_id": "r-P0045-x1",
+    "patient_id": "P0045",
+    "value_mmol": 6.8,
+    "sensor_serial": "SN-P0045",
+    "unit_raw": "mmol/L"
+   }
+  }
+ },
  "把患者 P0088 的服务分层结论发给他看看；家属说他最近睡得还行。": {
   "kind": "action",
   "confidence": 1.0,
@@ -6065,6 +6655,44 @@
    "window": "14d"
   }
  },
+ "给P0045按 14 天数据输出德心服务分层标签": {
+  "kind": "action",
+  "confidence": 0.85,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0045",
+   "window": "14d"
+  }
+ },
+ "给黄伯（P0045）按 14 天数据输出德心服务分层标签；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.85,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0045",
+   "window": "14d"
+  }
+ },
+ "健管师在P0088的群里答复：您本期的服务分层是 L1 级": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0088",
+   "message": "您本期的服务分层是 L1 级",
+   "sender_role": "健管师"
+  }
+ },
+ "健管师在李女士（P0088）的群里答复：您本期的服务分层是 L1 级；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 1.0,
+  "action": "群内答复患者",
+  "params": {
+   "patient_id": "P0088",
+   "message": "您本期的服务分层是 L1 级",
+   "sender_role": "健管师"
+  }
+ },
  "患者 P0007 停药满 90 天了，判一下缓解（化验 lab-P0007-hba1c，报告 s-P0007-14d）；家属说他最近睡得还行。": {
   "kind": "action",
   "confidence": 0.95,
@@ -6073,6 +6701,16 @@
    "patient_id": "P0007",
    "lab_result_id": "lab-P0007-hba1c",
    "summary_id": "s-P0007-14d"
+  }
+ },
+ "给 P0012 做一次缓解判定。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.8,
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0012",
+   "lab_result_id": null,
+   "summary_id": null
   }
  },
  "给 P0012 生成本期方案草稿（基于 14 天指标 s-P0012-14d）并送医师签发；家属说他最近睡得还行。": {
@@ -6184,6 +6822,68 @@
   "params": {
    "patient_id": "P0045",
    "window": "14d"
+  }
+ },
+ "P0023 的草稿，方向去强化。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0023",
+   "analysis_result": {},
+   "direction": "去强化"
+  }
+ },
+ "P0045 出强化降糖方向的草稿。；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0045",
+   "analysis_result": {},
+   "direction": "强化"
+  }
+ },
+ "给P0012出一份转医师的去强化证据包（14 天）": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "生成去强化证据工单",
+  "params": {
+   "patient_id": "P0012",
+   "window": "14d"
+  }
+ },
+ "给刘阿姨（P0012）出一份转医师的去强化证据包（14 天）；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "生成去强化证据工单",
+  "params": {
+   "patient_id": "P0012",
+   "window": "14d"
+  }
+ },
+ "给P0007生成本期方案草稿，方向维持（基于 s-P0007-14d）": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0007",
+   "analysis_result": {
+    "summary_ref": "s-P0007-14d"
+   },
+   "direction": "维持"
+  }
+ },
+ "给周先生（P0007）生成本期方案草稿，方向维持（基于 s-P0007-14d）；家属说他最近睡得还行。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0007",
+   "analysis_result": {
+    "summary_ref": "s-P0007-14d"
+   },
+   "direction": "维持"
   }
  }
 }

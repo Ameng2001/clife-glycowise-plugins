@@ -1,0 +1,80 @@
+# 由 t-20261023-0215 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r31
+q: 健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意
+expect: rejected(C6_群内数据最小可见范围)
+tier: 3
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+- C6_群内数据最小可见范围
+label:
+  answer: 群内消息含未脱敏原始血糖值『2.2 mmol/L』（C6 正则 \d+\.\d\s*mmol 命中），硬拒成立。
+  source: feedback
+  trace_id: t-20261023-0215
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 健管师在P0031群里答复：您凌晨三点测到 2.2 mmol/L，要注意
+  kind: paraphrase
+- q: 健管师在王叔（P0031）群里答复：您凌晨三点测到 2.2 mmol/L，要注意；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0209
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: 一级低血糖处置
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0210
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: 二级低血糖处置规则
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0212
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 5.1，继续观察 24 小时
+    retest_value: 5.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0214
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 群内答复患者
+  params:
+    patient_id: P0031
+    message: 您凌晨三点测到 2.2 mmol/L，要注意
+    sender_role: 健管师

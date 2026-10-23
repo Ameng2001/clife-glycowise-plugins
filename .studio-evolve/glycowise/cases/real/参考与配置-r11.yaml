@@ -1,0 +1,55 @@
+# 由 t-20261023-0211 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r11
+q: 王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4
+expect: action(收紧告警阈值)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 收紧告警阈值
+label:
+  answer: P0031 is_iah_high_risk=True（R46 要求夜间低值阈值 ≥4.4），把 night_low 上调到 4.4 是向安全方向收紧，医师操作直接提交成立；seed 原本没有 th-P0031-night_low，动作新建一行 current 4.4（before 记默认 3.9）。
+  source: feedback
+  trace_id: t-20261023-0211
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P003124 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4
+  kind: paraphrase
+- q: 王叔（P0031）24 小时内有 Level 2 事件，按 R34 把夜间低值阈值上调到 4.4；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0209
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: 一级低血糖处置
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0210
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: 二级低血糖处置规则
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4

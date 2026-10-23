@@ -1,0 +1,116 @@
+# 由 t-20261023-0243 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 产品与机构合规-r17
+q: P0007 的英纽林推荐，话术只说饮食补充。
+expect: action(生成产品推荐)
+tier: 3
+family: 产品与机构合规
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 生成产品推荐
+label:
+  answer: 路由把『话术只说饮食补充』补成 pitch='作为日常饮食的补充'。P0007 同意书含『营销推荐』（C4 过）；话术无分层/缓解字样（D9/R32 同句闸过），handler 自动附『固体饮料，不替代药物』尾注（R32 尾注过）；C13 bundle 不作用；置信 0.8 ≥0.75 不进 HIL，直接提交成立。
+  source: feedback
+  trace_id: t-20261023-0243
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0007 的英纽林推荐，话术只说饮食补充。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0204
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result: {}
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0209
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: 一级低血糖处置
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0210
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: 二级低血糖处置规则
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0212
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 5.1，继续观察 24 小时
+    retest_value: 5.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0214
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0219
+  action: 触发低血糖处置
+  params:
+    patient_id: P0031
+    reading_id: r-P0031-01067
+    rule_id: R34
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0228
+  action: 输出服务分层标签
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0229
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 今天的数据已经同步到，餐后记得走一走
+    sender_role: 健管师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0236
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0045-w41
+    targets:
+    - P0045
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0238
+  action: 放宽告警阈值
+  params:
+    patient_id: P0007
+    field: day_high
+    new_value: 13.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.8
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 作为日常饮食的补充
