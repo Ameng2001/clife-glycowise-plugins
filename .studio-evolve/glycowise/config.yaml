@@ -28,8 +28,8 @@ simulate:
 trajectory_source:
   kind: audit_log
   path: ".studio-evolve/glycowise/trajectories/{window}/audit.jsonl"
-  export:                                             # 网关从引擎 SqliteAuditStore 导出并补四个键的约定
-    from: "sqlite:///var/lib/clife-onto-engine/audit.db"   # 表 audit，按 ontology_id='glycowise' 导出
+  export:                                             # 网关从引擎 SqliteAuditStore 导出并补四个键的约定（样例实现：examples/record_window.py export）
+    from: "sqlite:///.studio-evolve/glycowise/examples/engine-audit/audit.db"   # 表 audit + 网关表 gateway_trace；2026-10-23 由 examples/record_window.py 真跑引擎写入（生产环境换成网关侧的库路径）
     enrich: [trace_id, ts, utterance, cost]           # 缺 utterance → COARSE_TRAJECTORY；缺 cost.tokens → COST_BY_STEPS
     window: iso_week                                  # 目录名 2026-W44 这种 ISO 周
 

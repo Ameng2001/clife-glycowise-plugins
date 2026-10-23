@@ -12,11 +12,13 @@
 
 | 路径 | 是什么 |
 |---|---|
-| `trajectories/2026-W44/audit.jsonl` | ① 一个完整的最小可开工窗口：20 条轨迹（17 execute：committed 8 · rejected 7 · pending_hil 2；3 ask），覆盖 10 个 family |
+| `trajectories/2026-W43/audit.jsonl` | ① **真实窗口**：35 条引擎真跑出来的轨迹（见文末） |
+| `trajectories/2026-W44/audit.jsonl` | ① 格式样例（手写，非引擎产出）：20 条轨迹（17 execute：committed 8 · rejected 7 · pending_hil 2；3 ask），覆盖 10 个 family |
 | `trajectories/2026-W44/feedback.yaml` | ② 这 20 条的标签：correct 14（含 7 条「拒绝得对」）/ wrong 4 / partial 2，三位标签人可追溯 |
-| `cases/real/*.yaml` | ②' 由 ①+② 自动落成的 18 条真实案例（partial 不落） |
+| `cases/real.format-sample/*.yaml` | ②' 的**格式样例**（由 W44 手写样例落成，不是真实案例，不得进 `cases/real/`） |
 | `make_real_cases.py` | ①+② → ②' 的样例实现（幂等，按 family 顺延编号），`python3 make_real_cases.py --dry-run` 先看 |
 | `config.sources.yaml` | ③ 只读数据源 `sources` 段 + 审计导出约定，贴进 `../config.yaml` |
+| `record_window.py` / `replay_check.py` / `draft_feedback.py` | 真实窗口三件套：真跑引擎录轨迹、回放校验、起草待标注清单（见文末「真实窗口 2026-W43」） |
 | `gen_synthetic_windows.py` | 按 200 / 900 门槛生成**合成**窗口验证接法与分层（产物 `synthetic/` 已 gitignore，不得混入 `cases/real/`） |
 
 ## ① 轨迹：`trajectories/2026-W44/audit.jsonl`
@@ -83,16 +85,35 @@ evolve-ground 对 IR §6 每一行（`store / table / key / columns`）跑 `SELE
 
 没反馈的轨迹可以多收，但不参与归因。合成窗口只证明管线接法与 `holdout_sample.py` 分层能跑通，**真实 real 池只能来自业务侧标过的轨迹**。
 
-## 接入自检（2026-10-23，对本目录里"已准备好"的三类数据）
+## 接入自检（2026-10-23 第一轮，对 W44 手写样例）
 
-把 W44 窗口接进 `.studio-evolve/glycowise/`（config、trajectories/、cases/real/、从审计记录登记 manual 路由）后在生产插件上跑了一遍，结论是**这三类数据目前都还不是真实数据，不能进 cases/real 与正式 run**：
+W44 那 20 条不是本引擎跑出来的（9 条参数越界、wrong 标签与引擎行为不符、引用了 seed 里没有的对象 id），数据源不可达，所以**W44 只是格式样例**，其落成的案例已挪到 `cases/real.format-sample/`，不得进 `cases/real/`。同时发现并修了一个真问题：real 与 sim 共用 `{family}-NN` 的 id 会在 runner 里互相覆盖，real 改为 `{family}-rNN`。
 
-| 检查 | 结果 |
-|---|---|
-| 轨迹是否出自本引擎 | 20 条 execute/ask 里 9 条 execute 的参数不在动作声明里（如 创建服务包SKU 用了 package_id/items/price_cny，声明是 sku_id/tier/contents；响应并回执告警 用了 close/patient_id）→ 引擎会在 guard 前拒「越界参数」，真实审计日志不可能有这些行 |
-| wrong 标签与引擎行为是否一致 | R35 那条：生产插件本来就按 R35 拒，"布尔位未置真"的 bug 不存在；R42 / D13 / R44 三条引用的对象（cce-P0023-03、d-P0088-w44 等 8 个 id）不在 seed 里，裁决无法复现 |
-| 数据源 | pg-ro / ch-ro 两个主机不可解析，环境变量未设，`/var/lib/clife-onto-engine/audit.db` 不存在 → ground 整体 UNREACHABLE |
-| 合成窗口 synthetic/（200 条） | 标 synthetic: true、已 gitignore，按约定不得进 cases/real |
-| id 命名 | cases/real 与 cases/sim 共用 `{family}-NN`，runner 按 id 取案例时互相覆盖 → real 改为 `{family}-rNN`（make_real_cases.py 已改） |
+## 真实窗口 2026-W43（2026-10-23 第二轮）
 
-所以 W44 只能当**格式样例**。真实数据的硬判据只有一条：轨迹必须是引擎 `execute` / `ask` 真跑出来的审计记录（参数 ⊆ 声明、对象 id 在库里查得到），反馈由业务侧标。接法本身已验证：config → trajectories → 路由登记（`plugins/glycowise/cq/make_real_routes.py`）→ runner，一条真实窗口到位即可开跑。
+按硬判据重做：**轨迹必须是引擎 `execute` / `ask` 真跑出来的审计记录，参数 ⊆ 声明、对象 id 在库里查得到；反馈由业务侧的人标。**
+
+| 文件 | 是什么 | 真到什么程度 |
+|---|---|---|
+| `record_window.py` | 网关样例：口语 → 真 Qwen（qwen3.5-plus）路由 → `Session.ask` → `ActionEngine.execute` / OQL，审计落 `SqliteAuditStore`，`export` 子命令从 sqlite 导出并补 trace_id / ts / utterance / cost 四个键 | 就是 config.yaml `trajectory_source.export` 约定的那条接法，引擎与插件都是生产代码（engine 44d8ce1，插件 0.1.1） |
+| `utterances.2026-W43.yaml` | 喂进去的 42 句口语：golden 28 句 + 仿真库 14 句（都带演示租户对象 id），角色医师，带 `session_context.txt` | 口语是 CQ 原句；`cq_expect` 只是 CQ 里的领域期望，给标注人参考，不是标签 |
+| `routing.log.2026-W43.jsonl` | 42 句的路由去向全记录 | 7 句被 Qwen 路由成 advise / clarify，不是轨迹，只留在这里 |
+| `engine-audit/audit.db`（gitignore） | 引擎 audit 表 + 网关 gateway_trace 表 | 真 sqlite，`config.yaml` 的 `export.from` 已指向它 |
+| `trajectories/2026-W43/audit.jsonl` | **35 条真实轨迹**：execute 24（committed 3 / pending_hil 6 / rejected 15）、ask 11 | execute 行 = 引擎 `AuditSnapshot.to_dict()` 原样 + 四个键，一个字段没手改；参数越界 0 条；cost.tokens 全部来自真实 usage |
+| `replay_check.py` | 回放校验：新鲜 seed 上按窗口顺序重新 execute / 重跑 OQL | **35/35 复现**（裁决、命中规则、行数全部一致）。`--mode preview`（每条独立预演）有 5 条差异，全是窗口内前序写入导致的状态依赖，sequential 下消失 |
+| `trajectories/2026-W43/feedback.yaml` | **待标注清单**（`status: draft`，35 条 `label: null`） | 每条列了引擎实际裁决与 CQ 期望的机器比对（9 条不一致，建议标注人优先看）；**标签由业务侧填**，填完改 `status: reviewed`，`make_real_cases.py` 在此之前拒绝落案例 |
+| `cases/real/` | 空 | 等 reviewed 的反馈才会有 |
+| 数据源 `sources` | 仍是约定形状 | pg-ro / ch-ro 主机不可达、环境变量未设；唯一真实可达的只有上面的 sqlite 审计库 |
+
+引擎审计有两个口径要知道：`rules_evaluated` 只记 **violate** 的规则（pass 的不记）；guard 阶段命中 hard 即返回，不再跑写后规则，所以同一句在不同状态下命中的规则集合可以不同（这正是 preview 与 sequential 回放差异的来源）。
+
+机器比对与 CQ 期望不一致的 9 条，给标注人的线索（不是结论）：
+
+| trace | 口语 | CQ 期望 | 引擎实际 | 线索 |
+|---|---|---|---|---|
+| 0007 / 0029 / 0031 / 0040 / 0041 / 0042 | 6 句 query | 查到行 | 0 行 | 多数是 Qwen 选了没有该字段的对象或 where 口径不对（如 TAR 字段名、ReviewEvidence 多跳），属路由层；0041 / 0042 seed 里确有 AlertTemplate / HypoState 行 |
+| 0008 | 给 P0012 生成方案草稿 | action(生成方案草稿) | rejected(低血糖优先抢占, R14) | P0012 昨夜有 L1 夜间事件，规则层抢占；这条 CQ 期望本身可能要改 |
+| 0018 | 群里答复"二甲双胍减到一片" | rejected(D10) | rejected(R51) | guard 阶段 R51 先命中就返回了，D10 在写后规则没机会跑；拒绝得对但命中的不是期望规则 |
+| 0022 | OCR 2.8 直接发危急告警 | rejected(R53) | rejected(R56) | 同上：推送告警的 guard 里 R56 排在 R53 前 |
+
+下一步只剩业务侧的事：医师 / 健管主管 / 合规官把 `feedback.yaml` 的 35 条标完（含 ≥3 条 wrong 的真实根因）→ `python3 make_real_cases.py --window 2026-W43` 落成 `cases/real/` → `plugins/glycowise/cq/make_real_routes.py` 登记路由 → 外关卡可开。要凑 200 条，照 `utterances.*.yaml` 的样子换一批口语再跑 `record_window.py` 即可，每周一个窗口。

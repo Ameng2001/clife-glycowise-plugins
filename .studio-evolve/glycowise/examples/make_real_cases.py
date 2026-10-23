@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """把 ① audit.jsonl + ② feedback.yaml 落成 ②' cases/real/{family}-r{n}.yaml（evolve-attribute 第 1 步的样例实现）。
 
-用法：python3 make_real_cases.py [--window 2026-W44] [--out ../cases/real] [--dry-run]
+用法：python3 make_real_cases.py --window 2026-W43 [--out cases/real] [--dry-run]
+前置：feedback.yaml 必须 status: reviewed 且 reviewer 非空、每条 label 已填；draft 直接退出。
 
 规则（与 examples/README.md 一致）：
   * 只处理有反馈的轨迹；partial 不落案例（只用于成本统计）。
@@ -155,7 +156,11 @@ def main():
             t = json.loads(line)
             traj[t["trace_id"]] = t
     fb = yaml.safe_load(open(os.path.join(wdir, "feedback.yaml"), encoding="utf-8"))
-    default_reviewer = fb.get("reviewer", {}).get("id")
+    if fb.get("status", "reviewed") != "reviewed" or not fb.get("reviewer"):
+        sys.exit(f"✗ {a.window}/feedback.yaml 还是 status={fb.get('status')!r}、reviewer={fb.get('reviewer')!r}：业务侧没标完，不落 real 案例")
+    if any(i.get("label") is None for i in fb["items"]):
+        sys.exit(f"✗ {a.window}/feedback.yaml 有 label 为空的条目：没反馈的轨迹不参与归因，请删掉或标好")
+    default_reviewer = (fb.get("reviewer") or {}).get("id")
 
     # 已有案例：trace_id → 文件；family → 已用最大编号
     existing, maxn = {}, {f: 0 for f in FAMILIES}
