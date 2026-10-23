@@ -1,0 +1,18 @@
+# 反馈标签 —— 每条轨迹一项；没有反馈的轨迹不参与归因（不猜标签）。
+# label: correct | partial | wrong；wrong / partial 必须给 truth（真实答案或真实根因），由业务侧（医师 / 健管主管 / 合规）填写。
+window: 2026-W44
+reviewer: {id: u-doctor-01, role: 医师}        # 谁给的标签，进台账 contamination_note
+items:
+  - trace_id: t-20261027-0001
+    label: correct
+    truth: "连续两读数 <3.0 确认，立即触发 L2 处置正确"
+  - trace_id: t-20261027-0002
+    label: correct                                 # 引擎拒绝得对：拒绝本身就是正确行为
+    truth: "营养师凭证已过期，不得签发；应改由黄医生签"
+  - trace_id: t-20261028-0003
+    label: wrong
+    truth: "P0031 夜间覆盖率 41.7%、连续 7 夜低覆盖、TBR 4.7%，不应出强化方向草稿，应先去强化；R35 只看了 summary 的 nocturnal_coverage_insufficient 布尔位，而该位因 summary 生成时窗口口径不同未置真"
+    root_cause_hint: "R35 的 check 应直接读 nocturnal_coverage_pct < 70 而不是依赖派生布尔位"   # 可选，归因器只当线索不当结论
+  - trace_id: t-20261028-0004
+    label: partial
+    truth: "答出了 2 次夜间事件，但其中一次是回填读数算出来的，应标注来源；只用于成本统计，不进 D⁺/D⁻"
