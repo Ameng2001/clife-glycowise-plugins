@@ -30,6 +30,7 @@ h_i 在 203 条 × 3 run：**474/609**（A .778；S_consist = S_stable = 1.0；W
 - 第 1 次（commit / 规则名判据）：P9a 与 P9b 八臂几乎同判 ACCEPT，Dᵢ / B_5 / B-sim / real-all 逐行相同——判据读不到落库状态。
 - 第 2 次（runner 加 `expect_state`，15 条 dedup 案例补落库真值）：Dᵢ 上 P9a 12/15、P9b **0/15**，判据分开了；但 3d 仍接受 P9b——g_in 的 strict 项被 ΔC −0.8 单独满足（steps 把违规数计入成本，放行永远比拒绝便宜），外关卡 B_5 又有两条同根 x9 案例给 +0.05。八臂只有 1d-strict 拒（ΔA < δ）。`arm_compare` r1–5（attempt 2 的 verdict）：9 条提案 × 8 臂，regress 全 0，1d-strict accept 8/9，random 5/9。
 - 第 3 次（criteria amend：strict 只认 T / S / W，ΔC 只做约束；v3 未冻结）：3d 族四臂 **REJECT** P9b（无严格改善），1d 仍 ACCEPT，1d-strict REJECT——**第一个分歧集**（1d 接受 ∧ 3d 拒绝 = P9b）；但 B_5 上 regress = 0，因为 B_5 没有 dup1 案例、留出集对这类写错盲。arms r1–5（attempt 3）：3d accept 8/9、1d 9/9、regress 全 0。
+- 第 4 次（B 的写类案例全带 `expect_state`，65/203）：B_5 / real-all 重跑，八臂与第 3 次逐格相同，regress_rate_diff 仍 0。原因不再是判据盲：P9b 写错的 8 条在 h_i 上本来就失败（硬拒），regress 口径只认「h_i 过 → h' 不过」；B_5 仅有的 3 条去重案例两份都修对。外关卡结构上看不见「换一种失败」的朴素修法，只有内关卡成长轴能拒——H-1b 的实测边界。
 
 ## 4. 方法问题
 
