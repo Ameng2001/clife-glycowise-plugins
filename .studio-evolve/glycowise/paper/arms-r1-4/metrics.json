@@ -16,7 +16,7 @@
   "regress_rate_3d-noW": 0.0,
   "accept_rate_3d": 1.0,
   "accept_rate_1d": 1.0,
-  "accept_rate_random": 0.4,
+  "accept_rate_random": 0.42857142857142855,
   "accept_rate_1d-strict": 1.0,
   "accept_rate_none": 1.0,
   "accept_rate_3d-noT": 1.0,
@@ -24,7 +24,7 @@
   "accept_rate_3d-noW": 1.0,
   "divergent_regress_rate": null
  },
- "n": 5,
+ "n": 7,
  "flags": [
   "REGRESS_MIXED_B"
  ],

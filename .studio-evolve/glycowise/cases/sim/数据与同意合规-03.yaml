@@ -1,0 +1,20 @@
+id: 数据与同意合规-03
+q: 厂商接口重推了黄伯（P0045）23:45 那条读数（r-P0045-dup1，序号 SN-P0045-A-01343），做去重仲裁
+expect: action(去重与通道仲裁)
+tier: 3
+family: 数据与同意合规
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 去重与通道仲裁
+- R48_去重键必须用传感器序号
+- GlucoseReading
+label:
+  answer: dedup_key 与库里 r-P0045-01343 相同 → 候选判重复，落库为 superseded（不计入指标），动作 committed
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0045 的 r-P0045-dup1（SN-P0045-A-01343）去重。
+- kind: irrelevant_field
+  q: 厂商接口重推了黄伯（P0045）23:45 那条读数（r-P0045-dup1，序号 SN-P0045-A-01343），做去重仲裁；今天天气不错。
+note: P8 来源案例：W45 0233 路由到只有桩的动作

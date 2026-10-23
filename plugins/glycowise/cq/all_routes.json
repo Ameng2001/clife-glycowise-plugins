@@ -4859,6 +4859,450 @@
    "sender_role": "健管师"
   }
  },
+ "李女士（P0088）在群里问二甲双胍要不要减量，健管师不能答，把问题转介医师": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0088",
+   "question_context": "李女士问二甲双胍要不要减量"
+  }
+ },
+ "P0088 问二甲双胍减不减量，转医师。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0088",
+   "question_context": "李女士问二甲双胍要不要减量"
+  }
+ },
+ "李女士（P0088）在群里问二甲双胍要不要减量，健管师不能答，把问题转介医师；她说最近胃口不错。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0088",
+   "question_context": "李女士问二甲双胍要不要减量"
+  }
+ },
+ "王叔（P0031）家属记录到夜里叫不醒（sym-P0031-01），按 Level 3 严重低血糖转介医师复核": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0031",
+   "question_context": "家属记录王叔夜里叫不醒、喂糖水后缓解，请医师复核"
+  }
+ },
+ "P0031 叫不醒那次，转医师复核。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0031",
+   "question_context": "家属记录王叔夜里叫不醒、喂糖水后缓解，请医师复核"
+  }
+ },
+ "王叔（P0031）家属记录到夜里叫不醒（sym-P0031-01），按 Level 3 严重低血糖转介医师复核；家属说他白天精神还行。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0031",
+   "question_context": "家属记录王叔夜里叫不醒、喂糖水后缓解，请医师复核"
+  }
+ },
+ "周先生（P0007）停药观察期里问能不能把二甲双胍彻底停掉，转介医师": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0007",
+   "question_context": "周先生停药观察期问能不能把二甲双胍彻底停掉"
+  }
+ },
+ "P0007 问能不能停二甲双胍，转医师。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0007",
+   "question_context": "周先生停药观察期问能不能把二甲双胍彻底停掉"
+  }
+ },
+ "周先生（P0007）停药观察期里问能不能把二甲双胍彻底停掉，转介医师；他这周开始晨跑了。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "转介医师",
+  "params": {
+   "patient_id": "P0007",
+   "question_context": "周先生停药观察期问能不能把二甲双胍彻底停掉"
+  }
+ },
+ "厂商接口重推了黄伯（P0045）23:45 那条读数（r-P0045-dup1，序号 SN-P0045-A-01343），做去重仲裁": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-dup1",
+    "value_mmol": 6.8,
+    "time_utc": "2026-10-22T23:45",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01343",
+    "value_raw": 6.8,
+    "device_time": "2026-10-22T23:45"
+   }
+  }
+ },
+ "P0045 的 r-P0045-dup1（SN-P0045-A-01343）去重。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-dup1",
+    "value_mmol": 6.8,
+    "time_utc": "2026-10-22T23:45",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01343",
+    "value_raw": 6.8,
+    "device_time": "2026-10-22T23:45"
+   }
+  }
+ },
+ "厂商接口重推了黄伯（P0045）23:45 那条读数（r-P0045-dup1，序号 SN-P0045-A-01343），做去重仲裁；今天天气不错。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-dup1",
+    "value_mmol": 6.8,
+    "time_utc": "2026-10-22T23:45",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01343",
+    "value_raw": 6.8,
+    "device_time": "2026-10-22T23:45"
+   }
+  }
+ },
+ "黄伯（P0045）新到一条读数 r-P0045-x9（00:00，6.5，序号 SN-P0045-A-01344），做去重仲裁后入库": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-x9",
+    "value_mmol": 6.5,
+    "time_utc": "2026-10-23T00:00",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01344",
+    "value_raw": 6.5,
+    "device_time": "2026-10-23T00:00"
+   }
+  }
+ },
+ "P0045 的 r-P0045-x9（SN-P0045-A-01344）入库。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-x9",
+    "value_mmol": 6.5,
+    "time_utc": "2026-10-23T00:00",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01344",
+    "value_raw": 6.5,
+    "device_time": "2026-10-23T00:00"
+   }
+  }
+ },
+ "黄伯（P0045）新到一条读数 r-P0045-x9（00:00，6.5，序号 SN-P0045-A-01344），做去重仲裁后入库；他昨晚睡得早。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-x9",
+    "value_mmol": 6.5,
+    "time_utc": "2026-10-23T00:00",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01344",
+    "value_raw": 6.5,
+    "device_time": "2026-10-23T00:00"
+   }
+  }
+ },
+ "黄伯（P0045）的读数 r-P0045-v7 没带传感器序号，用厂商记录 ID vendor-rec-778899 做去重键，做去重仲裁": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-v7",
+    "value_mmol": 7.1,
+    "time_utc": "2026-10-23T00:15",
+    "sensor_serial": null,
+    "dedup_key": "vendor-rec-778899",
+    "value_raw": 7.1,
+    "device_time": "2026-10-23T00:15"
+   }
+  }
+ },
+ "P0045 的 r-P0045-v7 用厂商记录 ID 去重。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-v7",
+    "value_mmol": 7.1,
+    "time_utc": "2026-10-23T00:15",
+    "sensor_serial": null,
+    "dedup_key": "vendor-rec-778899",
+    "value_raw": 7.1,
+    "device_time": "2026-10-23T00:15"
+   }
+  }
+ },
+ "黄伯（P0045）的读数 r-P0045-v7 没带传感器序号，用厂商记录 ID vendor-rec-778899 做去重键，做去重仲裁；他今天换了手机。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-v7",
+    "value_mmol": 7.1,
+    "time_utc": "2026-10-23T00:15",
+    "sensor_serial": null,
+    "dedup_key": "vendor-rec-778899",
+    "value_raw": 7.1,
+    "device_time": "2026-10-23T00:15"
+   }
+  }
+ },
+ "黄伯（P0045）家属截图 OCR 出一条 23:45 的 6.9（r-P0045-ocr9，无序号，已标 weak_dedup），与厂商那条做通道仲裁": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "upload_day_assumed",
+    "source_channel": "ocr_upload",
+    "source_confidence": 0.78,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "stale",
+    "reading_id": "r-P0045-ocr9",
+    "value_mmol": 6.9,
+    "time_utc": "2026-10-22T23:45",
+    "sensor_serial": null,
+    "dedup_key": "ocr-P0045-9",
+    "weak_dedup": true,
+    "value_raw": 6.9,
+    "device_time": "2026-10-22T23:45"
+   }
+  }
+ },
+ "P0045 的 OCR 读数 r-P0045-ocr9（weak_dedup）仲裁。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "upload_day_assumed",
+    "source_channel": "ocr_upload",
+    "source_confidence": 0.78,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "stale",
+    "reading_id": "r-P0045-ocr9",
+    "value_mmol": 6.9,
+    "time_utc": "2026-10-22T23:45",
+    "sensor_serial": null,
+    "dedup_key": "ocr-P0045-9",
+    "weak_dedup": true,
+    "value_raw": 6.9,
+    "device_time": "2026-10-22T23:45"
+   }
+  }
+ },
+ "黄伯（P0045）家属截图 OCR 出一条 23:45 的 6.9（r-P0045-ocr9，无序号，已标 weak_dedup），与厂商那条做通道仲裁；截图是女儿发的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "upload_day_assumed",
+    "source_channel": "ocr_upload",
+    "source_confidence": 0.78,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "stale",
+    "reading_id": "r-P0045-ocr9",
+    "value_mmol": 6.9,
+    "time_utc": "2026-10-22T23:45",
+    "sensor_serial": null,
+    "dedup_key": "ocr-P0045-9",
+    "weak_dedup": true,
+    "value_raw": 6.9,
+    "device_time": "2026-10-22T23:45"
+   }
+  }
+ },
+ "黄伯（P0045）23:37 来了一个 2.4 的单点（r-P0045-art1），前后 10 分钟都在 6.8 以上，做去重仲裁": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-art1",
+    "value_mmol": 2.4,
+    "time_utc": "2026-10-22T23:37",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01345",
+    "value_raw": 2.4,
+    "device_time": "2026-10-22T23:37"
+   }
+  }
+ },
+ "P0045 23:37 的 2.4 单点（r-P0045-art1）去重仲裁。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-art1",
+    "value_mmol": 2.4,
+    "time_utc": "2026-10-22T23:37",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01345",
+    "value_raw": 2.4,
+    "device_time": "2026-10-22T23:37"
+   }
+  }
+ },
+ "黄伯（P0045）23:37 来了一个 2.4 的单点（r-P0045-art1），前后 10 分钟都在 6.8 以上，做去重仲裁；他说传感器被压到了。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "去重与通道仲裁",
+  "params": {
+   "reading_candidate": {
+    "patient_id": "P0045",
+    "unit_raw": "mmol/L",
+    "tz_provenance": "device_reported",
+    "source_channel": "vendor_api",
+    "source_confidence": 0.99,
+    "quality_flag": "clean",
+    "is_backfill": false,
+    "data_age": "fresh",
+    "reading_id": "r-P0045-art1",
+    "value_mmol": 2.4,
+    "time_utc": "2026-10-22T23:37",
+    "sensor_serial": "SN-P0045-A",
+    "dedup_key": "SN-P0045-A-01345",
+    "value_raw": 2.4,
+    "device_time": "2026-10-22T23:37"
+   }
+  }
+ },
  "王叔（P0031）读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置": {
   "kind": "action",
   "confidence": 0.9,

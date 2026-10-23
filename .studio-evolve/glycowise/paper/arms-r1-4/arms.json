@@ -1,9 +1,10 @@
 {
- "n_proposals": 5,
+ "n_proposals": 7,
  "rounds": [
   1,
   2,
-  3
+  3,
+  4
  ],
  "modes": [
   "3d",
@@ -18,42 +19,42 @@
  "arms": {
   "3d": {
    "accept_rate": 1.0,
-   "n_accept": 5,
+   "n_accept": 7,
    "regress_rate": 0.0
   },
   "1d": {
    "accept_rate": 1.0,
-   "n_accept": 5,
+   "n_accept": 7,
    "regress_rate": 0.0
   },
   "random": {
-   "accept_rate": 0.4,
-   "n_accept": 2,
+   "accept_rate": 0.42857142857142855,
+   "n_accept": 3,
    "regress_rate": 0.0
   },
   "1d-strict": {
    "accept_rate": 1.0,
-   "n_accept": 5,
+   "n_accept": 7,
    "regress_rate": 0.0
   },
   "none": {
    "accept_rate": 1.0,
-   "n_accept": 5,
+   "n_accept": 7,
    "regress_rate": 0.0
   },
   "3d-noT": {
    "accept_rate": 1.0,
-   "n_accept": 5,
+   "n_accept": 7,
    "regress_rate": 0.0
   },
   "3d-noS": {
    "accept_rate": 1.0,
-   "n_accept": 5,
+   "n_accept": 7,
    "regress_rate": 0.0
   },
   "3d-noW": {
    "accept_rate": 1.0,
-   "n_accept": 5,
+   "n_accept": 7,
    "regress_rate": 0.0
   }
  },
@@ -72,7 +73,7 @@
     0.0,
     0.0
    ],
-   "boot": 929
+   "boot": 981
   },
   "1d-strict_minus_3d": {
    "value": 0.0,
@@ -127,7 +128,7 @@
   "C": 0,
   "unknown": 0
  },
- "n": 5,
+ "n": 7,
  "flags": [
   "REGRESS_MIXED_B"
  ],
@@ -249,6 +250,52 @@
    "window": null,
    "origins": {
     "real": 1
+   }
+  },
+  {
+   "round": 4,
+   "proposal": "7",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 3
+   }
+  },
+  {
+   "round": 4,
+   "proposal": "8",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 5
    }
   }
  ]

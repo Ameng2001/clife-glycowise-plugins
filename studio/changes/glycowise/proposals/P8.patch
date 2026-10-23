@@ -1,0 +1,147 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1379,12 +1379,60 @@
+     cons = [c for c in ctx.find("ConsentRecord", lambda r: r.get("patient_id") == pid) if c.get("state", "granted") != "revoked"] if pid else []
+     if not any("营销推荐" in (c.get("scope_items") or []) for c in cons):
+         return _fail("C4", f"患者 {pid} 未单独勾选「营销推荐」用途", "单独同意后再生成推荐，并提供关闭与人工复核入口")
++    return RuleResult.ok()
++
++
++def _pressure_artifact(ctx, r):
++    """R02 口径：单点 <3.0 但前后 10min 内回升 ≥1.5，或 15min 内跳变 >5.0 → 传感器压迫伪差。返回命中描述或 None。"""
++    g, t, pid = _num(r.get("value_mmol")), _dt(r.get("time_utc")), r.get("patient_id")
++    if g is None or t is None or g >= 3.0 or not pid:
++        return None
++    rows = [x for x in ctx.find("GlucoseReading", lambda x: x.get("patient_id") == pid and x.get("reading_id") != r.get("reading_id"))
++            if _dt(x.get("time_utc")) and _num(x.get("value_mmol")) is not None]
++    near10 = [x for x in rows if abs((_dt(x["time_utc"]) - t).total_seconds()) <= 600]
++    near15 = [x for x in rows if abs((_dt(x["time_utc"]) - t).total_seconds()) <= 900]
++    if any(_num(x["value_mmol"]) - g >= 1.5 for x in near10):
++        return "前后 10min 内回升 ≥1.5"
++    if any(abs(_num(x["value_mmol"]) - g) > 5.0 for x in near15):
++        return "15min 内跳变 >5.0"
++    return None
++
++
++@rule("R02_传感器压迫伪差识别")
++def r02(ctx):
++    r = P(ctx, "reading_candidate")
++    if not isinstance(r, dict):
++        rid = P(ctx, "reading_id")
++        r = ctx.get("GlucoseReading", str(rid)) if rid else None
++    if not isinstance(r, dict):
++        return RuleResult.ok()
++    hit = _pressure_artifact(ctx, r)
++    if hit:
++        return _fail("R02", f"读数 {r.get('reading_id')}={r.get('value_mmol')} 疑为传感器压迫伪差（{hit}），不计入低血糖事件", "标 noise；伪差判定不抑制 hard 级告警")
++    return RuleResult.ok()
++
++
++@rule("R36_active率超100自检")
++def r36(ctx):
++    """IR check：active_pct <= 100。P8：去重与通道仲裁没有 active_pct 参数——按候选读数所属患者近 14 天（含本次暂存）自算，>100% 即去重失效。"""
++    a = _num(P(ctx, "active_pct"))
++    if a is None:
++        pid = pid_of(ctx) or (P(ctx, "reading_candidate", "patient_id") if isinstance(P(ctx, "reading_candidate"), dict) else None)
++        if not pid:
++            return RuleResult.ok()
++        rows = readings_of(ctx, str(pid), days=14, clean_only=True)
++        a = round(100.0 * len(rows) / (14 * 96), 1)
++    if a > 100:
++        return _fail("R36", f"active% = {a} > 100，去重失效信号", "停止入库，检查 dedup_key 与通道仲裁")
+     return RuleResult.ok()
+ 
+ 
+ @rule("R48_去重键必须用传感器序号")
+ def r48(ctx):
+     rows = P(ctx, "raw_payload", "readings") or []
++    c = P(ctx, "reading_candidate")
++    if isinstance(c, dict):
++        rows = list(rows) + [c]
+     for r in rows:
+         if not isinstance(r, dict):
+             continue
+@@ -1818,6 +1866,44 @@
+         n += 1
+     ctx.stage_write("IngestBatch", f"batch-{ctx.params.get('channel')}-{_now()}", {"channel": ctx.params.get("channel"), "record_count": n, "status": "pending", "_staged": exec_token(ctx)})
+     ctx.set_confidence(1.0)
++
++
++@action("去重与通道仲裁")
++def act_dedup(ctx):
++    """P8（W45 / 0233）：IR §4「按传感器序号去重，多路自动仲裁」。
++    强键（sensor_serial + 序号）相同 → 重复，候选落库为 superseded；弱键（weak_dedup）→ ±90s 容差内有读数即重复；
++    强键不同但 ±90s 内有其它通道读数 → 多通道仲裁，source_confidence 高者为准，低者 superseded；
++    R02 口径的压迫伪差 → quality_flag noise（不计入事件，不抑制告警）。"""
++    c = dict(ctx.params.get("reading_candidate") or {})
++    rid = str(c.get("reading_id") or f"cand-{_now()}")
++    pid = str(c.get("patient_id") or pid_of(ctx) or "")
++    c["reading_id"], c["patient_id"] = rid, pid
++    c.setdefault("quality_flag", "clean"); c.setdefault("tz_provenance", "device_reported")
++    dk, t = c.get("dedup_key"), _dt(c.get("time_utc"))
++    others = [r for r in ctx.find("GlucoseReading", lambda r: r.get("patient_id") == pid and r.get("reading_id") != rid)]
++    dup = [r for r in others if dk and r.get("dedup_key") == dk]
++    near = [r for r in others if t and _dt(r.get("time_utc")) and abs((_dt(r["time_utc"]) - t).total_seconds()) <= 90]
++    verdict, ref = "new", None
++    if dup:
++        verdict, ref = "duplicate", dup[0]["reading_id"]
++    elif c.get("weak_dedup") is True and near:
++        verdict, ref = "weak_duplicate", near[0]["reading_id"]
++    elif near:
++        best = max(near, key=lambda r: _num(r.get("source_confidence")) or 0.0)
++        if (_num(c.get("source_confidence")) or 0.0) > (_num(best.get("source_confidence")) or 0.0):
++            verdict, ref = "arbitrated_wins", best["reading_id"]
++            ctx.stage_write("GlucoseReading", str(best["reading_id"]), {**best, "quality_flag": "superseded", "superseded_by": rid, "_staged": exec_token(ctx)})
++        else:
++            verdict, ref = "arbitrated_loses", best["reading_id"]
++    if verdict in ("duplicate", "weak_duplicate", "arbitrated_loses"):
++        c["quality_flag"], c["superseded_by"] = "superseded", ref
++    else:
++        hit = _pressure_artifact(ctx, c)
++        if hit:
++            c["quality_flag"], c["artifact_reason"] = "noise", hit
++    ctx.stage_write("GlucoseReading", rid, {**c, "_staged": exec_token(ctx)})
++    ctx.set_confidence(0.95 if c.get("sensor_serial") else 0.8)
++    ctx.add_evidence(verdict=verdict, ref=ref, quality_flag=c["quality_flag"])
+ 
+ 
+ @action("触发低血糖处置")
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -1484,9 +1484,7 @@
+     优先级 120（B1 低血糖 带）· 生效阶段 P1+P2。
+     挂载动作：去重与通道仲裁、统计低血糖事件。
+     """
+-    # TODO(FDE): 查该读数前后 10min 窗口，校验是否满足回升 ≥1.5 mmol/L 或 15min 内跳变 >5.0 mmol/L
+-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
+-    raise NotImplementedError("R02_传感器压迫伪差识别 待实现")
++    return _fde.RULES['R02_传感器压迫伪差识别'](ctx)
+ 
+ @spi.rule(ONTOLOGY, "R05_即将低血糖预测告警", backing=Backing.FUNCTION, severity=Severity.HARD,
+           evaluation=Evaluation.POST_WRITE,
+@@ -1811,10 +1809,7 @@
+     优先级 335（B3 波动与餐后 带）· 生效阶段 P1+P2。
+     挂载动作：去重与通道仲裁、计算窗口指标。
+     """
+-    active_pct = ctx.params.get("active_pct")
+-    if not (active_pct <= 100):  # ← 取自 IR check，取反即违反条件
+-        return RuleResult.fail("R36_active率超100自检 未通过", suggestion="须满足：active_pct <= 100")
+-    return RuleResult.ok()
++    return _fde.RULES['R36_active率超100自检'](ctx)  # 缺 active_pct 参数时按患者 14 天窗口自算（P8）
+ 
+ @spi.rule(ONTOLOGY, "R48_去重键必须用传感器序号", backing=Backing.FUNCTION, severity=Severity.HARD,
+           evaluation=Evaluation.PRE,
+@@ -2932,12 +2927,7 @@
+ 
+     写入对象：GlucoseReading。
+     """
+-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
+-    # ctx.stage_write("GlucoseReading", f"glucosereading_{ctx.params[...]}", {...})
+-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
+-    ctx.set_confidence(0.8)
+-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
+-    raise NotImplementedError("去重与通道仲裁 handler 待实现")
++    _fde.ACTIONS['去重与通道仲裁'](ctx)
+ 
+ @spi.action(
+     ONTOLOGY, "OCR读数复核",

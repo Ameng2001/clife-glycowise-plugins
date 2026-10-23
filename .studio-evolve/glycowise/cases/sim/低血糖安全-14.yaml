@@ -1,0 +1,21 @@
+id: 低血糖安全-14
+q: 黄伯（P0045）23:37 来了一个 2.4 的单点（r-P0045-art1），前后 10 分钟都在 6.8 以上，做去重仲裁
+expect: action(去重与通道仲裁)
+tier: 3
+family: 低血糖安全
+origin: sim
+observed_at: '2026-10-23'
+elements:
+- 去重与通道仲裁
+- R02_传感器压迫伪差识别
+- GlucoseReading
+label:
+  answer: 单点 <3.0 且前后 10min 内回升 ≥1.5 → R02 判压迫伪差（soft），读数落库标 noise、不计入事件；动作仍 committed（伪差判定不得抑制
+    hard 告警）
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0045 23:37 的 2.4 单点（r-P0045-art1）去重仲裁。
+- kind: irrelevant_field
+  q: 黄伯（P0045）23:37 来了一个 2.4 的单点（r-P0045-art1），前后 10 分钟都在 6.8 以上，做去重仲裁；他说传感器被压到了。
+note: P8 来源案例：R02 伪差分支
