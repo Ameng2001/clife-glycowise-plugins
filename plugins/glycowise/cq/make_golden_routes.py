@@ -103,6 +103,8 @@ def expand(golden: list, routes: dict) -> dict:
         r = routes[orig]
         out[g["q"]] = r
         out[orig] = r
+        for v in (g.get("variants") or []):  # 其余变体（如 with_fact 原「钓」句）共用同一路由
+            if v.get("q"): out[v["q"]] = r
     return out
 
 
@@ -116,4 +118,4 @@ if __name__ == "__main__":
     out = Path(__file__).parent / "golden_routes.json"
     rec = expand(golden, ROUTES)
     out.write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"✓ {len(ROUTES)} 条路由 × (q + original) = {len(rec)} 键 → {out}")
+    print(f"✓ {len(ROUTES)} 条路由 × (q + variants) = {len(rec)} 键 → {out}")

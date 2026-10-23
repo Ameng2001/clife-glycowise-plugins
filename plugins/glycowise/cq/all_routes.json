@@ -416,7 +416,7 @@
    "direction": "强化"
   }
  },
- "患者 P0088 才戴了 6 天，先把服务分层结论发给他看看": {
+ "把患者 P0088 的服务分层结论发给他看看": {
   "kind": "action",
   "confidence": 0.95,
   "action": "输出服务分层标签",
@@ -426,6 +426,15 @@
   }
  },
  "患者才戴了 6 天，先把服务分层结论发给他看看": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "输出服务分层标签",
+  "params": {
+   "patient_id": "P0088",
+   "window": "6d"
+  }
+ },
+ "患者 P0088 才戴了 6 天，先把服务分层结论发给他看看": {
   "kind": "action",
   "confidence": 0.95,
   "action": "输出服务分层标签",
@@ -492,7 +501,7 @@
    "sender_role": "健管师"
   }
  },
- "陈营养师的注册证上个月过期了，让她把 P0012 的方案草稿 d-P0012-01 签了": {
+ "让陈营养师把 P0012 的方案草稿 d-P0012-01 签了": {
   "kind": "action",
   "confidence": 0.95,
   "action": "签发方案",
@@ -512,7 +521,17 @@
    "decision": "approve"
   }
  },
- "患者 P0099 还没签单独同意，先把他的血糖数据从厂商接口拉进来": {
+ "陈营养师的注册证上个月过期了，让她把 P0012 的方案草稿 d-P0012-01 签了": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "签发方案",
+  "params": {
+   "draft_id": "d-P0012-01",
+   "signer_id": "陈营养师",
+   "decision": "approve"
+  }
+ },
+ "把患者 P0099 的血糖数据从厂商接口拉进来": {
   "kind": "action",
   "confidence": 0.95,
   "action": "摄入读数",
@@ -534,6 +553,27 @@
   }
  },
  "患者还没签单独同意，先把他的血糖数据拉进来": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "摄入读数",
+  "params": {
+   "channel": "vendor_api",
+   "raw_payload": {
+    "patient_id": "P0099",
+    "readings": [
+     {
+      "reading_id": "r-P0099-00001",
+      "value_raw": 6.1,
+      "unit_raw": "mmol/L",
+      "value_mmol": 6.1,
+      "sensor_serial": "SN-P0099-A",
+      "dedup_key": "SN-P0099-A-00001"
+     }
+    ]
+   }
+  }
+ },
+ "患者 P0099 还没签单独同意，先把他的血糖数据从厂商接口拉进来": {
   "kind": "action",
   "confidence": 0.95,
   "action": "摄入读数",

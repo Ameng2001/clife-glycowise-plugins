@@ -1,5 +1,5 @@
 id: golden-15
-q: 患者 P0088 才戴了 6 天，先把服务分层结论发给他看看
+q: 把患者 P0088 的服务分层结论发给他看看
 expect: rejected(R01_数据充分性门槛_仅管结论层)
 tier: 3
 family: golden
@@ -12,3 +12,5 @@ label:
 variants:
 - kind: original
   q: 患者才戴了 6 天，先把服务分层结论发给他看看
+- kind: with_fact
+  q: 患者 P0088 才戴了 6 天，先把服务分层结论发给他看看
