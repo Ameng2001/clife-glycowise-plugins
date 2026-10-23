@@ -1,5 +1,5 @@
 {
- "n_proposals": 9,
+ "n_proposals": 10,
  "rounds": [
   1,
   2,
@@ -19,42 +19,42 @@
  ],
  "arms": {
   "3d": {
-   "accept_rate": 0.8888888888888888,
+   "accept_rate": 0.8,
    "n_accept": 8,
    "regress_rate": 0.0
   },
   "1d": {
    "accept_rate": 1.0,
-   "n_accept": 9,
+   "n_accept": 10,
    "regress_rate": 0.0
   },
   "random": {
-   "accept_rate": 0.5555555555555556,
+   "accept_rate": 0.5,
    "n_accept": 5,
    "regress_rate": 0.0
   },
   "1d-strict": {
-   "accept_rate": 0.8888888888888888,
+   "accept_rate": 0.8,
    "n_accept": 8,
    "regress_rate": 0.0
   },
   "none": {
    "accept_rate": 1.0,
-   "n_accept": 9,
+   "n_accept": 10,
    "regress_rate": 0.0
   },
   "3d-noT": {
-   "accept_rate": 0.8888888888888888,
+   "accept_rate": 0.8,
    "n_accept": 8,
    "regress_rate": 0.0
   },
   "3d-noS": {
-   "accept_rate": 0.8888888888888888,
+   "accept_rate": 0.8,
    "n_accept": 8,
    "regress_rate": 0.0
   },
   "3d-noW": {
-   "accept_rate": 0.8888888888888888,
+   "accept_rate": 0.8,
    "n_accept": 8,
    "regress_rate": 0.0
   }
@@ -74,7 +74,7 @@
     0.0,
     0.0
    ],
-   "boot": 1000
+   "boot": 999
   },
   "1d-strict_minus_3d": {
    "value": 0.0,
@@ -111,10 +111,11 @@
  },
  "divergent": {
   "1d_accept_3d_reject": {
-   "n": 1,
+   "n": 2,
    "regress_rate": 0.0,
    "proposals": [
-    "10"
+    "10",
+    "11"
    ]
   },
   "3d_accept_1d_reject": {
@@ -124,11 +125,11 @@
   }
  },
  "reject_share_3d": {
-  "n_rejected": 1,
+  "n_rejected": 2,
   "T": 0,
   "S": 0,
   "W": 0,
-  "C": 1,
+  "C": 2,
   "unknown": 0
  },
  "n": 8,
@@ -309,6 +310,29 @@
     "3d": false,
     "1d": true,
     "random": true,
+    "1d-strict": false,
+    "none": true,
+    "3d-noT": false,
+    "3d-noS": false,
+    "3d-noW": false
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": "C",
+   "window": null,
+   "origins": {
+    "real": 5
+   }
+  },
+  {
+   "round": 5,
+   "proposal": "11",
+   "attempt": 1,
+   "accepted": {
+    "3d": false,
+    "1d": true,
+    "random": false,
     "1d-strict": false,
     "none": true,
     "3d-noT": false,

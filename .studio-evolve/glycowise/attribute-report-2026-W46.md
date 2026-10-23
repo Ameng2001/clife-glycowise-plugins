@@ -31,6 +31,7 @@ h_i 在 203 条 × 3 run：**474/609**（A .778；S_consist = S_stable = 1.0；W
 - 第 2 次（runner 加 `expect_state`，15 条 dedup 案例补落库真值）：Dᵢ 上 P9a 12/15、P9b **0/15**，判据分开了；但 3d 仍接受 P9b——g_in 的 strict 项被 ΔC −0.8 单独满足（steps 把违规数计入成本，放行永远比拒绝便宜），外关卡 B_5 又有两条同根 x9 案例给 +0.05。八臂只有 1d-strict 拒（ΔA < δ）。`arm_compare` r1–5（attempt 2 的 verdict）：9 条提案 × 8 臂，regress 全 0，1d-strict accept 8/9，random 5/9。
 - 第 3 次（criteria amend：strict 只认 T / S / W，ΔC 只做约束；v3 未冻结）：3d 族四臂 **REJECT** P9b（无严格改善），1d 仍 ACCEPT，1d-strict REJECT——**第一个分歧集**（1d 接受 ∧ 3d 拒绝 = P9b）；但 B_5 上 regress = 0，因为 B_5 没有 dup1 案例、留出集对这类写错盲。arms r1–5（attempt 3）：3d accept 8/9、1d 9/9、regress 全 0。
 - 第 4 次（B 的写类案例全带 `expect_state`，65/203）：B_5 / real-all 重跑，八臂与第 3 次逐格相同，regress_rate_diff 仍 0。原因不再是判据盲：P9b 写错的 8 条在 h_i 上本来就失败（硬拒），regress 口径只认「h_i 过 → h' 不过」；B_5 仅有的 3 条去重案例两份都修对。外关卡结构上看不见「换一种失败」的朴素修法，只有内关卡成长轴能拒——H-1b 的实测边界。
+- 第三份 P9c（amend §5 机械生成：删 R48 命中分支）：Dᵢ 0/15，B_5 +2 −1、real-all +3 −5、sim −1；3d 族 REVISE / 1d ACCEPT。regress_rate_diff 仍 0——B_5 上那一条真回退（r08）被同层两条修对盖住，净 A +0.025；regress 的净口径看不见单条回退，real-all / sim 上 P9c 净 A 都在降。
 
 ## 4. 方法问题
 
@@ -38,5 +39,6 @@ h_i 在 203 条 × 3 run：**474/609**（A .778；S_consist = S_stable = 1.0；W
 1b. **strict 项被成本满足（已 amend，v3 待签字）**：gate-rules §1 的 strict 含 ΔC<0，而 steps 成本把违规规则数算进去，「拒绝改放行」总是更便宜——零增长的朴素修法靠成本过了内关卡。修法预登记进 amend-v2 §5：strict 只认 T / S / W；成本改用不随裁决方向变化的口径。v3 判定式下 3d 拒了 P9b、1d 没拒，分歧集第一次非空；但 regress 判定要看见它，B 里的写类案例也得带 expect_state——否则 regress_rate_diff 仍为 0。
 2. **real 池过 200 但分层仍薄（并层口径复核仍未达）**：203 条 / 20 层，最薄层 2 条；按 v3 并层口径（family×tier，<8 并入同 family 其余 tier）复核，8 个 family×rest 层仍不足 8（产品与机构合规 4 / 低血糖安全 5 / 出口签发闸 3 / 参考与配置 7 / 因果链溯源 7 / 指标口径 7 / 缓解路径 2 / 高血糖与波动 4）；make_real_cases 把去重类案例归到「指标口径」family（按口语推断），分层口径本身也要修。
 3. 三胞胎案例（同一 sim 案例的 original / paraphrase / irrelevant_field 各落一条 real 案例）不是独立样本，63 条里 23 组。
+6. **regress 是净口径**：`arm_compare` 的 regress = A_holdout 或层 T_k 下降；P9c 证明一条 h_i 通过的案例被改错可以被同层的修对抵消。候选修法（等下次 amend）：加「单条回退」口径并排报告；或分层加入「规则 × 期望方向」，让该拒与该过的案例分开抽。
 5. **写类案例落库断言全覆盖**：其余 54 条 correct 写类动作案例（16 个动作）补 `expect_state`，期望只从 IR §4 writes 列 + 路由参数 + 参考数据固定事实推出（时间戳键用 `key_prefix`）；h_i real-all 474 → **471/609**，唯一新失败 数据与同意合规-r02（摄入读数）：路由把单条读数平铺进 `raw_payload`，handler 只读 `raw_payload.readings[]`，一条都没入库、批次计数 0，而 reviewed 标签按 C3 放行判 correct——**commit 判据下的「正确」掩盖了空写入**；IR §4 只写 `raw_payload:object`，golden 路由一律 `readings[]` 形状、该条真实窗口路由平铺——归路由层，登记为发现不在本轮修。B_5 现含带断言的写类案例，下一对提案的 regress_rate_diff 才可能非零。
 4. irrelevant_field 变体在路由层的泄漏（patient-facing 正文 ×2、Session 记忆串句 ×3、当过滤值 ×1）：S 维度只在规则层测了扰动一致性，路由层没测。
