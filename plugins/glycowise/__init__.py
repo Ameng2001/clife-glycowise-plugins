@@ -2596,7 +2596,7 @@ def R55_显示口径_没有数据不得说成没有异常(ctx) -> RuleResult:
 
 @spi.action(
     ONTOLOGY, "签署单独同意书",
-    description="患者本人逐项勾选并电子签名，七项范围不得合并",
+    description="为患者登记一份单独同意书：记录逐项勾选的范围、电子签名与时间戳，生成 ConsentRecord",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("scope_items", "list", required=True),
@@ -2623,7 +2623,7 @@ def 签署单独同意书(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "撤回同意",
-    description="按范围撤回并级联下游，须产出豁免触达封锁的告知",
+    description="按范围撤回患者已签的同意，记录撤回并级联更新受影响的下游数据项",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("scope", "list", required=True),
@@ -2649,7 +2649,7 @@ def 撤回同意(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "录入结构化用药清单",
-    description="医师或药师录入 meds 并打四标签",
+    description="把患者的结构化用药清单（药名、类别标签）写入画像 meds 字段",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("meds_list", "list", required=True),
@@ -2676,7 +2676,7 @@ def 录入结构化用药清单(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "采集用药线索",
-    description="患者自报或药盒照片，仅供规则开闸，与 meds 严格分离",
+    description="记录患者自报或药盒照片得到的用药线索（MedClassHint），与正式用药清单分开存放",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("hint_source", "string", required=True),
@@ -2699,7 +2699,7 @@ def 采集用药线索(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "入组判定",
-    description="医师判定是否入组、选包、缓解路径适宜性、人群目标区间",
+    description="根据体检与化验结果给出入组决定、服务包选择、缓解路径适宜性与人群目标区间",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("exam_results", "object", required=True),
@@ -2727,7 +2727,7 @@ def 入组判定(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录到店随机指血分诊",
-    description="到店 5 分钟内前置串行，危急值命中即阻断商业流程",
+    description="记录患者到店时的随机指血值并生成分诊记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("glucose_value", "number", required=True),
@@ -2754,7 +2754,7 @@ def 记录到店随机指血分诊(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "建立传感器会话",
-    description="绑定传感器序号并按型号取预热参数",
+    description="为患者绑定一枚传感器（序号、厂商、型号、佩戴时间），按型号取预热参数建立佩戴会话",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("sensor_serial", "string", required=True),
@@ -2780,7 +2780,7 @@ def 建立传感器会话(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录时间基线",
-    description="入组现场唯一采集时机，漏了不可补",
+    description="记录患者手机时区与设备时钟偏移，作为后续读数时间校正的基线",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("phone_tz", "string", required=True),
@@ -2803,7 +2803,7 @@ def 记录时间基线(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "建立同步计划",
-    description="按画像分配同步触发方式，决定一期数据完整性",
+    description="为患者设置数据同步方式（触发类型、预期间隔、协助人）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("trigger_type", "string", required=True),
@@ -2828,7 +2828,7 @@ def 建立同步计划(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "验证通道连通性",
-    description="离店前端到端验证至少一条读数落库",
+    description="端到端验证某条数据通道是否已有读数落库，并登记载体信息",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("channel", "string", required=True),
@@ -2855,7 +2855,7 @@ def 验证通道连通性(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "覆盖状态告知",
-    description="当面告知一期无当夜干预能力并签署留痕",
+    description="记录向患者告知当前服务覆盖状态（如夜间无实时干预）的留痕",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("coverage_state", "string", required=True),
@@ -2882,7 +2882,7 @@ def 覆盖状态告知(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "标记入组成功",
-    description="通过全部离店硬闸后才启动服务包计时",
+    description="把患者标记为入组成功并启动服务包计时",
     params=(
         ParamSpec("patient_id", "string", required=True),
     ),
@@ -2905,7 +2905,7 @@ def 标记入组成功(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "摄入读数",
-    description="多通道摄入，单位与时间完整性硬校验",
+    description="从指定通道摄入一批原始血糖读数（含患者、读数列表），写入 GlucoseReading 与 IngestBatch",
     params=(
         ParamSpec("channel", "string", required=True),
         ParamSpec("raw_payload", "object", required=True),
@@ -2924,7 +2924,7 @@ def 摄入读数(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "去重与通道仲裁",
-    description="按传感器序号去重，多路自动仲裁",
+    description="对一条候选读数按传感器序号去重，并在多通道间仲裁取舍",
     params=(
         ParamSpec("reading_candidate", "object", required=True),
     ),
@@ -2947,7 +2947,7 @@ def 去重与通道仲裁(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "OCR读数复核",
-    description="健管师按决策影响分诊复核，否决走 retract + 新增",
+    description="对一条 OCR 识别出的读数做人工复核决定（确认 / 否决并重录）",
     params=(
         ParamSpec("reading_id", "string", required=True),
         ParamSpec("decision", "string", required=True),
@@ -2972,7 +2972,7 @@ def OCR读数复核(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "计算窗口指标",
-    description="计算全套派生量并落 CgmSummary",
+    description="按时间窗计算患者的全套 CGM 派生指标（TIR/TBR/TAR/CV/GMI、有效率、夜间覆盖）并写入 CgmSummary",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -2996,7 +2996,7 @@ def 计算窗口指标(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成AGP与指标报告",
-    description="按先低→再高→再波动顺序组织报告",
+    description="按窗口生成患者的 AGP 图与指标报告内容",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3034,7 +3034,7 @@ def 生成AGP与指标报告(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录餐食与运动事件",
-    description="患者或家属打卡，AI 可从群聊抽取",
+    description="记录患者的一次餐食 / 运动 / 睡眠等情境事件及发生时间",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("event_type", "string", required=True),
@@ -3065,7 +3065,7 @@ def 记录餐食与运动事件(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录症状与处置",
-    description="告警卡片内一键回填，R10 的唯一输入",
+    description="记录患者一次低血糖相关症状标签及对应处置动作",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("symptom_tag", "string", required=False),
@@ -3092,7 +3092,7 @@ def 记录症状与处置(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录酮体",
-    description="R11/R12/R24 的阳性分支唯一输入",
+    description="记录患者一次酮体检测结果（数值或定性）与检测方法",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("value_or_qualitative", "string", required=True),
@@ -3115,7 +3115,7 @@ def 记录酮体(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录临床混杂事件",
-    description="医师或护士录入急性病、激素、住院、调药期",
+    description="记录患者的急性病、激素使用、住院、调药期等临床混杂事件及起止时间",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("type", "string", required=True),
@@ -3142,7 +3142,7 @@ def 记录临床混杂事件(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "计算餐后响应",
-    description="配对窗计算 PPGR 五项",
+    description="对一次餐食事件配对前后读数，计算餐后血糖响应（PPGR）指标",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("meal_event_id", "string", required=True),
@@ -3166,7 +3166,7 @@ def 计算餐后响应(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "输出服务分层标签",
-    description="内部服务分层，默认不可披露患者",
+    description="按窗口指标为患者计算内部服务分层标签（L0–L4）并写入画像",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3194,7 +3194,7 @@ def 输出服务分层标签(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "触发低血糖处置",
-    description="一期写事件进次日队列，二期走实时推送",
+    description="基于一条读数与命中的规则生成低血糖告警事件与事件记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("reading_id", "string", required=True),
@@ -3220,7 +3220,7 @@ def 触发低血糖处置(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "统计低血糖事件",
-    description="Danne ≥15 分钟口径的回顾统计，一期核心安全产出",
+    description="按窗口回顾统计患者的低血糖事件（≥15 分钟口径），写入 HypoEpisode",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3243,7 +3243,7 @@ def 统计低血糖事件(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "更新低血糖状态机",
-    description="置延长风险与复发窗，closure_blocked_reason 无人可写",
+    description="根据新事件更新患者的低血糖状态（延长风险、复发观察窗）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("event", "string", required=True),
@@ -3266,7 +3266,7 @@ def 更新低血糖状态机(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "推送告警",
-    description="分级推送，紧急告警只套用已预审冻结的模板",
+    description="把一条告警事件按级别推送给指定对象，生成投递回执",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("level", "string", required=True),
@@ -3307,7 +3307,7 @@ def 推送告警(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "响应并回执告警",
-    description="健管师或值班医师回执，高危用药不得直接闭环",
+    description="记录对一条告警的响应：响应人、所做处置、复测值，生成回执",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("responder", "string", required=True),
@@ -3334,7 +3334,7 @@ def 响应并回执告警(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "升级告警",
-    description="逐级升级至值班责任人（phase=P2）",
+    description="把一条告警升级到更高级别的值班责任人",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("level", "number", required=True),
@@ -3360,7 +3360,7 @@ def 升级告警(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "撤销更正已发出告警",
-    description="上游读数被 retract 或 corrected 时撤销并发更正说明",
+    description="撤销一条已发出的告警并发出更正说明",
     params=(
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("reason", "string", required=True),
@@ -3386,7 +3386,7 @@ def 撤销更正已发出告警(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "放宽告警阈值",
-    description="把某项告警阈值改到更不容易报警的值（低值类阈值下调、高值类阈值上调）。仅医师可做，HIL 必审",
+    description="把患者某项告警阈值改到更不容易报警的值（低值类阈值下调、高值类阈值上调）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("field", "string", required=True),
@@ -3408,7 +3408,7 @@ def 放宽告警阈值(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "收紧告警阈值",
-    description="把某项告警阈值改到更早报警的值（低值类阈值上调如 3.9→4.4、高值类阈值下调）。可由规则自动触发，也可由医师手动指定 new_value；记录并通知医师",
+    description="把患者某项告警阈值改到更早报警的值（低值类阈值上调，如夜间低值 3.9→4.4；高值类阈值下调），记录触发来源与前后值",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("field", "string", required=True),
@@ -3428,7 +3428,7 @@ def 收紧告警阈值(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "配置患者告警与静音策略",
-    description="按人群维度设阈值与静音策略",
+    description="按患者人群属性设置告警阈值与夜间静音策略",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("is_iah_high_risk", "boolean", required=False),
@@ -3456,7 +3456,7 @@ def 配置患者告警与静音策略(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成方案草稿",
-    description="AI 只出草稿，不含用药加减停、不含产品映射、不含分型结论",
+    description="根据患者分析结果生成一份本期健康管理方案草稿（可指定方向：强化 / 维持 / 去强化），写入 PlanDraft 待签发",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("analysis_result", "object", required=True),
@@ -3489,7 +3489,7 @@ def 生成方案草稿(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "审核输出内容",
-    description="出口合规闸四道判定，通过才签发 gate_token",
+    description="对一条待发出的内容做合规审核，记录命中项并在通过时签发 gate_token",
     params=(
         ParamSpec("content_id", "string", required=True),
         ParamSpec("content_type", "string", required=True),
@@ -3519,7 +3519,7 @@ def 审核输出内容(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "签发方案",
-    description="医师或注册营养师签发，AI 与健管师绝对禁写",
+    description="由签发人对一份方案草稿作出签发决定，生成已签发方案与审阅证据",
     params=(
         ParamSpec("draft_id", "string", required=True),
         ParamSpec("signer_id", "string", required=True),
@@ -3542,7 +3542,7 @@ def 签发方案(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "推送方案至患者",
-    description="已签发且过闸的内容才可推送",
+    description="把一份已签发的方案推送给指定对象，生成投递回执",
     params=(
         ParamSpec("plan_id", "string", required=True),
         ParamSpec("targets", "list", required=True),
@@ -3561,7 +3561,7 @@ def 推送方案至患者(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "标记方案证据过期",
-    description="消费 metrics.invalidated，生成签发人待办",
+    description="把一份已签发方案标记为依据过期，并生成签发人待办",
     params=(
         ParamSpec("plan_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3586,7 +3586,7 @@ def 标记方案证据过期(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成去强化证据工单",
-    description="带 14 天曲线 + 用药清单 + 低血糖事件明细转医师",
+    description="为患者生成一份转医师的去强化证据包（窗口指标、14 天曲线、用药清单、低血糖事件明细）并创建转介记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("window", "string", required=True),
@@ -3613,7 +3613,7 @@ def 生成去强化证据工单(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "转介医师",
-    description="用药类问题一律转医师，AI 与健管师不得答",
+    description="把一个患者问题及上下文转介给医师，生成转介记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("question_context", "string", required=True),
@@ -3644,7 +3644,7 @@ def 转介医师(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "评估可否停药并签发减停计划",
-    description="仅医师，原文快照不可被智能体摘要改写",
+    description="基于证据包评估患者可否停药并签发减停计划",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("evidence_pack", "object", required=True),
@@ -3670,7 +3670,7 @@ def 评估可否停药并签发减停计划(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "确认缓解时钟Day0",
-    description="医师另行确认，系统不得自动推断",
+    description="为患者确认缓解观察的 Day0 日期并启动缓解时钟",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("day0", "string", required=True),
@@ -3695,7 +3695,7 @@ def 确认缓解时钟Day0(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "判定缓解结果",
-    description="停药 ≥90 天 + HbA1c<6.5%（GMI 可替代但须过四条前提）",
+    description="根据停药时长、化验结果与窗口指标判定患者是否达到缓解，写入评估记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("lab_result_id", "string", required=False),
@@ -3724,7 +3724,7 @@ def 判定缓解结果(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "决定复药",
-    description="复药即 remission_clock 清零",
+    description="记录患者复药决定并重置缓解时钟",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("evidence", "string", required=True),
@@ -3749,7 +3749,7 @@ def 决定复药(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成结营报告",
-    description="面对面解读用的人话版报告",
+    description="为患者生成服务包结营时面对面解读用的报告",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("package_id", "string", required=True),
@@ -3782,7 +3782,7 @@ def 生成结营报告(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "兑现结果承诺",
-    description="结营 KPI 结算，TBR 安全门一票否决",
+    description="按依从数据结算一个服务包的结营 KPI",
     params=(
         ParamSpec("package_id", "string", required=True),
         ParamSpec("adherence_data", "object", required=True),
@@ -3809,7 +3809,7 @@ def 兑现结果承诺(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录服务退出与退款归因",
-    description="流失信号误报率评估的 ground truth",
+    description="记录患者退出服务的原因与退款金额，并关联流失信号",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("exit_reason", "string", required=True),
@@ -3836,7 +3836,7 @@ def 记录服务退出与退款归因(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "创建服务包SKU",
-    description="服务包只含服务，不含任何产品",
+    description="创建一个服务包 SKU（等级、内容清单）",
     params=(
         ParamSpec("sku_id", "string", required=True),
         ParamSpec("tier", "string", required=True),
@@ -3859,7 +3859,7 @@ def 创建服务包SKU(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "上架产品SKU",
-    description="器械一律拒绝；食品须核验标签",
+    description="把一个产品 SKU（指定类别：服务 / 食品 / 器械引用）上架",
     params=(
         ParamSpec("sku_id", "string", required=True),
         ParamSpec("category", "string", required=True),
@@ -3880,7 +3880,7 @@ def 上架产品SKU(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "生成产品推荐",
-    description="不得与分层或缓解同句，须附固体饮料尾注",
+    description="为患者生成一条产品推荐内容（可附推荐话术 pitch）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("sku_id", "string", required=True),
@@ -3903,7 +3903,7 @@ def 生成产品推荐(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "发布宣传素材",
-    description="停发个案对比，命名合规",
+    description="把一条宣传素材发布到指定渠道",
     params=(
         ParamSpec("content_id", "string", required=True),
         ParamSpec("channel", "string", required=True),
@@ -3931,7 +3931,7 @@ def 发布宣传素材(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "群内答复患者",
-    description="五师在企微群内的对外发言",
+    description="以指定角色在患者企微群内发一条答复消息",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("message", "string", required=True),
@@ -3960,7 +3960,7 @@ def 群内答复患者(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "建立厂商云通道对接",
-    description="云到云通道，须境内存储且协议齐备",
+    description="登记一条厂商云到云数据通道及其授权",
     params=(
         ParamSpec("vendor", "string", required=True),
         ParamSpec("channel_id", "string", required=True),
@@ -3987,7 +3987,7 @@ def 建立厂商云通道对接(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "写入外部协作工具",
-    description="向飞书等第三方 SaaS 提供数据，属持续对外提供行为",
+    description="把数据写入飞书等外部协作工具并记审计日志",
     params=(
         ParamSpec("target_system", "string", required=True),
         ParamSpec("payload_ref", "string", required=True),
@@ -4014,7 +4014,7 @@ def 写入外部协作工具(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "维护凭证台账",
-    description="到期即自动冻结签发权限",
+    description="更新一条执业凭证的台账记录（有效期、状态）",
     params=(
         ParamSpec("credential_id", "string", required=True),
     ),
@@ -4039,7 +4039,7 @@ def 维护凭证台账(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "门店清查确认",
-    description="未完成清查的门店不予开通服务包",
+    description="记录一家门店的合规清查确认与签字人",
     params=(
         ParamSpec("store_id", "string", required=True),
         ParamSpec("signed_by", "string", required=True),
@@ -4066,7 +4066,7 @@ def 门店清查确认(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "门店会话合规抽检",
-    description="仅关键词命中片段可读，30 天 ≥3 次停发言权",
+    description="对门店会话片段做合规抽检并记录事件",
     params=(
         ParamSpec("message_fragment", "string", required=True),
         ParamSpec("actor", "string", required=True),
@@ -4092,7 +4092,7 @@ def 门店会话合规抽检(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "处理数据主体权利请求",
-    description="PIPL 44–50 条法定时限内答复留痕",
+    description="登记并处理患者的数据主体权利请求（查询 / 更正 / 删除等）",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("request_type", "string", required=True),
@@ -4118,7 +4118,7 @@ def 处理数据主体权利请求(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录心理咨询介入",
-    description="最严可见性档",
+    description="记录一次心理咨询介入笔记",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("note", "string", required=True),
@@ -4143,7 +4143,7 @@ def 记录心理咨询介入(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "启用AI生成能力",
-    description="智能体上线前的平台级备案闸",
+    description="登记启用某版本 AI 生成能力及其适用范围",
     params=(
         ParamSpec("model_version", "string", required=True),
         ParamSpec("scope", "string", required=True),
@@ -4169,7 +4169,7 @@ def 启用AI生成能力(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "设定机构与门诊名称",
-    description="命名须经卫健核准且不得暗示疗效",
+    description="设置门店机构或门诊的名称",
     params=(
         ParamSpec("store_id", "string", required=True),
         ParamSpec("name", "string", required=True),
@@ -4195,7 +4195,7 @@ def 设定机构与门诊名称(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "开展线上随访",
-    description="定性为健康管理随访并限制内容",
+    description="向患者发起一次线上随访内容并记录",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("content", "string", required=True),
@@ -4223,7 +4223,7 @@ def 开展线上随访(ctx) -> None:
 
 @spi.action(
     ONTOLOGY, "记录载体覆盖变更并强制告知",
-    description="解绑或离线必产出告知，豁免于触达封锁（phase=P2）",
+    description="记录患者数据载体的覆盖状态变更（解绑 / 离线）并产出告知",
     params=(
         ParamSpec("patient_id", "string", required=True),
         ParamSpec("coverage_state", "string", required=True),
