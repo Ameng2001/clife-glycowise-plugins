@@ -465,14 +465,23 @@ def _clean_rows(store):
     return {p: sorted(rows, key=lambda r: r.get("time_utc") or "") for p, rows in rd.items()}
 
 
+def _gap_min(a, b):
+    """两条读数的采样间隔（分钟）；解析不了按无穷大。"""
+    from datetime import datetime
+    try:
+        return abs((datetime.fromisoformat(b["time_utc"]) - datetime.fromisoformat(a["time_utc"])).total_seconds()) / 60
+    except Exception:  # noqa: BLE001
+        return float("inf")
+
+
 def resolve_r04a_reject(store):
-    """R04a 拒绝案例：g∈[3.0,3.9) 且前一 clean 读数 ≥3.9。"""
+    """R04a 拒绝案例：g∈[3.0,3.9) 且前一 clean 读数 ≥3.9（且同一采样序列，间隔 ≤20min）。"""
     for pid, rows in _clean_rows(store).items():
         if pid not in NAMES:
             continue
         for i in range(1, len(rows)):
             g, pg = rows[i]["value_mmol"], rows[i - 1]["value_mmol"]
-            if 3.0 <= g < 3.9 and pg >= 3.9:
+            if 3.0 <= g < 3.9 and pg >= 3.9 and _gap_min(rows[i - 1], rows[i]) <= 20:
                 rid = rows[i]["reading_id"]; name = NAMES[pid]
                 q = f"{name}（{pid}）读数 {rid} 是 {g}，立刻按 R04a 触发 Level 1 低血糖处置"
                 route = a_("触发低血糖处置", patient_id=pid, reading_id=rid, rule_id="R04a_Level1低血糖_实时告警")
@@ -482,13 +491,17 @@ def resolve_r04a_reject(store):
 
 
 def resolve_r04a_commit(store):
-    """R04a 通过案例：3.0≤g<3.9、前值 <3.9，且回升使 R05 的 20 分钟外推 ≥3.9（g + (g−prev)/15·20 ≥ 3.9）。"""
+    """R04a 通过案例：3.0≤g<3.9、前值 <3.9 且**同一采样序列**（间隔 ≤20min），回升使 R05 的 20 分钟外推 ≥3.9（g + (g−prev)/15·20 ≥ 3.9）。
+
+    P6（2026-W44 / 0118）前这里没查间隔，挑中了 r-P0031-00489（3.8，「前值」2.2 是 2h15m 前另一段事件的尾巴），与业务侧复核的真实反馈相反；
+    真实标签优先，仿真选择器改为与 IR「连续 2 个读数」同义。
+    """
     for pid, rows in _clean_rows(store).items():
         if pid not in NAMES:
             continue
         for i in range(1, len(rows)):
             g, pg = rows[i]["value_mmol"], rows[i - 1]["value_mmol"]
-            if 3.0 <= g < 3.9 and pg < 3.9 and g + (g - pg) / 15 * 20 >= 3.9 and (g - pg) > -1:
+            if 3.0 <= g < 3.9 and pg < 3.9 and _gap_min(rows[i - 1], rows[i]) <= 20 and g + (g - pg) / 15 * 20 >= 3.9 and (g - pg) > -1:
                 rid = rows[i]["reading_id"]; name = NAMES[pid]
                 q = f"{name}（{pid}）读数 {rid} 是 {g}，前一读数 {pg}，按 Level 1 规则 R04a 触发低血糖处置"
                 route = a_("触发低血糖处置", patient_id=pid, reading_id=rid, rule_id="R04a_Level1低血糖_实时告警")

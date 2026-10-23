@@ -1,0 +1,50 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -656,6 +656,22 @@
+     rows = [x for x in ctx.find("GlucoseReading", lambda x: x.get("patient_id") == pid and x.get("reading_id") != r.get("reading_id"))
+             if _dt(x.get("time_utc")) and _dt(x["time_utc"]) < t]
+     return max(rows, key=lambda x: x["time_utc"]) if rows else {}
++
++
++SAMPLE_GAP_MAX_MIN = 20  # CGM 采样 5–15 min；超过这个间隔的「上一条」不属于同一采样序列，不算连续读数
++
++
++def _prev_sample(ctx, r, max_gap_min=SAMPLE_GAP_MAX_MIN):
++    """实时告警口径的「前一读数」：时间上最近、且与本读数间隔 ≤ max_gap_min 的那条；间隔更长（丢点、断连）→ 视为无前一读数。
++
++    P6（2026-W44 / 0118）：`_prev_reading` 只取时间最近的一条，不看间隔，P0031 02:15 的 3.8 把 2h15m 前 00:00 另一段 L2 事件的
++    尾巴 2.2 当成「连续 2 读数确认」，R04a 放行了单点触发——IR 写的是「连续 2 个读数（间隔 ≥5min）」，连续指同一采样序列。
++    """
++    prev = _prev_reading(ctx, r)
++    pt, t = _dt(prev.get("time_utc")), _dt(r.get("time_utc"))
++    if not prev or pt is None or t is None or (t - pt).total_seconds() > max_gap_min * 60:
++        return {}
++    return prev
+ 
+ 
+ def _staged_alert(ctx):
+@@ -669,10 +685,10 @@
+     g = _num(r.get("value_mmol"))
+     if g is None or g >= 3.0:
+         return RuleResult.ok()
+-    prev = _num(_prev_reading(ctx, r).get("value_mmol"))
++    prev = _num(_prev_sample(ctx, r).get("value_mmol"))
+     ev = _staged_alert(ctx) or _alert(ctx)
+     if prev is None or prev >= 3.0:
+-        return _fail("R03a", f"G={g} <3.0 但前一读数 {prev} 未确认，实时告警须连续 2 个读数确认", "等下一读数确认后再触发")
++        return _fail("R03a", f"G={g} <3.0 但前一读数 {prev} 未确认（无前一读数或间隔 >{SAMPLE_GAP_MAX_MIN}min 不算连续），实时告警须连续 2 个读数确认", "等下一读数确认后再触发")
+     if ev and ev.get("level") not in ("高", "危急"):
+         return _fail("R03a", f"连续 2 读数 G<3.0，告警级别应为高/危急，实际 {ev.get('level')}", "升级并附 15-15 处置指引")
+     return RuleResult.ok()
+@@ -684,9 +700,9 @@
+     g = _num(r.get("value_mmol"))
+     if g is None or not (3.0 <= g < 3.9):
+         return RuleResult.ok()
+-    prev = _num(_prev_reading(ctx, r).get("value_mmol"))
++    prev = _num(_prev_sample(ctx, r).get("value_mmol"))
+     if prev is None or prev >= 3.9:
+-        return _fail("R04a", f"G={g} 在 3.0–3.9 但前一读数 {prev} 未确认，须连续 2 个读数", "等下一读数确认")
++        return _fail("R04a", f"G={g} 在 3.0–3.9 但前一读数 {prev} 未确认（无前一读数或间隔 >{SAMPLE_GAP_MAX_MIN}min 不算连续），须连续 2 个读数", "等下一读数确认")
+     return RuleResult.ok()
+ 
+ 

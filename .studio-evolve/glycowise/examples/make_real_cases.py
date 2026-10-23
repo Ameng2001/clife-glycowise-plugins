@@ -200,7 +200,7 @@ def main():
         tid = (c.get("label") or {}).get("trace_id")
         if tid:
             existing[tid] = p
-        m = re.match(r"(.+)-(\d+)$", c["id"])
+        m = re.match(r"(.+)-r(\d+)$", c["id"])  # real 案例 id 形如 {family}-rNN
         if m and m.group(1) in maxn:
             maxn[m.group(1)] = max(maxn[m.group(1)], int(m.group(2)))
 

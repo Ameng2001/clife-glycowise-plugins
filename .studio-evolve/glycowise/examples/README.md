@@ -80,7 +80,7 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 | 非轨迹 | 10 句：clarify 8、advise 1、error 1（`routing.log.2026-W44.jsonl`） |
 | 回放 | sequential 51/51 复现；preview 3 条不一致（0119/0120 多出 C22、0158 多出 R49），待标注人看是否前序写入导致 |
 | 成本 | 真 Qwen usage 共 415,733 token，均 6,815/句 |
-| 反馈 | `trajectories/2026-W44/feedback.yaml` 为 **draft**（51 条 label 为空，机器比对与 CQ 期望不一致 6 条）；专家建议草案 `feedback.expert-draft.yaml`：correct 40 / partial 2 / wrong 9（router 8：0105 / 0115 / 0117 / 0119 / 0121 / 0124 / 0138 / 0154；rule 1：0118 R04a 假阴性——`_prev_reading` 取到 2h15m 前另一段事件的尾巴当「连续 2 读数」）。只供标注人确认，不是标签 |
+| 反馈 | `trajectories/2026-W44/feedback.yaml` **reviewed**（2026-10-23，标签采纳自专家草案，correct 40 / wrong 9 / partial 2）；专家建议草案 `feedback.expert-draft.yaml`：correct 40 / partial 2 / wrong 9（router 8：0105 / 0115 / 0117 / 0119 / 0121 / 0124 / 0138 / 0154；rule 1：0118 R04a 假阴性——`_prev_reading` 取到 2h15m 前另一段事件的尾巴当「连续 2 读数」）。只供标注人确认，不是标签 |
 
 非轨迹 10 句里值得记的：
 - **LLM 路由层预判拒绝 5 句**（0125 戴 6 天判缓解→它自己搬 R01；0129「我来给您诊断」→C19；0130「夜里出事我们第一时间知道」→R54；0131「建议您去医院开处方」→它按 C19 拒，而这正是 P4 已合入生产、引擎会放行的转介句——规则层改了，路由层还在用旧禁令；0134 推送未签发草稿→C9）。与 W43 golden 去钓前的现象同源：规则层能稳定裁决的句子，路由层不稳定。
@@ -109,3 +109,4 @@ attribute 第 1 步自动从 ①+② 生成，不用手写：`python3 make_real_
 - **2026-10-23 第三轮**：独立复核 W43——`replay_check.py --mode sequential` 在新鲜 seed 上 35/35 复现，24 条 execute 参数全部在动作声明内（越界 0）。`feedback.yaml` 仍是 draft、35 条 label 为空，所以 `cases/real/` 仍为空、attribute 不能开。专家子代理给了一份建议标签 `trajectories/2026-W43/feedback.expert-draft.yaml`（status: expert-draft），只供标注人确认，不是标签。
 - **2026-10-23 第四轮**：标签入库（`feedback.yaml` reviewed）→ `cases/real` 33 条 → attribute → verify 走通。两处只有真数据才暴露的坑：① 逐案例新鲜 seed 复现不了窗口状态（0008/0021/0022 判错、0018 的泄漏不出现）→ 案例加 `setup`；② 共享录制按口语键让 golden 参数覆盖了窗口真走的参数 → 案例加 `route`。P5（`_staged: True` 持久化标记跨动作泄漏）3d ACCEPT、real 留出集 20 条，同日确认合入生产（real-all 81/99、B-sim 294/294）；路由层 6 条 wrong 不归本体，记平台 backlog。
 - **2026-10-23 第五轮**：录第二个窗口 W44（61 句 → 51 条轨迹，`--window` 覆盖逻辑窗口号）。顺序回放 51/51；preview 3 条差异全是引擎 execute（guard 命中即返回、不评 post 规则）与 validate（全收集）的语义差，不是状态依赖。P5 在新窗口里验证：0113 落库证据包后 0114/0123/0127/0128 的规则命中集合与单独预演一致。专家草案见上表；标注人确认进 `feedback.yaml`（status reviewed）后：`make_real_cases.py --window 2026-W44` → 留出集 round 3 从 W43+W44 池抽（跨窗口）→ P5 在 B_3 上的 `readings/P5-{hi,hp}-B3.json` → `arm_compare.py` 按 B_{i+1} 判回退。
+- **2026-10-23 第六轮**：W44 标签入库（`feedback.yaml` reviewed，correct 40 / wrong 9 / partial 2）→ `cases/real` 累计 82 条（修了 `make_real_cases.py` id 正则不认 `-rNN`、覆盖 W43 案例的 bug）→ `holdout-3.yaml` 第一次跨窗口（40 条 / 20 层，W43 19 / W44 21）。P5 在 B_3 上无回退（A .75→.825，W44 两条 HIL 答复 r16/r18 的 R51 泄漏被修）。P6（R04a「前一读数」不看采样间隔）3d ACCEPT、八臂同判，**未合入生产**；仿真案例 低血糖安全-01 与 real 反馈冲突，选择器加 20 min 间隔条件后重生成，B-sim 98/98。见 `attribute-report-2026-W44.md`。

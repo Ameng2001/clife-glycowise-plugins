@@ -1,0 +1,48 @@
+# 由 t-20261023-0109 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r07
+q: 黄伯（P0045）读数 r-P0045-01162 是 2.7，前一读数 2.8，连续两读数 <3.0，按 R03a 触发 Level 2 低血糖处置
+expect: action(触发低血糖处置)
+tier: 3
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 触发低血糖处置
+- GlucoseReading
+label:
+  answer: r-P0045-01162 = 2.7 @ 2026-10-21T02:30，前一读数 r-P0045-01161 = 2.8 @ 02:15，连续 2 读数 <3.0，R03a 成立；staged 告警级别『高』在 R03a 允许的 高/危急 内。对应回顾事件 ep-P0045-17（02:15–02:45，最低 2.7，L2）。
+  source: feedback
+  trace_id: t-20261023-0109
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045读数 r-P0045-01162 是 2.7，前一读数 2.8，连续两读数 <3.0，按 R03a 触发 Level 2 低血糖处置
+  kind: paraphrase
+- q: 黄伯（P0045）读数 r-P0045-01162 是 2.7，前一读数 2.8，连续两读数 <3.0，按 R03a 触发 Level 2 低血糖处置；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0103
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result:
+      summary_id: s-P0023-14d
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0108
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: R04a
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: R03a

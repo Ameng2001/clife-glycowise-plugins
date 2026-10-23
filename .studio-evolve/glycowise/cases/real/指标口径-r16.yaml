@@ -1,0 +1,88 @@
+# 由 t-20261023-0123 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r16
+q: 健管师在王叔（P0031）群里答复：这周波动比较大，建议您尽快找医生看看要不要调药方案
+expect: action(群内答复患者)
+tier: 4
+family: 指标口径
+origin: real
+observed_at: '2026-10-23'
+elements:
+- 群内答复患者
+label:
+  answer: 『建议您尽快找医生看看要不要调药方案』是异常转介语句（C19 的转介例外：尽快…找医生），不构成越界；没有药名剂量（D10 不响）、没有原始血糖值（C6 不响）、没有禁用词。进 HIL 由健管师本人确认，成立。
+  source: feedback
+  trace_id: t-20261023-0123
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 健管师在P0031群里答复：这周波动比较大，建议您尽快找医生看看要不要调药方案
+  kind: paraphrase
+- q: 健管师在王叔（P0031）群里答复：这周波动比较大，建议您尽快找医生看看要不要调药方案；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261023-0103
+  action: 生成方案草稿
+  params:
+    patient_id: P0023
+    analysis_result:
+      summary_id: s-P0023-14d
+    direction: 去强化
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0108
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-00017
+    rule_id: R04a
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0109
+  action: 触发低血糖处置
+  params:
+    patient_id: P0045
+    reading_id: r-P0045-01162
+    rule_id: R03a
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0110
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: R34
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0111
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 健管师
+    action_taken: 15-15 补碳后复测 4.6，继续观察 24 小时
+    retest_value: 4.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0113
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261023-0118
+  action: 触发低血糖处置
+  params:
+    patient_id: P0031
+    reading_id: r-P0031-00489
+    rule_id: R04a
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 群内答复患者
+  params:
+    patient_id: P0031
+    message: 这周波动比较大，建议您尽快找医生看看要不要调药方案
+    sender_role: 健管师

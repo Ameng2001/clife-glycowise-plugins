@@ -2512,33 +2512,33 @@
    ]
   }
  },
- "王叔（P0031）读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置": {
+ "王叔（P0031）读数 r-P0031-01067 是 3.6，前一读数 2.8，按 Level 1 规则 R04a 触发低血糖处置": {
   "kind": "action",
   "confidence": 0.95,
   "action": "触发低血糖处置",
   "params": {
    "patient_id": "P0031",
-   "reading_id": "r-P0031-00489",
+   "reading_id": "r-P0031-01067",
    "rule_id": "R04a_Level1低血糖_实时告警"
   }
  },
- "P0031 的 r-P0031-00489（3.8，前值 2.2）触发一级低血糖处置流程。": {
+ "P0031 的 r-P0031-01067（3.6，前值 2.8）触发一级低血糖处置流程。": {
   "kind": "action",
   "confidence": 0.95,
   "action": "触发低血糖处置",
   "params": {
    "patient_id": "P0031",
-   "reading_id": "r-P0031-00489",
+   "reading_id": "r-P0031-01067",
    "rule_id": "R04a_Level1低血糖_实时告警"
   }
  },
- "王叔（P0031）读数 r-P0031-00489 是 3.8，前一读数 2.2，按 Level 1 规则 R04a 触发低血糖处置；家属说昨晚没吃夜宵。": {
+ "王叔（P0031）读数 r-P0031-01067 是 3.6，前一读数 2.8，按 Level 1 规则 R04a 触发低血糖处置；家属说昨晚没吃夜宵。": {
   "kind": "action",
   "confidence": 0.95,
   "action": "触发低血糖处置",
   "params": {
    "patient_id": "P0031",
-   "reading_id": "r-P0031-00489",
+   "reading_id": "r-P0031-01067",
    "rule_id": "R04a_Level1低血糖_实时告警"
   }
  },
