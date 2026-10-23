@@ -672,6 +672,8 @@ def r05(ctx):
     pg, pt, t = _num(prev.get("value_mmol")), _dt(prev.get("time_utc")), _dt(r.get("time_utc"))
     if g is None or pg is None or pt is None or t is None or t <= pt:
         return RuleResult.ok()
+    if g < 3.9:  # P2：已低于 3.9 的读数由 R03a/R04a 实时触发管，预测性告警不适用
+        return RuleResult.ok()
     slope15 = (g - pg) / ((t - pt).total_seconds() / 60) * 15  # mmol/L per 15 min
     if g < 5.0 and (slope15 <= -1 or g + slope15 / 15 * 20 < 3.9):
         ev = _staged_alert(ctx) or _alert(ctx)
@@ -1242,7 +1244,8 @@ def c6(ctx):
 @rule("C19_线上随访边界")
 def c19(ctx):
     text = text_of(ctx)
-    if re.search(r"诊断|开处方|处方|开药|调药方案", text):
+    referral = re.search(r"(建议|请|需要|尽快|最好).{0,8}(去医院|就医|复诊|找医生|转诊|挂号)", text)  # P4：异常转介在允许范围内
+    if re.search(r"诊断|开处方|处方|开药|调药方案", text) and not referral:
         return _fail("C19", "随访内容超出健康教育/生活方式/监测提醒/异常转介范围", "定性为健康管理随访；超范围须互联网诊疗备案 + 等保三级")
     return RuleResult.ok()
 

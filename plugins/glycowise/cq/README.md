@@ -30,6 +30,8 @@
 
 `live4*`：golden #15/#19/#20 三条 rejected 口语去掉自带的违规事实（"才戴了 6 天"/"注册证过期了"/"还没签单独同意"），原句保留为 `variants[kind=with_fact]`；`session_context.txt` 里对应两行也改为中性（"新戴机患者 = P0088"、"厂商接口新接入的患者 = P0099"）。引擎 main 44d8ce1。无上下文那次录制 #06 两句 LLM 返回了畸形 where（list 而非 dict，TypeError），单独补录一次。
 
+提案 P2–P4（R05 只在 G≥3.9 评估、R49 hard→soft、C19 转介豁免）合入生产后，用同一份 live4 / live4-ctx 录制重放：21/28、23/28 不变。
+
 `live3*` 两行的结果文件按引擎 clife-onto-engine PR #86（commit c244013，动作名 NFKC + 去空白归一化）重算；该 PR 已于 2026-10-23 合并进 main（merge 44d8ce1）。
 
 失败归因（live3 两列为引擎 c244013 重算后）：

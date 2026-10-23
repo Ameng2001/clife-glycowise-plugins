@@ -76,3 +76,5 @@ tier 4（HIL）为 0：seed 可达的动作里没有带复核闸的实现。
 ## 附：提案来源案例（2026-10-23 晚，不计入上面的"全过"）
 
 `plugins/glycowise/cq/make_proposal_cases.py` 另写出 5 条（低血糖安全-11/-12、参考与配置-12、结论层与分层-09/-10），标签按现实口径，在生产插件 h_i 上**预期失败**，是提案 P2–P4 的 Dᵢ；裁决见 `studio/changes/glycowise/proposals/P2–P4.md` 与 `growth-ledger.md` round 1。参考与配置-13（计算窗口指标 P0099）在两边都 ENGINE_ERROR，删除并记为 P5 候选。
+
+合入 P2–P4 后（同日）：全库 103 案例 / 948 行全过，W_family 0.909（提案案例给低血糖安全 / 参考与配置 / 结论层与分层补了 tier 3）。

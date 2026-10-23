@@ -1958,7 +1958,7 @@ def R42_急性混杂窗口禁止出结论(ctx) -> RuleResult:
     """
     return _fde.RULES['R42_急性混杂窗口禁止出结论'](ctx)
 
-@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行", backing=Backing.DECLARATIVE, severity=Severity.HARD,
+@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
           evaluation=Evaluation.PRE,
           source="通用（domain-canvas 架构护栏「D2 不得在缺参数时回落一般成人阈值」）",
           citations=("domain-canvas §3.6", "behavior-matrix §7.1 G1"))
