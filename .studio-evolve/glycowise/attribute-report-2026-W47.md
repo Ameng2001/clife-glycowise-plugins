@@ -67,7 +67,22 @@ W47 轨迹 family×tier：产品与机构合规 t4 9 · 低血糖安全 t1 3 · 
 
 两个键回答的是不同问题：现行键是「引擎在这条案例上**评到了哪个 family 的规则 / 动作**」，source 键是「这句口语**想做哪个 family 的事**」。分层的目的是让留出集按场景覆盖，应当用 source 键；但 holdout-4 / holdout-5 是按现行键抽的，round 1–5 的层 T_k 读数也按现行键。因此：
 - W47 起新落的案例按 source 键归 family（已改代码）；
-- **W43–W46 的 203 条不重写**（约束）；是否在抽 holdout-6 前用 source 键整体重归（`holdout_sample` 读一张 override 表），是 §3 决定 ②，要用户定——两种键下薄层不同，直接决定补录多少句。
+- **W43–W46 的 203 条不重写**（约束）；是否在抽 holdout-6 前用 source 键整体重归（`holdout_sample` 读一张 override 表），是 §5 决定 ②′——**已定**（§2.2）：按 source 键整体重归，holdout-6 用 override 表。
+
+### 2.2 决定 ②′（2026-10-24，用户裁定）：按 source 键整体重归，holdout-6 用 override 表
+
+W43–W46 的 203 条案例**文件不改**，改走覆盖表：`sets/family-override.yaml`（`families: {case_id: family}`，182 条，其中 106 条与文件里的现行 family 不同；21 条 W43 `golden#NN` 口语无 family 列在 `not_covered`，保留现行）。`holdout_sample.py` 新增 `--family-override FILE`，分层前覆盖 family，留出集文件记 `family_override` / `family_overridden`。抽 holdout-6 的命令固定为：
+
+```
+holdout_sample.py --cases-dir cases --round 6 --holdout-size 40 --stratify family,tier --merge-min 8 \
+    --family-override sets/family-override.yaml --exclude-file <Dᵢ> --ledger growth-ledger.md
+```
+
+`--check-pool` 现状（203 条，W47 未落）：并层后 18 层，**7 个 rest 层不足 8**——产品与机构合规 4 / 出口签发闸 2 / 参考与配置 3 / 指标口径 1 / 结论层与分层 1 / 缓解路径 5 / 高血糖与波动 1；不用覆盖表是 8 个。叠 W47 上界后仍薄 7 个（§2 表最右列）。
+
+**补录清单**已写成 `examples/utterances.2026-W48.brief.md`（约 70 句，8 个配额层），配额按「source 键 + W47 上界」的缺口乘以 W47 实测落轨迹率放大：tier1 / tier3 层 ≈ 1.6 倍，tier4 层 ≈ 2.5 倍，并要求 tier4 换写法、低血糖安全 t1 避开 CgmSummary 统计值。若 W47 标注后 partial 较多，缺口会再大，补录前以标注后的 `--check-pool` 为准。
+
+遗留口径差：`growth_metrics` 的 W_family 与层 T_k 读的是结果行里的 family（runner 从案例文件带出），仍是现行键；round 1–5 的读数不重算。要让读数与留出集同键，runner / growth_metrics 也得读 override 表——登记为 amend 候选，不在本轮改。
 
 ## 3. IMPL_MISSING 提案 P12 / P13（不等标注；不合入生产）
 
@@ -97,6 +112,6 @@ W47 轨迹 family×tier：产品与机构合规 t4 9 · 低血糖安全 t1 3 · 
 | # | 事项 | 本轮处置 |
 |---|---|---|
 | ① | criteria amend v3（strict 只认 T / S / W，ΔC 只做约束）待导师签字 | 论文侧 `criteria.yaml` 已按 v3 冻结并用于 round 5 第 3 / 4 次裁决和本轮 P12 / P13；交接文件仍写「待签字」。**需要用户确认**：v3 是否已签字；若未签，本轮所有 3d 判定都标 exploratory（已标） |
-| ② | `regress_any` 单条口径要不要进 criteria | **延后，不进 v3**。继续与净口径并排输出（T1 / T2 / metrics），作为 §6 威胁 (d) 的证据；是否进 v4 等 formal 前的 amend 一次性定。另加本轮决定 ②′：**分层键**用 source 还是现行推断（§2.1），抽 holdout-6 前必须定 |
+| ② | `regress_any` 单条口径要不要进 criteria | **延后，不进 v3**。继续与净口径并排输出（T1 / T2 / metrics），作为 §6 威胁 (d) 的证据；是否进 v4 等 formal 前的 amend 一次性定。另加本轮决定 ②′：**分层键**——用户裁定按 source 键整体重归 W43–W46（override 表，不改文件），见 §2.2 |
 | ③ | W_evid 未实现 | **已实现**（astra d07589d：结构分母 §1 Object + §6 Mapping + §4 function Rule，分子 §8 verified 去重），但 glycowise IR 无 §8（ground 未跑，pg-ro / ch-ro 不可达）→ 读数 null，gate_decide 记 `W_EVID_UNAVAILABLE` 只看 W_family。要让 W_evid 非空，得先跑 ground 填 §8——与数据组无关，是引擎侧的事 |
 | ④ | P9a 未合入；分歧集 {P9b, P9c} 未合入 | **保持未合入**。B_6 对 P9a 的回退判定按协议要在它合入生产之后；合入与否是用户决定，本轮不动生产。若决定合入，走 `git apply studio/changes/glycowise/proposals/P9a.patch` 后重算 h_i 基线再抽 B_6 |
