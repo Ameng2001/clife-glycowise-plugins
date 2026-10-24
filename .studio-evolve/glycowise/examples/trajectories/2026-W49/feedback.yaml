@@ -1,9 +1,10 @@
-# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
 window: 2026-W49
-status: draft
-reviewer: null
-labeled_at: null
-_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-24'
+_howto: 已标注：数据组按 IR §4 规则意图、规则/handler 实现与 seed 真值逐条判（含 sequential 回放的实际查询行），本体负责人 2026-10-24 授权采纳。suggested 只是机器比对，未抄作 label。
 items:
 - trace_id: t-20261024-0301
   utterance: 把刘阿姨（P0012）的 14 天报告 s-P0012-14d 放到飞书多维表格里，门店每周例会看
@@ -11,7 +12,7 @@ items:
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0012 ConsentRecord scope_items 没有『第三方工具传输』→ C7 拒，对。病历式数据不得写入飞书多维表格。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001

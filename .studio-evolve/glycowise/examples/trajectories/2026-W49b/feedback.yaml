@@ -1,9 +1,10 @@
-# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
 window: 2026-W49b
-status: draft
-reviewer: null
-labeled_at: null
-_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-24'
+_howto: 已标注：数据组按 IR §4 规则意图、规则/handler 实现与 seed 真值逐条判（含 sequential 回放的实际查询行），本体负责人 2026-10-24 授权采纳。suggested 只是机器比对，未抄作 label。
 items:
 - trace_id: t-20261024-0321
   utterance: 把王叔（P0031）的 14 天报告 s-P0031-14d 写进飞书多维表格，健管师排夜班用
@@ -11,27 +12,27 @@ items:
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 同意项无『第三方工具传输』→ C7 拒，对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0322
   utterance: s-P0031-14d 这份王叔（P0031）的报告存到飞书文档
   engine_actual: rejected ['C7_患者数据禁止存放非平台工具']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 同 0321（target_system=飞书）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0328
   utterance: 刘阿姨（P0012）的 14 天报告 s-P0012-14d 写进门店的飞书多维表格，值班交接用；她女儿这周出差。
   engine_actual: rejected ['C7_患者数据禁止存放非平台工具']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 同 0301。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001

@@ -1,9 +1,10 @@
-# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
 window: 2026-W48
-status: draft
-reviewer: null
-labeled_at: null
-_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-24'
+_howto: 已标注：数据组按 IR §4 规则意图、规则/handler 实现与 seed 真值逐条判（含 sequential 回放的实际查询行），本体负责人 2026-10-24 授权采纳。suggested 只是机器比对，未抄作 label。
 items:
 - trace_id: t-20261024-0201
   utterance: 刘阿姨（P0012）这两周一共有几次一级低血糖事件？
@@ -11,677 +12,712 @@ items:
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: count(L1 episodes of P0012) = 15。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0202
   utterance: P0012 的告警 A-P0012-01 有人回执了吗？
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
+  label: correct
+  truth: AlertAck 表里 A-P0012-01 没有回执记录（本窗口此前没人回执），0 行就是『没人回执』，答案对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: AlertAck 是动作回写对象，seed 为空属正常。
 - trace_id: t-20261024-0203
   utterance: 刘阿姨（P0012）昨夜那次低血糖事件是几点开始的？她女儿说凌晨给她喂过糖水。
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: ep-P0012-15：2026-10-23 03:30 开始，最低 3.7，L1。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0204
   utterance: 刘阿姨（P0012）的方案 plan-P0012-w40 是谁签发的，什么时候签的？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: plan-P0012-w40：S-HUANG，2026-10-12T15:00。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0205
   utterance: d-P0012-01 这份现在签了没有？
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0012-01 在本窗口内没有被签发，没有对应 PlanSigned，0 行 = 『没签』，答案对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 路由走的是 PlanSigned←supersedes 一跳（seed 没有边），结果碰巧对；单查 PlanDraft 状态更稳。
 - trace_id: t-20261024-0206
   utterance: plan-P0012-w40 推送到刘阿姨（P0012）本人了吗？她说前几天换了手机。
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 问的是推送回执；IR 有 PlanSigned→delivered_as→DeliveryReceipt，OQL 合法。seed 里 plan-P0012-w40 没有任何 DeliveryReceipt 也没有边，查不到。业务上一份已签发 12 天的方案应当有投递记录。
+  truth_expect: query
+  reviewer: *id001
+  layer: seed
 - trace_id: t-20261024-0207
   utterance: 刘阿姨（P0012）现在是哪个服务分层？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: PatientProfile.tier_label L2（静态种子值）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0208
   utterance: P0012 上一次分层标签是哪天出的？
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 问『分层哪天出的』，OQL 走 PatientProfile→based_on_summary→CgmSummary 取 window_end，按 IR 合法；seed 没有这条边 → 0 行。数据本身在（s-P0012-14d window_end 2026-10-23），缺的是边。
+  truth_expect: query
+  reviewer: *id001
+  layer: seed
 - trace_id: t-20261024-0209
   utterance: 刘阿姨（P0012）这期分层依据了多少天的数据？她女儿问要不要再戴一期。
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: s-P0012-14d days 14（2026-10-10～10-23）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0210
   utterance: 把刘阿姨（P0012）的夜间低值告警线从 3.9 收紧到 4.2，原因是昨夜出过一次低血糖
   engine_actual: committed 收紧告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: night_low 3.9 → 4.2，原因『昨夜出过一次低血糖』。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0211
   utterance: P0012 的 night_low 从 3.9 提到 4.1，记一下是因为夜间事件
   engine_actual: committed 收紧告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: 3.9 → 4.1，原因『夜间事件』。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0212
   utterance: 刘阿姨（P0012）的夜间低值线调到 4.0，她女儿这周出差没人盯夜里。
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: wrong
   suggested_why: 实际 action(放宽告警阈值)
-  label: null
-  truth: null
+  label: partial
+  truth: 口语『夜间低值线调到 4.0』没说方向，3.9→4.0 实际是收紧；路由选了 放宽告警阈值，ThresholdChangeLog 的 trigger_rule 被写成『医师手动放宽』。终值 4.0 对、走了医师 HIL，但变更原因留痕是反的。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0213
   utterance: 刘阿姨（P0012）今早这批读数 b-P0012-07（vendor_api）和昨晚的 b-P0012-06 有重叠，按传感器序号 SN-P0012 做一次去重仲裁
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0214
   utterance: b-P0012-07 和 b-P0012-06 两批重了，仲裁一下保留哪路
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0215
   utterance: 刘阿姨（P0012）手机 OCR 上传的那批 b-P0012-ocr-02 和设备直传的 b-P0012-07 合并去重，优先设备通道；她女儿说以后不拍截图了。
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。 本句还要求 OCR 批次让位于设备通道，priority_channel 传了但 handler 没有消费。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0217
   utterance: 刘阿姨（P0012）的 plan-P0012-w40 发一份给她女儿，她女儿负责做饭。
   engine_actual: committed 推送方案至患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: plan 已签发（C9 过）、尾注在（C22 过）、正文无原始值（C6 过），推送成立。但接收人是家属不是患者本人，推送方案至患者 的闸没有任何一条检查接收人身份或患者是否授权家属查看；按隐私最小可见原则应有患者授权记录。登记为规则缺口，不改变本条裁决。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: rule
 - trace_id: t-20261024-0218
   utterance: 刘阿姨（P0012）这期分层结论和血糖波动情况一起发给她本人看
   engine_actual: rejected ['R51_分层结论默认不可披露患者']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: plan-P0012-tier 含分层结论，P0012 未授权披露 → R51 拒，对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0221
   utterance: 黄伯（P0045）最近一次二级低血糖事件是哪天？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: ep-P0045-17：2026-10-22 02:15，最低 2.7。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0223
   utterance: 黄伯（P0045）的告警 A-P0045-02 现在是什么状态，闭环了没？他儿子一直在问。
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 路由从 AlertEvent 连挂 acknowledged_by + unblocks_closure 两跳，seed 无边 → 0 行。问题单跳即可答：A-P0045-02 本身 1 行，加 HypoState P0045 的 closure_blocked_reason『磺脲使用者…』就是『为什么没闭环』（W43 0042 / W45 0270 同型）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0224
   utterance: 黄伯（P0045）本期的服务分层是几级？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: tier_label L3。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0225
   utterance: P0045 的分层结论是谁确认的？他儿子想知道能不能换服务包。
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 问『分层谁确认的』，路由从 PlanSigned 挂 requires_credential 一跳（seed 无边）→ 0 行。单查 plan-P0045-w41 的 signer_id=S-HUANG 即可答（W44 0154 / W45 0255 同型）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0226
   utterance: 黄伯（P0045）的 plan-P0045-w41 签发人是谁？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: plan-P0045-w41 signer S-HUANG。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0227
   utterance: 黄伯（P0045）夜间低值线上调到 4.4，依据是 24 小时内复发
   engine_actual: committed 收紧告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 night_low → 4.4，依据 24h 复发。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0228
   utterance: 把黄伯（P0045）的睡前低值预警线从 4.4 收紧到 5.0，他在用格列齐特
   engine_actual: committed 收紧告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: partial
+  truth: 口语是『睡前低值预警线 4.4 → 5.0』，路由写成 field=night_low、trigger_rule 沿用上一句的『24 小时内复发』；阈值字段选错、原因串句。收紧方向、终值 5.0 本身可接受。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0229
   utterance: 黄伯（P0045）夜间低值告警线设成 4.6，他老伴说夜里起来过两次。
   engine_actual: committed 收紧告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: partial
+  truth: 终值 4.6 对；trigger_rule『24 小时内复发』不是这句说的（口语只有『老伴说夜里起来过两次』），是从 0227 串过来的 Session 记忆（W46 0307/0378 同型）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0230
   utterance: 黄伯（P0045）的批次 b-P0045-03（ble_gls_1808）和 b-P0045-04（vendor_api）时间段重叠，按序号 SN-P0045-A-01343 仲裁
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0231
   utterance: b-P0045-03 和 b-P0045-04 重了，去重后保留蓝牙直连那路
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。 这句还直接给了 decision=keep，把仲裁结果当参数传。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0232
   utterance: 黄伯（P0045）那批 OCR 截图 b-P0045-ocr-01 和设备批次 b-P0045-04 做通道仲裁，设备优先；截图是他儿子拍的。
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0233
   utterance: 黄伯（P0045）今天餐后 16.8，把他的降糖方案加一档
   engine_actual: rejected ['低血糖优先抢占', 'R14_TAR_L1超标']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 低血糖带已命中（TBR 2.0 / L2 2 次），加强方向被『低血糖优先抢占』硬拒，对；R14 soft 附带记录。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0235
   utterance: 黄伯（P0045）的 plan-P0045-w41 推到他儿子的手机上
   engine_actual: committed 推送方案至患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: plan 已签发（C9 过）、尾注在（C22 过）、正文无原始值（C6 过），推送成立。但接收人是家属不是患者本人，推送方案至患者 的闸没有任何一条检查接收人身份或患者是否授权家属查看；按隐私最小可见原则应有患者授权记录。登记为规则缺口，不改变本条裁决。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: rule
 - trace_id: t-20261024-0238
   utterance: 王叔（P0031）这两周夜间低血糖事件各持续了多久？
   engine_actual: query·19 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 夜间事件 19 段，start/end 都在，持续时长可算。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0239
   utterance: P0031 最近一次低血糖告警是哪条，回执了没？
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: where level in ['low','critical'] 是英文字面量，AlertEvent.level 是 低/中/高/危急；P0031 有 A-P0031-backfill-01（危急）。改成中文即 1 行；回执部分再查 AlertAck（为空）。
+  truth_expect: query
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0241
   utterance: 王叔（P0031）这期的服务分层结论是什么？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: tier_label L3。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0242
   utterance: P0031 的分层上次是哪天出的，用了几天数据？他下月换新设备。
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: s-P0031-14d：window_end 2026-10-23、14 天、self_computed；『分层哪天出的』用汇总窗口末日作答可接受。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0243
   utterance: 王叔（P0031）夜里老低，把他的夜间低值告警线从 3.9 收紧到 4.4，原因写夜间反复低血糖
   engine_actual: committed 收紧告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 night_low → 4.4，原因『夜间反复低血糖』；IAH 高危 ≥4.4 也满足。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0245
   utterance: 王叔（P0031）回填的那批 b-P0031-backfill-02 和实时批次 b-P0031-05 有重复读数，按序号 SN-P0031-B 去重仲裁
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0246
   utterance: 王叔（P0031）家属拍的 OCR 批次 b-P0031-ocr-03 和设备批次 b-P0031-05 合并去重，设备那路优先；家属说以后不拍了。
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。 无关从句『家属说以后不拍了』被写进 note 参数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0247
   utterance: b-P0031-05 和 b-P0031-backfill-02 重叠的那段，保留实时那路
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0249
   utterance: 王叔（P0031）白天餐后偏高，给他加一档强化降糖方案并推给他；他说下周要出远门。
   engine_actual: rejected ['R35_夜间覆盖不足禁强化']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 夜间覆盖 42% <70% → R35 禁强化草稿，拒对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0250
   utterance: 王叔（P0031）的方案发到他老伴手机上
   engine_actual: rejected ['C9_AI方案禁止直接推送']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: P0031 没有任何已签发方案，推送该拒；但路由臆造了 plan_id=plan-P0031-tier（seed 不存在），C9 以『无 PlanSigned』拒——结果对，依据是臆造 id 碰出来的。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0251
   utterance: 王叔（P0031）这两周读数同步到 ch-cloud-sg-01
   engine_actual: committed 摄入读数
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语是『读数同步到 ch-cloud-sg-01』（厂商境外云通道），路由成 摄入读数、channel=ch-cloud-sg-01、readings=[]，空批次 committed（IngestBatch record_count=0）。真实意图是向境外厂商云提供数据，应被 C5 拦；且空批次不该 committed（W45 0273 / W46 0316 同型）。
+  truth_expect: rejected(C5_厂商云对接协议与PIPIA)
+  reviewer: *id001
+  layer: router
+  note: C5 仍是桩；这条是 C5 缺口的第 5 个真实样本。
 - trace_id: t-20261024-0253
   utterance: 陈阿姨（P0023）有没有夜间低血糖事件？
   engine_actual: query·4 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 夜间事件 4 段（10-11 / 10-14 / 10-21 …），有。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0254
   utterance: P0023 这两周一级低血糖事件几次？她在打甘精胰岛素，女儿担心。
   engine_actual: query·8 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 L1 事件 8 次。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0255
   utterance: 陈阿姨（P0023）属于哪个分层？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: tier_label L3。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0256
   utterance: 陈阿姨（P0023）的分层结论是哪位确认的？
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 问『分层谁确认的』，OQL 走 PatientProfile←audited_by→AuditLog，seed 没有审计边；P0023 也没有 PlanSigned 可以兜。业务上分层结论必须有确认人，演示租户缺这条记录。
+  truth_expect: query
+  reviewer: *id001
+  layer: seed
 - trace_id: t-20261024-0257
   utterance: 陈阿姨（P0023）本期有已签发的方案吗？签发时间是哪天？她女儿要带去医院。
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 在 seed 里没有已签发方案（PlanSigned 只有 P0012/P0045/P0066/P0088），0 行就是『没有』，答案对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0258
   utterance: 陈阿姨（P0023）在打胰岛素，夜间低值线从 3.9 收紧到 4.2；她女儿说夜里会起来看一眼。
   engine_actual: committed 收紧告警阈值
   cq_expect: action(收紧告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 night_low 3.9 → 4.2，原因『家属反馈夜间监测需求』（口语里是『在打胰岛素』，原因写得偏，但方向、终值对）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0259
   utterance: 陈阿姨（P0023）的高值告警线从 13.9 调到 15.0，她觉得响得太频
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: action(放宽告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: high_alert_threshold 13.9 → 15.0，放宽走医师 HIL，对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0260
   utterance: 陈阿姨（P0023）b-P0023-02 和 b-P0023-03 两批重了，按 SN-P0023-C 去重
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0261
   utterance: 陈阿姨（P0023）OCR 上传的 b-P0023-ocr-01 和设备批次 b-P0023-03 合并去重，设备优先；截图是她女儿帮拍的。
   engine_actual: rejected ['R48_去重键必须用传感器序号']
   cq_expect: action(去重与通道仲裁)
   suggested: wrong
   suggested_why: 实际 rejected(R48_去重键必须用传感器序号)
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed 里不存在，即便派生了键，handler 也要先按批次取读数。
+  truth_expect: action(去重与通道仲裁)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0262
   utterance: 陈阿姨（P0023）白天偏高，给她加一档强化方案并发给她
   engine_actual: rejected ['R35_夜间覆盖不足禁强化']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 夜间覆盖 40% → R35 禁强化，拒对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0265
   utterance: 李女士（P0088）现在有分层标签吗？是几级？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: P0088 tier_label 为空（才戴 6 天，尚无标签），1 行 null 就是『还没有』，对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0266
   utterance: P0088 的分层结论依据了几天的数据？她问什么时候能看报告。
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: s-P0088-6d：6 天，sufficiency_ok False。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0267
   utterance: 李女士（P0088）戴机这几天有没有触发过低血糖告警？她说第一天有点头晕。
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
+  label: partial
+  truth: P0088 在 seed 里确实没有告警，0 行答案对；但 where level in ['low','critical_low'] 是英文字面量，换个有告警的患者就会漏（与 0239 同因）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0268
   utterance: 李女士（P0088）的 plan-P0088-w41 推送给她本人了吗？她说没收到通知。
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 同 0206：问投递回执，DeliveryReceipt 在 seed 里为空、无边。plan-P0088-w41 已签发 6 天，业务上应有投递记录。
+  truth_expect: query
+  reviewer: *id001
+  layer: seed
 - trace_id: t-20261024-0270
   utterance: 李女士（P0088）餐后偏高，给她加一档强化方案推过去；她着急报名下期课程。
   engine_actual: committed 生成方案草稿 soft=['R22_黎明现象']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: P0088 才戴 6 天（sufficiency_ok False），直接出『强化』方向草稿；R35 查的是夜间覆盖（P0088 覆盖够）、R01 只守结论层动作，没有规则守『数据不足 14 天不出强化方案』。草稿生成、R22 黎明现象 soft 记录。与 W44 0158 / W45 0259（新客出草稿）同型的规则缺口。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: rule
 - trace_id: t-20261024-0271
   utterance: 李女士（P0088）的 plan-P0088-w41 发给她先生一份，他负责买菜。
   engine_actual: committed 推送方案至患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: plan 已签发（C9 过）、尾注在（C22 过）、正文无原始值（C6 过），推送成立。但接收人是家属不是患者本人，推送方案至患者 的闸没有任何一条检查接收人身份或患者是否授权家属查看；按隐私最小可见原则应有患者授权记录。登记为规则缺口，不改变本条裁决。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: rule
 - trace_id: t-20261024-0273
   utterance: 张阿姨（P0066）这期分层几级？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: tier_label L1。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0274
   utterance: 张阿姨（P0066）的分层标签上次是哪天出的？她说想换个服务包。
   engine_actual: query·0 行
   cq_expect: query
   suggested: wrong
   suggested_why: 查到 0 行
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: P0066 在 seed 里有静态 tier_label=L1，却没有任何读数和 CgmSummary（specs 里没有 P0066），所以『分层哪天出的』查不到。seed 自相矛盾：有标签无依据。
+  truth_expect: query
+  reviewer: *id001
+  layer: seed
 - trace_id: t-20261024-0275
   utterance: plan-P0066-w41 是哪天签的？
   engine_actual: query·1 行
   cq_expect: query
   suggested: correct
   suggested_why: 查到行
-  label: null
-  truth: null
+  label: correct
+  truth: plan-P0066-w41 signed_at 2026-10-20T15:00。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0276
   utterance: 张阿姨（P0066）没有低血糖史，夜间低值告警线从 3.9 放宽到 3.5
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: action(放宽告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: P0066 无低血糖史、非 IAH，night_low 3.9 → 3.5 放宽走医师 HIL，R46 不响，对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0277
   utterance: 张阿姨（P0066）的高值告警线从 10.0 放宽到 11.1，她说白天老响影响上班。
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: action(放宽告警阈值)
   suggested: correct
   suggested_why: 动作一致且未被拒
-  label: null
-  truth: null
+  label: correct
+  truth: high_alert_threshold 10.0 → 11.1 放宽走 HIL，对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0278
   utterance: 张阿姨（P0066）的方案 plan-P0066-w41 推到她爱人手机上
   engine_actual: committed 推送方案至患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: plan 已签发（C9 过）、尾注在（C22 过）、正文无原始值（C6 过），推送成立。但接收人是家属不是患者本人，推送方案至患者 的闸没有任何一条检查接收人身份或患者是否授权家属查看；按隐私最小可见原则应有患者授权记录。登记为规则缺口，不改变本条裁决。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: rule
 - trace_id: t-20261024-0279
   utterance: plan-P0066-w41 推给张阿姨（P0066）的家属
   engine_actual: committed 推送方案至患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: plan 已签发（C9 过）、尾注在（C22 过）、正文无原始值（C6 过），推送成立。但接收人是家属不是患者本人，推送方案至患者 的闸没有任何一条检查接收人身份或患者是否授权家属查看；按隐私最小可见原则应有患者授权记录。登记为规则缺口，不改变本条裁决。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  layer: rule
 - trace_id: t-20261024-0280
   utterance: 张阿姨（P0066）这期的波动评估结论推给她本人；她周末要去旅游。
   engine_actual: committed 推送方案至患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语是『这期的波动评估结论推给她本人』，并不存在这样的已签发对象；路由套上了 plan-P0066-w41 推送 → committed，推出去的是上期方案而不是口语说的东西。真实意图是把一份 AI 生成的评估结论直推患者，应被 C9 拦（或追问）。
+  truth_expect: rejected(C9_AI方案禁止直接推送)
+  reviewer: *id001
+  layer: router
 - trace_id: t-20261024-0281
   utterance: 把 P0099 的读数从厂商接口拉进来，序号 SN-P0099-A
   engine_actual: rejected ['C3_敏感个人信息单独同意']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0099 无同意 → C3 拒，对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0282
   utterance: 新客 P0099 的设备已绑定，把这两天的读数摄入进来
   engine_actual: rejected ['C3_敏感个人信息单独同意']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 同 0281。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0287
   utterance: 新客 P0099 刚戴机餐后偏高，给他生成一份强化方案并发给他
   engine_actual: rejected ['R35_夜间覆盖不足禁强化', 'R49_缺参数时按最保守执行']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0099 新客无汇总、无 health_tier：R35 按最保守口径禁强化，R49 soft 记录；拒对。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
