@@ -22,6 +22,7 @@
   "3d": {
    "accept_rate": 0.7916666666666666,
    "n_accept": 19,
+   "n_judged": 24,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
    "n_any_known": 19
@@ -29,48 +30,55 @@
   "1d": {
    "accept_rate": 0.9583333333333334,
    "n_accept": 23,
+   "n_judged": 24,
    "regress_rate": 0.0,
    "regress_any_rate": 0.08695652173913043,
    "n_any_known": 23
   },
   "random": {
-   "accept_rate": 0.4166666666666667,
+   "accept_rate": 0.47619047619047616,
    "n_accept": 10,
+   "n_judged": 21,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
    "n_any_known": 10
   },
   "1d-strict": {
-   "accept_rate": 0.75,
+   "accept_rate": 0.8571428571428571,
    "n_accept": 18,
+   "n_judged": 21,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
    "n_any_known": 18
   },
   "none": {
-   "accept_rate": 0.875,
+   "accept_rate": 1.0,
    "n_accept": 21,
+   "n_judged": 21,
    "regress_rate": 0.0,
    "regress_any_rate": 0.047619047619047616,
    "n_any_known": 21
   },
   "3d-noT": {
-   "accept_rate": 0.75,
+   "accept_rate": 0.8571428571428571,
    "n_accept": 18,
+   "n_judged": 21,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
    "n_any_known": 18
   },
   "3d-noS": {
-   "accept_rate": 0.75,
+   "accept_rate": 0.8571428571428571,
    "n_accept": 18,
+   "n_judged": 21,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
    "n_any_known": 18
   },
   "3d-noW": {
-   "accept_rate": 0.75,
+   "accept_rate": 0.8571428571428571,
    "n_accept": 18,
+   "n_judged": 21,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
    "n_any_known": 18

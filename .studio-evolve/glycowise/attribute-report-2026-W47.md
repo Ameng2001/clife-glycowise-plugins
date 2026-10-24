@@ -162,7 +162,7 @@ P9a 先合入生产（§5 ④），h_i 重算：B_6 A .900、real-all .816、sim
 | P19a R51 正则 根因 | 分层口语分支 | 0→3/3 | = | .819（+r21） | .990 | ACCEPT | ACCEPT | ACCEPT | ACCEPT |
 | P19b 朴素 | 字面量 | 0→3/3 | = | 同 | 同 | ACCEPT | ACCEPT | ACCEPT | ACCEPT |
 
-三个消融臂与 1d-strict 都与 3d 同判。`arms/r1-6/`（`arm_compare` 24 条 × 8 臂）：accept_rate 3d .792 / 1d .958 / none .875 / random .417；regress_rate（净）全臂 0；regress_any 1d .087、none .048、3d 0；分歧集仍只有 round 5 的 {P9b, P9c}。
+三个消融臂与 1d-strict 都与 3d 同判。`arms/r1-6/`（`arm_compare` 24 条 × 8 臂）：accept_rate 3d .792 / 1d .958 / none 1.000 / random .476 / 1d-strict 与消融臂 .857（2026-10-24 修 arm_compare 分母：缺臂不当拒绝）；regress_rate（净）全臂 0；regress_any 1d .087、none .048、3d 0；分歧集仍只有 round 5 的 {P9b, P9c}。
 
 **这一轮朴素修复臂说明了什么**：
 1. 四对里三对（P16 / P17 / P19）根因修与朴素修在 Dᵢ、B_6、real-all 上**逐格相同**，八臂全部同判。朴素修的代价（只认字面量、删关键词）在这三个集合上没有一条案例能暴露——B_6 和 real 池里没有「换一种功效说法」「真正的闭环请求」「分层为二级」这类案例。
