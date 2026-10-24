@@ -1,0 +1,43 @@
+{
+  "n_cases": 0,
+  "n_rows": 0,
+  "n_tier": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0
+  },
+  "origins": {},
+  "case_pass": {},
+  "T": {
+    "T_1": null,
+    "T_2": null,
+    "T_3": null,
+    "T_4": null
+  },
+  "T_max": 0,
+  "A": null,
+  "S_consist": null,
+  "S_stable": 1.0,
+  "W_family": null,
+  "C": {
+    "steps": null,
+    "tokens": null,
+    "wall_s": null
+  },
+  "C_gate": null,
+  "runs": 0,
+  "n_unscored": 39,
+  "flags": [
+    "UNSCORED:39:SETUP_FAILED",
+    "NO_VARIANTS",
+    "SINGLE_RUN",
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "state": "h_prime",
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:11a7a4c24504c27adb2aa4f0e8e551350d9fbeb25a1d4788907379e66ddc4d98",
+  "exec": "AUTO"
+}

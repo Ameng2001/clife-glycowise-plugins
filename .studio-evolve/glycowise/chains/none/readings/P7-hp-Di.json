@@ -1,0 +1,46 @@
+{
+  "n_cases": 3,
+  "n_rows": 27,
+  "n_tier": {
+    "1": 0,
+    "2": 0,
+    "3": 9,
+    "4": 0
+  },
+  "origins": {
+    "sim": 3
+  },
+  "case_pass": {
+    "低血糖安全-13": 1.0,
+    "缓解路径-03": 1.0,
+    "缓解路径-04": 1.0
+  },
+  "T": {
+    "T_1": null,
+    "T_2": null,
+    "T_3": 1.0,
+    "T_4": null
+  },
+  "T_max": 3,
+  "A": 1.0,
+  "S_consist": 1.0,
+  "S_stable": 1.0,
+  "W_family": 1.0,
+  "C": {
+    "steps": 2.3333333333333335,
+    "tokens": null,
+    "wall_s": 0.0022333333333333333
+  },
+  "C_gate": 2.3333333333333335,
+  "runs": 3,
+  "n_unscored": 0,
+  "flags": [
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "state": "h_prime",
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:1746e630a91801f0fe7b20ea6c7e0b7144d1112b43646698517ab0b44e9f2abb",
+  "exec": "AUTO"
+}

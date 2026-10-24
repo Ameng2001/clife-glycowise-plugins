@@ -1,0 +1,13 @@
+# P-B 独立链试运行的提案流（重放流：提案来自原始 3d 链的归因）—— chain_drive.py 用
+ancestor_dir: .studio-evolve/glycowise/chains/ancestor/plugins/glycowise   # = git d5af308 的 plugins/glycowise（P2–P4 合入前）
+ontology: glycowise
+sets_root: .studio-evolve/glycowise
+proposals:
+  - {id: P2-4, num: 2, round: 1, window: pilot-sim, patch: .studio-evolve/glycowise/chains/patches/P2-4.patch, di: [sets/P2-Di.yaml, sets/P3-Di.yaml, sets/P4-Di.yaml], holdout: sets/B-sim.yaml, holdout_next: sets/holdout-2.yaml}   # 合入提交 81951ec 一次含三条，无法拆，按一条判
+  - {id: P5,  num: 5,  round: 2, window: 2026-W43, patch: studio/changes/glycowise/proposals/P5.patch,  di: [sets/P5-Di.yaml], holdout: sets/holdout-2.yaml, holdout_next: sets/holdout-3.yaml}
+  - {id: P6,  num: 6,  round: 3, window: 2026-W44, patch: studio/changes/glycowise/proposals/P6.patch,  di: [sets/P6-Di.yaml], holdout: sets/holdout-3.yaml, holdout_next: sets/holdout-4.yaml}
+  - {id: P7,  num: 7,  round: 4, window: 2026-W45, patch: studio/changes/glycowise/proposals/P7.patch,  di: [sets/P7-Di.yaml], holdout: sets/holdout-4.yaml, holdout_next: sets/holdout-5.yaml}
+  - {id: P8,  num: 8,  round: 4, window: 2026-W45, patch: studio/changes/glycowise/proposals/P8.patch,  di: [sets/P8-Di.yaml], holdout: sets/holdout-4.yaml, holdout_next: sets/holdout-5.yaml}
+  - {id: P9a, num: 9,  round: 5, window: 2026-W46, patch: studio/changes/glycowise/proposals/P9a.patch, di: [sets/P9-Di.yaml], holdout: sets/holdout-5.yaml}
+  - {id: P9b, num: 10, round: 5, window: 2026-W46, patch: studio/changes/glycowise/proposals/P9b.patch, di: [sets/P9-Di.yaml], holdout: sets/holdout-5.yaml}
+  - {id: P9c, num: 11, round: 5, window: 2026-W46, patch: studio/changes/glycowise/proposals/P9c.patch, di: [sets/P9-Di.yaml], holdout: sets/holdout-5.yaml}

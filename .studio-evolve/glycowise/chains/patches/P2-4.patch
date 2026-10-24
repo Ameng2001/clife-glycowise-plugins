@@ -1,0 +1,49 @@
+diff --git a/plugins/glycowise/__init__.py b/plugins/glycowise/__init__.py
+index 0b0504c..e569161 100644
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -1958,7 +1958,7 @@ def R42_急性混杂窗口禁止出结论(ctx) -> RuleResult:
+     """
+     return _fde.RULES['R42_急性混杂窗口禁止出结论'](ctx)
+ 
+-@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行", backing=Backing.DECLARATIVE, severity=Severity.HARD,
++@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行", backing=Backing.DECLARATIVE, severity=Severity.SOFT,
+           evaluation=Evaluation.PRE,
+           source="通用（domain-canvas 架构护栏「D2 不得在缺参数时回落一般成人阈值」）",
+           citations=("domain-canvas §3.6", "behavior-matrix §7.1 G1"))
+diff --git a/plugins/glycowise/_fde.py b/plugins/glycowise/_fde.py
+index f9dc45d..410388c 100644
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -672,6 +672,8 @@ def r05(ctx):
+     pg, pt, t = _num(prev.get("value_mmol")), _dt(prev.get("time_utc")), _dt(r.get("time_utc"))
+     if g is None or pg is None or pt is None or t is None or t <= pt:
+         return RuleResult.ok()
++    if g < 3.9:  # P2：已低于 3.9 的读数由 R03a/R04a 实时触发管，预测性告警不适用
++        return RuleResult.ok()
+     slope15 = (g - pg) / ((t - pt).total_seconds() / 60) * 15  # mmol/L per 15 min
+     if g < 5.0 and (slope15 <= -1 or g + slope15 / 15 * 20 < 3.9):
+         ev = _staged_alert(ctx) or _alert(ctx)
+@@ -1242,7 +1244,8 @@ def c6(ctx):
+ @rule("C19_线上随访边界")
+ def c19(ctx):
+     text = text_of(ctx)
+-    if re.search(r"诊断|开处方|处方|开药|调药方案", text):
++    referral = re.search(r"(建议|请|需要|尽快|最好).{0,8}(去医院|就医|复诊|找医生|转诊|挂号)", text)  # P4：异常转介在允许范围内
++    if re.search(r"诊断|开处方|处方|开药|调药方案", text) and not referral:
+         return _fail("C19", "随访内容超出健康教育/生活方式/监测提醒/异常转介范围", "定性为健康管理随访；超范围须互联网诊疗备案 + 等保三级")
+     return RuleResult.ok()
+ 
+diff --git a/plugins/glycowise/cq/README.md b/plugins/glycowise/cq/README.md
+index bcfc950..daa0134 100644
+--- a/plugins/glycowise/cq/README.md
++++ b/plugins/glycowise/cq/README.md
+@@ -30,6 +30,8 @@
+ 
+ `live4*`：golden #15/#19/#20 三条 rejected 口语去掉自带的违规事实（"才戴了 6 天"/"注册证过期了"/"还没签单独同意"），原句保留为 `variants[kind=with_fact]`；`session_context.txt` 里对应两行也改为中性（"新戴机患者 = P0088"、"厂商接口新接入的患者 = P0099"）。引擎 main 44d8ce1。无上下文那次录制 #06 两句 LLM 返回了畸形 where（list 而非 dict，TypeError），单独补录一次。
+ 
++提案 P2–P4（R05 只在 G≥3.9 评估、R49 hard→soft、C19 转介豁免）合入生产后，用同一份 live4 / live4-ctx 录制重放：21/28、23/28 不变。
++
+ `live3*` 两行的结果文件按引擎 clife-onto-engine PR #86（commit c244013，动作名 NFKC + 去空白归一化）重算；该 PR 已于 2026-10-23 合并进 main（merge 44d8ce1）。
+ 
+ 失败归因（live3 两列为引擎 c244013 重算后）：

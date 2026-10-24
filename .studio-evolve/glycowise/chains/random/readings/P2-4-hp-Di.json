@@ -1,0 +1,48 @@
+{
+  "n_cases": 5,
+  "n_rows": 45,
+  "n_tier": {
+    "1": 0,
+    "2": 0,
+    "3": 15,
+    "4": 0
+  },
+  "origins": {
+    "sim": 5
+  },
+  "case_pass": {
+    "低血糖安全-11": 1.0,
+    "低血糖安全-12": 1.0,
+    "参考与配置-12": 1.0,
+    "结论层与分层-09": 1.0,
+    "结论层与分层-10": 1.0
+  },
+  "T": {
+    "T_1": null,
+    "T_2": null,
+    "T_3": 1.0,
+    "T_4": null
+  },
+  "T_max": 3,
+  "A": 1.0,
+  "S_consist": 1.0,
+  "S_stable": 1.0,
+  "W_family": 1.0,
+  "C": {
+    "steps": 2.2,
+    "tokens": null,
+    "wall_s": 0.0031333333333333335
+  },
+  "C_gate": 2.2,
+  "runs": 3,
+  "n_unscored": 0,
+  "flags": [
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "state": "h_prime",
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:11a7a4c24504c27adb2aa4f0e8e551350d9fbeb25a1d4788907379e66ddc4d98",
+  "exec": "AUTO"
+}

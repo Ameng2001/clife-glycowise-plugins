@@ -1,0 +1,5 @@
+# chain_drive.py 的可再生产物：runner 结果行、链状态目录、候选沙箱、祖先快照（= git archive d5af308 plugins/glycowise）
+*/results/
+*/state/
+*/cand-*/
+ancestor/
