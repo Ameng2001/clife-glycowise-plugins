@@ -8481,5 +8481,86 @@
    "alert_id": "A-P0031-backfill-01",
    "reason": "回填批次读数经核对为错误批次，已更正"
   }
+ },
+ "把刘阿姨（P0012）这两周的血糖读数导出到我们的在线表格里，健管师要看": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-14d-P0012"
+  }
+ },
+ "P0012 近两周读数导一份到在线表格。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-14d-P0012"
+  }
+ },
+ "把刘阿姨（P0012）这两周的血糖读数导出到我们的在线表格里，健管师要看；她女儿这周回来住。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-14d-P0012"
+  }
+ },
+ "黄伯（P0045）两周读数导一份到在线表格，门店排班用": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-14d-P0045"
+  }
+ },
+ "P0045 的两周读数放到在线表格里。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-14d-P0045"
+  }
+ },
+ "黄伯（P0045）两周读数导一份到在线表格，门店排班用；他说胃口好了。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-14d-P0045"
+  }
+ },
+ "P0099 这两天的读数导到在线表格给健管师看": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-2d-P0099"
+  }
+ },
+ "把 P0099 两天读数导出到在线表格。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-2d-P0099"
+  }
+ },
+ "P0099 这两天的读数导到在线表格给健管师看；他是朋友介绍来的。": {
+  "kind": "action",
+  "confidence": 0.9,
+  "action": "写入外部协作工具",
+  "params": {
+   "target_system": "在线表格",
+   "payload_ref": "cgm-2d-P0099"
+  }
  }
 }
