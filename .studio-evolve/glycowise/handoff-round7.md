@@ -43,3 +43,9 @@
 ## 四、交付
 
 `attribute-report-2026-W50.md`；`sets/holdout-7.yaml`；P9a / P16a–P19a 的 B_7 回退判定与朴素修重判；两链 `attribution/round-7.md` 与各自提案；`chains/compare-r7.md`；台账 round 7 行；`arms/r1-7/`；论文 README 第 1–3 项更新。
+
+## 五、3d 链（D2，≥ 2026-10-25）的命令约定（2026-10-24 补）
+
+- `chain_drive.py run --manifest chains-r7/3d/manifest-r7.yaml --work-dir .studio-evolve/glycowise/chains-r7 --gate-mode 3d --family-override .studio-evolve/glycowise/sets/family-override.yaml --final-sets sets/real-all.yaml,sets/real-all-W50.yaml,sets/B-sim.yaml …`（`--family-override` 已在 astra 加）。
+- 3d 链起点同 1d：`chains-r7/ancestor-h7`。两链末轮比较用 `sets/real-all-W50.yaml`（376，版本化，旧 `real-all.yaml` 348 不改）：h₇ A .827 / 1d 链末态 .840（`chains-r7/reading-h7-real-all-W50.json`、`chains-r7/1d/readings/final-real-all-W50.json`）。
+- 3d 链的提案同时进 P-A 八臂（`gate_decide` 八个 mode、`--ledger --window 2026-W50`）。若 v5 (b‴) 获签，链上只走根因修，朴素修只进 P-A。
