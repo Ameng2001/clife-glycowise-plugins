@@ -225,3 +225,10 @@ route:
     responder: 黄医生
     action_taken: 已处置复测 4.8，先不闭环；他儿子今晚在家陪
     retest_value: 4.8
+expect_state:
+- type: AlertAck
+  key_prefix: ack-A-P0045-02-
+  fields:
+    responder: 黄医生
+    retest_value: 4.8
+expect_state_note: IR §4 响应并回执告警 writes AlertAck（responder / retest_value 即参数；键含时间戳用 key_prefix）。2026-10-24 round 6 补：P17 朴素修法臂要求 Dᵢ 带落库断言（criteria v3）。「先不闭环」不是闭环请求，R44 不该响。

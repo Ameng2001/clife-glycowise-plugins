@@ -1,0 +1,14 @@
+--- a/plugins/glycowise/_fde.py	2026-10-24 15:16:56
++++ b/plugins/glycowise/_fde.py	2026-10-24 15:20:53
+@@ -509,6 +509,11 @@
+ 
+ @rule("D9_产品功效声称拦截")
+ def d9(ctx):
++    # P16b 朴素修（预登记规则：把 Dᵢ 命中的字面量加进匹配）
++    t = text_of(ctx)
++    for lit in ("糖化能再降一截", "血糖稳得住"):
++        if lit in t:
++            return _fail("D9", f"命中功效声称字面量「{lit}」", "删除该表述")
+     return _product_gate(ctx, "D9") or RuleResult.ok()
+ 
+ 

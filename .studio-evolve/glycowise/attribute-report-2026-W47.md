@@ -145,6 +145,32 @@ P9a 的两次 3d 裁决（B_5、B_6）都 ACCEPT、两次 regress 0、Dᵢ 12/15
 7. **brief 层 ≠ 案例 tier**（4.1）：补薄层的配额按口语意图写，落案例按引擎裁决分层，t4 配额里被放行的那部分恰是 wrong 候选、落成 t3。分层预估要按「预计裁决」算。
 8. **批次级请求落到单条动作上**（4.4）：路由把 IR 没有的操作套进最近的动作，handler 不校验参数形态就写幻影对象并 commit。两处可修：IR 补动作声明；handler 对缺 reading_id 的候选 fail（这会让 11 条在三份修法下都变 rejected，B_6 仍不分，但至少不再空写）。后者是实现层提案候选，Dᵢ 可用这 11 条。
 
+### 4.6 规则层提案 P16–P19（配对：根因修 + 朴素修，八臂；2026-10-24）
+
+P9a 先合入生产（§5 ④），h_i 重算：B_6 A .900、real-all .816、sim .990。四条规则层 D⁻ 各出一对（`proposals/P16.md`–`P19.md`；台账 proposal 16–23）：
+
+| 提案 | 修法 | Dᵢ | B_6 | real-all 348 | sim 98 | 3d | 1d | none | random |
+|---|---|---|---|---|---|---|---|---|---|
+| P16a D9 功效声称 根因 | EFFICACY_RE | 0→6/6 | .900 = | .822（+r26 r27） | .990 | ACCEPT | ACCEPT | ACCEPT | REVISE |
+| P16b 朴素 | 两条字面量 | 0→6/6 | = | 同 | 同 | ACCEPT | ACCEPT | ACCEPT | REVISE |
+| P17a R44 否定句 根因 | 去否定片段再判 | 0→3/3（state 过） | = | .819（+r15） | .990 | ACCEPT | ACCEPT | ACCEPT | REVISE |
+| P17b 朴素 | 删「闭环」关键词 | 0→3/3 | = | 同 | **.980（golden-23 回退）** | ACCEPT | ACCEPT | ACCEPT | REVISE |
+| P18a 升级告警 根因 | guard R38→R53 + handler + level 映射 | 0→3/3 | = | .819（+r21） | .990 | ACCEPT | ACCEPT | ACCEPT | REVISE |
+| P18b 朴素 | R38 删分支 | **0→0**（仍 IMPL_MISSING） | = | .816 | .990 | **REVISE** | REVISE | ACCEPT | ACCEPT |
+| P19a R51 正则 根因 | 分层口语分支 | 0→3/3 | = | .819（+r21） | .990 | ACCEPT | ACCEPT | ACCEPT | ACCEPT |
+| P19b 朴素 | 字面量 | 0→3/3 | = | 同 | 同 | ACCEPT | ACCEPT | ACCEPT | ACCEPT |
+
+三个消融臂与 1d-strict 都与 3d 同判。`arms/r1-6/`（`arm_compare` 24 条 × 8 臂）：accept_rate 3d .792 / 1d .958 / none .875 / random .417；regress_rate（净）全臂 0；regress_any 1d .087、none .048、3d 0；分歧集仍只有 round 5 的 {P9b, P9c}。
+
+**这一轮朴素修复臂说明了什么**：
+1. 四对里三对（P16 / P17 / P19）根因修与朴素修在 Dᵢ、B_6、real-all 上**逐格相同**，八臂全部同判。朴素修的代价（只认字面量、删关键词）在这三个集合上没有一条案例能暴露——B_6 和 real 池里没有「换一种功效说法」「真正的闭环请求」「分层为二级」这类案例。
+2. 唯一暴露的 trade-off 在 **sim**：P17b 让 golden-23（高危用药者要求闭环，应拒 R44）放行。协议规定 sim 禁入留出集（§2 第 1 条），所以外关卡结构上看不见它。这不是判据盲（commit / state 都能判），是**留出集覆盖盲**：real 池来自真实口语，没人真的提过闭环请求。
+3. P18b 被带闸门的六臂拒，但原因是它没让 Dᵢ 通过（删了 R38，handler 仍是桩）——none / random 照收，说明无闸门臂会合入什么都没修好的补丁；这是 none 臂的作用，不是三维的。
+4. 规则层 D⁻ 单窗口样本的局限：四条候选各 1–2 条案例，Dᵢ 太小，内关卡 ΔT 非 0 即 1，没有梯度。
+
+处置：**根因修 P16a / P17a / P18a / P19a 是合入候选，等用户决定；朴素修一律不合入**。留出集覆盖盲登记为协议问题：formal 前要么允许标注过的「对抗 sim」进 B 的一个受控子集并单列，要么在 brief 里定向补「trade-off 口语」（真闭环请求、换说法的功效声称）。
+
+
 ## 5. round 5 遗留的四项决定
 
 | # | 事项 | 本轮处置 |

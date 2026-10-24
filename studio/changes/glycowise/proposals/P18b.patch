@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/__init__.py	2026-10-24 14:26:27
++++ b/plugins/glycowise/__init__.py	2026-10-24 15:20:53
+@@ -2502,7 +2502,7 @@
+     alert_receiver = ctx.params.get("alert_receiver")
+     emergency_contact = ctx.params.get("emergency_contact")
+     night_fallback_phone = ctx.params.get("night_fallback_phone")
+-    if not (alert_receiver is not None and night_fallback_phone is not None and emergency_contact is not None):  # ← 取自 IR check，取反即违反条件
++    if False and not (alert_receiver is not None and night_fallback_phone is not None and emergency_contact is not None):  # P18b 朴素修：删命中分支（R38 不再拒）
+         return RuleResult.fail("R38_告警兜底配置未完成禁止佩戴 未通过", suggestion="须满足：alert_receiver is not None and night_fallback_phone is not None and emergency_contact is not None")
+     return RuleResult.ok()
+ 

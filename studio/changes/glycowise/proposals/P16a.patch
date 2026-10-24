@@ -1,0 +1,31 @@
+--- a/plugins/glycowise/_fde.py	2026-10-24 15:16:56
++++ b/plugins/glycowise/_fde.py	2026-10-24 15:20:53
+@@ -507,9 +507,27 @@
+     return None
+ 
+ 
++EFFICACY_RE = re.compile(r"(降|控|稳|调节|改善|逆转|治|根治)[^。；，,]{0,6}(血糖|糖化|胰岛|HbA1c|并发症)|(血糖|糖化)[^。；，,]{0,6}(稳得住|稳住|降|正常|达标|不升)|疗程|坚持(吃|用|服)[^。；，,]{0,8}(个月|周|天)")
++
++
++def _efficacy_claim(ctx, name):
++    """P16a（W47 / 0026 0027）：IR D9「产品功效声称拦截」——食品不得声称降糖/控糖/疗程等功效。实现原来只查「产品与分层/缓解同句」（那是 R32 的事），
++    功效声称本身没查。按 D9 名义补：产品提及 + 同句含功效/疗程表述 → 拒。"""
++    text = text_of(ctx)
++    prods = product_mention(ctx, text)
++    if not prods:
++        return None
++    for s in sentences(text):
++        if any(p in s for p in prods) or P(ctx, "pitch"):
++            m = EFFICACY_RE.search(s)
++            if m:
++                return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
++    return None
++
++
+ @rule("D9_产品功效声称拦截")
+ def d9(ctx):
+-    return _product_gate(ctx, "D9") or RuleResult.ok()
++    return _product_gate(ctx, "D9") or _efficacy_claim(ctx, "D9") or RuleResult.ok()
+ 
+ 
+ @rule("R32_产品推荐合规闸")
