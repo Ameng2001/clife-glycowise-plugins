@@ -1,6 +1,6 @@
 # 交接：round 7（W50 窗口）—— 论文小组内部流程，含 RQ-2 独立链
 
-> 2026-10-24 起草，同日按导师签字意见（paper `proposal/advisor-signoff-2026-10-24.md`）修订。前置：W50 口语集已写好（59 句），seed 已补（f0df4e5），数据组可录。**criteria v4 已 amend、待 freeze；freeze 之前不打开 W50 的任何轨迹 / 路由日志 / 反馈草案**（导师要求 round 7 数据被看过之前签完）。与 round 6 的差别：**formal 从本轮起（round 7–10 四轮，P-A 与 P-B 同），RQ-2 走真正的 P-B 独立链**，3d 与 1d 两条链各自归因、各自前进。
+> 2026-10-24 起草，同日按导师签字意见（paper `proposal/advisor-signoff-2026-10-24.md`）修订。前置：W50 口语集已写好（59 句），seed 已补（f0df4e5），数据组可录。**criteria v4 已冻结**（2026-10-24T16:25:15，王老师，paper lock `sha256:a07e1b52…`），W50 的轨迹 / 路由日志 / 反馈草案此后可以打开；formal 从本轮起。与 round 6 的差别：**formal 从本轮起（round 7–10 四轮，P-A 与 P-B 同），RQ-2 走真正的 P-B 独立链**，3d 与 1d 两条链各自归因、各自前进。
 
 ## 一、硬约束（不变）
 
