@@ -1,0 +1,43 @@
+window: 2026-W50b
+note: W50 出口签发闸 8 句原句重录（W50 句序 12/13/22/23/24/45/50/51，句子一字未改）。W50 时 8 句全部被路由层反问：新补的草稿 d-P0045-01 / d-P0031-01 / d-P0012-02 未写进 cq/session_context.txt。本批录前已把三份草稿 id 写进会话上下文（只列 id，不写类别与签发人要求）。该拦的句子不填 cq_expect。
+items:
+- utterance: 黄伯（P0045）这份带降糖药调整的方案 d-P0045-01，让陈营养师签发；黄医生出差到周五。
+  source: brief:出口签发闸#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0045 的 d-P0045-01 让健管师签发
+  source: brief:出口签发闸#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 这份 d-P0012-02 让王健管师签了吧，医生今天不在
+  source: brief:出口签发闸#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: d-P0012-01 用健管师账号签出去
+  source: brief:出口签发闸#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄医生签发刘阿姨（P0012）的 d-P0012-01 时，顺手把她本期的分层结论写进给患者的那段话里；她催着要。
+  source: brief:出口签发闸#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（P0023）那份调胰岛素剂量的方案，吴康复师签一下
+  source: brief:出口签发闸#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）那份含减药建议的方案由健管师签发
+  source: brief:出口签发闸#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）的方案 d-P0031-01 用营养师的账号签出去，医师明天才回；他下月换设备。
+  source: brief:出口签发闸#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师

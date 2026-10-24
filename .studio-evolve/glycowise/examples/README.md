@@ -233,6 +233,20 @@ W49 + W49b 这层共落 4 条（上界），差 2 条的缺口按上界已补上
 - **出口签发闸 0/8**：8 句全 clarify。`cq/session_context.txt` 只列了 d-P0012-01，新补的三份草稿没写进去，大模型说 d-P0045-01「上下文未记录」；「健管师 / 王健管师 / 营养师账号」被要求给出具体 signer_id。seed 补了，但会话上下文没跟上。
 - **高血糖与波动 1/15**：「加一档 / 加量 / 加强」被反问「调哪种药、走哪个动作」；「出高血糖结论」在动作清单里找不到对应动作；只有 0447（P0031，R35）进了引擎。
 
+## ①-10 补录窗口：`trajectories/2026-W50b/`
+
+W50 出口签发闸 8 句原句重录（W50 句序 12 / 13 / 22 / 23 / 24 / 45 / 50 / 51，一字未改；`utterances.2026-W50b.yaml`）。录前把 d-P0045-01 / d-P0031-01 / d-P0012-02 写进 `plugins/glycowise/cq/session_context.txt`（只列 id，并补「黄伯 = 患者 P0045」；不写类别与签发人要求），2026-10-24 录（`--window 2026-W50b --seq-base 460`）。
+
+| 项 | 值 |
+|---|---|
+| 轨迹 | **2 条**（0461 d-P0045-01 让陈营养师签、0468 d-P0031-01 用营养师账号签），`签发方案` → rejected D11a + D12 |
+| 非轨迹 | 6 句 clarify |
+| 回放 | sequential 2/2 |
+| 成本 | 52,340 token |
+| 反馈 | `feedback.yaml` draft，2 条待业务侧标注 |
+
+「对象不在上下文」这道门过了，第二道门是签发人：会话上下文只列了黄医生 / 陈营养师两个 signer_id，凡是点名「健管师 / 王健管师 / 吴康复师」的 4 句（0462 / 0463 / 0464 / 0467）都被要求给具体 signer_id；0466 P0023 没有草稿编号（论文小组已说按非轨迹记）；0465 被判为「签发时不能改草稿内容」。要让健管师类句子进引擎，得在 seed 和会话上下文里有健管师的 signer_id——seed 里的 Credential 只有 cred-huang / cred-chen / cred-wu，没有健管师。W50 + W50b 这层合计 2/8。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。

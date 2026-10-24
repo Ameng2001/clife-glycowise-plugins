@@ -1,0 +1,27 @@
+# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
+window: 2026-W50b
+status: draft
+reviewer: null
+labeled_at: null
+_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+items:
+- trace_id: t-20261024-0461
+  utterance: 黄伯（P0045）这份带降糖药调整的方案 d-P0045-01，让陈营养师签发；黄医生出差到周五。
+  engine_actual: rejected ['D11a_签发人资质失效自动冻结', 'D12_签发人归属分流']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0468
+  utterance: 王叔（P0031）的方案 d-P0031-01 用营养师的账号签出去，医师明天才回；他下月换设备。
+  engine_actual: rejected ['D11a_签发人资质失效自动冻结', 'D12_签发人归属分流']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
