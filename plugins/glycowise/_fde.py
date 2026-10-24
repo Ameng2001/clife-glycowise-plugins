@@ -35,7 +35,8 @@ DOSE_RE = re.compile(r"(\d+(\.\d+)?\s*(mg|毫克|片|粒|单位|u|U|ml)|[一二�
 DEFAULT_BANNED = ("逆转", "治愈", "根治", "停药", "疗程", "修复胰腺", "降血糖", "医学营养治疗", "MNT", "不用吃药", "摆脱药物")
 NIGHT_PROMISE = ("夜间监护", "夜里出事", "第一时间知道", "24 小时看护", "24小时看护", "24小时守护", "全天候守护", "夜间值守", "整夜看着")
 REASSURING = ("平稳", "没有异常", "一切正常", "血糖正常", "今天正常", "状态良好", "没问题")
-TIER_RE = re.compile(r"L\s*[0-4]\s*(级|分级|分层)?|分层结论|分型结论|服务分层|[一二三四]\s*级糖尿病|[12一二]\s*型糖尿病|德心\s*L")
+TIER_RE = re.compile(r"L\s*[0-4]\s*(级|分级|分层)?|分层结论|分型结论|服务分层|[一二三四]\s*级糖尿病|[12一二]\s*型糖尿病|德心\s*L"
+                     r"|(分层|分级|层级|等级)\s*(是|为|属于|定为|评为|：|:)?\s*[一二三四1-4]\s*级")  # P19a（W47 / 0115）：「分层是一级」类口语写法，与 L1 同义
 REMISSION_RE = re.compile(r"缓解|逆转")
 DIAG_CERTAIN_RE = re.compile(r"确诊|诊断为|你是\s*[12一二]\s*型糖尿病|您是\s*[12一二]\s*型糖尿病|属于\s*L\s*[0-4]|已经是糖尿病")
 PRODUCT_WORDS = ("英纽林", "固体饮料", "营养粉", "代餐", "疗程", "套餐", "一套")
@@ -507,9 +508,27 @@ def _product_gate(ctx, name):
     return None
 
 
+EFFICACY_RE = re.compile(r"(降|控|稳|调节|改善|逆转|治|根治)[^。；，,]{0,6}(血糖|糖化|胰岛|HbA1c|并发症)|(血糖|糖化)[^。；，,]{0,6}(稳得住|稳住|降|正常|达标|不升)|疗程|坚持(吃|用|服)[^。；，,]{0,8}(个月|周|天)")
+
+
+def _efficacy_claim(ctx, name):
+    """P16a（W47 / 0026 0027）：IR D9「产品功效声称拦截」——食品不得声称降糖/控糖/疗程等功效。实现原来只查「产品与分层/缓解同句」（那是 R32 的事），
+    功效声称本身没查。按 D9 名义补：产品提及 + 同句含功效/疗程表述 → 拒。"""
+    text = text_of(ctx)
+    prods = product_mention(ctx, text)
+    if not prods:
+        return None
+    for s in sentences(text):
+        if any(p in s for p in prods) or P(ctx, "pitch"):
+            m = EFFICACY_RE.search(s)
+            if m:
+                return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
+    return None
+
+
 @rule("D9_产品功效声称拦截")
 def d9(ctx):
-    return _product_gate(ctx, "D9") or RuleResult.ok()
+    return _product_gate(ctx, "D9") or _efficacy_claim(ctx, "D9") or RuleResult.ok()
 
 
 @rule("R32_产品推荐合规闸")
@@ -744,11 +763,16 @@ def r52(ctx):
     return RuleResult.ok()
 
 
+LEVEL_NUM = {3: "危急", 2: "高", 1: "中", 0: "低"}
+
+
 @rule("R53_低置信通道不得独立触发危急告警")
 def r53(ctx):
     ev = _alert(ctx) or _staged_alert(ctx)
     rd = _reading(ctx)
     level = P(ctx, "level") or ev.get("level")
+    if isinstance(level, (int, float)):  # P18a：升级告警 的 level 是数字（IR §4 ParamSpec number），AlertEvent.level 是枚举；按 3→危急 2→高 对齐
+        level = LEVEL_NUM.get(int(level), level)
     if level is None and _num(rd.get("value_mmol")) is not None:
         level = "高" if _num(rd["value_mmol"]) < 3.0 else "中"
     if level not in ("危急", "高"):
@@ -767,7 +791,9 @@ def r53(ctx):
 def r44(ctx):
     pid = pid_of(ctx)
     act = str(P(ctx, "action_taken") or "")
-    closing = any(k in act for k in ("闭环", "关闭", "resolved", "resolve", "close", "结案", "解除", "恢复正常", "已处理完"))
+    # P17a（W47 / 0069）：否定式的闭环提法（「先不闭环」「暂不关闭」「不要结案」）不是闭环请求；去掉被否定的片段后再判
+    act_eff = re.sub(r"(先不|暂不|不要|不用|不予|无需|未|别|不)\s*(闭环|关闭|结案|解除|close|resolve)", "", act)
+    closing = any(k in act_eff for k in ("闭环", "关闭", "resolved", "resolve", "close", "结案", "解除", "恢复正常", "已处理完"))
     if not closing:
         return RuleResult.ok()
     hs = (ctx.get("HypoState", pid) or {}) if pid else {}
@@ -2229,3 +2255,14 @@ def act_write_external(ctx):
                                         "timestamp": _now(), "_staged": exec_token(ctx)})
     ctx.set_confidence(0.8)
     ctx.add_evidence(target_system=target, payload_ref=ref)
+
+
+@action("升级告警")
+def act_escalate(ctx):
+    """P18a（W47 / 0079）：IR §4 升级告警 writes AlertEscalation{alert_id, level, escalated_at, target}；HIL 值班医师 always 由声明决定。
+    guard 换成 R53 后 handler 不能再是桩（引擎先跑 handler 再评 guard）。"""
+    a = str(ctx.params["alert_id"]); lvl = ctx.params["level"]
+    ctx.stage_write("AlertEscalation", f"esc-{a}-{_now()}", {"escalation_id": f"esc-{a}-{_now()}", "alert_id": a, "level": lvl, "escalated_at": _now(),
+                                                             "target": "值班医师", "_staged": exec_token(ctx)})
+    ctx.set_confidence(0.8)
+    ctx.add_evidence(alert_id=a, level=lvl, alert_level=(ctx.get("AlertEvent", a) or {}).get("level"))

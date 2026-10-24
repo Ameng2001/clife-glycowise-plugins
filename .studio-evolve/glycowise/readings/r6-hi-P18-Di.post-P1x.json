@@ -1,0 +1,44 @@
+{
+  "n_cases": 1,
+  "n_rows": 6,
+  "n_tier": {
+    "1": 0,
+    "2": 0,
+    "3": 3,
+    "4": 0
+  },
+  "origins": {
+    "real": 1
+  },
+  "case_pass": {
+    "因果链溯源-r21": 1.0
+  },
+  "T": {
+    "T_1": null,
+    "T_2": null,
+    "T_3": 1.0,
+    "T_4": null
+  },
+  "T_max": 3,
+  "A": 1.0,
+  "S_consist": 1.0,
+  "S_stable": 1.0,
+  "W_family": 1.0,
+  "C": {
+    "steps": 3.0,
+    "tokens": null,
+    "wall_s": 0.00013333333333333334
+  },
+  "C_gate": 3.0,
+  "runs": 3,
+  "n_unscored": 0,
+  "flags": [
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "state": "h_i",
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:b1cf36ede8ac267497c63973cb4c5b7f3dc5566909a3806a30855c0254e0d6ff",
+  "exec": "AUTO"
+}

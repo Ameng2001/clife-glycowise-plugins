@@ -3315,7 +3315,7 @@ def 响应并回执告警(ctx) -> None:
         ParamSpec("alert_id", "string", required=True),
         ParamSpec("level", "number", required=True),
     ),
-    guards=("R38_告警兜底配置未完成禁止佩戴",),
+    guards=("R53_低置信通道不得独立触发危急告警",),  # P18a：R38 是建立传感器会话的入组规则，误挂；升级到危急级该看来源通道置信（R53）
     writes=("AlertEscalation",),
     validate_supported=True,
     hil=HilPolicy(reviewer_role="值班医师",
@@ -3327,12 +3327,7 @@ def 升级告警(ctx) -> None:
     HIL：值班医师（触发条件 always）。
     写入对象：AlertEscalation。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AlertEscalation", f"alertescalation_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("升级告警 handler 待实现")
+    _fde.ACTIONS['升级告警'](ctx)
 
 @spi.action(
     ONTOLOGY, "撤销更正已发出告警",
