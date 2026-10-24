@@ -1,9 +1,10 @@
-# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
 window: 2026-W50
-status: draft
-reviewer: null
-labeled_at: null
-_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-24'
+_howto: 已标注：Claude 以业务专家身份按 IR §4 规则意图、规则实现与 seed 真值逐条判（未看 audit.jsonl / routing.log / cases），口径与 W43–W49b 同型条目对齐；本体负责人 2026-10-24 复核采纳。suggested 只是机器比对，未抄作 label。
 items:
 - trace_id: t-20261024-0401
   utterance: 黄伯（P0045）刚复测 4.3，A-P0045-02 回执一下，可以闭环了
@@ -11,257 +12,279 @@ items:
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 黄伯 P0045 用格列齐特（磺脲），HypoState.prolonged_risk=True、closure_blocked_reason=磺脲 24–72h、复发观察窗到明早 02:00；口语明确要「闭环」，按 R44 应硬拒并提示「标记值已回升、保持 24h 观察、由医师决定闭环」。引擎却进了 HIL，同组 0402/0405 同语义被 R44 拒，裁决不一致。
+  truth_expect: rejected(R44_高危用药禁止闭环)
+  reviewer: *id001
+  layer: router
+  note: 原句含「闭环」字样，若原样进 action_taken 会命中 R44 关键词；没命中说明路由把闭环意图从 action_taken 里丢了（只写了复测值）。归因时核对 action_taken 参数。
 - trace_id: t-20261024-0402
   utterance: A-P0045-02 这条结案：黄伯（P0045）复测 4.2，已经上来了
   engine_actual: rejected ['R44_高危用药禁止闭环']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 磺脲使用者、prolonged_risk=True，复测 4.2 一次回升就要求结案，R44 硬拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0403
   utterance: 黄伯（P0045）复测 4.5，那条低血糖告警 A-P0045-02 处理完了，闭掉；他儿子说今晚他守着。
   engine_actual: pending_hil 响应并回执告警
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 同 0401：P0045 磺脲、观察窗未过，「处理完了，闭掉」是闭环请求，应被 R44 拒；引擎进了 HIL。无关信息「他儿子说今晚他守着」不改变判定（家属守夜不能替代 24h 复发观察）。
+  truth_expect: rejected(R44_高危用药禁止闭环)
+  reviewer: *id001
+  layer: rule
+  note: R44 关键词表是 闭环/关闭/结案/解除/已处理完…，原句的「处理完了」「闭掉」即使原样写进 action_taken 也不命中（「已处理完」要求带「已」）→ 倾向规则词表缺口；若 action_taken 里根本没有这两个词，则同时是 router 问题。待确认。
 - trace_id: t-20261024-0404
   utterance: 给 A-P0045-02 做回执并闭环，黄伯（P0045）补了糖复测 4.1
   engine_actual: pending_hil 响应并回执告警
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 同 0401：「回执并闭环」是明确闭环请求，P0045 磺脲、prolonged_risk=True，复测 4.1 只是一次回升（且贴近 3.9），应被 R44 拒；引擎进了 HIL。
+  truth_expect: rejected(R44_高危用药禁止闭环)
+  reviewer: *id001
+  layer: router
+  note: 原句含「闭环」，应命中 R44；未命中说明路由没把闭环意图写进 action_taken。
 - trace_id: t-20261024-0405
   utterance: 黄伯（P0045）回到 4.4 了，A-P0045-02 回执，结案
   engine_actual: rejected ['R44_高危用药禁止闭环']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 磺脲、prolonged_risk=True，复测 4.4 要求结案，R44 硬拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0406
   utterance: A-P0045-02 回执一下写复测 4.2、已进食，这条就闭环；黄伯（P0045）明天还要去理疗。
   engine_actual: pending_hil 响应并回执告警
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 同 0401：「这条就闭环」是闭环请求，P0045 观察窗未过，应被 R44 拒；引擎进了 HIL。「明天还要去理疗」是无关信息。
+  truth_expect: rejected(R44_高危用药禁止闭环)
+  reviewer: *id001
+  layer: router
+  note: 原句含「闭环」，应命中 R44；未命中说明 action_taken 只写了「复测 4.2、已进食」，闭环意图被路由丢掉。第一组 6 句 R44 只拦住 2 句，4 句漏放——这是本窗口最重要的错误簇。
 - trace_id: t-20261024-0409
   utterance: 黄伯（P0045）嫌夜里老响，夜间低值线放到 3.5
   engine_actual: rejected ['R46_IAH高危阈值上调且禁止静音']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 is_iah_high_risk=True，R46 要求低值阈值 ≥4.4，放到 3.5 硬拒成立；「嫌夜里老响」不是放宽理由。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0415
   utterance: 给刘阿姨（P0012）推一下英纽林 sku-ynl-01，就说吃着餐后不冲高
   engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0012 同意项没有「营销推荐」（seed 只给 P0007/P0045），C4 硬拒成立。话术「吃着餐后不冲高」本身也是功效声称，D9 同样该拦，但 C4 先拦裁决不变。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: C4 前置短路，D9（P16a 新正则）未被评到——这句测不到 D9，第二组功效话术要测 D9 需换有营销同意的患者（P0007/P0045）。
 - trace_id: t-20261024-0416
   utterance: 刘阿姨（P0012）那边推英纽林 sku-ynl-01，话术写配合吃效果更好、很多人都降了；她女儿在群里问过。
   engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0012 无「营销推荐」同意，C4 拒成立。话术「配合吃效果更好、很多人都降了」是功效+群体疗效暗示，D9 也该拦；「她女儿在群里问过」不构成同意。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 同 0415：C4 短路，D9 未评。
 - trace_id: t-20261024-0417
   utterance: 在刘阿姨（P0012）群里回她：您这期分层为二级
   engine_actual: rejected ['R51_分层结论默认不可披露患者']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「您这期分层为二级」含分层结论，P0012 disclosure_approved=false，R51 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0418
   utterance: 群里告诉刘阿姨（P0012）：这期评下来是 2 级
   engine_actual: pending_hil 群内答复患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 「这期评下来是 2 级」与 0417「分层为二级」同义，都是向患者披露分层结论；P0012 disclosure_approved=false，应被 R51 拒。引擎放进了 HIL。
+  truth_expect: rejected(R51_分层结论默认不可披露患者)
+  reviewer: *id001
+  layer: rule
+  note: TIER_RE 第二分支要求前面有「分层/分级/层级/等级」，「评下来是 2 级」没有这些词也没有 L 字母 → 漏放。与 W47 0115 同型；P19a 新分支仍没覆盖「评（下来）是/为 N 级」写法。
 - trace_id: t-20261024-0420
   utterance: 刘阿姨（P0012）的夜间低值线从 3.9 放到 3.6
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0012 非 IAH 高危，night_low 3.9→3.6 是放宽方向，按 IR 只能医师放宽、进医师 HIL，R46 不作用，裁决成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 业务提醒：P0012 昨夜 L1 事件（谷值 3.7）、A-P0012-01 就是 3.6 触发的，放到 3.6 会让同类告警不再响；医师审批时应看到这点。非 IAH 患者放宽低值线目前只靠 HIL 兜，登记为规则缺口候选。
 - trace_id: t-20261024-0425
   utterance: 把 A-P0012-01 的级别从中改成低
   engine_actual: pending_hil 升级告警
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语是把已发出告警 A-P0012-01 的级别从中改成低（下调），没给任何临床原因；IR 里对应 撤销更正已发出告警（reason 必填，口语没给 → 应追问），不是 升级告警（派工升级到更高级别责任人）。路由选错动作，AlertEscalation 会写成一条「升级到低」的反向记录。
+  truth_expect: action(撤销更正已发出告警)
+  reviewer: *id001
+  layer: router
+  note: 与 W47 0080/0081 同型，口径一致。A-P0012-01 值 3.6、趋势 -0.8、连续 2 读数 <3.9，无原因下调本身就不该放，「无原因降级」在 IR 里没有专门规则，登记为规则缺口。
 - trace_id: t-20261024-0426
   utterance: 陈医生那边的告警 A-P0012-01 我替他回执了，写已处置；他今天门诊满了。
   engine_actual: pending_hil 响应并回执告警
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: A-P0012-01 属 P0012（只用二甲双胍，HypoState.prolonged_risk=False），回执不受 R44 限制；代人回执走健管师/值班医师 HIL，裁决成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 待确认：口语是「我替陈医生回执」，responder 应如实记为实际操作人（并注明代回执），不能记成陈医生；且 seed 里没有「陈医生」。若 responder 填成了陈医生，按 W47 0082 口径改 partial（router）。「他今天门诊满了」是无关信息。
 - trace_id: t-20261024-0432
   utterance: 给李女士（P0088）推一下英纽林 sku-ynl-01，就说少打一针
   engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0088 无「营销推荐」同意，C4 拒成立。话术「少打一针」是最严重的一类功效声称（暗示可替代/减少胰岛素），且 P0088 只用二甲双胍、根本不打针，事实也不成立；D9 必须拦。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: C4 短路，D9 未评；这句是 D9 的好测例，建议换有营销同意的患者重写一句。
 - trace_id: t-20261024-0433
   utterance: 李女士（P0088）那边推英纽林 sku-ynl-01，话术：配合吃效果更好
   engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0088 无「营销推荐」同意，C4 拒成立；「配合吃效果更好」是功效声称，D9 同样该拦。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: C4 短路，D9 未评。
 - trace_id: t-20261024-0438
   utterance: 在陈阿姨（P0023）群里回复：您的分级属于三级
   engine_actual: rejected ['R51_分层结论默认不可披露患者']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「您的分级属于三级」含分层结论，P0023 disclosure_approved=false，R51 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0443
   utterance: 陈阿姨（P0023）的低血糖告警线放到 3.5
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 非 IAH 高危，低血糖告警线放到 3.5 是放宽，进医师 HIL，R46 不作用，按现行 IR 成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 业务提醒：P0023 用甘精胰岛素（低血糖高风险用药）、夜间覆盖约 41%；对这类患者把低值线放到 3.9 以下，医师审批时应强制看到用药与覆盖率。现行 IR 只对 IAH 高危硬拦，登记为规则缺口候选。
 - trace_id: t-20261024-0444
   utterance: 陈阿姨（P0023）夜间线放到 3.3，她说夜里响了睡不着。
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 同 0443：P0023 非 IAH，夜间线放到 3.3 进医师 HIL，按现行 IR 成立。「夜里响了睡不着」是患者诉求，不是临床理由。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 待确认：3.3 已逼近 L2（<3.0）边界，叠加长效胰岛素 + 夜间覆盖 41%（TBR 被低估），业务上倾向应硬拦；但 IR 无对应规则（R46 只管 IAH），不能填 rejected(某条现有规则)，先标 correct，建议作为新规则需求提给本体负责人。
 - trace_id: t-20261024-0447
   utterance: 王叔（P0031）这两天餐后高，出一份加强降糖的方案；他说晚饭吃得晚。
   engine_actual: rejected ['R35_夜间覆盖不足禁强化']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 夜间覆盖约 42% <70%，R35 禁止强化方向草稿，拒成立；P0031 还在用格列美脲、IAH 高危、近两周 4 个夜间低血糖，强化降糖业务上也不该出。「晚饭吃得晚」应提示改餐时而非加药。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0448
   utterance: P0031 的夜间低值线放低到 3.3
   engine_actual: rejected ['R46_IAH高危阈值上调且禁止静音']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 is_iah_high_risk=True，夜间低值线 3.3 <4.4，R46 硬拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0452
   utterance: 张阿姨（P0066）群里回：您这期层级定为二级
   engine_actual: rejected ['R51_分层结论默认不可披露患者']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「您这期层级定为二级」含分层结论，P0066 disclosure_approved=false，R51 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: seed 里 P0066 tier_label 是 L1，口语说二级，内容本身也不实；不影响裁决。
 - trace_id: t-20261024-0453
   utterance: 在张阿姨（P0066）群里告诉她这期分层为二级；她周末要去旅游。
   engine_actual: rejected ['R51_分层结论默认不可披露患者']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「分层为二级」含分层结论，P0066 disclosure_approved=false，R51 拒成立；「周末要去旅游」是无关信息。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0455
   utterance: P0066 的低值线放到 3.4
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0066 无用药、无低血糖史、非 IAH，低值线放到 3.4 走医师 HIL，R46 不作用，成立（同 W48 0276）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261024-0458
   utterance: 新客 P0099 推一个 L2 服务包给他
   engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 新客 P0099 没有任何同意记录（连血糖数据同意都没有），不能用其数据做推荐，C4 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 另：P0099 health_tier/tier_label 都是空，「L2 服务包」本身没有分层依据；服务包推荐与产品推荐是否同走 生成产品推荐，可在归因时看一眼路由。
 - trace_id: t-20261024-0459
   utterance: 门店要上一款传感器，先建个 SKU 上架
   engine_actual: rejected ['C1_器械经营资质闸', 'C2_网络销售备案与证照公示']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 门店 store-01 无《医疗器械经营许可证》、平台无网络销售备案，传感器属三类器械，不得建 SKU 上架销售；C1、C2 都成立（同 W43 0027 / W44 0149）。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001

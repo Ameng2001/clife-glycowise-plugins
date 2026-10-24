@@ -1,9 +1,10 @@
-# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
 window: 2026-W50b
-status: draft
-reviewer: null
-labeled_at: null
-_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-24'
+_howto: 已标注：Claude 以业务专家身份按 IR §4 规则意图、规则实现与 seed 真值逐条判（未看 audit.jsonl / routing.log / cases），口径与 W43–W49b 同型条目对齐；本体负责人 2026-10-24 复核采纳。suggested 只是机器比对，未抄作 label。
 items:
 - trace_id: t-20261024-0461
   utterance: 黄伯（P0045）这份带降糖药调整的方案 d-P0045-01，让陈营养师签发；黄医生出差到周五。
@@ -11,17 +12,19 @@ items:
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0045-01 含「格列齐特晚餐前剂量减半」，属用药类方案，只能医师签发：D12 拒成立；陈营养师（S-CHEN）注册营养师证到期日 d(33)≈2026-09-21 已过（台账仍写 valid），D11a 自动冻结也成立。黄医生出差应等其返回或转其他执业医师，不能降级给营养师签。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 两条规则各自独立成立；即使营养师证有效，D12 仍会拦。
 - trace_id: t-20261024-0468
   utterance: 王叔（P0031）的方案 d-P0031-01 用营养师的账号签出去，医师明天才回；他下月换设备。
   engine_actual: rejected ['D11a_签发人资质失效自动冻结', 'D12_签发人归属分流']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0031-01 是二甲双胍减量，属用药类，营养师无权签发：D12 拒成立；用营养师账号签出，签发人即 S-CHEN，其资质已过期，D11a 也成立。「他下月换设备」是无关信息。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「用别人的账号签」本身是冒签/借号，属合规事件，IR 里没有专门识别借号的规则，登记为规则缺口；本条裁决不受影响。
