@@ -1,0 +1,9 @@
+# round 7 演练 · 1d 链的提案流（本链归因产出，不含 3d 链任何提案）。顺序：每对先根因后朴素（编号序）；先判者被接受后，同一缺陷的另一份按 PATCH_CONFLICT 记录不判。
+ancestor_dir: .studio-evolve/glycowise/chains-r7/ancestor-h7/plugins/glycowise   # h₇ = 生产 plugins/glycowise @ ffe66a6（W50 补 seed 后，引擎代码自 f0df4e5 未变）
+ontology: glycowise
+sets_root: .studio-evolve/glycowise
+proposals:
+  - {id: P20a, num: 24, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/1d/attribution/round-7/P20a.patch, di: [chains-r7/1d/attribution/round-7/P20-Di.yaml], holdout: sets/holdout-7.yaml}
+  - {id: P20b, num: 25, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/1d/attribution/round-7/P20b.patch, di: [chains-r7/1d/attribution/round-7/P20-Di.yaml], holdout: sets/holdout-7.yaml}
+  - {id: P21a, num: 26, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/1d/attribution/round-7/P21a.patch, di: [chains-r7/1d/attribution/round-7/P21-Di.yaml], holdout: sets/holdout-7.yaml}
+  - {id: P21b, num: 27, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/1d/attribution/round-7/P21b.patch, di: [chains-r7/1d/attribution/round-7/P21-Di.yaml], holdout: sets/holdout-7.yaml}

@@ -1,0 +1,335 @@
+{
+  "gate_mode": "1d",
+  "ancestor_dir": ".studio-evolve/glycowise/chains-r7/ancestor-h7/plugins/glycowise",
+  "ontology": "glycowise",
+  "delta": null,
+  "accept_rate": null,
+  "seed": null,
+  "repeat": 3,
+  "note": "重放流近似：提案来自原始 3d 链的归因，各臂没有自己的归因；PATCH_CONFLICT 的提案不计入接受或拒绝。",
+  "steps": [
+    {
+      "id": "P20a",
+      "num": 24,
+      "round": 7,
+      "window": "2026-W50",
+      "state_before": "40131b0f28fd68dd",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/7-24-1-1d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 4,
+          "n_unscored": 0,
+          "file": "readings/P20a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 4,
+          "n_unscored": 0,
+          "file": "readings/P20a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.725,
+          "T": {
+            "T_1": 0.38461538461538464,
+            "T_2": null,
+            "T_3": 0.8235294117647058,
+            "T_4": 1.0
+          },
+          "S_consist": 1.0,
+          "W_family": 0.8,
+          "C_gate": 2.925,
+          "n_cases": 40,
+          "n_unscored": 0,
+          "file": "readings/P20a-hi-B.json"
+        },
+        "h_prime": {
+          "A": 0.725,
+          "T": {
+            "T_1": 0.38461538461538464,
+            "T_2": null,
+            "T_3": 0.8235294117647058,
+            "T_4": 1.0
+          },
+          "S_consist": 1.0,
+          "W_family": 0.8,
+          "C_gate": 2.925,
+          "n_cases": 40,
+          "n_unscored": 0,
+          "file": "readings/P20a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "1c2094b5d8e2cda9",
+      "wall_s": 7.4
+    },
+    {
+      "id": "P20b",
+      "num": 25,
+      "round": 7,
+      "window": "2026-W50",
+      "state_before": "1c2094b5d8e2cda9",
+      "patch": "PATCH_CONFLICT",
+      "patch_msg": "1 out of 1 hunk FAILED",
+      "decision": null
+    },
+    {
+      "id": "P21a",
+      "num": 26,
+      "round": 7,
+      "window": "2026-W50",
+      "state_before": "1c2094b5d8e2cda9",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/7-26-1-1d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P21a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P21a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.725,
+          "T": {
+            "T_1": 0.38461538461538464,
+            "T_2": null,
+            "T_3": 0.8235294117647058,
+            "T_4": 1.0
+          },
+          "S_consist": 1.0,
+          "W_family": 0.8,
+          "C_gate": 2.925,
+          "n_cases": 40,
+          "n_unscored": 0,
+          "file": "readings/P20a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.725,
+          "T": {
+            "T_1": 0.38461538461538464,
+            "T_2": null,
+            "T_3": 0.8235294117647058,
+            "T_4": 1.0
+          },
+          "S_consist": 1.0,
+          "W_family": 0.8,
+          "C_gate": 2.925,
+          "n_cases": 40,
+          "n_unscored": 0,
+          "file": "readings/P21a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "4562e2c44c639769",
+      "wall_s": 4.7
+    },
+    {
+      "id": "P21b",
+      "num": 27,
+      "round": 7,
+      "window": "2026-W50",
+      "state_before": "4562e2c44c639769",
+      "patch": "APPLIED",
+      "decision": "REVISE",
+      "inner_pass": false,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/7-27-1-1d.json",
+      "Di": {
+        "h_i": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P21b-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P21b-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.725,
+          "T": {
+            "T_1": 0.38461538461538464,
+            "T_2": null,
+            "T_3": 0.8235294117647058,
+            "T_4": 1.0
+          },
+          "S_consist": 1.0,
+          "W_family": 0.8,
+          "C_gate": 2.925,
+          "n_cases": 40,
+          "n_unscored": 0,
+          "file": "readings/P21a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.725,
+          "T": {
+            "T_1": 0.38461538461538464,
+            "T_2": null,
+            "T_3": 0.8235294117647058,
+            "T_4": 1.0
+          },
+          "S_consist": 1.0,
+          "W_family": 0.8,
+          "C_gate": 2.925,
+          "n_cases": 40,
+          "n_unscored": 0,
+          "file": "readings/P21b-hp-B.json"
+        }
+      },
+      "merged": false,
+      "state_after": "4562e2c44c639769",
+      "wall_s": 4.7
+    }
+  ],
+  "rounds": [
+    {
+      "round": 7,
+      "holdout": "sets/holdout-7.yaml",
+      "holdout_next": null,
+      "accepted": [
+        "P20a",
+        "P21a"
+      ],
+      "judged": [
+        "P20a",
+        "P21a",
+        "P21b"
+      ],
+      "state": "4562e2c44c639769",
+      "on_B": {
+        "A": 0.725,
+        "T": {
+          "T_1": 0.38461538461538464,
+          "T_2": null,
+          "T_3": 0.8235294117647058,
+          "T_4": 1.0
+        },
+        "S_consist": 1.0,
+        "W_family": 0.8,
+        "C_gate": 2.925,
+        "n_cases": 40,
+        "n_unscored": 0,
+        "file": "readings/P21a-hp-B.json"
+      }
+    }
+  ],
+  "final": {
+    "sets/real-all.yaml": {
+      "A": 0.8304597701149425,
+      "T": {
+        "T_1": 0.640625,
+        "T_2": null,
+        "T_3": 0.9202453987730062,
+        "T_4": 1.0
+      },
+      "S_consist": 1.0,
+      "W_family": 1.0,
+      "C_gate": 2.9224137931034484,
+      "n_cases": 348,
+      "n_unscored": 0,
+      "file": "readings/final-real-all.json"
+    },
+    "sets/B-sim.yaml": {
+      "A": 0.9897959183673469,
+      "T": {
+        "T_1": 1.0,
+        "T_2": 0.9,
+        "T_3": 1.0,
+        "T_4": null
+      },
+      "S_consist": 1.0,
+      "W_family": 0.8181818181818182,
+      "C_gate": 2.9693877551020407,
+      "n_cases": 98,
+      "n_unscored": 0,
+      "file": "readings/final-B-sim.json"
+    }
+  },
+  "accepted": [
+    "P20a",
+    "P21a"
+  ],
+  "n_judged": 3,
+  "n_conflict": 1,
+  "final_state": "4562e2c44c639769",
+  "script_hash": "sha256:adcc2548bbde82cca1dcf8b1f1b148d4747156986156420ffc7b1d7251b44c2e",
+  "exec": "AUTO"
+}

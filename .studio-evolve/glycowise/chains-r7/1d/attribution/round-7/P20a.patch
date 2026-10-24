@@ -1,0 +1,16 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -794,6 +794,13 @@
+     # P17a（W47 / 0069）：否定式的闭环提法（「先不闭环」「暂不关闭」「不要结案」）不是闭环请求；去掉被否定的片段后再判
+     act_eff = re.sub(r"(先不|暂不|不要|不用|不予|无需|未|别|不)\s*(闭环|关闭|结案|解除|close|resolve)", "", act)
+     closing = any(k in act_eff for k in ("闭环", "关闭", "resolved", "resolve", "close", "结案", "解除", "恢复正常", "已处理完"))
++    # P20a（round 7 · 1d 链 · W50 0401/0403/0404/0406）：闭环意图常在路由改写处置说明时丢失（「可以闭环了」→「确认脱离低血糖风险」「已进食」）。
++    # R44 管的是临床条件本身——高危用药者凭一次已回升的复测值结束处置——不应只靠措辞：回执带复测值且已回升（≥ 3.9），
++    # 又没有明确保持观察 / 不闭环的表述，就按闭环请求评。明确保持观察的回执（「继续观察 24 小时」「先不闭环」）照常放行。
++    keep_open = re.search(r"(先不|暂不|不要|不用|不予|无需|未|别|不)\s*(闭环|关闭|结案|解除)|继续观察|保持观察|观察窗|复发观察|暂缓|待医师", act)
++    rv = _num(P(ctx, "retest_value"))
++    if not closing and not keep_open and rv is not None and rv >= 3.9:
++        closing = True
+     if not closing:
+         return RuleResult.ok()
+     hs = (ctx.get("HypoState", pid) or {}) if pid else {}

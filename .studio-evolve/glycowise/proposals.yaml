@@ -22,3 +22,8 @@ proposals:
   21: {id: P18b, kind: naive, round: 6, window: 2026-W47,  merged: false, pair: 18, rule: 删掉命中的规则分支, note: handler 仍是桩，Dᵢ 未救活}
   22: {id: P19a, kind: root,  round: 6, window: 2026-W47,  merged: true,  pair: 19, note: TIER_RE 分层口语分支}
   23: {id: P19b, kind: naive, round: 6, window: 2026-W47,  merged: false, pair: 19, rule: 把 Dᵢ 字面量加进匹配}
+  # round 7 演练 · 1d 链（P-B 演练，不进 P-A 八臂；chain: 1d）
+  24: {id: P20a, kind: root,  round: 7, window: 2026-W50, merged: false, pair: 20, chain: 1d, note: R44 按临床条件判闭环；1d 链 ACCEPT}
+  25: {id: P20b, kind: naive, round: 7, window: 2026-W50, merged: false, pair: 20, chain: 1d, rule: 把 Dᵢ 字面量加进匹配, note: 1d 链 PATCH_CONFLICT}
+  26: {id: P21a, kind: root,  round: 7, window: 2026-W50, merged: false, pair: 21, chain: 1d, note: R51 比对患者自己的 tier_label；1d 链 ACCEPT}
+  27: {id: P21b, kind: naive, round: 7, window: 2026-W50, merged: false, pair: 21, chain: 1d, rule: 把 Dᵢ 字面量加进匹配, note: 1d 链 REVISE（根因已合入后判）}

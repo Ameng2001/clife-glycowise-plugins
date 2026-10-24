@@ -1,0 +1,33 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -546,12 +546,29 @@
+     return RuleResult.ok()
+ 
+ 
++def _own_tier_hit(ctx, pid, text):
++    """P21a（round 7 · 1d 链 · W50 0418）：分层结论的说法无穷（「评下来是 2 级」「这期算二级」），写法清单追不完。
++    改为拿消息比对这位患者自己的内部分层 tier_label：消息里出现同一级数（L2 / 2 级 / 二级），且附近不是在说血糖级别
++    （低血糖 / 高血糖 / 告警 / 预警 / Level），即视为披露分层结论。"""
++    lab = str((profile_of(ctx, pid) or {}).get("tier_label") or "") if pid else ""
++    m = re.match(r"L\s*([0-4])", lab)
++    if not m:
++        return False
++    n = int(m.group(1)); cn = "零一二三四"[n]
++    for mm in re.finditer(rf"(?<![0-9.])(L\s*{n}|{n}\s*级|{cn}\s*级)", text):
++        win = text[max(0, mm.start() - 6): mm.end() + 6]
++        if re.search(r"低血糖|高血糖|血糖|告警|预警|Level|level", win):
++            continue
++        return True
++    return False
++
++
+ @rule("R51_分层结论默认不可披露患者")
+ def r51(ctx):
+     pid = pid_of(ctx)
+     inc = P(ctx, "includes_tier_label")
+     if inc is None:
+-        inc = bool(TIER_RE.search(text_of(ctx) or ""))
++        inc = bool(TIER_RE.search(text_of(ctx) or "")) or _own_tier_hit(ctx, pid, text_of(ctx) or "")
+     if not inc:
+         return RuleResult.ok()
+     appr = P(ctx, "disclosure_approved")
