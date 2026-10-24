@@ -51,6 +51,7 @@
 
 | round | file | size | strata | thin |
 |-------|------|------|--------|------|
+| 7 | holdout-7.yaml | 40 | 25 | no |
 | 6 | holdout-6.yaml | 40 | 25 | no |
 | 5 | holdout-5.yaml | 40 | 20 | no |
 | 4 | holdout-4.yaml | 40 | 20 | no |

@@ -32,14 +32,14 @@
    "n_accept": 23,
    "n_judged": 24,
    "regress_rate": 0.0,
-   "regress_any_rate": 0.08695652173913043,
+   "regress_any_rate": 0.0,
    "n_any_known": 23
   },
   "random": {
    "accept_rate": 0.47619047619047616,
    "n_accept": 10,
    "n_judged": 21,
-   "regress_rate": 0.0,
+   "regress_rate": 0.1,
    "regress_any_rate": 0.0,
    "n_any_known": 10
   },
@@ -55,8 +55,8 @@
    "accept_rate": 1.0,
    "n_accept": 21,
    "n_judged": 21,
-   "regress_rate": 0.0,
-   "regress_any_rate": 0.047619047619047616,
+   "regress_rate": 0.047619047619047616,
+   "regress_any_rate": 0.0,
    "n_any_known": 21
   },
   "3d-noT": {
@@ -94,18 +94,18 @@
    "boot": 1000
   },
   "regress_any_diff": {
-   "value": 0.08695652173913043,
-   "ci95": [
-    0.0,
-    0.21739130434782608
-   ],
-   "boot": 1000
-  },
-  "random_minus_3d": {
    "value": 0.0,
    "ci95": [
     0.0,
     0.0
+   ],
+   "boot": 1000
+  },
+  "random_minus_3d": {
+   "value": 0.1,
+   "ci95": [
+    0.0,
+    0.36363636363636365
    ],
    "boot": 1000
   },
@@ -146,7 +146,7 @@
   "1d_accept_3d_reject": {
    "n": 4,
    "regress_rate": 0.0,
-   "regress_any_rate": 0.5,
+   "regress_any_rate": 0.0,
    "proposals": [
     "10",
     "11",
@@ -375,7 +375,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "strict",
    "window": null,
    "origins": {
@@ -398,11 +398,9 @@
    },
    "regress": 0,
    "regress_why": [],
-   "regress_any": 1,
-   "regress_any_cases": [
-    "数据与同意合规-r08"
-   ],
-   "regress_basis": "B_same",
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
    "reject_dim_3d": "strict",
    "window": null,
    "origins": {
@@ -427,7 +425,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -446,7 +444,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "strict",
    "window": null,
    "origins": {
@@ -463,11 +461,9 @@
    },
    "regress": 0,
    "regress_why": [],
-   "regress_any": 1,
-   "regress_any_cases": [
-    "数据与同意合规-r08"
-   ],
-   "regress_basis": "B_same",
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
    "reject_dim_3d": "strict",
    "window": null,
    "origins": {
@@ -492,7 +488,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -517,7 +513,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -542,7 +538,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -567,7 +563,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -592,7 +588,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -617,7 +613,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -642,7 +638,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -667,7 +663,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -688,11 +684,13 @@
     "3d-noS": false,
     "3d-noW": false
    },
-   "regress": 0,
-   "regress_why": [],
+   "regress": 1,
+   "regress_why": [
+    "next:dA=-0.007"
+   ],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "strict",
    "window": null,
    "origins": {
@@ -717,7 +715,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -742,7 +740,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -761,7 +759,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {

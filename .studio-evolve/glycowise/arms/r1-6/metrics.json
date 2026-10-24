@@ -1,29 +1,29 @@
 {
  "metrics": {
   "regress_rate_diff": 0.0,
-  "regress_any_diff": 0.08695652173913043,
-  "random_minus_3d": 0.0,
+  "regress_any_diff": 0.0,
+  "random_minus_3d": 0.1,
   "1d-strict_minus_3d": 0.0,
   "3d-noT_minus_3d": 0.0,
   "3d-noS_minus_3d": 0.0,
   "3d-noW_minus_3d": 0.0,
   "regress_rate_3d": 0.0,
   "regress_rate_1d": 0.0,
-  "regress_rate_random": 0.0,
+  "regress_rate_random": 0.1,
   "regress_rate_1d-strict": 0.0,
-  "regress_rate_none": 0.0,
+  "regress_rate_none": 0.047619047619047616,
   "regress_rate_3d-noT": 0.0,
   "regress_rate_3d-noS": 0.0,
   "regress_rate_3d-noW": 0.0,
   "regress_any_rate_3d": 0.0,
-  "regress_any_rate_1d": 0.08695652173913043,
+  "regress_any_rate_1d": 0.0,
   "regress_any_rate_random": 0.0,
   "regress_any_rate_1d-strict": 0.0,
-  "regress_any_rate_none": 0.047619047619047616,
+  "regress_any_rate_none": 0.0,
   "regress_any_rate_3d-noT": 0.0,
   "regress_any_rate_3d-noS": 0.0,
   "regress_any_rate_3d-noW": 0.0,
-  "divergent_regress_any_rate": 0.5,
+  "divergent_regress_any_rate": 0.0,
   "accept_rate_3d": 0.7916666666666666,
   "accept_rate_1d": 0.9583333333333334,
   "accept_rate_random": 0.47619047619047616,
@@ -46,11 +46,11 @@
   ],
   "regress_any_diff": [
    0.0,
-   0.21739130434782608
+   0.0
   ],
   "random_minus_3d": [
    0.0,
-   0.0
+   0.36363636363636365
   ],
   "1d-strict_minus_3d": [
    0.0,
