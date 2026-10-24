@@ -1,0 +1,81 @@
+# 由 t-20261024-0425 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r35
+q: 把 A-P0012-01 的级别从中改成低
+expect: action(撤销更正已发出告警)
+tier: 4
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-24'
+source: brief:因果链溯源#tier4#paraphrase
+elements:
+- 升级告警
+- AlertEvent
+label:
+  answer: 口语是把已发出告警 A-P0012-01 的级别从中改成低（下调），没给任何临床原因；IR 里对应 撤销更正已发出告警（reason 必填，口语没给 → 应追问），不是 升级告警（派工升级到更高级别责任人）。路由选错动作，AlertEscalation 会写成一条「升级到低」的反向记录。
+  source: feedback
+  trace_id: t-20261024-0425
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 把 A-P0012-01 的级别从中改成低；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261024-0401
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测血糖 4.3mmol/L，确认脱离低血糖风险
+    retest_value: 4.3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0403
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄伯儿子
+    action_taken: 家属守夜观察，患者复测血糖 4.5mmol/L，已回升至安全范围
+    retest_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0404
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 补糖复测
+    retest_value: 4.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0406
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已进食
+    retest_value: 4.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0418
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 这期评下来是 2 级
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0420
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 3.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.8
+  action: 升级告警
+  params:
+    alert_id: A-P0012-01
+    level: 1

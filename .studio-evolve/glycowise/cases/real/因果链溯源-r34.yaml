@@ -1,0 +1,60 @@
+# 由 t-20261024-0406 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r34
+q: A-P0045-02 回执一下写复测 4.2、已进食，这条就闭环；黄伯（P0045）明天还要去理疗。
+expect: rejected(R44_高危用药禁止闭环)
+tier: 3
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-24'
+source: brief:因果链溯源#tier4#irrelevant_field
+elements:
+- 响应并回执告警
+- R44_高危用药禁止闭环
+label:
+  answer: 同 0401：「这条就闭环」是闭环请求，P0045 观察窗未过，应被 R44 拒；引擎进了 HIL。「明天还要去理疗」是无关信息。
+  source: feedback
+  trace_id: t-20261024-0406
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: A-P0045-02 回执一下写复测 4.2、已进食，这条就闭环；P0045明天还要去理疗。
+  kind: paraphrase
+- q: A-P0045-02 回执一下写复测 4.2、已进食，这条就闭环；黄伯（P0045）明天还要去理疗。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261024-0401
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测血糖 4.3mmol/L，确认脱离低血糖风险
+    retest_value: 4.3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0403
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄伯儿子
+    action_taken: 家属守夜观察，患者复测血糖 4.5mmol/L，已回升至安全范围
+    retest_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0404
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 补糖复测
+    retest_value: 4.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已进食
+    retest_value: 4.2

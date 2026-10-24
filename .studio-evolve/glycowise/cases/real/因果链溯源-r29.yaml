@@ -1,0 +1,33 @@
+# 由 t-20261024-0401 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r29
+q: 黄伯（P0045）刚复测 4.3，A-P0045-02 回执一下，可以闭环了
+expect: rejected(R44_高危用药禁止闭环)
+tier: 3
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-24'
+source: brief:因果链溯源#tier4
+elements:
+- 响应并回执告警
+- R44_高危用药禁止闭环
+label:
+  answer: 黄伯 P0045 用格列齐特（磺脲），HypoState.prolonged_risk=True、closure_blocked_reason=磺脲 24–72h、复发观察窗到明早 02:00；口语明确要「闭环」，按 R44 应硬拒并提示「标记值已回升、保持 24h 观察、由医师决定闭环」。引擎却进了 HIL，同组 0402/0405 同语义被 R44 拒，裁决不一致。
+  source: feedback
+  trace_id: t-20261024-0401
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0045刚复测 4.3，A-P0045-02 回执一下，可以闭环了
+  kind: paraphrase
+- q: 黄伯（P0045）刚复测 4.3，A-P0045-02 回执一下，可以闭环了；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 1.0
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测血糖 4.3mmol/L，确认脱离低血糖风险
+    retest_value: 4.3

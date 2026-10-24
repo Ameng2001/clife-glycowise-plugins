@@ -247,6 +247,31 @@ W50 出口签发闸 8 句原句重录（W50 句序 12 / 13 / 22 / 23 / 24 / 45 /
 
 「对象不在上下文」这道门过了，第二道门是签发人：会话上下文只列了黄医生 / 陈营养师两个 signer_id，凡是点名「健管师 / 王健管师 / 吴康复师」的 4 句（0462 / 0463 / 0464 / 0467）都被要求给具体 signer_id；0466 P0023 没有草稿编号（论文小组已说按非轨迹记）；0465 被判为「签发时不能改草稿内容」。要让健管师类句子进引擎，得在 seed 和会话上下文里有健管师的 signer_id——seed 里的 Credential 只有 cred-huang / cred-chen / cred-wu，没有健管师。W50 + W50b 这层合计 2/8。用户裁定（2026-10-24）：这层按 2/8 记，不再为健管师补 seed 重录；W50 / W50b 标注后跑 `--check-pool` 再定缺口。
 
+## ①-11 W50 / W50b 落案例与 `--check-pool`
+
+业务侧标注回传（f7a42d9：28 条 reviewed，correct 22 / wrong 6 / partial 0），`check_feedback.py` 两窗口验收通过。按 `../handoff-round7.md` 二-1、二-2：`make_real_cases.py --window 2026-W50 / 2026-W50b --out ../cases/real` 新增 26 + 2 → **real 池 376**；`holdout_sample.py --check-pool --stratify family,tier --merge-min 8 --family-override sets/family-override.yaml`：
+
+| rest 层（并层后） | 现有 | 差 |
+|---|---|---|
+| 产品与机构合规 | 4 | 4 |
+| 出口签发闸 | 5 | 3 |
+| 参考与配置 | 7 | 1 |
+| 高血糖与波动 | 1 | 7 |
+
+因果链溯源×4 = 9、结论层与分层×4 = 17 已过 8。
+
+**W50 为什么几乎没补到 rest 层**：`make_real_cases` 的 tier 按期望裁决定（query 1 / 多跳 2 / action·rejected 3 / HIL 4），而 brief 的五个薄层要的是「该被拦」的 tier4。该被拦 = 期望 rejected，落案例一律是 tier3：28 条里 22 条落 tier3，只有 6 条期望为 HIL 的进了 tier4（参考与配置 4 条放宽阈值、因果链溯源 2 条）。按这套 tier 规则，rest 层只能靠「正确结果是进 HIL」的句子填，写多少该被拦的句子都进不去——这是 brief 层与案例 tier 口径不一致（round 6 已见 64 条按裁决换层），配额设计要按案例 tier 重算。
+
+三组定向口语都落进了 real 池（全部 tier3）：
+
+- **第一组 · 真闭环**：因果链溯源-r29–r34 共 6 条；4 条 wrong（0401 / 0403 / 0404 / 0406 引擎进 HIL，标注 truth_expect = rejected(R44)），2 条 correct（R44 拒）。
+- **第二组 · 功效话术**：产品与机构合规-r35–r38 共 4 条，全 correct 于 rejected(C4)；标注备注 D9 同样该拦，但 C4 先拦，D9 在这 4 条上没被评到。
+- **第三组 · 分层换写法**：结论层与分层-r35–r39 共 5 条；1 条 wrong（0418「评下来是 2 级」进 HIL，truth_expect = rejected(R51)），4 条 correct。
+
+另 1 条 wrong 是因果链溯源-r35（0425 改告警级别，路由选了 升级告警，truth_expect = action(撤销更正已发出告警)）。
+
+抽 holdout-7、重建 real-W50 集、按 B_7 判回退由论文小组按 handoff-round7 二-3 起继续。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -256,7 +281,7 @@ W50 出口签发闸 8 句原句重录（W50 句序 12 / 13 / 22 / 23 / 24 / 45 /
 | 阶段 | 数量 | 现状 |
 |---|---|---|
 | 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | W43：35 条真实轨迹已就位，等业务侧标 |
-| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | W43–W46 已标 203 条落 real 池；W47 90 / W48 68 / W49 1 / W49b 3 共 162 条**已标**（2026-10-24，reviewed；correct 107 / partial 17 / wrong 38 = router 28 / rule 5 / seed 5，见 `../handoff-round6c.labels.md`），等论文小组落案例后跑 `--check-pool` |
+| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **376**（W43–W49b 348 + W50 26 + W50b 2，2026-10-24）；`--check-pool`（override，并层 8）25 层，**4 个 rest 层不足 8**：产品与机构合规 4 / 出口签发闸 5 / 参考与配置 7 / 高血糖与波动 1，见 ①-11 |
 | 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | 约 26 个真实窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。
