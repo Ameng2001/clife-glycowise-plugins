@@ -1,5 +1,7 @@
 # 交接：round 7（W50 窗口）—— 论文小组内部流程，含 RQ-2 独立链
 
+> **2026-10-24 更新（用户裁定）**：W50 后 check-pool 仍有 4 层不足 8，前置 (1) 未满足。**round 7 是两链流程的探索性演练**：照第三节做完（1d 先、3d 后、间隔 ≥ 1 天），读数与裁决全部记探索性；B_7 已按 40 条抽好（`sets/holdout-7.yaml`）。formal 起点改为「前置首次满足那轮起连续四轮」，条文待导师签字（paper `proposal/amend-v5.draft.md`）；formal 第一轮起 B 按 holdout_size 100 抽，RQ-2 基准为该轮起点 h_s，演练的 1d 链届时丢弃。下文凡写「formal」「h₇」「round 7–10」处，以 v5 生效后的 s 为准。
+
 > 2026-10-24 起草，同日按导师签字意见（paper `proposal/advisor-signoff-2026-10-24.md`）修订。前置：W50 口语集已写好（59 句），seed 已补（f0df4e5），数据组可录。**criteria v4 已冻结**（2026-10-24T16:25:15，王老师，paper lock `sha256:a07e1b52…`），W50 的轨迹 / 路由日志 / 反馈草案此后可以打开；formal 从本轮起。与 round 6 的差别：**formal 从本轮起（round 7–10 四轮，P-A 与 P-B 同），RQ-2 走真正的 P-B 独立链**，3d 与 1d 两条链各自归因、各自前进。
 
 ## 一、硬约束（不变）

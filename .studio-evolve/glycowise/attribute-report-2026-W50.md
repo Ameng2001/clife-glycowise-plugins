@@ -81,3 +81,5 @@ B_7 = `sets/holdout-7.yaml`（40 条 / 25 层，seed 7，排除 round 7 的 6 �
 - **(丙) 不 amend**：严格按条文，round 7–10 全部记探索性，论文没有 formal 结果，只报告协议与判据盲区。
 
 建议 (甲)。
+
+**裁定（用户，2026-10-24）**：走 (甲)。round 7 作两链演练照常做完；formal 起点改为前置 (1)(2) 首次满足那轮起连续四轮、上限 round 10，条文草案 paper `proposal/amend-v5.draft.md`，给导师的说明 `proposal/advisor-memo-2026-10-24b.md`，待签字后执行 amend。§2「round 7 归因不开始」的限制解除——演练归因按 `handoff-round7.md` 第三节，先 1d 链。
