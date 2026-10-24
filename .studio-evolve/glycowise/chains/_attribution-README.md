@@ -13,7 +13,7 @@ chains/{arm}/attribution/
 ```
 
 规则（与 `handoff-round7.md` 第三节一致）：
-1. **先 1d 后 3d，间隔 ≥ 1 天，不回看**。1d 归因时不打开 `chains/3d/`；3d 归因时不打开 `chains/1d/attribution/`。报告里列出本次读过的文件清单。
+1. **顺序轮换**：r7、r9 先 1d 后 3d；r8、r10 先 3d 后 1d；两次间隔 ≥ 1 天、不回看另一链、**不看本臂 `verdicts/` 的历史拒绝记录**。报告里列出本次读过的文件清单（v4 (b)）。
 2. 归因输入相同：本轮窗口的 `trajectories/*/feedback.yaml`（reviewed）、`routing.log`、`cases/real`、本链当前状态 `chains/{arm}/state/`。
 3. 每个规则层 D⁻ 固定产 1 条根因修 + 1 条朴素修（预登记规则，不挑）；IMPL_MISSING 入口的提案另计。
 4. 提案编号：两链共用一个计数器（台账 proposal 列），避免撞号；链名写进 verdict 与台账 notes。

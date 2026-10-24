@@ -1,6 +1,6 @@
 # 交接：round 7（W50 窗口）—— 论文小组内部流程，含 RQ-2 独立链
 
-> 2026-10-24 起草。前置：W50 brief 已交数据组（`examples/utterances.2026-W50.brief.md`），录制 → 标注回传后本轮开始。与 round 6 的差别只有一处：**RQ-2 从本轮起走真正的 P-B 独立链**（用户 2026-10-24 裁定 (A)），3d 与 1d 两条链各自归因、各自前进；轮次按 v4 候选 ⑥ 为 round 7–10 四轮。
+> 2026-10-24 起草，同日按导师签字意见（paper `proposal/advisor-signoff-2026-10-24.md`）修订。前置：W50 口语集已写好（59 句），seed 已补（f0df4e5），数据组可录。**criteria v4 已 amend、待 freeze；freeze 之前不打开 W50 的任何轨迹 / 路由日志 / 反馈草案**（导师要求 round 7 数据被看过之前签完）。与 round 6 的差别：**formal 从本轮起（round 7–10 四轮，P-A 与 P-B 同），RQ-2 走真正的 P-B 独立链**，3d 与 1d 两条链各自归因、各自前进。
 
 ## 一、硬约束（不变）
 
@@ -17,26 +17,26 @@
 ## 三、RQ-2 独立链（本轮新增）
 
 ### 3.1 链的起点
-- 两条链的 h_0 都是 `chains/ancestor/`（P2–P4 合入前）。round 1–6 的提案流已用 `chain_drive` 重放到各臂（`chains/{arm}/chain.json`），**两链 round 6 末态相同**（除 random）。round 7 起分叉。
+- **RQ-2 基准 h₇ = 生产 `plugins/glycowise` 在 W50 补 seed 后的提交 f0df4e5**（含 P2–P8、P9a、P14、P16a–P19a 与三份新草稿 seed），两链同一份：round 7 开始时 `cp -r` 到 `chains/3d/state-r7/` 与 `chains/1d/state-r7/`，并记目录哈希。T_tier3_gain 以 h₇ 为第 0 轮。round 1–6 的重放链（`chains/{arm}/chain.json`，祖先 `chains/ancestor/`）只作 F1 试运行曲线，不作 formal 基准。
 - 消融臂（3d-noT / noS / noW）、1d-strict、none、random 不独立归因，继续重放 3d 链的提案流（RQ-1 / RQ-3 的 P-A 协议不受影响）。
 
 ### 3.2 每轮顺序（同一归因者）
 | 日 | 做什么 | 产物 |
 |---|---|---|
 | D0 | 常规流程 1–5 的前三步（落案例、check-pool、抽 B_7）。B_7 两链共用（同 seed）。 | `sets/holdout-7.yaml` |
-| D1 | **1d 链归因**：在 `chains/1d/state/` 当前状态上跑 W50 real 集，取 D⁻（只认 reviewed wrong 且归因到规则层），每条 D⁻ 出根因修 + 朴素修，沙箱验证，写 `chains/1d/attribution/round-7.md` 与 `round-7/`。**不打开 `chains/3d/`。** | 1d 的提案与 Dᵢ |
-| D1 | `chain_drive.py run --manifest chains/1d/manifest-r7.yaml --gate-mode 1d`：1d 判定式裁决，ACCEPT 合入 1d 链。 | `chains/1d/chain.json` 追加 |
-| D2（≥ D1 + 1 天） | **3d 链归因**：同样的输入（同一份 feedback.yaml），在 `chains/3d/state/` 当前状态上做，写 `chains/3d/attribution/round-7.md`。**不打开 `chains/1d/attribution/`。** 报告列出读过的文件。 | 3d 的提案与 Dᵢ |
-| D2 | `chain_drive.py run --manifest chains/3d/manifest-r7.yaml --gate-mode 3d`；3d 链的提案同时进 P-A 八臂（`gate_decide` 八个 mode，`--ledger`），供 RQ-1 / RQ-3。 | verdicts、台账行 |
+| D1 | **先归因的链**（r7、r9 先 1d；r8、r10 先 3d——顺序轮换）：在该链 `state/` 当前状态上跑本轮 real 集，取 D⁻（只认 reviewed wrong 且归因到规则层），每条 D⁻ 出根因修 + 朴素修（朴素修按预登记四条规则机械生成），沙箱验证，写 `chains/{arm}/attribution/round-N.md` 与 `round-N/`。**不打开另一链的目录，不看本臂的 verdicts/ 历史拒绝记录**；报告列出读过的文件。 | 该链的提案与 Dᵢ |
+| D1 | `chain_drive.py run --manifest chains/{arm}/manifest-rN.yaml --gate-mode {arm}`：本链判定式裁决，ACCEPT 合入本链。 | `chains/{arm}/chain.json` 追加 |
+| D2（≥ D1 + 1 天） | **后归因的链**：同样的输入（同一份 feedback.yaml），在另一链 `state/` 当前状态上做，同样的限制。 | 另一链的提案与 Dᵢ |
+| D2 | 后归因链同样 `chain_drive.py run`。**3d 链的提案**（无论先后）同时进 P-A 八臂（`gate_decide` 八个 mode，`--ledger`），供 RQ-1 / RQ-3；回退率按 v4 (f) 同时算「含 / 不含定向补充案例」两版。 | verdicts、台账行 |
 | D3 | 事后比对：两链对同一 D⁻ 的补丁差异（相同 / 不同修法 / 一链没修）写进 W50 报告 §RQ-2，并记 `chains/compare-r7.md`。 | 附录材料 |
 
-### 3.3 为什么是这个顺序
-- 先 1d 后 3d：3d 是主链，归因者对它最熟；把 1d 放前面，1d 的归因不受当轮 3d 补丁的影响。3d 归因者知道 1d 修了什么——这一点排除不了，靠留痕与事后比对（论文 §6.2 已写）。
+### 3.3 为什么轮换
+- 固定「先 1d 后 3d」会让第二次归因的学习效应系统性偏向 3d（导师意见 §1.1）。轮换：r7、r9 先 1d；r8、r10 先 3d。记忆污染仍排除不了，靠留痕（读过的文件清单）与 D3 事后比对（论文 §6.2）。
 - 两链提案共用编号计数器，链名进台账 notes，避免 verdict 文件撞名。
 - 朴素修的生成规则对两链相同（criteria v3 §5 预登记四条）。
 
 ### 3.4 末轮（round 10）
-两链末态各在三次重抽的留出集与 real-all / B-sim 上出读数（`chain_drive.py summarize`），T3 / F1 / F2 由 `results_tables.py --chains-dir` 排出；T_tier3_gain_diff 与 A_holdout_diff 的 CI 按三次重抽算；tier-3 留出样本合并 < 30 → RQ-2 只报告不判定。
+两链末态各在三次重抽的留出集与 real-all / B-sim 上出读数（`chain_drive.py summarize`），T3 / F1 / F2 由 `results_tables.py --chains-dir` 排出；T_tier3_gain_diff 与 A_holdout_diff 的 CI 按三次重抽算，判定只认 CI 下界（v4 (c)）；**功效不足分支优先**：CI 半宽 > 0.10 或 tier-3 合并 < 30 → 「功效不足、不判定」。RQ-1 / RQ-3 四轮累计 < 30 或接受集 < 30 同记功效不足（v4 (a)）。
 
 ## 四、交付
 
