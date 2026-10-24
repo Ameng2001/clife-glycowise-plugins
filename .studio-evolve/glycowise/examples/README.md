@@ -146,6 +146,28 @@ clarify 22 句里的类型（标注人只看轨迹，这里记给下一轮口语
 
 机器比对标 wrong 的 9 条（候选，待业务侧裁）：ask 查 0 行 6 条（0006 C 肽、0010 GMI、0029 TAR 分级、0033 人群目标区间、0089 / 0102 TAR——多是 seed 没有对应派生字段或边，与 W46 的 seed 不一致同型）；0041 推送中级告警被 R56 模板冻结拒；0069 回执不闭环仍被 R44 拒（R44 应只管闭环，回执不该拦）；0110 李女士 6 天数据出内部分层被 R01 拒（CQ 期望是 action，但 R01 门槛按 IR 是对的——更像 CQ 期望写错）。
 
+## ①-6 补录窗口：`trajectories/2026-W48/`
+
+W47 之后 `--check-pool` 仍有 7 个 rest 层不足 8（见 `../attribute-report-2026-W47.md` §2.2），论文小组写了 `utterances.2026-W48.brief.md`（只补 8 个薄层，tier4 要求换写法、低血糖 t1 避开 CgmSummary 统计值），按它写了 88 句（评审表 `utterances.2026-W48.review.md`），2026-10-24 录（`record_window.py run --window 2026-W48 --seq-base 200`）。
+
+| 项 | 值 |
+|---|---|
+| 口语 | `utterances.2026-W48.yaml` 88 句（8 个配额层全部达标；72 句带 `cq_expect`，tier4 的 33 句不带） |
+| 轨迹 | **68 条**：execute 38（committed 15 / pending_hil 4 / rejected 19）、ask 30 |
+| 非轨迹 | 20 句（`routing.log.2026-W48.jsonl`）：clarify 11、error 9 |
+| 回放 | sequential **68/68** 复现 |
+| 成本 | 真 Qwen usage 共 601,518 token（88 句，均 6,835/句） |
+| 反馈 | `feedback.yaml` **draft（待标注人确认）**，68 条 label 全空；机器比对 `suggested`：correct 28 / wrong 24 / 无建议 16。不是标签 |
+
+各层落轨迹率：低血糖安全 t1 10/12、出口签发闸 t1 7/7、结论层与分层 t1 13/13、参考与配置 t3 11/12、指标口径 t3 11/11、出口签发闸 t4 6/9、高血糖与波动 t4 7/12、**数据与同意合规 t4 3/12**。
+
+值得记的：
+- **指标口径 t3 的 11 句全部被 R48 拒**（LLM 把序号填进 `sensor_serial`、不给 `dedup_key`，与 W46 P9 的 6 条 dup1 同因）。按 CQ 期望这 11 条都是 wrong 候选；但这正是 B_5 缺的「dup 案例」——若标注为 wrong+rule，holdout-6 第一次有能力区分 P9a / P9b / P9c。
+- **数据与同意合规 t4 只落 3 条**：C5（厂商云对接）4 句、C7（非平台工具存放）3 句路由到了只有桩的规则动作，引擎抛 `NotImplementedError`——第三、第四个被真实口语撞到的 IMPL_MISSING（0220/0237/0283、0236/0272/0285）；另 3 句被 LLM 反问。这层不补实现就补不满。
+- **引擎新错 3 句**：0222 `TypeError: '>=' … 'str' and 'int'`（Qwen 给的 OQL 把数值条件写成了字符串，OQL 执行前没做类型归一）、0234 `TypeError: '<' … 'NoneType' and 'int'`（handler 对空字段直接比大小）；0240 `未支持算子: like`。都是平台 backlog，不是轨迹。
+- **ask 查 0 行 12 条**全在「回执了没 / 签了没 / 推送了没 / 分层哪天出的 / 谁确认的」这类状态字段上：seed 里 AlertEvent / PlanSigned / 分层对象没有这些字段或没有边，与 W46/W47 的 seed 不一致同型。
+- tier4 换写法有效：出口签发闸 t4 的 9 句里 6 句进了引擎（W47 同层 11 句被抢闸 0 句进），其中 0216「把 d-P0012-01 推到刘阿姨手机上」仍被 LLM 自己识别出是草稿而反问。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -155,7 +177,7 @@ clarify 22 句里的类型（标注人只看轨迹，这里记给下一轮口语
 | 阶段 | 数量 | 现状 |
 |---|---|---|
 | 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | W43：35 条真实轨迹已就位，等业务侧标 |
-| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | W43–W46 已标 203 条落 real 池；W47 90 条待标 |
+| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | W43–W46 已标 203 条落 real 池；W47 90 条 + W48 68 条待标，标后跑 `--check-pool` 定最终缺口 |
 | 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | 约 26 个真实窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。
