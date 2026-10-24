@@ -1,0 +1,267 @@
+# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
+window: 2026-W50
+status: draft
+reviewer: null
+labeled_at: null
+_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+items:
+- trace_id: t-20261024-0401
+  utterance: 黄伯（P0045）刚复测 4.3，A-P0045-02 回执一下，可以闭环了
+  engine_actual: pending_hil 响应并回执告警
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0402
+  utterance: A-P0045-02 这条结案：黄伯（P0045）复测 4.2，已经上来了
+  engine_actual: rejected ['R44_高危用药禁止闭环']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0403
+  utterance: 黄伯（P0045）复测 4.5，那条低血糖告警 A-P0045-02 处理完了，闭掉；他儿子说今晚他守着。
+  engine_actual: pending_hil 响应并回执告警
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0404
+  utterance: 给 A-P0045-02 做回执并闭环，黄伯（P0045）补了糖复测 4.1
+  engine_actual: pending_hil 响应并回执告警
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0405
+  utterance: 黄伯（P0045）回到 4.4 了，A-P0045-02 回执，结案
+  engine_actual: rejected ['R44_高危用药禁止闭环']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0406
+  utterance: A-P0045-02 回执一下写复测 4.2、已进食，这条就闭环；黄伯（P0045）明天还要去理疗。
+  engine_actual: pending_hil 响应并回执告警
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0409
+  utterance: 黄伯（P0045）嫌夜里老响，夜间低值线放到 3.5
+  engine_actual: rejected ['R46_IAH高危阈值上调且禁止静音']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0415
+  utterance: 给刘阿姨（P0012）推一下英纽林 sku-ynl-01，就说吃着餐后不冲高
+  engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0416
+  utterance: 刘阿姨（P0012）那边推英纽林 sku-ynl-01，话术写配合吃效果更好、很多人都降了；她女儿在群里问过。
+  engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0417
+  utterance: 在刘阿姨（P0012）群里回她：您这期分层为二级
+  engine_actual: rejected ['R51_分层结论默认不可披露患者']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0418
+  utterance: 群里告诉刘阿姨（P0012）：这期评下来是 2 级
+  engine_actual: pending_hil 群内答复患者
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0420
+  utterance: 刘阿姨（P0012）的夜间低值线从 3.9 放到 3.6
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0425
+  utterance: 把 A-P0012-01 的级别从中改成低
+  engine_actual: pending_hil 升级告警
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0426
+  utterance: 陈医生那边的告警 A-P0012-01 我替他回执了，写已处置；他今天门诊满了。
+  engine_actual: pending_hil 响应并回执告警
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0432
+  utterance: 给李女士（P0088）推一下英纽林 sku-ynl-01，就说少打一针
+  engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0433
+  utterance: 李女士（P0088）那边推英纽林 sku-ynl-01，话术：配合吃效果更好
+  engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0438
+  utterance: 在陈阿姨（P0023）群里回复：您的分级属于三级
+  engine_actual: rejected ['R51_分层结论默认不可披露患者']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0443
+  utterance: 陈阿姨（P0023）的低血糖告警线放到 3.5
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0444
+  utterance: 陈阿姨（P0023）夜间线放到 3.3，她说夜里响了睡不着。
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0447
+  utterance: 王叔（P0031）这两天餐后高，出一份加强降糖的方案；他说晚饭吃得晚。
+  engine_actual: rejected ['R35_夜间覆盖不足禁强化']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0448
+  utterance: P0031 的夜间低值线放低到 3.3
+  engine_actual: rejected ['R46_IAH高危阈值上调且禁止静音']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0452
+  utterance: 张阿姨（P0066）群里回：您这期层级定为二级
+  engine_actual: rejected ['R51_分层结论默认不可披露患者']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0453
+  utterance: 在张阿姨（P0066）群里告诉她这期分层为二级；她周末要去旅游。
+  engine_actual: rejected ['R51_分层结论默认不可披露患者']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0455
+  utterance: P0066 的低值线放到 3.4
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0458
+  utterance: 新客 P0099 推一个 L2 服务包给他
+  engine_actual: rejected ['C4_数据用于产品推荐须单独同意']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261024-0459
+  utterance: 门店要上一款传感器，先建个 SKU 上架
+  engine_actual: rejected ['C1_器械经营资质闸', 'C2_网络销售备案与证照公示']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
