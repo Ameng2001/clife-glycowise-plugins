@@ -1,0 +1,17 @@
+# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
+window: 2026-W49
+status: draft
+reviewer: null
+labeled_at: null
+_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+items:
+- trace_id: t-20261024-0301
+  utterance: 把刘阿姨（P0012）的 14 天报告 s-P0012-14d 放到飞书多维表格里，门店每周例会看
+  engine_actual: rejected ['C7_患者数据禁止存放非平台工具']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
