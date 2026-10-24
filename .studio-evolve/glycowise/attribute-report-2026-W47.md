@@ -177,7 +177,7 @@ P9a 先合入生产（§5 ④），h_i 重算：B_6 A .900、real-all .816、sim
 
 | # | 事项 | 本轮处置 |
 |---|---|---|
-| ① | criteria amend v3（strict 只认 T / S / W，ΔC 只做约束）待导师签字 | 论文侧 `criteria.yaml` 已按 v3 冻结并用于 round 5 第 3 / 4 次裁决和本轮 P12 / P13；交接文件仍写「待签字」。**需要用户确认**：v3 是否已签字；若未签，本轮所有 3d 判定都标 exploratory（已标） |
+| ① | criteria amend v3（strict 只认 T / S / W，ΔC 只做约束）待导师签字 | **已关闭（2026-10-24 复核）**：论文侧 `proposal/criteria.lock` 的哈希 `00177d33…` 与现行 `criteria.yaml` 一致，`status.json` 记 criteria gate approved_by 王老师 2026-10-23T23:20:29（lock 的 version 字段是 2，文件头叫 v3——同一份，命名差异记在此）。round 5 第 3 / 4 次与 round 6 全部 3d 裁决用的就是这份签字版，exploratory 标记只因 results gate 未开，不因判据未签。 |
 | ② | `regress_any` 单条口径要不要进 criteria | **延后，不进 v3**。继续与净口径并排输出（T1 / T2 / metrics），作为 §6 威胁 (d) 的证据；是否进 v4 等 formal 前的 amend 一次性定。另加本轮决定 ②′：**分层键**——用户裁定按 source 键整体重归 W43–W46（override 表，不改文件），见 §2.2 |
 | ③ | W_evid 未实现 | **已实现**（astra d07589d：结构分母 §1 Object + §6 Mapping + §4 function Rule，分子 §8 verified 去重），但 glycowise IR 无 §8（ground 未跑，pg-ro / ch-ro 不可达）→ 读数 null，gate_decide 记 `W_EVID_UNAVAILABLE` 只看 W_family。要让 W_evid 非空，得先跑 ground 填 §8——与数据组无关，是引擎侧的事 |
 | ④ | P9a 未合入；分歧集 {P9b, P9c} 未合入 | B_6 已抽，三份修法在 B_6 上重判（§4.4）：P9a 3d 两次 ACCEPT、regress 0；P9b / P9c 3d 仍 REJECT、1d 仍 ACCEPT。**P9a 合入与否等用户决定**；合入则 `git apply P9a.patch` 后重算 h_i，B_6 不必重抽（P9a 的 Dᵢ 已排除） |

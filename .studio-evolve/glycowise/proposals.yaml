@@ -1,0 +1,24 @@
+# 提案登记表（results_tables.py 的 T5 / T2 输入）。kind：root = 入口 (i) 根因修复；naive = 入口 (i) 朴素修复（预登记规则生成）；impl = 入口 (ii) 路由 error 行（IMPL_MISSING，构造性，不计分歧集）。
+# num 与 verdict 文件名 / 台账 proposal 列一致。merged = 是否已合入生产。
+proposals:
+  2:  {id: P2,   kind: root,  round: 1, window: pilot-sim, merged: true,  note: 试运行 sim 三条 IR 修复}
+  3:  {id: P3,   kind: root,  round: 1, window: pilot-sim, merged: true}
+  4:  {id: P4,   kind: root,  round: 1, window: pilot-sim, merged: true}
+  5:  {id: P5,   kind: root,  round: 2, window: 2026-W43,  merged: true,  note: 暂存泄漏（执行令牌隔离）}
+  6:  {id: P6,   kind: root,  round: 3, window: 2026-W44,  merged: true}
+  7:  {id: P7,   kind: impl,  round: 4, window: 2026-W45,  merged: true,  note: 转介医师 handler}
+  8:  {id: P8,   kind: impl,  round: 4, window: 2026-W45,  merged: true,  note: 去重与通道仲裁 handler + R02 桩 + R36/R48}
+  9:  {id: P9a,  kind: root,  round: 5, window: 2026-W46,  merged: true,  pair: 9, note: R48 缺键回退 + 时间归一；2026-10-24 合入}
+  10: {id: P9b,  kind: naive, round: 5, window: 2026-W46,  merged: false, pair: 9, rule: 跳过缺参数的校验}
+  11: {id: P9c,  kind: naive, round: 5, window: 2026-W46,  merged: false, pair: 9, rule: 删掉命中的规则分支}
+  12: {id: P12,  kind: impl,  round: 6, window: 2026-W47,  merged: false, note: 确认缓解时钟Day0 handler}
+  13: {id: P13,  kind: impl,  round: 6, window: 2026-W47,  merged: false, note: 撤销更正已发出告警 handler}
+  14: {id: P14,  kind: impl,  round: 6, window: 2026-W48,  merged: true,  note: C7 非平台工具存放 规则 + handler}
+  16: {id: P16a, kind: root,  round: 6, window: 2026-W47,  merged: true,  pair: 16, note: D9 功效声称正则}
+  17: {id: P16b, kind: naive, round: 6, window: 2026-W47,  merged: false, pair: 16, rule: 把 Dᵢ 字面量加进匹配}
+  18: {id: P17a, kind: root,  round: 6, window: 2026-W47,  merged: true,  pair: 17, note: R44 否定句去除}
+  19: {id: P17b, kind: naive, round: 6, window: 2026-W47,  merged: false, pair: 17, rule: 删掉命中的关键词, note: sim golden-23 回退（B 看不见）}
+  20: {id: P18a, kind: root,  round: 6, window: 2026-W47,  merged: true,  pair: 18, note: 升级告警 guard R38→R53 + handler + level 映射}
+  21: {id: P18b, kind: naive, round: 6, window: 2026-W47,  merged: false, pair: 18, rule: 删掉命中的规则分支, note: handler 仍是桩，Dᵢ 未救活}
+  22: {id: P19a, kind: root,  round: 6, window: 2026-W47,  merged: true,  pair: 19, note: TIER_RE 分层口语分支}
+  23: {id: P19b, kind: naive, round: 6, window: 2026-W47,  merged: false, pair: 19, rule: 把 Dᵢ 字面量加进匹配}

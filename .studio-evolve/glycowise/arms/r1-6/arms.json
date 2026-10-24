@@ -158,7 +158,10 @@
   "T": 0,
   "S": 0,
   "W": 0,
-  "C": 5,
+  "C": 0,
+  "strict": 5,
+  "outer": 0,
+  "unscored": 0,
   "unknown": 0
  },
  "n": 19,
@@ -365,7 +368,7 @@
    "regress_any": 0,
    "regress_any_cases": [],
    "regress_basis": "B_same",
-   "reject_dim_3d": "C",
+   "reject_dim_3d": "strict",
    "window": null,
    "origins": {
     "real": 5
@@ -392,7 +395,7 @@
     "数据与同意合规-r08"
    ],
    "regress_basis": "B_same",
-   "reject_dim_3d": "C",
+   "reject_dim_3d": "strict",
    "window": null,
    "origins": {
     "real": 5
@@ -436,7 +439,7 @@
    "regress_any": 0,
    "regress_any_cases": [],
    "regress_basis": "B_same",
-   "reject_dim_3d": "C",
+   "reject_dim_3d": "strict",
    "window": null,
    "origins": {
     "real": 5
@@ -457,7 +460,7 @@
     "数据与同意合规-r08"
    ],
    "regress_basis": "B_same",
-   "reject_dim_3d": "C",
+   "reject_dim_3d": "strict",
    "window": null,
    "origins": {
     "real": 5
@@ -682,7 +685,7 @@
    "regress_any": 0,
    "regress_any_cases": [],
    "regress_basis": "B_same",
-   "reject_dim_3d": "C",
+   "reject_dim_3d": "strict",
    "window": null,
    "origins": {
     "real": 1
