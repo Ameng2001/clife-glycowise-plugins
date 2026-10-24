@@ -68,9 +68,25 @@ def patient_of(t):
     return m.group(0) if m else None
 
 
-def family_of(t, fb, expect_rule):
+SOURCE_RE = re.compile(r"^(?:brief|sim):(.+?)(?:-\d+)?(?:#tier(\d))?(?:#.*)?$")
+
+
+def family_from_source(src):
+    """口语集 `source` 自带的分层键：`brief:{family}#tier{N}[#变体]`（W47 起）或 `sim:{family}-NN[#变体]`（W44–W46）→ family；
+    `golden#NN` 等无 family 的来源 → None。"""
+    m = SOURCE_RE.match(str(src or ""))
+    if not m or m.group(1) not in FAMILIES:
+        return None
+    return m.group(1)
+
+
+def family_of(t, fb, expect_rule, source=None):
+    """family 优先级：反馈项显式 family > 口语集 source 自带 family（W47 起为唯一分层键）> 按规则 / 动作 / 查询起点推断（回退）。"""
     if fb.get("family"):
         return fb["family"]
+    fs = family_from_source(source)
+    if fs:
+        return fs
     if expect_rule and rule_prefix(expect_rule) in RULE_FAMILY:
         return RULE_FAMILY[rule_prefix(expect_rule)]
     if t["kind"] == "execute" and t["action"] in ACTION_FAMILY:
@@ -187,6 +203,11 @@ def main():
                               "actor_id": u["actor"]["id"], "actor_role": u["actor"]["role"]})
         return steps
     fb = yaml.safe_load(open(os.path.join(wdir, "feedback.yaml"), encoding="utf-8"))
+    # 口语集（utterances.{window}.yaml）的 source 字段：按口语原文回查，给 family 用
+    utt_path = os.path.join(HERE, f"utterances.{a.window}.yaml")
+    sources = {}
+    if os.path.exists(utt_path):
+        sources = {i["utterance"]: i.get("source") for i in (yaml.safe_load(open(utt_path, encoding="utf-8")) or {}).get("items", [])}
     if fb.get("status", "reviewed") != "reviewed" or not fb.get("reviewer"):
         sys.exit(f"✗ {a.window}/feedback.yaml 还是 status={fb.get('status')!r}、reviewer={fb.get('reviewer')!r}：业务侧没标完，不落 real 案例")
     if any(i.get("label") is None for i in fb["items"]):
@@ -219,7 +240,8 @@ def main():
             continue
         t = traj[tid]
         expect, expect_rule = expect_of(t, item)
-        fam = family_of(t, item, expect_rule)
+        src = sources.get(t["utterance"])
+        fam = family_of(t, item, expect_rule, src)
         maxn[fam] += 1
         q = q_with_id(t)
         case = {
@@ -230,6 +252,7 @@ def main():
             "family": fam,
             "origin": "real",
             "observed_at": t["ts"][:10],
+            "source": src,
             "elements": elements_of(t, expect_rule),
             "label": {
                 "answer": item["truth"],

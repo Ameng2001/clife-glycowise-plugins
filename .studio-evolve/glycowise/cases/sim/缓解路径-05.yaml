@@ -1,0 +1,29 @@
+id: 缓解路径-05
+q: 给周先生（P0007）把缓解时钟的 Day0 确认在 2026 年 7 月 28 日
+expect: action(确认缓解时钟Day0)
+tier: 3
+family: 缓解路径
+origin: sim
+observed_at: '2026-10-24'
+elements:
+- 确认缓解时钟Day0
+- RemissionClock
+- gated_by_meds
+label:
+  answer: P0007 无降糖药在用（profile.meds 空），医师确认 Day0 → RemissionClock day0 改写为 2026-07-28、status
+    running、confirmed_by 为确认人，进 HIL（医师 always）；h_i 的 handler 是桩
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0007 的缓解时钟 Day0 定 2026-07-28，医师确认。
+- kind: irrelevant_field
+  q: 给周先生（P0007）把缓解时钟的 Day0 确认在 2026 年 7 月 28 日，他说那天刚好是生日。
+note: P12 来源案例：W47 0021 路由到只有桩的动作
+expect_state:
+- type: RemissionClock
+  key: P0007
+  fields:
+    day0: '2026-07-28'
+    status: running
+expect_state_note: IR §1 RemissionClock{day0,status}；§2 gated_by_meds：任一降糖药在用即清零，P0007
+  meds=[] → running

@@ -1,0 +1,27 @@
+id: 缓解路径-06
+q: 张阿姨（P0066）停药满期了，医师确认缓解时钟 Day0 为 2026 年 10 月 1 日，启动缓解观察
+expect: action(确认缓解时钟Day0)
+tier: 3
+family: 缓解路径
+origin: sim
+observed_at: '2026-10-24'
+elements:
+- 确认缓解时钟Day0
+- RemissionClock
+label:
+  answer: P0066 此前没有 RemissionClock、meds 空 → 新建时钟 day0 2026-10-01、status running，进
+    HIL（医师）
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0066 缓解时钟 Day0 = 2026-10-01，启动。
+- kind: irrelevant_field
+  q: 张阿姨（P0066）停药满期了，医师确认缓解时钟 Day0 为 2026 年 10 月 1 日，启动缓解观察；她女儿陪着来的。
+note: P12 来源案例：无既有时钟的患者
+expect_state:
+- type: RemissionClock
+  key: P0066
+  fields:
+    day0: '2026-10-01'
+    status: running
+expect_state_note: 同上；P0066 无既有 RemissionClock，seed 事实

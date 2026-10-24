@@ -1,0 +1,40 @@
+--- a/plugins/glycowise/__init__.py	2026-10-23 22:23:50
++++ b/plugins/glycowise/__init__.py	2026-10-24 11:10:55
+@@ -3659,12 +3659,7 @@
+     HIL：医师（触发条件 always）。
+     写入对象：RemissionClock。
+     """
+-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
+-    # ctx.stage_write("RemissionClock", f"remissionclock_{ctx.params[...]}", {...})
+-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
+-    ctx.set_confidence(0.8)
+-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
+-    raise NotImplementedError("确认缓解时钟Day0 handler 待实现")
++    _fde.ACTIONS['确认缓解时钟Day0'](ctx)
+ 
+ @spi.action(
+     ONTOLOGY, "判定缓解结果",
+--- a/plugins/glycowise/_fde.py	2026-10-23 22:23:50
++++ b/plugins/glycowise/_fde.py	2026-10-24 11:10:55
+@@ -2159,3 +2159,21 @@
+     put("OutboundContent", "c-promo-01", {"content_id": "c-promo-01", "target_audience": "公众", "body": "刘阿姨佩戴 14 天前后血糖对比图：从波动到平稳，看得见的改变。",
+                                           "content_type": "宣传素材", "gate_token_ref": None, "disclaimer_attached": False, "patient_ref": "P0012",
+                                           "contains_identifiable_patient": True, "is_before_after_comparison": True})
++
++
++@action("确认缓解时钟Day0")
++def act_confirm_day0(ctx):
++    """P12（W47 / 0021）：IR §5「医师另行确认，系统不得自动推断」。写 RemissionClock（主键 patient_id）：day0 取医师给定日期，
++    status 按 §2 gated_by_meds——任一降糖药在用即清零（reset），否则 running；confirmed_by = 确认人。HIL 医师 always 由动作声明决定。"""
++    pid = str(ctx.params["patient_id"])
++    raw = str(ctx.params["day0"])
++    d0 = _dt(raw)
++    day0 = d0.date().isoformat() if d0 else raw
++    meds = [m for m in meds_of(ctx, pid) if any(k in str(m) for k in DRUG_NAMES)]
++    prev = ctx.get("RemissionClock", pid) or {}
++    status = "reset" if meds else "running"
++    ctx.stage_write("RemissionClock", pid, {"patient_id": pid, "day0": day0, "status": status, "confirmed_by": ctx.actor.id,
++                                             "confirmed_at": _now(), "previous_day0": prev.get("day0"), "_staged": exec_token(ctx)})
++    ctx.set_confidence(0.9 if d0 else 0.6)
++    ctx.add_evidence(day0=day0, parsed=bool(d0), meds_in_use=meds, previous_day0=prev.get("day0"), status=status)
++    ctx.emit_effect("workitem", on="committed", template="医师确认缓解 Day0", patient_id=pid, day0=day0, status=status)

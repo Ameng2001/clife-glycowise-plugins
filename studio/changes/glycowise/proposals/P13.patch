@@ -1,0 +1,50 @@
+--- a/plugins/glycowise/__init__.py	2026-10-23 22:23:50
++++ b/plugins/glycowise/__init__.py	2026-10-24 11:10:55
+@@ -3354,13 +3354,7 @@
+     HIL：触及已签发方案时转签发人（触发条件 touched_hard）。
+     写入对象：AlertEvent、PlanSigned。
+     """
+-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
+-    # ctx.stage_write("AlertEvent", f"alertevent_{ctx.params[...]}", {...})
+-    # ctx.stage_write("PlanSigned", f"plansigned_{ctx.params[...]}", {...})
+-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
+-    ctx.set_confidence(0.8)
+-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
+-    raise NotImplementedError("撤销更正已发出告警 handler 待实现")
++    _fde.ACTIONS['撤销更正已发出告警'](ctx)
+ 
+ @spi.action(
+     ONTOLOGY, "放宽告警阈值",
+--- a/plugins/glycowise/_fde.py	2026-10-23 22:23:50
++++ b/plugins/glycowise/_fde.py	2026-10-24 11:10:55
+@@ -2159,3 +2159,30 @@
+     put("OutboundContent", "c-promo-01", {"content_id": "c-promo-01", "target_audience": "公众", "body": "刘阿姨佩戴 14 天前后血糖对比图：从波动到平稳，看得见的改变。",
+                                           "content_type": "宣传素材", "gate_token_ref": None, "disclaimer_attached": False, "patient_ref": "P0012",
+                                           "contains_identifiable_patient": True, "is_before_after_comparison": True})
++
++
++@action("撤销更正已发出告警")
++def act_retract_alert(ctx):
++    """P13（W47 / 0075）：IR §5「上游读数被 retract 或 corrected 时撤销并发更正说明」。AlertEvent 进 lifecycle retracted，
++    带撤销原因 / 更正说明 / 撤销人；患者在该告警之后签发的方案视为被触及（评估依据含该告警）→ 在 PlanSigned 上标 evidence_stale 与更正说明，
++    HIL「触及已签发方案时转签发人」由动作声明的 predicate 决定。告警不存在时不写任何对象，置信度 0.3（无规则声明拒绝，不伪造拒绝）。"""
++    a = str(ctx.params["alert_id"])
++    reason = str(ctx.params["reason"])
++    ev = ctx.get("AlertEvent", a)
++    if not ev:
++        ctx.set_confidence(0.3)
++        ctx.add_evidence(alert_found=False, alert_id=a)
++        return
++    pid = ev.get("patient_id")
++    note = f"告警 {a} 已撤销：{reason}"
++    ctx.stage_write("AlertEvent", a, {**ev, "status": "retracted", "retract_reason": reason, "retracted_at": _now(),
++                                       "retracted_by": ctx.actor.id, "correction_note": note, "_staged": exec_token(ctx)})
++    raised = _dt(ev.get("raised_at"))
++    touched = [p for p in ctx.find("PlanSigned", lambda r: r.get("patient_id") == pid)
++               if raised and _dt(p.get("signed_at")) and _dt(p["signed_at"]) >= raised]
++    for p in touched:
++        ctx.stage_write("PlanSigned", p["plan_id"], {**p, "evidence_stale": True, "correction_note": note, "_staged": exec_token(ctx)})
++    ctx.set_confidence(0.9)
++    ctx.add_evidence(alert_found=True, level=ev.get("level"), is_backfill=ev.get("is_backfill"), touched_signed_plans=[p["plan_id"] for p in touched])
++    if touched:
++        ctx.emit_effect("workitem", on="committed", template="签发人复核更正说明", patient_id=pid, plans=[p["plan_id"] for p in touched])

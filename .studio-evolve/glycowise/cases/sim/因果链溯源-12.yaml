@@ -1,0 +1,26 @@
+id: 因果链溯源-12
+q: 王叔（P0031）那条回填告警 A-P0031-backfill-01 的读数核对下来是错误批次、已更正，撤销告警并发更正说明
+expect: action(撤销更正已发出告警)
+tier: 3
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-24'
+elements:
+- 撤销更正已发出告警
+- AlertEvent
+- IngestBatch
+label:
+  answer: 回填告警（is_backfill）撤销 → retracted；P0031 无已签发方案 → 只写 AlertEvent，committed
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: A-P0031-backfill-01 读数更正了，撤销这条回填告警。
+- kind: irrelevant_field
+  q: 王叔（P0031）那条回填告警 A-P0031-backfill-01 的读数核对下来是错误批次、已更正，撤销告警并发更正说明；他下周去儿子家住。
+note: P13 来源案例：回填告警撤销
+expect_state:
+- type: AlertEvent
+  key: A-P0031-backfill-01
+  fields:
+    status: retracted
+expect_state_note: 同上；P0031 无 PlanSigned（seed）

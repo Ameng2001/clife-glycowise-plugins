@@ -1,0 +1,29 @@
+id: 缓解路径-07
+q: 医师给刘阿姨（P0012）确认缓解时钟 Day0 为 2026 年 9 月 15 日
+expect: action(确认缓解时钟Day0)
+tier: 3
+family: 缓解路径
+origin: sim
+observed_at: '2026-10-24'
+elements:
+- 确认缓解时钟Day0
+- RemissionClock
+- gated_by_meds
+- PatientProfile
+label:
+  answer: P0012 仍在用二甲双胍（profile.meds）→ 按 §2 gated_by_meds「任一降糖药在用即清零」，时钟落为 status
+    reset（day0 照记、confirmed_by 照记），进 HIL 由医师定夺；不是拒绝——IR 没有把它声明成规则
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: P0012 的缓解时钟 Day0 确认为 2026-09-15。
+- kind: irrelevant_field
+  q: 医师给刘阿姨（P0012）确认缓解时钟 Day0 为 2026 年 9 月 15 日；她问要不要换个传感器。
+note: P12 来源案例：gated_by_meds 分支
+expect_state:
+- type: RemissionClock
+  key: P0012
+  fields:
+    day0: '2026-09-15'
+    status: reset
+expect_state_note: §2 gated_by_meds：P0012 meds=[二甲双胍]（seed）→ reset

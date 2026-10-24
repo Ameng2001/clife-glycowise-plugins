@@ -1,0 +1,28 @@
+id: 因果链溯源-11
+q: 黄伯（P0045）凌晨那条告警 A-P0045-02 对应的读数被厂商标为传感器压迫伪差撤回了，撤销这条告警并发更正说明
+expect: action(撤销更正已发出告警)
+tier: 3
+family: 因果链溯源
+origin: sim
+observed_at: '2026-10-24'
+elements:
+- 撤销更正已发出告警
+- AlertEvent
+- R02_传感器压迫伪差识别
+label:
+  answer: A-P0045-02 存在（seed，Level2 实时告警）→ AlertEvent 进 retracted，带撤销原因与更正说明；P0045
+    的已签发方案 plan-P0045-w41 签发在告警之前，不受触及 → 不写 PlanSigned、不进签发人 HIL，committed
+  source: cq+expert
+variants:
+- kind: paraphrase
+  q: A-P0045-02 的读数被撤回了，撤销告警并更正。
+- kind: irrelevant_field
+  q: 黄伯（P0045）凌晨那条告警 A-P0045-02 对应的读数被厂商标为传感器压迫伪差撤回了，撤销这条告警并发更正说明；他女儿早上打电话来问过。
+note: P13 来源案例：W47 0075 路由到只有桩的动作（0075 原句「复测 4.1 了把告警关掉」更像回执闭环，归路由层候选；本案例按动作的 IR 语义重写）
+expect_state:
+- type: AlertEvent
+  key: A-P0045-02
+  fields:
+    status: retracted
+expect_state_note: IR §1 AlertEvent lifecycle 含 retracted；plan-P0045-w41 signed_at
+  = 5 天前 < raised_at 1 天前（seed）
