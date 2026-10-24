@@ -2199,6 +2199,13 @@ def seed_reference_data(store) -> None:
     # 方案草稿 / 已签发方案 / 签发证据（上周有两份停留 <20 秒）
     put("PlanDraft", "d-P0012-01", {"draft_id": "d-P0012-01", "patient_id": "P0012", "content": "【P0012 本期方案草稿 · 方向：维持】\n先菜后饭、控制主食份量，餐后步行 15 分钟；睡前如需加餐选含碳水 10–15g 食物并复测。\n" + DISCLAIMER,
                                     "template_version": "fde-0.1", "med_interaction_routed": False, "direction": "维持", "category": "营养"})
+    # 2026-10-24 W50 补 seed（round 7 出口签发闸 tier4 用例需要含用药调整的草稿；此前只有 d-P0012-01 营养类）。只增对象，不改既有对象。
+    put("PlanDraft", "d-P0045-01", {"draft_id": "d-P0045-01", "patient_id": "P0045", "content": "【P0045 本期方案草稿 · 方向：调整】\n夜间低血糖反复，建议格列齐特晚餐前剂量减半并复测一周；睡前加餐含碳水 10–15g。\n" + DISCLAIMER,
+                                    "template_version": "fde-0.1", "med_interaction_routed": True, "direction": "调整", "category": "用药"})
+    put("PlanDraft", "d-P0031-01", {"draft_id": "d-P0031-01", "patient_id": "P0031", "content": "【P0031 本期方案草稿 · 方向：减药】\n餐后与空腹均达标两周，建议二甲双胍由每日三次减为两次，两周后复评。\n" + DISCLAIMER,
+                                    "template_version": "fde-0.1", "med_interaction_routed": True, "direction": "减药", "category": "用药"})
+    put("PlanDraft", "d-P0012-02", {"draft_id": "d-P0012-02", "patient_id": "P0012", "content": "【P0012 本期方案草稿 · 方向：调整】\n餐后峰值偏高，建议加用阿卡波糖随餐；饮食与步行方案沿用上期。\n" + DISCLAIMER,
+                                    "template_version": "fde-0.1", "med_interaction_routed": True, "direction": "调整", "category": "用药"})
     for pid, plan, dwell, diff, when, signer in (("P0088", "plan-P0088-w41", 12, "", d(6), "S-HUANG"), ("P0045", "plan-P0045-w41", 15, "", d(5), "S-HUANG"),
                                                   ("P0012", "plan-P0012-w40", 95, "调整了餐后步行时长", d(12), "S-HUANG"), ("P0066", "plan-P0066-w41", 48, "补充了睡前加餐说明", d(4), "S-CHEN")):
         put("PlanSigned", plan, {"plan_id": plan, "patient_id": pid, "content_snapshot": f"{pid} 方案（已签发）\n{DISCLAIMER}", "signer_id": signer, "signed_at": when + "T15:00",
