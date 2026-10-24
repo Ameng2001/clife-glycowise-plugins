@@ -1,0 +1,38 @@
+# 由 t-20261024-0208 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 结论层与分层-r23
+q: P0012 上一次分层标签是哪天出的？
+expect: query
+tier: 1
+family: 结论层与分层
+origin: real
+observed_at: '2026-10-24'
+source: brief:结论层与分层#tier1#paraphrase
+elements:
+- PatientProfile
+label:
+  answer: 问『分层哪天出的』，OQL 走 PatientProfile→based_on_summary→CgmSummary 取 window_end，按 IR 合法；seed 没有这条边 → 0 行。数据本身在（s-P0012-14d window_end 2026-10-23），缺的是边。
+  source: feedback
+  trace_id: t-20261024-0208
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants: []
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: PatientProfile
+    where:
+    - field: patient_id
+      op: eq
+      value: P0012
+    select:
+    - window_end
+    steps:
+    - link_type: based_on_summary
+      direction: out
+      where: []
+    order_by:
+    - field: window_end
+      desc: true
+    limit: 1

@@ -1,0 +1,113 @@
+# 由 t-20261024-0247 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r88
+q: b-P0031-05 和 b-P0031-backfill-02 重叠的那段，保留实时那路
+expect: action(去重与通道仲裁)
+tier: 3
+family: 指标口径
+origin: real
+observed_at: '2026-10-24'
+source: brief:指标口径#tier3#paraphrase
+elements:
+- 去重与通道仲裁
+label:
+  answer: 口语给了传感器序号，但路由没有构造 dedup_key（= 序号 + 序号），也没有把批次展开成读数候选，reading_candidate 里只有 batch_ids / sensor_serial；R48 检查 dedup_key 以序号开头 → 硬拒。业务上这是合法的去重仲裁请求，应当执行：有序号就派生键（P9a 的做法）。另注意 b-P0012-07 这类批次对象 seed
+    里不存在，即便派生了键，handler 也要先按批次取读数。
+  source: feedback
+  trace_id: t-20261024-0247
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: b-P0031-05 和 b-P0031-backfill-02 重叠的那段，保留实时那路；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261024-0210
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 昨夜出过一次低血糖
+    new_value: 4.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 夜间事件
+    new_value: 4.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0212
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0217
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - 刘阿姨女儿
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0227
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 24 小时内复发
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0228
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 24 小时内复发
+    new_value: 5.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0229
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 24 小时内复发
+    new_value: 4.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0235
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0045-w41
+    targets:
+    - P0045-son
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0243
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: 夜间反复低血糖
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 去重与通道仲裁
+  params:
+    reading_candidate:
+      patient_id: P0031
+      sensor_serial: SN-P0031-B
+      batch_ids:
+      - b-P0031-05
+      - b-P0031-backfill-02
+      priority_channel: realtime
+      overlap_strategy: keep_realtime

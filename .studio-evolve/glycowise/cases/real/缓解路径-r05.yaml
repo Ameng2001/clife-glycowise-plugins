@@ -1,0 +1,35 @@
+# 由 t-20261024-0003 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r05
+q: 周先生（P0007）的缓解时钟现在是什么状态？他下周要出差一趟。
+expect: query
+tier: 1
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier1#irrelevant_field
+elements:
+- RemissionClock
+label:
+  answer: status running（day0 2026-07-11）；无关从句『下周出差』没进查询条件。
+  source: feedback
+  trace_id: t-20261024-0003
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0007的缓解时钟现在是什么状态？他下周要出差一趟。
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: RemissionClock
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    select:
+    - patient_id
+    - day0
+    - status
+    - confirmed_by

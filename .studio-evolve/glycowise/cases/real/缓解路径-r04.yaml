@@ -1,0 +1,30 @@
+# 由 t-20261024-0002 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r04
+q: P0007 停药观察的 Day0 定在哪一天？
+expect: query
+tier: 1
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier1#paraphrase
+elements:
+- RemissionClock
+label:
+  answer: day0 2026-07-11。
+  source: feedback
+  trace_id: t-20261024-0002
+  reviewer: Ameng2001
+  feedback_label: correct
+variants: []
+setup: []
+route:
+  kind: query
+  confidence: 0.98
+  oql:
+    start: RemissionClock
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    select:
+    - day0

@@ -1,0 +1,43 @@
+# 由 t-20261024-0005 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r06
+q: P0007 的 GADA 查出来阴性还是阳性，数值多少？
+expect: query
+tier: 1
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier1#paraphrase
+elements:
+- LabResult
+label:
+  answer: method in [GADA…] 命中 lab-P0007-gada：0.4（2026-07-16），阴性。
+  source: feedback
+  trace_id: t-20261024-0005
+  reviewer: Ameng2001
+  feedback_label: correct
+variants: []
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: LabResult
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    - field: method
+      op: in
+      value:
+      - GADA
+      - GAD 抗体
+      - 谷氨酸脱羧酶抗体
+    select:
+    - lab_result_id
+    - value
+    - method
+    - measured_at
+    order_by:
+    - field: measured_at
+      desc: true
+    limit: 10

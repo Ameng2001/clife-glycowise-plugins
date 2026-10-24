@@ -1,0 +1,40 @@
+# 由 t-20261024-0010 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r10
+q: 周先生（P0007）这 14 天的平均血糖和 GMI 分别是多少？他说最近开始记饮食了。
+expect: query
+tier: 1
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier1#irrelevant_field
+elements:
+- CgmSummary
+label:
+  answer: where window_start >= 'now-14d' 是字面字符串，引擎不解析相对时间，与 ISO 日期字符串比较必然失败 → 0 行（W43 0029/0040、W44 0138、W45 0239/0271/0272 同因，第四个窗口复现）。去掉该条件即命中 14 天汇总。 s-P0007-14d：mean_glucose 6.2 附近、gmi 6.15。
+  source: feedback
+  trace_id: t-20261024-0010
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0007这 14 天的平均血糖和 GMI 分别是多少？他说最近开始记饮食了。
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: CgmSummary
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    - field: window_start
+      op: ge
+      value: now-14d
+    select:
+    - mean_glucose
+    - gmi_pct
+    order_by:
+    - field: window_end
+      desc: true
+    limit: 1

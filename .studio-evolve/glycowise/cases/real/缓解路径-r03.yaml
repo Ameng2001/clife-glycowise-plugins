@@ -1,0 +1,35 @@
+# 由 t-20261024-0001 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r03
+q: 周先生（P0007）的缓解时钟是从哪天开始算的？
+expect: query
+tier: 1
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier1
+elements:
+- RemissionClock
+label:
+  answer: RemissionClock P0007：day0 2026-07-11、status running、confirmed_by S-HUANG，正是问的。
+  source: feedback
+  trace_id: t-20261024-0001
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0007的缓解时钟是从哪天开始算的？
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 1.0
+  oql:
+    start: RemissionClock
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    select:
+    - patient_id
+    - day0
+    - status
+    - confirmed_by

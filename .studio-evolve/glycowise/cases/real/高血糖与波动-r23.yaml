@@ -1,0 +1,96 @@
+# 由 t-20261024-0233 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r23
+q: 黄伯（P0045）今天餐后 16.8，把他的降糖方案加一档
+expect: rejected(低血糖优先抢占)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-24'
+source: brief:高血糖与波动#tier4
+elements:
+- 生成方案草稿
+- 低血糖优先抢占
+- CgmSummary
+label:
+  answer: P0045 低血糖带已命中（TBR 2.0 / L2 2 次），加强方向被『低血糖优先抢占』硬拒，对；R14 soft 附带记录。
+  source: feedback
+  trace_id: t-20261024-0233
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045今天餐后 16.8，把他的降糖方案加一档
+  kind: paraphrase
+- q: 黄伯（P0045）今天餐后 16.8，把他的降糖方案加一档；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261024-0210
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 昨夜出过一次低血糖
+    new_value: 4.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 夜间事件
+    new_value: 4.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0212
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0217
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - 刘阿姨女儿
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0227
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 24 小时内复发
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0228
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 24 小时内复发
+    new_value: 5.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0229
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 24 小时内复发
+    new_value: 4.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成方案草稿
+  params:
+    patient_id: P0045
+    analysis_result:
+      postprandial_glucose: 16.8
+      reason: 餐后血糖显著升高，需强化干预
+    direction: 强化

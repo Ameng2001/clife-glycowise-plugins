@@ -1,0 +1,246 @@
+# 由 t-20261024-0072 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 出口签发闸-r19
+q: 黄伯（P0045）按 s-P0045-14d 出一份维持方向的方案草稿，他下周要去旅游。
+expect: action(生成方案草稿)
+tier: 3
+family: 出口签发闸
+origin: real
+observed_at: '2026-10-24'
+source: brief:出口签发闸#tier3#irrelevant_field
+elements:
+- 生成方案草稿
+- CgmSummary
+label:
+  answer: 维持方向；TAR 37.1% 命中 R14 soft 只记录，草稿生成。低血糖带（TBR 2.0 / L2 2 次）只抑制加强方向，维持不受影响。
+  source: feedback
+  trace_id: t-20261024-0072
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045按 s-P0045-14d 出一份维持方向的方案草稿，他下周要去旅游。
+  kind: paraphrase
+- q: 黄伯（P0045）按 s-P0045-14d 出一份维持方向的方案草稿，他下周要去旅游。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261024-0014
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0015
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0016
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0017
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: null
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0018
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者询问停药期间能否顺便把降压药也停了
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0022
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0023
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0024
+  action: 生成方案草稿
+  params:
+    patient_id: P0007
+    analysis_result:
+      summary_id: s-P0007-14d
+    direction: 维持
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0025
+  action: 群内答复患者
+  params:
+    patient_id: P0007
+    message: 周先生您好，您本期的内部服务分层标签已计算完成。具体结果将在周末门店活动中为您详细解读，敬请期待。
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0026
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 配合使用，糖化能再降一截
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0027
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 坚持吃三个月血糖稳得住
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0036
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 已补碳水
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0037
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 吃了 15 克糖
+    retest_value: 5.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0038
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 已喝糖水
+    retest_value: 5.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0039
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 夜间低血糖事件
+    new_value: 4.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0040
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 夜间低血糖事件
+    new_value: 4.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0042
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: 签发
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0043
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0044
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0045
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0046
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - P0012
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0047
+  action: 输出服务分层标签
+  params:
+    patient_id: P0012
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0048
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 今天数据已同步，餐后记得散步
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0068
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 补了碳水，复测 4.6，继续观察一天
+    retest_value: 4.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0070
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 复发窗规则
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0071
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 复发窗
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.9
+  action: 生成方案草稿
+  params:
+    patient_id: P0045
+    analysis_result:
+      summary_id: s-P0045-14d
+    direction: 维持

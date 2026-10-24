@@ -1,0 +1,71 @@
+# 由 t-20261024-0225 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 结论层与分层-r26
+q: P0045 的分层结论是谁确认的？他儿子想知道能不能换服务包。
+expect: query
+tier: 1
+family: 结论层与分层
+origin: real
+observed_at: '2026-10-24'
+source: brief:结论层与分层#tier1#irrelevant_field
+elements:
+- PlanSigned
+label:
+  answer: 问『分层谁确认的』，路由从 PlanSigned 挂 requires_credential 一跳（seed 无边）→ 0 行。单查 plan-P0045-w41 的 signer_id=S-HUANG 即可答（W44 0154 / W45 0255 同型）。
+  source: feedback
+  trace_id: t-20261024-0225
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants: []
+setup:
+- trace_id: t-20261024-0210
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 昨夜出过一次低血糖
+    new_value: 4.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 夜间事件
+    new_value: 4.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0212
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0217
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - 刘阿姨女儿
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: PlanSigned
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    select:
+    - plan_id
+    - signer_id
+    - signed_at
+    - content_snapshot
+    steps:
+    - link_type: requires_credential
+      direction: out
+      where: []

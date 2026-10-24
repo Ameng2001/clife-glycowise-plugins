@@ -1,0 +1,32 @@
+# 由 t-20261024-0210 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r23
+q: 把刘阿姨（P0012）的夜间低值告警线从 3.9 收紧到 4.2，原因是昨夜出过一次低血糖
+expect: action(收紧告警阈值)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-24'
+source: brief:参考与配置#tier3
+elements:
+- 收紧告警阈值
+label:
+  answer: night_low 3.9 → 4.2，原因『昨夜出过一次低血糖』。
+  source: feedback
+  trace_id: t-20261024-0210
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 把P0012的夜间低值告警线从 3.9 收紧到 4.2，原因是昨夜出过一次低血糖
+  kind: paraphrase
+- q: 把刘阿姨（P0012）的夜间低值告警线从 3.9 收紧到 4.2，原因是昨夜出过一次低血糖；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 1.0
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 昨夜出过一次低血糖
+    new_value: 4.2

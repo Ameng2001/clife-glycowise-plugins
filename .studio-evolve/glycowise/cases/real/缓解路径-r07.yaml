@@ -1,0 +1,47 @@
+# 由 t-20261024-0006 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r07
+q: 周先生（P0007）空腹和餐后两小时的 C 肽各是多少？他说化验那天没睡好。
+expect: query
+tier: 1
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier1#irrelevant_field
+elements:
+- LabResult
+label:
+  answer: 路由把『空腹 / 餐后 2h C 肽』编成 specimen_type=fasting_c_peptide / postprandial_2h_c_peptide；seed 里 specimen_type 全是 venous，分析物写在 method 字段（C-peptide fasting 1.6、C-peptide 2h 3.4，2026-07-16）。按 method 过滤即
+    2 行。
+  source: feedback
+  trace_id: t-20261024-0006
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0007空腹和餐后两小时的 C 肽各是多少？他说化验那天没睡好。
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: LabResult
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    - or:
+      - field: specimen_type
+        op: eq
+        value: fasting_c_peptide
+      - field: specimen_type
+        op: eq
+        value: postprandial_2h_c_peptide
+    select:
+    - lab_result_id
+    - value
+    - method
+    - measured_at
+    - specimen_type
+    order_by:
+    - field: measured_at
+      desc: true

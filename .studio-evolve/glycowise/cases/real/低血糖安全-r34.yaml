@@ -1,0 +1,43 @@
+# 由 t-20261024-0203 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r34
+q: 刘阿姨（P0012）昨夜那次低血糖事件是几点开始的？她女儿说凌晨给她喂过糖水。
+expect: query
+tier: 1
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-24'
+source: brief:低血糖安全#tier1#irrelevant_field
+elements:
+- HypoEpisode
+label:
+  answer: ep-P0012-15：2026-10-23 03:30 开始，最低 3.7，L1。
+  source: feedback
+  trace_id: t-20261024-0203
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0012昨夜那次低血糖事件是几点开始的？她女儿说凌晨给她喂过糖水。
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: HypoEpisode
+    where:
+    - field: patient_id
+      op: eq
+      value: P0012
+    - field: night_flag
+      op: eq
+      value: true
+    select:
+    - episode_id
+    - start_time
+    - end_time
+    - min_value
+    - level
+    order_by:
+    - field: start_time
+      desc: true
+    limit: 1

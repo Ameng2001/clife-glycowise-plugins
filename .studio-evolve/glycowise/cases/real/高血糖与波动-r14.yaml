@@ -1,0 +1,124 @@
+# 由 t-20261024-0029 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r14
+q: P0012 最近 14 天 TAR 一级和二级各占多少？
+expect: query
+tier: 1
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-24'
+source: brief:高血糖与波动#tier1#paraphrase
+elements:
+- CgmSummary
+label:
+  answer: where window_start >= 'now-14d' 是字面字符串，引擎不解析相对时间，与 ISO 日期字符串比较必然失败 → 0 行（W43 0029/0040、W44 0138、W45 0239/0271/0272 同因，第四个窗口复现）。去掉该条件即命中 14 天汇总。 s-P0012-14d：tar_pct 28.7 / tar_l2_pct 可查。
+  source: feedback
+  trace_id: t-20261024-0029
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants: []
+setup:
+- trace_id: t-20261024-0014
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0015
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0016
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0017
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: null
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0018
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者询问停药期间能否顺便把降压药也停了
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0022
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0023
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0024
+  action: 生成方案草稿
+  params:
+    patient_id: P0007
+    analysis_result:
+      summary_id: s-P0007-14d
+    direction: 维持
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0025
+  action: 群内答复患者
+  params:
+    patient_id: P0007
+    message: 周先生您好，您本期的内部服务分层标签已计算完成。具体结果将在周末门店活动中为您详细解读，敬请期待。
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0026
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 配合使用，糖化能再降一截
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0027
+  action: 生成产品推荐
+  params:
+    patient_id: P0007
+    sku_id: sku-ynl-01
+    pitch: 坚持吃三个月血糖稳得住
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.98
+  oql:
+    start: CgmSummary
+    where:
+    - field: patient_id
+      op: eq
+      value: P0012
+    - field: window_start
+      op: ge
+      value: now-14d
+    select:
+    - tar_pct
+    - tar_l2_pct
+    order_by:
+    - field: window_start
+      desc: true
+    limit: 1

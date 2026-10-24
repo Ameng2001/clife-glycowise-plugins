@@ -1,0 +1,66 @@
+# 由 t-20261024-0227 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r25
+q: 黄伯（P0045）夜间低值线上调到 4.4，依据是 24 小时内复发
+expect: action(收紧告警阈值)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-24'
+source: brief:参考与配置#tier3#paraphrase
+elements:
+- 收紧告警阈值
+label:
+  answer: P0045 night_low → 4.4，依据 24h 复发。
+  source: feedback
+  trace_id: t-20261024-0227
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045夜间低值线上调到 4.4，依据是 24 小时内复发
+  kind: paraphrase
+- q: 黄伯（P0045）夜间低值线上调到 4.4，依据是 24 小时内复发；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261024-0210
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 昨夜出过一次低血糖
+    new_value: 4.2
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0211
+  action: 收紧告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    trigger_rule: 夜间事件
+    new_value: 4.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0212
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0217
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0012-w40
+    targets:
+    - 刘阿姨女儿
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 24 小时内复发
+    new_value: 4.4

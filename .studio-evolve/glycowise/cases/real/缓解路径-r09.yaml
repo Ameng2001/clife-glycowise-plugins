@@ -1,0 +1,40 @@
+# 由 t-20261024-0008 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r09
+q: P0007 的 HbA1c 化验值和测定日期是什么？
+expect: query
+tier: 1
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier1#paraphrase
+elements:
+- LabResult
+label:
+  answer: 6.1 / 2026-10-16。
+  source: feedback
+  trace_id: t-20261024-0008
+  reviewer: Ameng2001
+  feedback_label: correct
+variants: []
+setup: []
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: LabResult
+    where:
+    - field: patient_id
+      op: eq
+      value: P0007
+    - field: method
+      op: in
+      value:
+      - HbA1c
+      - 糖化血红蛋白
+    select:
+    - value
+    - measured_at
+    order_by:
+    - field: measured_at
+      desc: true
+    limit: 1

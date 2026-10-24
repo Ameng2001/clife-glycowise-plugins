@@ -1,0 +1,34 @@
+# 由 t-20261024-0202 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r33
+q: P0012 的告警 A-P0012-01 有人回执了吗？
+expect: query
+tier: 1
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-24'
+source: brief:低血糖安全#tier1#paraphrase
+elements:
+- AlertAck
+label:
+  answer: AlertAck 表里 A-P0012-01 没有回执记录（本窗口此前没人回执），0 行就是『没人回执』，答案对。
+  source: feedback
+  trace_id: t-20261024-0202
+  reviewer: Ameng2001
+  feedback_label: correct
+variants: []
+setup: []
+route:
+  kind: query
+  confidence: 0.98
+  oql:
+    start: AlertAck
+    where:
+    - field: alert_id
+      op: eq
+      value: A-P0012-01
+    select:
+    - ack_id
+    - responder
+    - responded_at
+    - action_taken
+    - retest_value

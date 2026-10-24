@@ -1,0 +1,34 @@
+# 由 t-20261024-0204 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 出口签发闸-r24
+q: 刘阿姨（P0012）的方案 plan-P0012-w40 是谁签发的，什么时候签的？
+expect: query
+tier: 1
+family: 出口签发闸
+origin: real
+observed_at: '2026-10-24'
+source: brief:出口签发闸#tier1
+elements:
+- PlanSigned
+label:
+  answer: plan-P0012-w40：S-HUANG，2026-10-12T15:00。
+  source: feedback
+  trace_id: t-20261024-0204
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0012的方案 plan-P0012-w40 是谁签发的，什么时候签的？
+  kind: paraphrase
+setup: []
+route:
+  kind: query
+  confidence: 1.0
+  oql:
+    start: PlanSigned
+    where:
+    - field: plan_id
+      op: eq
+      value: plan-P0012-w40
+    select:
+    - signer_id
+    - signed_at
+    limit: 1

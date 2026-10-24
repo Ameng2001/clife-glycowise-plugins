@@ -1,0 +1,31 @@
+# 由 t-20261024-0014 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r12
+q: 周先生（P0007）停药满三个月了，用化验 lab-P0007-hba1c 和报告 s-P0007-14d 判一下缓解
+expect: action(判定缓解结果)
+tier: 4
+family: 缓解路径
+origin: real
+observed_at: '2026-10-24'
+source: brief:缓解路径#tier3
+elements:
+- 判定缓解结果
+label:
+  answer: 停药 105 天、无降糖药、近 3 月 NGSP HbA1c 6.1 <6.5 → 符合缓解；判定缓解结果 按声明走医师 HIL，pending_hil 成立。
+  source: feedback
+  trace_id: t-20261024-0014
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0007停药满三个月了，用化验 lab-P0007-hba1c 和报告 s-P0007-14d 判一下缓解
+  kind: paraphrase
+- q: 周先生（P0007）停药满三个月了，用化验 lab-P0007-hba1c 和报告 s-P0007-14d 判一下缓解；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 0.95
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d

@@ -101,11 +101,49 @@ holdout_sample.py --cases-dir cases --round 6 --holdout-size 40 --stratify famil
 
 两条都是 round 4 P7 / P8 同型：Dᵢ 从 IMPL_MISSING 变 pending_hil，全集不动。**不合入生产**——等标注回来按 round 6 正式流程（B_6 抽出后重判外关卡）由用户确认。生产 `__init__.py` 现有 65 处 NotImplementedError，这两条合入后 63。W_evid 两侧均不可得（glycowise IR 无 §8，`W_EVID_UNAVAILABLE`），判定只看 W_family。
 
-## 4. 归因（待标注）
+## 4. 归因（round 6，四窗口合并：W47 / W48 / W49 / W49b；2026-10-24 标注回传 9b63c5e）
 
-留空。标注回来后：`feedback.yaml` → reviewed → `make_real_cases.py --window 2026-W47`（partial 不落；family 按 source）→ `sets/holdout-6.yaml`（先过并层口径）→ 对 B_6 判 P9a 回退（**前提 P9a 已合入生产，目前未合入**）→ 归因 → 规则层提案 P14 起编。
+标注：162 条 reviewed（reviewer Ameng2001 / 本体负责人，标签由数据组按 IR 规则意图、实现、seed 真值与 sequential 回放逐条判后授权采纳），`check_feedback.py` 四窗口 ✓；correct 107 / partial 17 / wrong 38（router 28 / rule 5 / seed 5）。明细与归并见 `handoff-round6c.labels.md`。
 
-机器比对标 wrong 的 9 条，标注前只当候选：ask 查 0 行 6 条（0006 C 肽、0010 GMI、0029 TAR 分级、0033 人群目标区间、0089 / 0102 TAR，多半 seed 缺派生字段或边）；0041 推送中级告警被 R56 冻结；0069 回执不闭环仍被 R44 拒（R44 按 IR 只该管闭环）；0110 6 天数据出内部分层被 R01 拒（R01 门槛按 IR 是对的，更像 `cq_expect` 写错）。以标注为准。
+### 4.1 反馈 → 案例
+
+`make_real_cases.py --window …` 四窗口：W47 84（partial 6 不落）、W48 57（partial 11）、W49 1、W49b 3 → **cases/real 203 → 348**。`sets/real-all.yaml`（348）、`real-W47`（84）、`real-W48`（57）、`real-W49`（4，含 W49b）重建。family 自 W47 起按口语集 `source` 归；W43–W46 走 `sets/family-override.yaml`。
+
+**tier 口径的发现**：案例 tier 由引擎实际裁决的类别定（查到→1、执行→3、被拒→4），不是 brief 的层。145 条新案例里 64 条 brief 层与案例 tier 不同——产品与机构合规 / 数据与同意合规 / 高血糖与波动的 brief t4 句被引擎放行、落成 t3（正是 wrong 候选）；出口签发闸 / 因果链溯源 / 结论层与分层的 brief t3 句被规则拦下、落成 t4。因此 §2 用 brief 层算的上界（10 族全 ✓）高估了：`--check-pool --family-override --merge-min 8` 实测 **348 条、25 层、5 个 rest 层仍不足 8**（产品与机构合规 4 / 出口签发闸 5 / 参考与配置 3 / 因果链溯源 7 / 高血糖与波动 1），正式 run 前置 (1) 仍 ✗（池 ≥ 80 ✓）。tier 口径本身不改（「实际裁决的类别」是读数 T_k 的分母定义），登记：下次 brief 的配额要按「引擎会怎么裁」而不是「口语想做什么」反推。
+
+### 4.2 留出集 B_6 与 h_i 基线
+
+`holdout_sample.py --round 6 --holdout-size 40 --stratify family,tier --merge-min 8 --family-override … --exclude-file sets/P9-Di.yaml --exclude <5 条 rule 层 wrong 案例>`：**40 / 25 层，池 338，排除 10**（P9-Di 5 条 real；rule 层 wrong 5 条作为本轮规则层提案的 Dᵢ 预先排除）。W48 的 11 条 dup 案例（指标口径-r80–r90）按比例进了 2 条（r87 / r88）。台账「留出集记录」已加 round 6 行；`sets/holdout-6.yaml` 记 `family_override` / `family_overridden: 106`。
+
+h_i（post-P14 生产）：B_6 **A .825**、T=(.857, —, .706, 1.0)、S 1.0、W_family 1.0、C 3.0（`readings/r6-hi-B6.json`）；real-all 348 A .756、T=(.641, —, .761, 1.0)；IMPL_MISSING 21 行全是因果链溯源-r21 / r22 / r23 路由到 `升级告警` 桩（r21 是 rule 层 R38 误挂，r22 / r23 是路由选错动作，真值是 P13 的 撤销更正已发出告警——P13 未合入，合入也救不了路由选错）。
+
+### 4.3 D⁻ 分层
+
+| layer | 条 | 归因 | 处置 |
+|---|---|---|---|
+| **rule** | 5（全 W47） | 0026 / 0027 D9 功效声称没拦（实现只查「产品与分层同句」）；0069 R44 否定句「先不闭环」被子串匹配当成闭环 → 假阳性；0079 R38（入组规则）误挂在 升级告警 上对任何参数 fail，该拦的理由是 R53；0115 R51 的 TIER_RE 不认「分层是一级」 | **4 个规则层提案候选 P16–P19**（P15 已被「描述去品牌」占），Dᵢ = 对应 real 案例（已从 B_6 排除）；按配对设计各出根因修 + 朴素修。D9 ×2 与 R44 都只有单窗口样本——round 2–4 的 P5 / P6 / P7 也是单窗口来源，不等复现 |
+| router | 28 | 去重仲裁无 dedup_key → R48 硬拒 11（W48，见 4.4）；'now-14d' 字面量 5（第四窗口复现）；多挂一跳 / seed 无边 3；枚举字面量 3（level「中级」第四次）；字段选错 2；选错动作 / 臆造对象 4（含 0251 境外云同步被套成 摄入读数 空批次 committed、0280 波动结论套成已签发方案推送）；丢参数 1 | 不归本体，平台 backlog；累计 **路由层 wrong 49 + 28 = 77 条**、非轨迹 100 句 |
+| seed | 5（全 W48） | DeliveryReceipt / based_on_summary 无边、分层确认人无记录、P0066 有 tier_label 无读数 | 演示租户问题，留出集里两臂同败 |
+
+partial 17 条只计成本；其中「推送已签发方案给家属」5 条同型——没有任何规则看接收人身份或患者授权，是**规则缺口**（IR 修订候选，不是实现缺失）。
+
+### 4.4 P9 三份修法在 B_6 上（attempt 4，report-only，不进台账）
+
+| | Dᵢ（P9-Di 5 条 real，15 句） | B_6 A | ΔA | regress_any | 修对 | 3d | 1d |
+|---|---|---|---|---|---|---|---|
+| h_i | 0/15 | .825 | | | | | |
+| P9a 根因修 | **12/15** | .900 | +.075 | 0 | r72 / r87 / r88 | **ACCEPT** | ACCEPT |
+| P9b 朴素修（放宽） | 0/15（STATE_MISMATCH 33） | .900 | +.075 | 0 | 同 | **REJECT** | ACCEPT |
+| P9c 机械修（删分支） | 0/15（STATE_MISMATCH 39） | .900 | +.075 | 0 | 同 | **REJECT** | ACCEPT |
+
+分歧集仍 {P9b, P9c}，判定与 round 5 第 3 / 4 次相同：3d 靠内关卡 Dᵢ 的落库断言拒，外关卡 B_6 三份修法逐格相同。**B_6 仍然看不见它们的差别，原因换了**：W48 的 11 条 dup 案例是**批次级**请求（参数是 batch_ids / batches / sources + sensor_serial，键名由 LLM 临场发明，批次对象 seed 里不存在），而 IR §4 的 去重与通道仲裁 是**单条读数**动作（reading_candidate.reading_id）。三份修法的 handler 拿到没有 reading_id / 值 / 时间的候选，都走到 verdict=new，暂存一条 `cand-{now}`、value_mmol 为空的幻影读数并 commit——commit 判据下 11 条全「修对」。这和 W46 数据与同意合规-r02 的「空写入被判正确」同型，是第五类盲区的又一实例；更深一层是 **IR 没有声明批次级仲裁动作**，口语想做的事在本体里没有对应物，所以也写不出诚实的 expect_state（没有 IR 声明的 writes 可推）。登记为 IR 修订候选（批次级去重仲裁动作或把 batch 形态并入 reading_candidate 规范），这 11 条案例在 IR 修订前对 P9 分歧集**不构成证据**。
+
+P9a 的两次 3d 裁决（B_5、B_6）都 ACCEPT、两次 regress 0、Dᵢ 12/15——合入与否仍是用户决定（§5 ④）。verdicts：`6-9-4-{3d,1d}`、`6-10-4-*`、`6-11-4-*`。
+
+### 4.5 本轮方法问题（续 W46 报告 §4）
+
+7. **brief 层 ≠ 案例 tier**（4.1）：补薄层的配额按口语意图写，落案例按引擎裁决分层，t4 配额里被放行的那部分恰是 wrong 候选、落成 t3。分层预估要按「预计裁决」算。
+8. **批次级请求落到单条动作上**（4.4）：路由把 IR 没有的操作套进最近的动作，handler 不校验参数形态就写幻影对象并 commit。两处可修：IR 补动作声明；handler 对缺 reading_id 的候选 fail（这会让 11 条在三份修法下都变 rejected，B_6 仍不分，但至少不再空写）。后者是实现层提案候选，Dᵢ 可用这 11 条。
 
 ## 5. round 5 遗留的四项决定
 
@@ -114,4 +152,4 @@ holdout_sample.py --cases-dir cases --round 6 --holdout-size 40 --stratify famil
 | ① | criteria amend v3（strict 只认 T / S / W，ΔC 只做约束）待导师签字 | 论文侧 `criteria.yaml` 已按 v3 冻结并用于 round 5 第 3 / 4 次裁决和本轮 P12 / P13；交接文件仍写「待签字」。**需要用户确认**：v3 是否已签字；若未签，本轮所有 3d 判定都标 exploratory（已标） |
 | ② | `regress_any` 单条口径要不要进 criteria | **延后，不进 v3**。继续与净口径并排输出（T1 / T2 / metrics），作为 §6 威胁 (d) 的证据；是否进 v4 等 formal 前的 amend 一次性定。另加本轮决定 ②′：**分层键**——用户裁定按 source 键整体重归 W43–W46（override 表，不改文件），见 §2.2 |
 | ③ | W_evid 未实现 | **已实现**（astra d07589d：结构分母 §1 Object + §6 Mapping + §4 function Rule，分子 §8 verified 去重），但 glycowise IR 无 §8（ground 未跑，pg-ro / ch-ro 不可达）→ 读数 null，gate_decide 记 `W_EVID_UNAVAILABLE` 只看 W_family。要让 W_evid 非空，得先跑 ground 填 §8——与数据组无关，是引擎侧的事 |
-| ④ | P9a 未合入；分歧集 {P9b, P9c} 未合入 | **保持未合入**。B_6 对 P9a 的回退判定按协议要在它合入生产之后；合入与否是用户决定，本轮不动生产。若决定合入，走 `git apply studio/changes/glycowise/proposals/P9a.patch` 后重算 h_i 基线再抽 B_6 |
+| ④ | P9a 未合入；分歧集 {P9b, P9c} 未合入 | B_6 已抽，三份修法在 B_6 上重判（§4.4）：P9a 3d 两次 ACCEPT、regress 0；P9b / P9c 3d 仍 REJECT、1d 仍 ACCEPT。**P9a 合入与否等用户决定**；合入则 `git apply P9a.patch` 后重算 h_i，B_6 不必重抽（P9a 的 Dᵢ 已排除） |

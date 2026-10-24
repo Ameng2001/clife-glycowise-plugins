@@ -1,0 +1,70 @@
+# 由 t-20261024-0022 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 结论层与分层-r10
+q: 周先生（P0007）按这 14 天的数据出一个内部服务分层
+expect: action(输出服务分层标签)
+tier: 4
+family: 结论层与分层
+origin: real
+observed_at: '2026-10-24'
+source: brief:结论层与分层#tier3
+elements:
+- 输出服务分层标签
+- CgmSummary
+label:
+  answer: s-P0007-14d gmi 6.15 → L2，P0007 52 岁非老年、非混杂，R18 不响；内部标签走 HIL。
+  source: feedback
+  trace_id: t-20261024-0022
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0007按这 14 天的数据出一个内部服务分层
+  kind: paraphrase
+- q: 周先生（P0007）按这 14 天的数据出一个内部服务分层；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261024-0014
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0015
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0016
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: lab-P0007-hba1c
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0017
+  action: 判定缓解结果
+  params:
+    patient_id: P0007
+    lab_result_id: null
+    summary_id: s-P0007-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261024-0018
+  action: 转介医师
+  params:
+    patient_id: P0007
+    question_context: 患者询问停药期间能否顺便把降压药也停了
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.85
+  action: 输出服务分层标签
+  params:
+    patient_id: P0007
+    window: 14d
