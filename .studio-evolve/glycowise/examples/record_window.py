@@ -103,6 +103,8 @@ def cmd_run(a) -> None:
     print(f"== 真引擎 · 真 Qwen({client.model}) · 本体 {ontology} · schema {schema_version} · 审计库 {a.audit_db} ==")
     n_exec = n_ask = n_other = 0
     for i, it in enumerate(items, 1):
+        if i < a.start:
+            continue
         actor = Actor(it.get("actor", {}).get("id", "u-doctor-01"), it.get("actor", {}).get("role", "医师"))
         key = (actor.id, actor.role)
         if key not in sessions:
@@ -164,9 +166,10 @@ def compiler_raw_oql(reply) -> dict:
     q = reply.oql
 
     def node(n):
-        if hasattr(n, "items") and not hasattr(n, "field"):
-            key = "or" if type(n).__name__ == "Or" else "and"
-            return {key: [node(x) for x in n.items]}
+        if hasattr(n, "any_of"):
+            return {"or": [node(x) for x in n.any_of]}
+        if hasattr(n, "all_of"):
+            return {"and": [node(x) for x in n.all_of]}
         return {"field": n.field, "op": n.op, "value": n.value}
     d = {"start": q.start, "where": [node(x) for x in q.where], "select": list(q.select)}
     if q.steps:
@@ -208,6 +211,7 @@ def main() -> None:
     r.add_argument("--utterances", required=True, type=Path); r.add_argument("--context-file", type=Path)
     r.add_argument("--audit-db", required=True, type=Path); r.add_argument("--llm-config"); r.add_argument("--pin-ip")
     r.add_argument("--seq-base", type=int, default=0); r.add_argument("--sleep", type=float, default=0.3)
+    r.add_argument("--start", type=int, default=1, help="从第几句（1 起）开始跑；中断后续跑用，trace_id 序号按句序延续")
     r.add_argument("--window", help="逻辑窗口号（缺省按录制日 ISO 周）；同一周内录第二个进化窗口时指定，ts 仍如实记录")
     r.set_defaults(fn=cmd_run)
     e = sub.add_parser("export")
