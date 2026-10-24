@@ -2323,9 +2323,7 @@ def C7_患者数据禁止存放非平台工具(ctx) -> RuleResult:
     优先级 680（B7 器械/数据/机构合规 带）· 生效阶段 P1+P2。
     挂载动作：写入外部协作工具。
     """
-    # TODO(FDE): 查写入目标是否为已完成安全评估并签署 DPA 的系统，且本次外传是否已取得第三方 SaaS 传输同意项
-    # 可用：ctx.get / ctx.find / ctx.search_around（写后可见本次暂存写入）
-    raise NotImplementedError("C7_患者数据禁止存放非平台工具 待实现")
+    return _fde.RULES['C7_患者数据禁止存放非平台工具'](ctx)
 
 @spi.rule(ONTOLOGY, "C8_数据出境与境外云禁止", backing=Backing.FUNCTION, severity=Severity.HARD,
           evaluation=Evaluation.PRE,
@@ -3978,12 +3976,7 @@ def 写入外部协作工具(ctx) -> None:
     HIL：合规官（触发条件 always）。
     写入对象：AuditLog。
     """
-    # TODO(FDE): 业务回写。逐个 writes 对象补 stage_write，key 命名由 FDE 定：
-    # ctx.stage_write("AuditLog", f"auditlog_{ctx.params[...]}", {...})
-    # ctx.emit_effect("workitem", on="...", template="...")   # 如需派工单
-    ctx.set_confidence(0.8)
-    # ctx.add_evidence(source="...")                            # 取自命中规则的 source
-    raise NotImplementedError("写入外部协作工具 handler 待实现")
+    _fde.ACTIONS['写入外部协作工具'](ctx)
 
 @spi.action(
     ONTOLOGY, "维护凭证台账",

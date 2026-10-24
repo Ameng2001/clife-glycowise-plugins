@@ -2159,3 +2159,35 @@ def seed_reference_data(store) -> None:
     put("OutboundContent", "c-promo-01", {"content_id": "c-promo-01", "target_audience": "公众", "body": "刘阿姨佩戴 14 天前后血糖对比图：从波动到平稳，看得见的改变。",
                                           "content_type": "宣传素材", "gate_token_ref": None, "disclaimer_attached": False, "patient_ref": "P0012",
                                           "contains_identifiable_patient": True, "is_before_after_comparison": True})
+
+
+@rule("C7_患者数据禁止存放非平台工具")
+def c7(ctx):
+    """P14（W48 / 0236 0272 0285）：IR「病历式数据须在境内加密可审计的平台内，不得用个人版 SaaS 表格；写入第三方 SaaS 即向第三方提供个人信息」。
+    口径与 C3 / C4 同机制：数据主体须有含「第三方工具传输」项、已签名、未撤销的 ConsentRecord。动作参数无 patient_id，约定 payload_ref 含患者编号。
+    目标系统是否完成安全评估 / 签署 DPA 在 IR 里没有对象可查，留给 IR 修订（见 P14.md Risk）。"""
+    target = str(P(ctx, "target_system") or "")
+    ref = str(P(ctx, "payload_ref") or "")
+    m = re.search(r"P\d{4}", ref)
+    pid = pid_of(ctx) or (m.group(0) if m else None)
+    if not pid:
+        return _fail("C7", f"无法确定数据主体（payload_ref={ref!r} 不含患者编号）", "外传载荷须可定位到患者；病历式数据不得写入第三方协作工具")
+    cons = [c for c in ctx.find("ConsentRecord", lambda r: r.get("patient_id") == pid) if c.get("state", "granted") != "revoked"]
+    ok = [c for c in cons if "第三方工具传输" in (c.get("scope_items") or []) and c.get("signed_at")]
+    if not ok:
+        return _fail("C7", f"患者 {pid} 未取得向第三方协作工具（{target or '未指明'}）传输数据的单独同意项；病历式数据须留在境内加密可审计的平台内",
+                     "先登记含「第三方工具传输」的单独同意，并确认目标系统已完成安全评估与 DPA；否则改用平台内视图")
+    return RuleResult.ok()
+
+
+@action("写入外部协作工具")
+def act_write_external(ctx):
+    """P14 配套：动作本身也是桩，guard C7 之前引擎先跑 handler，桩抛错就评不到 C7。按 IR §4 writes AuditLog（actor / action / target / timestamp）；
+    HIL 合规官 always 由动作声明决定。handler 不做任何外传——外传是 commit 后的效应，这里只留审计痕。"""
+    target = str(ctx.params.get("target_system", ""))
+    ref = str(ctx.params.get("payload_ref", ""))
+    log_id = f"audit-ext-{target}-{ref}"
+    ctx.stage_write("AuditLog", log_id, {"log_id": log_id, "actor": ctx.actor.id, "action": "写入外部协作工具", "target": f"{target}:{ref}",
+                                        "timestamp": _now(), "_staged": exec_token(ctx)})
+    ctx.set_confidence(0.8)
+    ctx.add_evidence(target_system=target, payload_ref=ref)

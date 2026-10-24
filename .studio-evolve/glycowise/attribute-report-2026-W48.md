@@ -37,11 +37,13 @@ W48 轨迹 family×tier：低血糖安全 t1 10 · 出口签发闸 t1 7 / t4 6 �
 | 缓解路径 | t4 5 ✗ | t1 11 / t3 5 / t4 5 ✓（并层 10） | 同 ✓ |
 | 高血糖与波动 | t3 8 / t4 1 ✗ | t4 1 ✗ | t1 10 / t3 8 / t4 8 ✓ |
 
-数据与同意合规 t4 的缺口就是 C5 / C7 的 6 句桩：已录的 error 不会变成轨迹，**P14 合入生产后再补录 ≥ 4 句 C7 类口语**（在线表格 / 非平台工具）即可过 8；C5 类口语在 C5 实现前写了也白写。若标注后 partial 把别的层拉回 8 以下，以标注后 `holdout_sample --check-pool --family-override` 为准。
+数据与同意合规 t4 的缺口就是 C5 / C7 的 6 句桩：已录的 error 不会变成轨迹，**P14 已合入（见 §3），W49 brief 补录 C7 类口语 10 句、目标 ≥ 4 句进引擎**即可过 8；C5 类口语在 C5 实现前写了也白写。若标注后 partial 把别的层拉回 8 以下，以标注后 `holdout_sample --check-pool --family-override` 为准。
 
 ## 3. IMPL_MISSING 提案 P14（不等标注；不合入生产）
 
 见 `studio/changes/glycowise/proposals/P14.md`。C7 guard + 写入外部协作工具 handler 两处桩一起补（引擎先跑 handler 再评 guard，只补 guard 评不到）。Dᵢ 3 条 tier4 CQ：h_i IMPL_MISSING 0/9，h' rejected(C7) 9/9；B（临时 holdout-5）/ real-all / sim 两臂逐行相同；**八臂同判 ACCEPT**；台账 round 6 第三行。残余：C7 的 DPA / 安全评估半边 IR 无对象可查，只实现了同意项半边。
+
+**2026-10-24 用户裁定合入生产**：`git apply P14.patch`，h_i 基线重算四集（`results/r6.h_i.post-P14.*.jsonl`）与沙箱逐行相同；`__init__.py` 桩 65 → 63。合入后 W49 补录 brief（`examples/utterances.2026-W49.brief.md`）只写数据与同意合规 t4 的 C7 类口语 10 句（目标 ≥ 4 句进引擎），不写 C5 类。**此后 B_6 / real-all 的 h_i 读数以 post-P14 为准**（P12 / P13 仍未合入）。
 
 ## 4. 归因（待标注）
 

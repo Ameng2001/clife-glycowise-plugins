@@ -26,7 +26,7 @@
 | 5 | 2026-W46 | 11 | 1 | 0.571 | — | 0.812 | 1.000 | 1.000 | 1.000 | 1.000 | — | 0.900 | — | 2.825 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:bc2c318b53068be5 | | P9c 朴素修法（amend §5「删命中的规则分支」：R48 拒绝分支整段删除）：Dᵢ 0/15（无键重复仍错写），B_5 90→93/120（r73/r74 修对、数据与同意合规-r08 由对变错），real-all 471→465（+3 −5），sim 294→291；3d 族 REVISE（无严格改善）、1d ACCEPT、1d-strict REVISE；B_5 净 A +0.025 → arm_compare regress 0——净口径盖住了单条回退 |
 | 6 | 2026-W47 | 12 | 1 | 0.571 | — | 0.750 | 1.000 | 1.000 | 1.000 | 1.000 | — | 0.900 | — | 2.900 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:11a7a4c24504c27a |  |
 | 6 | 2026-W47 | 13 | 1 | 0.571 | — | 0.750 | 1.000 | 1.000 | 1.000 | 1.000 | — | 0.900 | — | 2.900 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:11a7a4c24504c27a |  |
-| 6 | 2026-W48 | 14 | 1 | 0.571 | — | 0.750 | 1.000 | 1.000 | 1.000 | 1.000 | — | 0.900 | — | 2.900 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:b1cf36ede8ac2674 |  |
+| 6 | 2026-W48 | 14 | 1 | 0.571 | — | 0.750 | 1.000 | 1.000 | 1.000 | 1.000 | — | 0.900 | — | 2.900 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:b1cf36ede8ac2674 | 已合入生产（2026-10-24 用户确认 `git apply`；post-P14 h_i 在 Dᵢ 9/9、B_5 90/120、real-all 471/609、B-sim 291/294，与沙箱逐行相同；`results/r6.h_i.post-P14.*.jsonl`） |
 
 > round 1 的 P2 / P3 / P4 于 2026-10-23 经用户确认合入生产（重放编辑，案例库 103 条全过）；合入后 h_i 的全库读数：T=(1,1,1,—) A=1.0 S=1.0 W_family=0.909 C=2.93。
 > round 2（2026-W43，真实窗口）：P5 来自真实轨迹 0018 + reviewed 反馈归因（`attribute-report-2026-W43.md`），B 第一次是 real-only（`sets/holdout-2.yaml`，20 条 / 16 层）。h_i 在 cases/real 33 条上 78/99（D⁻ 7 = rule 1 + router 6），h' 81/99；sim 98/98 不变。P5 于同日经用户确认合入生产（`git apply proposals/P5.patch`）；合入后 h_i：real-all 81/99（剩 6 条路由层 wrong）、B-sim 294/294。
