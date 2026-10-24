@@ -84,6 +84,8 @@ holdout_sample.py --cases-dir cases --round 6 --holdout-size 40 --stratify famil
 
 遗留口径差：`growth_metrics` 的 W_family 与层 T_k 读的是结果行里的 family（runner 从案例文件带出），仍是现行键；round 1–5 的读数不重算。要让读数与留出集同键，runner / growth_metrics 也得读 override 表——登记为 amend 候选，不在本轮改。
 
+**2026-10-24 已改工具侧**（astra：`_common.load_family_override` 三处共用；`runner run` 与 `growth_metrics compute` 加 `--family-override`）。在 post-P1x 的 B_6 / real-all / sim 读数上验证：覆盖 45 / 639 / 0 行，A、T、S、W_family、C 逐项与未覆盖读数相同——W_family 是「至少一条 tier≥2 过的 family 数 / family 数」，每个 family 都有过的案例，重归不改比值；T_k 只按 tier 分层本就不受 family 影响。所以 round 1–6 读数不重算也不失真。**round 7 起所有 runner / growth_metrics 调用都带 `--family-override sets/family-override.yaml`**，与 holdout_sample 同表。
+
 ## 3. IMPL_MISSING 提案 P12 / P13（不等标注；不合入生产）
 
 编号：verdict / 台账里 proposal 9 / 10 / 11 已被 P9a / P9b / P9c 占用，所以这两条从 **P12** 起编（交接文件写的 P10 / P11 对应这里的 P12 / P13）。`growth-ledger.md` 拒绝签名表为空，无命中。
