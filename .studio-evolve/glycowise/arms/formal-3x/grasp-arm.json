@@ -1,0 +1,40 @@
+{
+ "0": {
+  "n_accept": 69,
+  "accept_rate": 0.8625,
+  "regress_rate": 0.01932367149758454,
+  "accepted_also_by_3d": 61,
+  "accepted_not_by_3d": [
+   "P30a",
+   "P30b2",
+   "P33a",
+   "P33b1",
+   "P41a",
+   "P41b1",
+   "P45a",
+   "P45b1"
+  ],
+  "rejected_but_3d_accepts": []
+ },
+ "1": {
+  "n_accept": 73,
+  "accept_rate": 0.9125,
+  "regress_rate": 0.0319634703196347,
+  "accepted_also_by_3d": 61,
+  "accepted_not_by_3d": [
+   "P25b1",
+   "P26b1",
+   "P30a",
+   "P30b1",
+   "P30b2",
+   "P33a",
+   "P33b1",
+   "P41a",
+   "P41b1",
+   "P43b2",
+   "P45a",
+   "P45b1"
+  ],
+  "rejected_but_3d_accepts": []
+ }
+}

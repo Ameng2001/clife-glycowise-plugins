@@ -7,12 +7,23 @@ from collections import defaultdict
 from pathlib import Path
 W = Path(__file__).resolve().parents[2]
 NO_T = "--no-targeted" in sys.argv
+ONT = "--ontology-only" in sys.argv   # 本体口径：剔除标 wrong 且归因到路由层 / seed 层的案例（criteria v3 §3.4）
 MODES = ["3d", "1d", "random", "1d-strict", "none", "3d-noT", "3d-noS", "3d-noW"]
 SEEDS = {R: [R + 1, R + 2, R + 3] for R in (8, 9, 10, 11)}
 drop = set()
 if NO_T:
     for w in range(50, 55):
         drop |= set(yaml.safe_load(open(W / f"sets/targeted-W{w}.yaml"))["ids"])
+if ONT:
+    layer = {}
+    for fb in (W / "examples/trajectories").glob("*/feedback.yaml"):
+        for it in (yaml.safe_load(open(fb, encoding="utf-8")) or {}).get("items", []):
+            layer[it["trace_id"]] = (it.get("label"), it.get("layer"))
+    for cf in (W / "cases/real").glob("*.yaml"):
+        y = yaml.safe_load(open(cf, encoding="utf-8")); t = (y.get("label") or {}).get("trace_id")
+        if t in layer and layer[t][0] == "wrong" and layer[t][1] in ("router", "seed"):
+            drop.add(y["id"])
+    print("本体口径剔除", len(drop), "条（标 wrong 且归因路由层 / seed 层）")
 
 def load(f):
     """原题行：{case: (tier, [pass...])}"""
@@ -97,9 +108,9 @@ for _ in range(1000):
 ci = {k: sorted(v)[24:975:950] for k, v in boots.items()}
 out = dict(arms)
 out.update({"arms": point, "diffs": {k: {"value": pd[k], "ci95": ci[k], "boot": 1000} for k in pd}, "proposals": props,
-            "flags": ["B_NEXT_X3"] + (["NO_TARGETED"] if NO_T else []), "seed": 0, "boot": 1000,
+            "flags": ["B_NEXT_X3"] + (["NO_TARGETED"] if NO_T else []) + (["ONTOLOGY_ONLY"] if ONT else []), "seed": 0, "boot": 1000,
             "resample": {"seeds": SEEDS, "plan": "chains-formal/endpoint-plan-rq1.md", "drop_targeted": NO_T}})
-dst = W / ("arms/formal-3x-notargeted" if NO_T else "arms/formal-3x"); dst.mkdir(parents=True, exist_ok=True)
+dst = W / ("arms/formal-3x-ontology" if ONT else "arms/formal-3x-notargeted" if NO_T else "arms/formal-3x"); dst.mkdir(parents=True, exist_ok=True)
 (dst / "arms.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(json.dumps({m: {k: point[m][k] for k in ("accept_rate", "n_accept", "regress_rate", "regress_any_rate", "n_pairs")} for m in MODES}, ensure_ascii=False))
 print(json.dumps({k: [round(pd[k], 4), [round(x, 4) for x in ci[k]]] for k in pd}, ensure_ascii=False))
