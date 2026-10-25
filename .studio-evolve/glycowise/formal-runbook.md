@@ -35,7 +35,8 @@
 
 ## 6. 合入与下一轮
 - 3d 链的接受集经人确认后合入生产 → h_{r+1}；1d 链的接受集只在 1d 链内前进。
-- 用 `sets/holdout-<r+1>.yaml` 判本轮合入提案的回退（B_{i+1} 口径），读数对 `P<num>-h{i,p}-B<r+1>.json`。
+- 判本轮提案的回退用 B_{i+1} 的**三次重抽**（criteria v5 RQ-1 protocol「三次留出集重抽的结果合并计 n 但 CI 按重抽分层」）：seed = r+1、r+2、r+3，第一份即 `sets/holdout-<r+1>.yaml`；池与排除集同 holdout-<r+1>；判定前剔除本轮之后设计的定向句。seed 表先提交再抽。合并与 CI 见 `chains-formal/endpoint-plan-rq1.md` 与 `chains-formal/rq1-resample/compute.py`。
+  - 2026-10-25 补记（协议偏离 D-6）：formal round 8–11 执行时本条只用了一份 B_{i+1}，已按导师裁定 2026-10-25b §3 补做三次重抽。
 
 ## 7. 每轮必报（RQ-2 v5 (b‴)）
 - ① P-A 反事实：本轮缺陷集在两种闸门下各自的接受集（P-A 的 3d / 1d 两臂）。
