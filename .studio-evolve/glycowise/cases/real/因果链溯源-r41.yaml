@@ -1,0 +1,40 @@
+# 由 t-20261025-0603 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r41
+q: A-P0045-ocr-01 直接升到危急级；黄伯（P0045）老伴在外地。
+expect: rejected(R53_低置信通道不得独立触发危急告警)
+tier: 3
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier3#irrelevant_field
+elements:
+- 升级告警
+- R53_低置信通道不得独立触发危急告警
+label:
+  answer: A-P0045-ocr-01 来自 OCR 截图（置信 0.78，不在可信通道），R53 不允许低置信通道独立升到危急，硬拒成立；0601 的指血 5.0 也说明这条告警很可能是误识别。「老伴在外地」是无关信息。
+  source: feedback
+  trace_id: t-20261025-0603
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: A-P0045-ocr-01 直接升到危急级；P0045老伴在外地。
+  kind: paraphrase
+- q: A-P0045-ocr-01 直接升到危急级；黄伯（P0045）老伴在外地。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0601
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-ocr-01
+    responder: 黄医生
+    action_taken: 已打电话给黄伯（P0045）家属
+    retest_value: 5.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 升级告警
+  params:
+    alert_id: A-P0045-ocr-01
+    level: 3

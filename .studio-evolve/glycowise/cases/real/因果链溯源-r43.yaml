@@ -1,0 +1,84 @@
+# 由 t-20261025-0614 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r43
+q: 黄伯（P0045）复测 4.6，没事了，A-P0045-02 可以结案
+expect: rejected(R44_高危用药禁止闭环)
+tier: 3
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier3
+elements:
+- 响应并回执告警
+- R44_高危用药禁止闭环
+label:
+  answer: 「没事了，可以结案」是闭环请求，P0045 磺脲、prolonged_risk=True，R44 拒成立。
+  source: feedback
+  trace_id: t-20261025-0614
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045复测 4.6，没事了，A-P0045-02 可以结案
+  kind: paraphrase
+- q: 黄伯（P0045）复测 4.6，没事了，A-P0045-02 可以结案；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0601
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-ocr-01
+    responder: 黄医生
+    action_taken: 已打电话给黄伯（P0045）家属
+    retest_value: 5.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0604
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0606
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0045-w41
+    targets:
+    - P0045
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0611
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 医师手动调整
+    new_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0612
+  action: 去重与通道仲裁
+  params:
+    reading_candidate:
+      batch_ref: b-P0045-03
+      patient_id: P0045
+      sensor_serial: SN-P0045-A
+      conflict_reason: duplicate_with_vendor_channel
+      device_context: phone_changed_yesterday
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0613
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测血糖 4.6mmol/L，确认无低血糖风险，予以结案
+    retest_value: 4.6

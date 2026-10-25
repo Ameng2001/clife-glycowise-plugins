@@ -1,0 +1,42 @@
+# 由 t-20261025-0602 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r40
+q: A-P0045-02 是谁回执的，回执里写了什么处置
+expect: query
+tier: 1
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier1#paraphrase
+elements:
+- AlertAck
+label:
+  answer: 窗口内到这条为止没人给 A-P0045-02 回执（0601 回执的是另一条 A-P0045-ocr-01，而且只是 pending_hil），seed 里也没有 AlertAck；0 行就是「还没人回执」，答案对（同 W48 0202）。
+  source: feedback
+  trace_id: t-20261025-0602
+  reviewer: Ameng2001
+  feedback_label: correct
+variants: []
+setup:
+- trace_id: t-20261025-0601
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-ocr-01
+    responder: 黄医生
+    action_taken: 已打电话给黄伯（P0045）家属
+    retest_value: 5.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 1.0
+  oql:
+    start: AlertAck
+    where:
+    - field: alert_id
+      op: eq
+      value: A-P0045-02
+    select:
+    - responder
+    - action_taken
+    - retest_value
+    - responded_at

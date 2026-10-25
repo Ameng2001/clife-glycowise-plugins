@@ -1,0 +1,40 @@
+# 由 t-20261025-0604 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r42
+q: A-P0045-02 升到危急，通知值班医师；黄伯（P0045）儿子今晚不在。
+expect: action(升级告警)
+tier: 4
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier4#irrelevant_field
+elements:
+- 升级告警
+- AlertEvent
+label:
+  answer: A-P0045-02 来自厂商通道（vendor_api 0.99），R53 过；口语明说升到危急，level=3 对应危急，参数对；升级走值班医师 HIL，成立。黄伯磺脲 + IAH 高危，往安全方向升级合理。
+  source: feedback
+  trace_id: t-20261025-0604
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: A-P0045-02 升到危急，通知值班医师；P0045儿子今晚不在。
+  kind: paraphrase
+- q: A-P0045-02 升到危急，通知值班医师；黄伯（P0045）儿子今晚不在。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0601
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-ocr-01
+    responder: 黄医生
+    action_taken: 已打电话给黄伯（P0045）家属
+    retest_value: 5.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.8
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 3

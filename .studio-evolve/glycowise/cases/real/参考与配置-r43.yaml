@@ -1,0 +1,149 @@
+# 由 t-20261025-0628 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r43
+q: 王叔（P0031）夜间低值线收紧到 4.6；他老伴说夜里会起来看。
+expect: action(收紧告警阈值)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-25'
+source: brief:参考与配置#tier3#irrelevant_field
+elements:
+- 收紧告警阈值
+label:
+  answer: 夜间低值线收紧到 4.6，IAH 高危要求 ≥4.4，合规；收紧直接落库，成立。
+  source: feedback
+  trace_id: t-20261025-0628
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0031夜间低值线收紧到 4.6；他老伴说夜里会起来看。
+  kind: paraphrase
+- q: 王叔（P0031）夜间低值线收紧到 4.6；他老伴说夜里会起来看。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0601
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-ocr-01
+    responder: 黄医生
+    action_taken: 已打电话给黄伯（P0045）家属
+    retest_value: 5.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0604
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0606
+  action: 推送方案至患者
+  params:
+    plan_id: plan-P0045-w41
+    targets:
+    - P0045
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0611
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: 医师手动调整
+    new_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0612
+  action: 去重与通道仲裁
+  params:
+    reading_candidate:
+      batch_ref: b-P0045-03
+      patient_id: P0045
+      sensor_serial: SN-P0045-A
+      conflict_reason: duplicate_with_vendor_channel
+      device_context: phone_changed_yesterday
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0613
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0615
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 复测 4.5，今晚继续盯防
+    retest_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0616
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 复测 4.8，等黄医生明天看了再定
+    retest_value: 4.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0618
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 每天一包，血糖曲线会变平
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0619
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 这周门店有体验装
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0620
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 可以和早餐一起冲着喝
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0622
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 患者王叔（P0031）连续两晚出现夜间低血糖，需医师评估。患者白天在菜市场帮忙，体力消耗可能较大，请结合其日间活动与夜间读数分析原因并调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0624
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: 同意
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0625
+  action: 生成方案草稿
+  params:
+    patient_id: P0031
+    analysis_result:
+      summary_id: s-P0031-14d
+    direction: 调整
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: 家属反馈夜间监护
+    new_value: 4.6
