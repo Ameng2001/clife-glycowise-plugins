@@ -49,3 +49,4 @@
 - `chain_drive.py run --manifest chains-r7/3d/manifest-r7.yaml --work-dir .studio-evolve/glycowise/chains-r7 --gate-mode 3d --family-override .studio-evolve/glycowise/sets/family-override.yaml --final-sets sets/real-all.yaml,sets/real-all-W50.yaml,sets/B-sim.yaml …`（`--family-override` 已在 astra 加）。
 - 3d 链起点同 1d：`chains-r7/ancestor-h7`。两链末轮比较用 `sets/real-all-W50.yaml`（376，版本化，旧 `real-all.yaml` 348 不改）：h₇ A .827 / 1d 链末态 .840（`chains-r7/reading-h7-real-all-W50.json`、`chains-r7/1d/readings/final-real-all-W50.json`）。
 - 3d 链的提案同时进 P-A 八臂（`gate_decide` 八个 mode、`--ledger --window 2026-W50`）。若 v5 (b‴) 获签，链上只走根因修，朴素修只进 P-A。
+- **固定运行日期**（2026-10-25 起）：所有 runner / chain_drive 调用带 `--as-of <本轮开始日>`；gate_decide 出现 `AS_OF_MISMATCH` 的裁决须同日重算后再记台账。见 `date-drift-audit.md`。
