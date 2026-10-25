@@ -20,64 +20,64 @@
    "accept_rate": 0.7049180327868853,
    "n_accept": 43,
    "n_judged": 61,
-   "regress_rate": 0.0,
-   "regress_any_rate": 0.0,
+   "regress_rate": 0.046511627906976744,
+   "regress_any_rate": 0.046511627906976744,
    "n_any_known": 43
   },
   "1d": {
    "accept_rate": 0.7049180327868853,
    "n_accept": 43,
    "n_judged": 61,
-   "regress_rate": 0.0,
-   "regress_any_rate": 0.0,
+   "regress_rate": 0.046511627906976744,
+   "regress_any_rate": 0.046511627906976744,
    "n_any_known": 43
   },
   "random": {
    "accept_rate": 0.639344262295082,
    "n_accept": 39,
    "n_judged": 61,
-   "regress_rate": 0.10256410256410256,
-   "regress_any_rate": 0.15384615384615385,
+   "regress_rate": 0.15384615384615385,
+   "regress_any_rate": 0.20512820512820512,
    "n_any_known": 39
   },
   "1d-strict": {
    "accept_rate": 0.7049180327868853,
    "n_accept": 43,
    "n_judged": 61,
-   "regress_rate": 0.0,
-   "regress_any_rate": 0.0,
+   "regress_rate": 0.046511627906976744,
+   "regress_any_rate": 0.046511627906976744,
    "n_any_known": 43
   },
   "none": {
    "accept_rate": 1.0,
    "n_accept": 61,
    "n_judged": 61,
-   "regress_rate": 0.09836065573770492,
-   "regress_any_rate": 0.13114754098360656,
+   "regress_rate": 0.11475409836065574,
+   "regress_any_rate": 0.14754098360655737,
    "n_any_known": 61
   },
   "3d-noT": {
    "accept_rate": 0.7049180327868853,
    "n_accept": 43,
    "n_judged": 61,
-   "regress_rate": 0.0,
-   "regress_any_rate": 0.0,
+   "regress_rate": 0.046511627906976744,
+   "regress_any_rate": 0.046511627906976744,
    "n_any_known": 43
   },
   "3d-noS": {
    "accept_rate": 0.7049180327868853,
    "n_accept": 43,
    "n_judged": 61,
-   "regress_rate": 0.0,
-   "regress_any_rate": 0.0,
+   "regress_rate": 0.046511627906976744,
+   "regress_any_rate": 0.046511627906976744,
    "n_any_known": 43
   },
   "3d-noW": {
    "accept_rate": 0.7049180327868853,
    "n_accept": 43,
    "n_judged": 61,
-   "regress_rate": 0.0,
-   "regress_any_rate": 0.0,
+   "regress_rate": 0.046511627906976744,
+   "regress_any_rate": 0.046511627906976744,
    "n_any_known": 43
   }
  },
@@ -99,10 +99,10 @@
    "boot": 1000
   },
   "random_minus_3d": {
-   "value": 0.10256410256410256,
+   "value": 0.10733452593917711,
    "ci95": [
-    0.023809523809523808,
-    0.2
+    0.02631578947368421,
+    0.20087609511889865
    ],
    "boot": 1000
   },
@@ -165,9 +165,7 @@
   "unknown": 0
  },
  "n": 43,
- "flags": [
-  "REGRESS_MIXED_B"
- ],
+ "flags": [],
  "seed": 0,
  "boot": 1000,
  "tier_min": 8,
@@ -545,7 +543,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -566,16 +564,11 @@
     "3d-noS": false,
     "3d-noW": false
    },
-   "regress": 1,
-   "regress_why": [
-    "default:dA=-0.010",
-    "default:dT_3=-0.023"
-   ],
-   "regress_any": 1,
-   "regress_any_cases": [
-    "产品与机构合规-r59"
-   ],
-   "regress_basis": "B_same",
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
    "reject_dim_3d": "outer",
    "window": null,
    "origins": {
@@ -600,7 +593,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -625,7 +618,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -648,18 +641,16 @@
    },
    "regress": 1,
    "regress_why": [
-    "default:dA=-0.040",
-    "default:dT_3=-0.023",
-    "default:dT_4=-0.115"
+    "next:dA=-0.030",
+    "next:dT_4=-0.120"
    ],
    "regress_any": 1,
    "regress_any_cases": [
-    "产品与机构合规-r55",
-    "低血糖安全-r45",
-    "指标口径-r16",
-    "指标口径-r37"
+    "产品与机构合规-r21",
+    "指标口径-r37",
+    "结论层与分层-r13"
    ],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "outer",
    "window": null,
    "origins": {
@@ -684,7 +675,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -709,7 +700,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -734,7 +725,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -759,7 +750,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -780,11 +771,16 @@
     "3d-noS": true,
     "3d-noW": true
    },
-   "regress": 0,
-   "regress_why": [],
-   "regress_any": 0,
-   "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress": 1,
+   "regress_why": [
+    "next:dA=-0.010",
+    "next:dT_1=-0.036"
+   ],
+   "regress_any": 1,
+   "regress_any_cases": [
+    "参考与配置-r52"
+   ],
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -809,7 +805,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -832,19 +828,18 @@
    },
    "regress": 1,
    "regress_why": [
-    "default:dA=-0.050",
-    "default:dT_3=-0.045",
-    "default:dT_4=-0.115"
+    "next:dA=-0.040",
+    "next:dT_3=-0.022",
+    "next:dT_4=-0.120"
    ],
    "regress_any": 1,
    "regress_any_cases": [
-    "出口签发闸-r42",
-    "指标口径-r03",
-    "指标口径-r16",
+    "出口签发闸-r16",
     "指标口径-r37",
+    "结论层与分层-r13",
     "结论层与分层-r45"
    ],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "outer",
    "window": null,
    "origins": {
@@ -869,7 +864,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -894,7 +889,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -917,17 +912,16 @@
    },
    "regress": 1,
    "regress_why": [
-    "default:dA=-0.030",
-    "default:dT_3=-0.023",
-    "default:dT_4=-0.077"
+    "next:dA=-0.020",
+    "next:dT_4=-0.080"
    ],
    "regress_any": 1,
    "regress_any_cases": [
-    "出口签发闸-r42",
-    "指标口径-r16",
-    "指标口径-r37"
+    "出口签发闸-r16",
+    "指标口径-r37",
+    "结论层与分层-r13"
    ],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "outer",
    "window": null,
    "origins": {
@@ -952,7 +946,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -977,7 +971,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1002,7 +996,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1027,7 +1021,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1052,7 +1046,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1077,7 +1071,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1102,7 +1096,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1127,7 +1121,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1152,7 +1146,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1177,7 +1171,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -1202,7 +1196,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -1227,7 +1221,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1252,7 +1246,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1277,7 +1271,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1302,7 +1296,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1325,14 +1319,15 @@
    },
    "regress": 1,
    "regress_why": [
-    "default:dA=-0.010",
-    "default:dT_3=-0.023"
+    "next:dA=-0.010",
+    "next:dT_3=-0.022"
    ],
    "regress_any": 1,
    "regress_any_cases": [
-    "产品与机构合规-r26"
+    "产品与机构合规-r43",
+    "产品与机构合规-r44"
    ],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "outer",
    "window": null,
    "origins": {
@@ -1357,7 +1352,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1382,7 +1377,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1407,7 +1402,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1432,7 +1427,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -1457,7 +1452,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "C",
    "window": null,
    "origins": {
@@ -1478,11 +1473,16 @@
     "3d-noS": true,
     "3d-noW": true
    },
-   "regress": 0,
-   "regress_why": [],
-   "regress_any": 0,
-   "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress": 1,
+   "regress_why": [
+    "next:dA=-0.010",
+    "next:dT_1=-0.036"
+   ],
+   "regress_any": 1,
+   "regress_any_cases": [
+    "参考与配置-r52"
+   ],
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1507,7 +1507,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1532,7 +1532,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1557,7 +1557,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1580,19 +1580,18 @@
    },
    "regress": 1,
    "regress_why": [
-    "default:dA=-0.050",
-    "default:dT_3=-0.045",
-    "default:dT_4=-0.115"
+    "next:dA=-0.040",
+    "next:dT_3=-0.022",
+    "next:dT_4=-0.120"
    ],
    "regress_any": 1,
    "regress_any_cases": [
-    "出口签发闸-r42",
-    "指标口径-r03",
-    "指标口径-r16",
+    "出口签发闸-r16",
     "指标口径-r37",
+    "结论层与分层-r13",
     "结论层与分层-r45"
    ],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "outer",
    "window": null,
    "origins": {
@@ -1617,7 +1616,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1642,7 +1641,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1667,7 +1666,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1692,7 +1691,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1717,7 +1716,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1742,7 +1741,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {

@@ -2,27 +2,27 @@
  "metrics": {
   "regress_rate_diff": 0.0,
   "regress_any_diff": 0.0,
-  "random_minus_3d": 0.10256410256410256,
+  "random_minus_3d": 0.10733452593917711,
   "1d-strict_minus_3d": 0.0,
   "3d-noT_minus_3d": 0.0,
   "3d-noS_minus_3d": 0.0,
   "3d-noW_minus_3d": 0.0,
-  "regress_rate_3d": 0.0,
-  "regress_rate_1d": 0.0,
-  "regress_rate_random": 0.10256410256410256,
-  "regress_rate_1d-strict": 0.0,
-  "regress_rate_none": 0.09836065573770492,
-  "regress_rate_3d-noT": 0.0,
-  "regress_rate_3d-noS": 0.0,
-  "regress_rate_3d-noW": 0.0,
-  "regress_any_rate_3d": 0.0,
-  "regress_any_rate_1d": 0.0,
-  "regress_any_rate_random": 0.15384615384615385,
-  "regress_any_rate_1d-strict": 0.0,
-  "regress_any_rate_none": 0.13114754098360656,
-  "regress_any_rate_3d-noT": 0.0,
-  "regress_any_rate_3d-noS": 0.0,
-  "regress_any_rate_3d-noW": 0.0,
+  "regress_rate_3d": 0.046511627906976744,
+  "regress_rate_1d": 0.046511627906976744,
+  "regress_rate_random": 0.15384615384615385,
+  "regress_rate_1d-strict": 0.046511627906976744,
+  "regress_rate_none": 0.11475409836065574,
+  "regress_rate_3d-noT": 0.046511627906976744,
+  "regress_rate_3d-noS": 0.046511627906976744,
+  "regress_rate_3d-noW": 0.046511627906976744,
+  "regress_any_rate_3d": 0.046511627906976744,
+  "regress_any_rate_1d": 0.046511627906976744,
+  "regress_any_rate_random": 0.20512820512820512,
+  "regress_any_rate_1d-strict": 0.046511627906976744,
+  "regress_any_rate_none": 0.14754098360655737,
+  "regress_any_rate_3d-noT": 0.046511627906976744,
+  "regress_any_rate_3d-noS": 0.046511627906976744,
+  "regress_any_rate_3d-noW": 0.046511627906976744,
   "divergent_regress_any_rate": null,
   "accept_rate_3d": 0.7049180327868853,
   "accept_rate_1d": 0.7049180327868853,
@@ -35,9 +35,7 @@
   "divergent_regress_rate": null
  },
  "n": 43,
- "flags": [
-  "REGRESS_MIXED_B"
- ],
+ "flags": [],
  "ci": {
   "regress_rate_diff": [
    0.0,
@@ -48,8 +46,8 @@
    0.0
   ],
   "random_minus_3d": [
-   0.023809523809523808,
-   0.2
+   0.02631578947368421,
+   0.20087609511889865
   ],
   "1d-strict_minus_3d": [
    0.0,
