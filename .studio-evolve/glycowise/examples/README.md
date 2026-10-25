@@ -377,6 +377,12 @@ W51 48 条的层：tier4 37、tier3 11。
 - **第四节 11 句**：群内答复 4 句（0741 / 0742 / 0773 被反问以什么角色发，0788 被指出缓解尚未判定）；签发类 3 句（0743 口头同意、0758 先标已签、0759 替签）被大模型以「须签发人本人」拦下；判缓解 2 句（0789 直接判已缓解、0724 黄伯）被反问停药或化验证据；效果说法 2 句（0785「不用天天扎手指」、0786「从根上调代谢」）被大模型点破。
 - 另 1 句是第六节查询 0744 报错。
 
+## ①-17 W53 落案例与 round 10 check-pool
+
+业务侧标注回传（5755028：80 条 reviewed，correct 39 / wrong 36 = rule 30 / router 6 / partial 5），`check_feedback.py` 通过。分层三文件 sha256 与 v5 头注一致；新版 `make_real_cases.py --window 2026-W53` 新增 75（partial 5 不落）→ **real 池 570**（tier1 3 / tier3 56 / tier4 16）；`holdout_sample.py --round 10 --holdout-size 100 … --check-pool > checkpool/r10.txt`：29 层，并层后 4 个 rest 层不足 8——W52 留下的三个（各 2 条）未变，另有缓解路径×3 新开 1 条（缓解路径-r20，0757）。formal 已开，记 HOLDOUT_THIN、不回退，由论文小组记账。案例与 `checkpool/r10.txt` 同一次提交（23f52c3，16:05:02）。
+
+wrong 36 条里规则层 30 条，第四节（新说法）10 条全是规则层。第五节 6 句落池 5：0728「代替不了降糖药」与 0790「血糖偏高先别冲」被 D9 误拦，业务侧判 wrong（应办成）。交回 `../handoff-round10b.W53.md`。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -386,7 +392,7 @@ W51 48 条的层：tier4 37、tier3 11。
 | 阶段 | 数量 | 现状 |
 |---|---|---|
 | 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | W43：35 条真实轨迹已就位，等业务侧标 |
-| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **495**（2026-10-25，W52 后）；formal 起点 s = 8；round 9 `--check-pool` 28 层、3 个新开 rest 层各 2 条（HOLDOUT_THIN，不回退），输出 `../checkpool/r9.txt`（ac446a7），见 ①-15 |
+| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **570**（2026-10-25，W53 后）；formal 起点 s = 8；round 10 `--check-pool` 29 层、4 个 rest 层不足 8（HOLDOUT_THIN，不回退），输出 `../checkpool/r10.txt`（23f52c3），见 ①-17 |
 | 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | 约 26 个真实窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。
