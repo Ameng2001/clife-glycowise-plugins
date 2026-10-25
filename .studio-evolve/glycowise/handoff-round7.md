@@ -50,3 +50,4 @@
 - 3d 链起点同 1d：`chains-r7/ancestor-h7`。两链末轮比较用 `sets/real-all-W50.yaml`（376，版本化，旧 `real-all.yaml` 348 不改）：h₇ A .827 / 1d 链末态 .840（`chains-r7/reading-h7-real-all-W50.json`、`chains-r7/1d/readings/final-real-all-W50.json`）。
 - 3d 链的提案同时进 P-A 八臂（`gate_decide` 八个 mode、`--ledger --window 2026-W50`）。若 v5 (b‴) 获签，链上只走根因修，朴素修只进 P-A。
 - **固定运行日期**（2026-10-25 起）：所有 runner / chain_drive 调用带 `--as-of <本轮开始日>`；gate_decide 出现 `AS_OF_MISMATCH` 的裁决须同日重算后再记台账。见 `date-drift-audit.md`。
+- **round 7 收尾（2026-10-25）**：P22a、P23a 合入生产 → h₈；W51 在 h₈ 上录制。1d 演练链不合入。
