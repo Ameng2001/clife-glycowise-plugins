@@ -1,0 +1,24 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -591,11 +591,21 @@
+     if appr is not True:
+         return _fail("R51", f"内容含分层/分型结论，患者 {pid or '?'} 的 disclosure_approved 不是 true，不得直推患者", "由医师在面诊后授权披露（disclosure_approved=true）")
+     return RuleResult.ok()
++
++
++# P44a（W53 / 0799 0800）：IR R54 管的是「夜间安全承诺」这层意思——暗示夜里 / 睡着时有人或系统在看着、出事能及时知道。NIGHT_PROMISE 只是几种
++# 固定说法，「夜里有专人看着数据」「睡着了也有人替您守着血糖」换个说法就漏。改为同一句里「夜间 / 睡眠时段」与「有人值守 / 看护」两要素同时出现即算承诺，
++# 字面词表保留。值守要素要求有值守主体（有人 / 专人 / 护士 / 团队 / 系统……）或「看着数据 / 守着血糖 / 放心睡」这类直接的看护断言，「晚上记得测一次」不算。
++NIGHT_CTX_RE = re.compile(r"夜里|夜间|夜晚|晚上|半夜|深夜|整夜|通宵|凌晨|睡着|睡觉|入睡|睡梦|熟睡|24\s*小时|全天候")
++NIGHT_GUARD_RE = re.compile(r"(有人|专人|护士|医生|医师|健管师|团队|值班|我们|系统)[^。；，,！!]{0,6}(看着|守着|盯着|守护|看护|监护|值守|替您|帮您看|照看)"
++                            r"|(看着|守着|盯着)(数据|血糖|曲线)|放心睡|安心睡")
+ 
+ 
+ @rule("R54_服务话术不得含夜间安全承诺")
+ def r54(ctx):
+     h = hits(text_of(ctx), NIGHT_PROMISE)
++    if not h:
++        h = [s.strip()[:30] for s in sentences(text_of(ctx)) if NIGHT_CTX_RE.search(s) and NIGHT_GUARD_RE.search(s)][:1]
+     if h:
+         return _fail("R54", f"对外话术含夜间安全承诺 {h}，载体与夜间值班未落地前为硬红线", "删除承诺性表述，改为「数据同步后由健管师在工作时间复核」")
+     return RuleResult.ok()

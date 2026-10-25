@@ -1,0 +1,14 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -552,9 +552,9 @@
+         return None
+     for s in sentences(text):
+         if any(p in s for p in prods) or P(ctx, "pitch"):
++            # P31b1（朴素·删掉命中的放行分支）：原「if m:」放行判断删去
+             m = EFFICACY_RE.search(s)
+-            if m:
+-                return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
++            return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0) if m else ''}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
+     return None
+ 
+ 

@@ -1,0 +1,8 @@
+# 机械转换自 P40-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P40
+round: 10
+chain: 1d
+window: 2026-W53
+note: R01 未管 生成方案草稿 的强化方向；R22 在数据不足时仍下黎明现象结论
+ids:
+- 高血糖与波动-r60

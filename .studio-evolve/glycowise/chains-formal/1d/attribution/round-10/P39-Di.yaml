@@ -1,0 +1,8 @@
+# round 10 · 1d 链 · P39 的来源案例集 Dᵢ（W53 业务侧标 wrong 的案例；低血糖安全-r47 为 W52 遗留）
+proposal: P39
+round: 10
+chain: 1d
+window: 2026-W53
+note: R44：闭环请求取不到患者（告警反查不到）时直接放行
+source_cases:
+- 低血糖安全-r63

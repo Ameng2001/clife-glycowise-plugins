@@ -1,0 +1,38 @@
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -3433,7 +3433,8 @@
+         ParamSpec("analysis_result", "object", required=True),
+         ParamSpec("direction", "string", required=False),
+     ),
+-    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行"),
++    # P40a（W53 / 0772）：强化方向的草稿 = 先下了「未达标、需加强治疗」的结论，属 R01 管的结论层；R01 只对强化方向生效（见 _fde.r01）
++    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行", "R01_数据充分性门槛_仅管结论层"),
+     post_rules=(
+         "低血糖优先抢占",
+         "D10_用药建议拦截",
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -397,6 +397,10 @@
+ @rule("R01_数据充分性门槛_仅管结论层")
+ def r01(ctx):
+     pid = pid_of(ctx)
++    # P40a（W53 / 0772）：生成方案草稿 只有「强化」方向等于下了「未达标、需加强降糖」的结论（R01 管的结论层）；维持 / 去强化 / 未写方向的草稿
++    #   是趋势描述或安全方向，不受 R01 约束（W52 0657 的 6 天维持草稿判 correct）。草稿调用以 analysis_result 参数识别。
++    if P(ctx, "analysis_result") is not None and _direction(ctx) != "强化":
++        return RuleResult.ok()
+     s = summary_of(ctx, pid)
+     days = _num(P(ctx, "days")) or _num(s.get("days"))
+     active = _num(P(ctx, "active_pct")) or _num(s.get("active_pct"))
+@@ -1049,6 +1053,12 @@
+ def r22(ctx):
+     pid = pid_of(ctx)
+     if not pid:
++        return RuleResult.ok()
++    # P40a（W53 / 0772）：黎明现象是「14 天中 ≥半数天」的模式判断，属结论层；窗口不满 14 天 + 有效 ≥70%（R01 门槛）时样本天数不足以下这个结论，
++    #   6 天里 4 天上升不等于 14 天里过半。数据不足时不评（交 R01 管），不再给出「疑黎明现象」提示。
++    s = summary_of(ctx, pid)
++    days, active = _num(s.get("days")), _num(s.get("active_pct"))
++    if days is None or active is None or days < 14 or active < 70:
+         return RuleResult.ok()
+     rows = readings_of(ctx, pid, days=14, clean_only=True)
+     by_day = {}

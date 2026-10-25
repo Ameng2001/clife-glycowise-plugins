@@ -1,0 +1,13 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -573,8 +573,8 @@
+         attached = P(ctx, "disclaimer_attached")
+         if attached is None:
+             attached = ("固体饮料" in text and "不替代药物" in text) or bool(staged_outbound(ctx).get("disclaimer_attached"))
+-        if attached is not True:
+-            return _fail("R32", "产品推荐缺少「固体饮料，不替代药物」尾注", "附固定尾注后再出")
++        # P30b1（朴素·删掉命中的放行分支）：原「尾注已附 → 放行」分支删去
++        return _fail("R32", "产品推荐缺少「固体饮料，不替代药物」尾注", "附固定尾注后再出")
+     return RuleResult.ok()
+ 
+ 

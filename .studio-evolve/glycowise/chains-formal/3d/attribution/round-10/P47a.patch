@@ -1,0 +1,13 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -868,6 +868,10 @@
+ def c20(ctx):
+     ev = _alert(ctx)
+     if not ev:
++        # P47a（W53 / 0752）：C20 的本意是回执 / 推送必须挂在系统自动触发、有 rule_id 的告警上。指名的告警在系统里根本不存在，同样不满足——
++        # 此前「找不到告警就放行」，给不存在的 A-P0012-02 写回执进了人审。没指名告警（无 alert_id）的调用照旧放行。
++        if P(ctx, "alert_id"):
++            return _fail("C20", f"告警 {P(ctx, 'alert_id')} 在系统里不存在：回执 / 推送只能挂在系统自动触发、有 rule_id 的告警上", "核对告警编号；人工发现的危急值先走系统告警再回执")
+         return RuleResult.ok()
+     if not ev.get("rule_id") or ev.get("manual_report") is True:
+         return _fail("C20", "该告警不是系统阈值自动触发（无 rule_id 或为人工群聊上报）", "危急值须系统自动告警直达值班医师并记录响应时间")

@@ -1,0 +1,66 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -728,10 +728,53 @@
+ def _staged_alert(ctx):
+     rows = ctx.find("AlertEvent", lambda r: is_staged(ctx, r))
+     return rows[-1] if rows else {}
++
++
++# P33a（W52 / 0649 · W53 / 0732 0735 0747 0751 0761 0764）：R03a / R04a 是实时低血糖告警的**确认条件**——IR：「连续 2 个读数确认 G<3.0 / 3.0≤G<3.9
++#   即触发」。触发低血糖处置 引用一条读数发起处置时，这条读数本身就是确认的起点；原实现只在读数落在本级区间时才往下查，
++#   读数不存在（编号超出范围、夜间掉数）或读数值根本不是低血糖（10.8 / 11.7 / 12.1）时直接放行，handler 照样建 AlertEvent。
++#   按确认语义补两条前提：① 引用的读数必须存在；② 读数值必须处于低血糖区间（<3.9）。不满足即「本级确认不成立」。
++#   哪条规则来判，看动作请求的级别（rule_id 里的 Level 1 / Level 2 / R04a / R03a）：请求 L2 → R03a，请求 L1 → R04a，未写级别 → 两条都判。
++#   读数 <3.9 但级别与请求不一致（请求 L1、实际 2.6）不在此拦：handler 按读数值定告警级别，原有连续确认分支照常评。
++#   只在带 reading_id 的调用上生效（推送告警 等不引用读数的动作不受影响）。
++_HYPO_L2_RE = re.compile(r"(level|lv|l)\s*[_\-]?\s*2|二级|2\s*级|R03", re.I)
++_HYPO_L1_RE = re.compile(r"(level|lv|l)\s*[_\-]?\s*1|一级|1\s*级|R04", re.I)
++
++
++def _requested_hypo_level(ctx):
++    rid = str(P(ctx, "rule_id") or "")
++    l2, l1 = bool(_HYPO_L2_RE.search(rid)), bool(_HYPO_L1_RE.search(rid))
++    if l2 and not l1:
++        return 2
++    if l1 and not l2:
++        return 1
++    return None
++
++
++def _hypo_trigger_unconfirmed(ctx, level):
++    """引用读数发起 Level{level} 处置时，读数不存在或不在低血糖区间 → 返回原因；否则 None。"""
++    rid = P(ctx, "reading_id")
++    if rid is None:
++        return None
++    req = _requested_hypo_level(ctx)
++    if req is not None and req != level:
++        return None
++    r = _reading(ctx)
++    if not r:
++        return f"引用的读数 {rid} 不存在，无读数可确认 Level {level} 低血糖"
++    g = _num(r.get("value_mmol"))
++    if g is None:
++        return f"读数 {rid} 无数值，无法确认 Level {level} 低血糖"
++    if g >= 3.9:
++        return f"读数 {rid} 的值 {g} 不在低血糖区间（<3.9），Level {level} 确认不成立"
++    return None
+ 
+ 
+ @rule("R03a_Level2低血糖_实时告警")
+ def r03a(ctx):
++    why = _hypo_trigger_unconfirmed(ctx, 2)
++    if why:
++        return _fail("R03a", why, "核对读数编号；口语里的新测值请先作为指血读数录入再判")
+     r = _reading(ctx)
+     g = _num(r.get("value_mmol"))
+     if g is None or g >= 3.0:
+@@ -747,6 +790,9 @@
+ 
+ @rule("R04a_Level1低血糖_实时告警")
+ def r04a(ctx):
++    why = _hypo_trigger_unconfirmed(ctx, 1)
++    if why:
++        return _fail("R04a", why, "核对读数编号；口语里的新测值请先作为指血读数录入再判")
+     r = _reading(ctx)
+     g = _num(r.get("value_mmol"))
+     if g is None or not (3.0 <= g < 3.9):

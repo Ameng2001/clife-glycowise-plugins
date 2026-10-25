@@ -1,0 +1,26 @@
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -3386,6 +3386,9 @@
+         ParamSpec("trigger_rule", "string", required=True),
+         ParamSpec("new_value", "number", required=False),
+     ),
++    # P34a（W53 / 0705）：R46 约束的是 IAH 高危患者「低值阈值 ≥4.4」这个**结果**，与改阈值走哪个动作无关；只挂在 放宽 / 配置 上，
++    #   收紧 动作把低值线写成 4.3（低于 4.4）就绕过了它。收紧 是自动通道（不经医师），更需要这道前置。
++    guards=("R46_IAH高危阈值上调且禁止静音",),
+     post_rules=("R27_运动后延迟低血糖", "R34_HAAF_24小时复发窗"),
+     writes=("AlertThreshold", "ThresholdChangeLog"),
+     validate_supported=True,
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1155,7 +1155,10 @@
+     if iah is not True:
+         return RuleResult.ok()
+     field = str(P(ctx, "field") or "")
+-    th = _num(P(ctx, "alert_threshold")) if P(ctx, "alert_threshold") is not None else (_num(P(ctx, "new_value")) if ("low" in field or "低" in field) else _night_threshold_after(ctx, pid))
++    low_field = "low" in field or "低" in field
++    # P34a：本次改的是高值类字段（high / 高值）时，低值阈值没有被这次写入改变，不拿已有的夜间低值行来判本次动作
++    high_field = bool(field) and not low_field and ("high" in field or "高" in field)
++    th = _num(P(ctx, "alert_threshold")) if P(ctx, "alert_threshold") is not None else (_num(P(ctx, "new_value")) if low_field else (None if high_field else _night_threshold_after(ctx, pid)))
+     mute = P(ctx, "night_mute_allowed")
+     if mute is True or (th is not None and th < 4.4):
+         return _fail("R46", f"无感知低血糖高危患者 {pid}：低值阈值 {th} 不得低于 4.4，且不可夜间静音（night_mute_allowed={mute}）", "阈值 ≥4.4 并保留夜间告警")

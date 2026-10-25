@@ -1,0 +1,8 @@
+# round 10 · 1d 链 · P37 的来源案例集 Dᵢ（W53 业务侧标 wrong 的案例；低血糖安全-r47 为 W52 遗留）
+proposal: P37
+round: 10
+chain: 1d
+window: 2026-W53
+note: R24b 未挂在 群内答复患者 上：G>16.7 时群内仍可发运动建议
+source_cases:
+- 高血糖与波动-r52

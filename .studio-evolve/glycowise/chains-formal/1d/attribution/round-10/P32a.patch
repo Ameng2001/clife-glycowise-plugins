@@ -1,0 +1,37 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -594,9 +594,24 @@
+     return RuleResult.ok()
+ 
+ 
++# P32a（W53 / 0799 0800）：IR R54 拦的是「夜里有人替您看着、出事有人知道」这一**承诺语义**——一期没有夜间值班与载体，任何说法都兑现不了。
++#   NIGHT_PROMISE 是字面词表，「夜里有专人看着数据，您放心睡」「睡着了也有人替您守着血糖」换个说法就漏。按语义归纳为：
++#   夜间 / 睡眠时段词 与 有人值守谓词（有人 / 专人 + 看 / 守 / 盯 / 照看）同句，或以「放心睡」做安全担保。
++#   如实告知能力边界的否定式（「夜里没有人值守」「夜间暂无人工看护」「一期无当夜干预能力」）不是承诺，同句出现否定值守即不算。
++_NIGHT_TIME = r"(夜里|夜间|半夜|深夜|晚上|整夜|通宵|夜班|睡着|睡觉|入睡|睡梦|熟睡|睡下)"
++_NIGHT_GUARD = r"(有人|专人|值班|值守|守着|看着|盯着|守护|看护|监护|照看|帮您看|替您看|替您守)"
++NIGHT_PROMISE_RE = re.compile(rf"{_NIGHT_TIME}[^。；！？\n]{{0,12}}{_NIGHT_GUARD}|{_NIGHT_GUARD}[^。；！？\n]{{0,12}}{_NIGHT_TIME}|放心(地)?(睡|入睡|睡觉)")
++NIGHT_NEG_RE = re.compile(r"(没有|没|无|暂无|暂不|不能|无法|不会|不提供|不具备)[^。；！？\n]{0,4}(人|专人|值班|值守|看护|监护|干预|守护)")
++
++
++def _night_promise_sentences(text):
++    return [s.strip() for s in sentences(text) if NIGHT_PROMISE_RE.search(s) and not NIGHT_NEG_RE.search(s)]
++
++
+ @rule("R54_服务话术不得含夜间安全承诺")
+ def r54(ctx):
+-    h = hits(text_of(ctx), NIGHT_PROMISE)
++    text = text_of(ctx)
++    h = hits(text, NIGHT_PROMISE) + _night_promise_sentences(text)
+     if h:
+         return _fail("R54", f"对外话术含夜间安全承诺 {h}，载体与夜间值班未落地前为硬红线", "删除承诺性表述，改为「数据同步后由健管师在工作时间复核」")
+     return RuleResult.ok()
+@@ -1925,7 +1940,7 @@
+         hit_rules.append("D10_用药建议拦截")
+     if DIAG_CERTAIN_RE.search(text):
+         hit_rules.append("D11_未确认分型分级措辞拦截")
+-    if hits(text, NIGHT_PROMISE):
++    if hits(text, NIGHT_PROMISE) or _night_promise_sentences(text):  # P32a：与 R54 同口径
+         hit_rules.append("R54_服务话术不得含夜间安全承诺")
+     for s in sentences(text):
+         if product_mention(ctx, s) and (TIER_RE.search(s) or REMISSION_RE.search(s)):

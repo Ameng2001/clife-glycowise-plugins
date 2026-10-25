@@ -1,0 +1,8 @@
+# 机械转换自 P36-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P36
+round: 10
+chain: 1d
+window: 2026-W53
+note: C6：原始血糖值正则要求带 mmol 单位，「血糖 14.0」漏过
+ids:
+- 高血糖与波动-r54

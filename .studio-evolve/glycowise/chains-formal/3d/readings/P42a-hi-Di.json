@@ -1,0 +1,53 @@
+{
+  "n_cases": 5,
+  "n_rows": 45,
+  "n_tier": {
+    "1": 0,
+    "2": 0,
+    "3": 15,
+    "4": 0
+  },
+  "origins": {
+    "real": 5
+  },
+  "case_pass": {
+    "产品与机构合规-r70": 0.0,
+    "产品与机构合规-r71": 0.0,
+    "产品与机构合规-r72": 0.0,
+    "产品与机构合规-r76": 0.0,
+    "产品与机构合规-r78": 0.0
+  },
+  "T": {
+    "T_1": null,
+    "T_2": null,
+    "T_3": 0.0,
+    "T_4": null
+  },
+  "T_max": 0,
+  "A": 0.0,
+  "S_consist": 1.0,
+  "S_stable": 1.0,
+  "W_family": 0.0,
+  "C": {
+    "steps": 2.0,
+    "tokens": null,
+    "wall_s": 0.0008266666666666666
+  },
+  "C_gate": 2.0,
+  "runs": 3,
+  "n_unscored": 0,
+  "flags": [
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "family_override": ".studio-evolve/glycowise/sets/family-override.yaml",
+  "family_overridden": 0,
+  "state": "h_i",
+  "as_of": [
+    "2026-10-25"
+  ],
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:2d1e57d8b2ed7bef0ff9f5c483e38fdb2d6f1462bea9b4406f521251813c9595",
+  "exec": "AUTO"
+}

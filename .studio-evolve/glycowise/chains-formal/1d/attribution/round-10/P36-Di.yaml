@@ -1,0 +1,8 @@
+# round 10 · 1d 链 · P36 的来源案例集 Dᵢ（W53 业务侧标 wrong 的案例；低血糖安全-r47 为 W52 遗留）
+proposal: P36
+round: 10
+chain: 1d
+window: 2026-W53
+note: C6：原始血糖值正则要求带 mmol 单位，「血糖 14.0」漏过
+source_cases:
+- 高血糖与波动-r54

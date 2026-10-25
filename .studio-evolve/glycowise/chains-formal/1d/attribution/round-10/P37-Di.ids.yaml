@@ -1,0 +1,8 @@
+# 机械转换自 P37-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P37
+round: 10
+chain: 1d
+window: 2026-W53
+note: R24b 未挂在 群内答复患者 上：G>16.7 时群内仍可发运动建议
+ids:
+- 高血糖与波动-r52

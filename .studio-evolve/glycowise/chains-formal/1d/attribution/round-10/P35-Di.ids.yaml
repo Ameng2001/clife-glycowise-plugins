@@ -1,0 +1,11 @@
+# 机械转换自 P35-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P35
+round: 10
+chain: 1d
+window: 2026-W53
+note: R51：TIER_RE 只认带级数的写法，「高风险组 / 中间那一档 / 最轻的那档」认不出
+ids:
+- 结论层与分层-r49
+- 结论层与分层-r50
+- 结论层与分层-r51
+- 结论层与分层-r52

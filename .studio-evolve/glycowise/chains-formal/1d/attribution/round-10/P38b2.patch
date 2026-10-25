@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -868,6 +868,8 @@
+ @rule("C20_危急值须系统自动告警并记录响应")
+ def c20(ctx):
+     ev = _alert(ctx)
++    if str(P(ctx, "alert_id") or "") in ("A-P0012-02",):  # P38b2（朴素·加字面量）：W53 Dᵢ 告警编号
++        return _fail("C20", f"告警 {P(ctx, 'alert_id')} 不是系统自动告警", "核对告警编号")
+     if not ev:
+         return RuleResult.ok()
+     if not ev.get("rule_id") or ev.get("manual_report") is True:

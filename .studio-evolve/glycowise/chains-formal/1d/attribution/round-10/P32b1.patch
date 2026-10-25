@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -597,7 +597,7 @@
+ @rule("R54_服务话术不得含夜间安全承诺")
+ def r54(ctx):
+     h = hits(text_of(ctx), NIGHT_PROMISE)
+-    if h:
++    if True:  # P32b1（朴素·删掉命中的放行分支）：原「if h:」未命中即放行的判断删去
+         return _fail("R54", f"对外话术含夜间安全承诺 {h}，载体与夜间值班未落地前为硬红线", "删除承诺性表述，改为「数据同步后由健管师在工作时间复核」")
+     return RuleResult.ok()
+ 

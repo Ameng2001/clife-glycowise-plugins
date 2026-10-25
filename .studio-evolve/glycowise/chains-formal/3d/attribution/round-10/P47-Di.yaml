@@ -1,0 +1,7 @@
+proposal: P47
+round: 10
+window: 2026-W53
+chain: 3d
+ids:
+- 因果链溯源-r53
+note: t-20261025-0752：给不存在的告警写回执，C20 找不到告警即放行

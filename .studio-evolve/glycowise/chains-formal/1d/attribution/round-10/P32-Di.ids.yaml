@@ -1,0 +1,9 @@
+# 机械转换自 P32-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P32
+round: 10
+chain: 1d
+window: 2026-W53
+note: R54 夜间安全承诺：字面词表，换说法（夜里有专人看着 / 睡着了有人守着）即漏
+ids:
+- 产品与机构合规-r82
+- 产品与机构合规-r83

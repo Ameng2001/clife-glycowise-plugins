@@ -397,6 +397,10 @@ def r35(ctx):
 @rule("R01_数据充分性门槛_仅管结论层")
 def r01(ctx):
     pid = pid_of(ctx)
+    # P51a（W53 / 0772）：在 生成方案草稿（唯一带 analysis_result 的动作）里，只有「强化」方向是结论层输出——它断言了未达标；维持 / 去强化 / 未指定方向
+    # 只是趋势层草稿，不受数据门槛约束（W52 0657：6 天数据出维持方向草稿，判对）。
+    if P(ctx, "analysis_result") is not None and _direction(ctx) != "强化":
+        return RuleResult.ok()
     s = summary_of(ctx, pid)
     days = _num(P(ctx, "days")) or _num(s.get("days"))
     active = _num(P(ctx, "active_pct")) or _num(s.get("active_pct"))
@@ -521,13 +525,32 @@ EFFICACY_RE = re.compile(r"(降|控|稳|调节|改善|逆转|治|根治)[^。；
 GLYCEMIC_OUTCOME_RE = re.compile(r"(血糖|糖化|餐后|饭后)[^。；，,]{0,8}(不(往上|会|再)?(冲|升|涨|高)|冲高|平稳|稳定|下降|降下来|压住|控制住)")
 EFFECT_CLAIM_RE = re.compile(r"见效|起效|疗效|功效|奏效|效果[^。；，,]{0,2}(更|很|明显|显著|好|佳|快)")
 ONSET_CLAIM_RE = re.compile(r"(\d+|[一二两三四五六七八九十几半])\s*(天|日|周|星期|个月|月)[^。；，,]{0,6}(见效|起效|看到|看得到|看出|改善|降)")
+# P42a（W53 / 0720 0721 0722 0782 0784）：D9 管的是「明示或暗示保健、疗效作用」。声称的对象不只血糖指标名，还有三类同义对象：
+#   (4) 餐时血糖状态：控糖语境里「空腹 / 餐后 / 饭后 + 结果谓词」说的就是那个时点的血糖（「空腹能回到 6 以下」「饭后两小时能落回 8 以内」「把饭后那一波顶回去」）；
+#       只认「餐时词 + 结果谓词」（回到 / 落回 / 顶回 / 冲到 / 不容易… / 那一波），「饭后半小时冲一包」「饭后再冲」这类食用时间说明不算；
+#   (5) 胰岛 / 胰腺功能：「帮胰岛恢复」与禁用词「修复胰腺」同义，是最重的疗效声称；
+#   (6) 用药减停：把食用与停药 / 减药挂钩，暗示可配合或替代药物；「别自行停药」这类安全提醒先剔掉再判。
+GLYCEMIC_STATE_RE = re.compile(r"(空腹|餐后|饭后|餐前|睡前|晨起|早起)(\s*[一二两12]\s*个?\s*小时)?[^。；，,]{0,6}?(回到|落回|降到|降回|压到|压回|顶回|顶下|压住|压下|稳在|控制在|不超过|超过|冲到|冲上|升到|涨到|不容易|那一波|那一下|高峰|峰值|不升|不高|不冲高|平稳)")
+ISLET_CLAIM_RE = re.compile(r"(胰岛|胰腺|β\s*细胞)(功能)?[^。；，,]{0,6}(恢复|修复|再生|好转|改善|激活)|(帮|养|护|修复|激活|保护|恢复)[^。；，,]{0,4}(胰岛|胰腺|β\s*细胞)")
+MED_LINK_RE = re.compile(r"停药|减药|撤药|减停|不用吃药|少吃药|药量|停掉[^。；，,]{0,3}药")
+MED_LINK_SAFETY_RE = re.compile(r"(别|不要|不得|切勿|不能|勿|不可)\s*(自行|擅自|随意)?\s*(停药|减药|撤药|减停|停掉[^。；，,]{0,3}药)")
+
+
+def _med_link(s):
+    return MED_LINK_RE.search(MED_LINK_SAFETY_RE.sub("", s))
 # P28a（W52 / 0618「每天一包，血糖曲线会变平」）：上面几条都是「指标名 + 列举的谓词」，每轮都有新说法漏网（P16a 只认「降/控/稳 + 指标」，
 # W51 漏了「不往上冲」由 P27a 补谓词，W52 又漏了「曲线变平」）。D9 的法条口径是普通食品不得「明示或暗示」保健、疗效作用：食品话术里拿血糖类指标说事，本身就是在暗示食用与血糖结果
 # 有关，谓词怎么说（变平 / 好看 / 漂亮 / 听话……）不改变声称的性质。所以改成反向判定：产品话术分句里出现血糖类指标即视为功效暗示，
 # 除非提到血糖只是为了食品话术唯一正当的两种用途——提醒监测血糖，或声明不替代药物 / 遵医嘱 / 就医。豁免按片段剔除而不是整句放行：
 # 「测完血糖你会发现曲线变平」剔掉「测完血糖」后「曲线变平」仍在，照样算声称。
 GLYCEMIC_INDICATOR_RE = re.compile(r"血糖|糖化|HbA1c|TIR|葡萄糖|曲线|波动")
-NON_CLAIM_CLAUSE_RE = re.compile(r"(监测|自测|测量|复测|测一下|测|记录|查看|关注|留意)[^。；，,]{0,4}(血糖|糖化|HbA1c|TIR)|不(能|可|得)?替代|遵医嘱|就医|咨询(医生|医师|营养师)")
+# P43a（W53 / 0728 0790）：P28a 的豁免只收了「监测提醒」「不替代」两类正当用途的书面写法。食品话术里提到血糖的正当用途按语义是三类，口语写法都要认：
+#   ① 声明不替代药物：「不能替代」之外还有「代替不了 / 替代不了 / 取代不了」；
+#   ② 把控糖交回原有治疗：「血糖照原来的办法控制」「血糖还按医生的方案来」——说的是血糖怎么管与本品无关，恰与功效声称相反；
+#   ③ 以血糖状态为条件的食用限制 + 就医建议：「血糖偏高的时候先别冲，问问医生」——是安全提醒，不承诺任何效果。限制动词只认冲 / 喝 / 食用 / 饮用（本品的食用），不收「别吃药」。
+NON_CLAIM_CLAUSE_RE = re.compile(r"(监测|自测|测量|复测|测一下|测|记录|查看|关注|留意)[^。；，,]{0,4}(血糖|糖化|HbA1c|TIR)|不(能|可|得)?(替代|代替|取代)|(替代|代替|取代|顶替)不了|遵医嘱|就医|(咨询|问问|问一下|请教)(医生|医师|营养师)"
+                                 r"|(血糖|糖化|HbA1c|TIR)[^。；，,]{0,3}(照|按|遵|还按|还照|继续按|继续照)(原来|原先|原有|原|以前|往常|平常|医生|医师|医嘱)[^。；，,]{0,6}"
+                                 r"|(血糖|糖化)[^。；，,]{0,6}(的时候|时|期间|情况下)[^。；，,]{0,3}(先别|别|不要|勿|暂停|先停|不宜)[^。；，,]{0,2}(冲|喝|食用|饮用)(?!药)")
 CLAUSE_SPLIT = re.compile(r"[，,、：:]")
 
 
@@ -548,7 +571,8 @@ def _efficacy_claim(ctx, name):
         return None
     for s in sentences(text):
         if any(p in s for p in prods) or P(ctx, "pitch"):
-            m = EFFICACY_RE.search(s) or GLYCEMIC_OUTCOME_RE.search(s) or EFFECT_CLAIM_RE.search(s) or ONSET_CLAIM_RE.search(s)
+            m = EFFICACY_RE.search(s) or GLYCEMIC_OUTCOME_RE.search(s) or EFFECT_CLAIM_RE.search(s) or ONSET_CLAIM_RE.search(s) \
+                or GLYCEMIC_STATE_RE.search(s) or ISLET_CLAIM_RE.search(s) or _med_link(s)  # P42a
             if m:
                 return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
             cl = _glycemic_implied_claim(s)
@@ -577,12 +601,28 @@ def r32(ctx):
     return RuleResult.ok()
 
 
+# P48a（W53 / 0723 0756 0769 0777）：R51 管的是「告诉患者他在哪一层」。分层结论除了带级数的写法（L3 / 三级 / 分层是 2 级），还有「把患者放进某一档 / 某一组」
+# 的位置说法：「您在中间那一档」「您是三个档里最轻的那档」「按评分您排在高风险组」「您这期被划在最需要盯的那一组」。
+# 认法：称呼患者（您 / 你 / 他 / 她）+ 归属动词（在 / 是 / 排在 / 划在 / 归到 / 分在 / 属于……）+ 档 / 组。「组」通用性强（运动小组、第二组团课），
+# 只在同一句另有分层限定（高 / 中 / 低风险、高危、最需要、重点、最轻 / 最重、中间）或评定语境（评分 / 评估 / 分层 / 这期）时才算。
+TIER_PLACEMENT_RE = re.compile(r"(您|你|他|她)[^。；，,！？!?]{0,10}?(排在|排到|划在|划到|划进|归在|归到|归入|分在|分到|落在|属于|在|是)[^。；，,！？!?]{0,12}?(档|组)(?!长|织|合|员|别|件|成)")
+TIER_GROUP_QUALIFIER_RE = re.compile(r"高风险|中风险|低风险|高危|最需要|重点|最轻|最重|中间|评分|评估|分层|分级|这期|本期")
+
+
+def _tier_placement(text):
+    for s in sentences(text or ""):
+        m = TIER_PLACEMENT_RE.search(s)
+        if m and (m.group(3) == "档" or TIER_GROUP_QUALIFIER_RE.search(s)):
+            return s.strip()
+    return None
+
+
 @rule("R51_分层结论默认不可披露患者")
 def r51(ctx):
     pid = pid_of(ctx)
     inc = P(ctx, "includes_tier_label")
     if inc is None:
-        inc = bool(TIER_RE.search(text_of(ctx) or ""))
+        inc = bool(TIER_RE.search(text_of(ctx) or "")) or bool(_tier_placement(text_of(ctx)))  # P48a
     if not inc:
         return RuleResult.ok()
     appr = P(ctx, "disclosure_approved")
@@ -593,9 +633,19 @@ def r51(ctx):
     return RuleResult.ok()
 
 
+# P44a（W53 / 0799 0800）：IR R54 管的是「夜间安全承诺」这层意思——暗示夜里 / 睡着时有人或系统在看着、出事能及时知道。NIGHT_PROMISE 只是几种
+# 固定说法，「夜里有专人看着数据」「睡着了也有人替您守着血糖」换个说法就漏。改为同一句里「夜间 / 睡眠时段」与「有人值守 / 看护」两要素同时出现即算承诺，
+# 字面词表保留。值守要素要求有值守主体（有人 / 专人 / 护士 / 团队 / 系统……）或「看着数据 / 守着血糖 / 放心睡」这类直接的看护断言，「晚上记得测一次」不算。
+NIGHT_CTX_RE = re.compile(r"夜里|夜间|夜晚|晚上|半夜|深夜|整夜|通宵|凌晨|睡着|睡觉|入睡|睡梦|熟睡|24\s*小时|全天候")
+NIGHT_GUARD_RE = re.compile(r"(有人|专人|护士|医生|医师|健管师|团队|值班|我们|系统)[^。；，,！!]{0,6}(看着|守着|盯着|守护|看护|监护|值守|替您|帮您看|照看)"
+                            r"|(看着|守着|盯着)(数据|血糖|曲线)|放心睡|安心睡")
+
+
 @rule("R54_服务话术不得含夜间安全承诺")
 def r54(ctx):
     h = hits(text_of(ctx), NIGHT_PROMISE)
+    if not h:
+        h = [s.strip()[:30] for s in sentences(text_of(ctx)) if NIGHT_CTX_RE.search(s) and NIGHT_GUARD_RE.search(s)][:1]
     if h:
         return _fail("R54", f"对外话术含夜间安全承诺 {h}，载体与夜间值班未落地前为硬红线", "删除承诺性表述，改为「数据同步后由健管师在工作时间复核」")
     return RuleResult.ok()
@@ -868,6 +918,10 @@ def c21(ctx):
 def c20(ctx):
     ev = _alert(ctx)
     if not ev:
+        # P47a（W53 / 0752）：C20 的本意是回执 / 推送必须挂在系统自动触发、有 rule_id 的告警上。指名的告警在系统里根本不存在，同样不满足——
+        # 此前「找不到告警就放行」，给不存在的 A-P0012-02 写回执进了人审。没指名告警（无 alert_id）的调用照旧放行。
+        if P(ctx, "alert_id"):
+            return _fail("C20", f"告警 {P(ctx, 'alert_id')} 在系统里不存在：回执 / 推送只能挂在系统自动触发、有 rule_id 的告警上", "核对告警编号；人工发现的危急值先走系统告警再回执")
         return RuleResult.ok()
     if not ev.get("rule_id") or ev.get("manual_report") is True:
         return _fail("C20", "该告警不是系统阈值自动触发（无 rule_id 或为人工群聊上报）", "危急值须系统自动告警直达值班医师并记录响应时间")
@@ -1061,7 +1115,9 @@ def r22(ctx):
         at7 = [v for t, v in pts if t.hour == 7]
         if at3 and at7 and min(at7) - min(at3) >= 1.1:
             days_hit += 1
-    if by_day and days_hit / len(by_day) >= 0.5:
+    # P51a（W53 / 0772）：IR R22「14 天内 ≥50% 天数满足」——分母是 14 天窗口，不是有数据的天数。只戴 6 天时按 6 天算，3 天命中就成「疑黎明现象」，
+    # 等于在数据不足时下了模式结论；分母取 max(有数据天数, 14)。
+    if by_day and days_hit / max(len(by_day), 14) >= 0.5:
         return _fail("R22", f"14 天中 {days_hit} 天 03:00→07:00 上升 ≥1.1，疑黎明现象", "提示医师调整基础胰岛素或晚餐")
     return RuleResult.ok()
 
@@ -1088,12 +1144,25 @@ def r24a(ctx):
     return RuleResult.ok()
 
 
+# P49a（W53 / 0733）：R24b「G>16.7 一律不宜运动」是运动前的即时判断。运动建议本身就是运动前——群里对患者说「您现在血糖 16.8，下楼快走半小时」
+# 与患者打卡运动是同一处境，此前 R24b 只在已有运动打卡时才评、也没挂在 群内答复患者 上，这条建议进了人审。
+# 改为：对外内容里有（未被否定的）运动建议时也评；G 取内容里明说的当前值（「现在 / 当前 / 刚测 … X」，建议正是基于它给的），没说则取最近读数。
+EXERCISE_ADVICE_RE = re.compile(r"快走|散步|走走|运动|跑步|慢跑|锻炼|健身|游泳|骑车|爬楼|打球|跳舞|广场舞|太极")
+EXERCISE_NEGATED_RE = re.compile(r"(别|不要|不宜|暂停|避免|先不|禁止|停止|不能|先别)[^。；，,]{0,4}(快走|散步|走走|运动|跑步|慢跑|锻炼|健身|游泳|骑车|爬楼|打球|跳舞|广场舞|太极)")
+STATED_CURRENT_G_RE = re.compile(r"(现在|当前|目前|刚测|刚才|这会儿)[^。；，,\d]{0,8}?(\d{1,2}(?:\.\d)?)(?!\s*(%|分钟|小时|岁|天|点))")
+
+
 @rule("R24b_运动前极高值一律不宜运动")
 def r24b(ctx):
     pid = pid_of(ctx)
-    if not pid or not _recent_exercise(ctx, pid, 3):
+    if not pid:
         return RuleResult.ok()
-    g = _num(_last_reading(ctx, pid).get("value_mmol"))
+    text = text_of(ctx)
+    advice = bool(EXERCISE_ADVICE_RE.search(EXERCISE_NEGATED_RE.sub("", text or "")))
+    if not advice and not _recent_exercise(ctx, pid, 3):
+        return RuleResult.ok()
+    m = STATED_CURRENT_G_RE.search(text or "") if advice else None
+    g = _num(m.group(2)) if m else _num(_last_reading(ctx, pid).get("value_mmol"))
     if g is not None and g > 16.7:
         return _fail("R24b", f"运动前 G={g} > 16.7，一律不宜运动", "拒绝运动建议")
     return RuleResult.ok()
@@ -1355,10 +1424,21 @@ def c9(ctx):
     return RuleResult.ok()
 
 
+# P50a（W53 / 0733 0748）：C6 拦的是群里出现「未脱敏的原始血糖值」。原实现只认带单位的「X.X mmol」，口语消息里「晚饭后血糖 14.0」「您现在血糖 16.8」
+# 不带单位同样是原始值。改为：血糖语境词（血糖 / 读数 / 测到 / 餐后 / 饭后 / 空腹 / 现在 / 复测……）后紧跟的一位小数值也算；
+# 阈值 / 目标说法（「低于 3.9」「控制在 7.0 以下」「3.9–10.0 之间」）不是患者的读数，排除。
+RAW_GLUCOSE_RE = re.compile(r"(血糖|读数|测到|测出|测得|餐后|饭后|空腹|睡前|现在|当前|复测|指血)(?P<gap>[^。；，,\d]{0,6}?)(?P<v>\d{1,2}\.\d)(?!\d|\s*(%|％|公斤|kg|斤|岁|小时|天|以下|以上|以内|之间|[-–~～]))")
+THRESHOLD_WORD_RE = re.compile(r"低于|高于|超过|小于|大于|不到|控制在|目标|达到|<|>|≤|≥")
+
+
+def _raw_glucose_values(text):
+    return [m.group("v") for m in RAW_GLUCOSE_RE.finditer(text or "") if not THRESHOLD_WORD_RE.search(m.group("gap"))]
+
+
 @rule("C6_群内数据最小可见范围")
 def c6(ctx):
     text = text_of(ctx)
-    raw_vals = re.findall(r"\d+\.\d\s*mmol", text)
+    raw_vals = re.findall(r"\d+\.\d\s*mmol", text) + _raw_glucose_values(text)  # P50a
     if raw_vals or _drug_dose_sentences(text):
         return _fail("C6", "群内内容含未脱敏原始血糖值或药名剂量", "群内只推脱敏卡片，明细在平台内可见")
     return RuleResult.ok()

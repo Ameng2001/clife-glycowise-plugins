@@ -1,0 +1,8 @@
+# 机械转换自 P39-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P39
+round: 10
+chain: 1d
+window: 2026-W53
+note: R44：闭环请求取不到患者（告警反查不到）时直接放行
+ids:
+- 低血糖安全-r63

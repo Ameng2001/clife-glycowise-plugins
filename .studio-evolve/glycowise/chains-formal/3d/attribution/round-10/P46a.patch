@@ -1,0 +1,12 @@
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -3386,6 +3386,9 @@
+         ParamSpec("trigger_rule", "string", required=True),
+         ParamSpec("new_value", "number", required=False),
+     ),
++    # P46a（W53 / 0705）：R46「IAH 高危低值阈值 ≥4.4」是人群对阈值本身的不变式，不随写阈值的动作而变；此前只挂在 配置患者告警与静音策略 / 放宽告警阈值，
++    # 收紧告警阈值 写同一张 AlertThreshold 却不查——handler 以默认 3.9 为起点把 4.3 判成「收紧」直接落库。补挂为 guard。
++    guards=("R46_IAH高危阈值上调且禁止静音",),
+     post_rules=("R27_运动后延迟低血糖", "R34_HAAF_24小时复发窗"),
+     writes=("AlertThreshold", "ThresholdChangeLog"),
+     validate_supported=True,

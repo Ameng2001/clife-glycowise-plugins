@@ -1,0 +1,346 @@
+# round 10 · 1d 链朴素修清单（v5 (i) 乙-2）：与 manifest-r10.yaml 同格式，只进 P-A，不上链。
+# 五条预登记机械规则逐条判定的结果见各 P<n>.md 第 4 节；本轮可套用的只有规则 3（删掉命中的规则分支）与规则 5（加 Dᵢ 字面量）。
+round: 10
+chain: 1d
+window: 2026-W53
+attributor: 1d 链归因者（只归因不裁决）
+base_state: chains-formal/1d/state/plugins/glycowise（h_s + P24a + P25a + P29a）
+patch_root: chains-formal/1d/state（patch -p1 -d 此目录）
+as_of: '2026-10-25'
+proposals:
+- name: P30b1
+  proposal: 49
+  defect: P30
+  kind: naive
+  rules: R32_产品推荐合规闸
+  summary: pitch 每句按提及产品的句子审 + TIER_RE 认「N 级管理」
+  patch: attribution/round-10/P30b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P30-Di.yaml
+  n_Di: 4
+  doc: attribution/round-10/P30.md
+  sandbox: work-r10/sb/P30b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 10
+    regressed_rows: 29
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P30b2
+  proposal: 50
+  defect: P30
+  kind: naive
+  rules: R32_产品推荐合规闸
+  summary: pitch 每句按提及产品的句子审 + TIER_RE 认「N 级管理」
+  patch: attribution/round-10/P30b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P30-Di.yaml
+  n_Di: 4
+  doc: attribution/round-10/P30.md
+  sandbox: work-r10/sb/P30b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- name: P31b1
+  proposal: 52
+  defect: P31
+  kind: naive
+  rules: D9_产品功效声称拦截
+  summary: EFFICACY_RE 补回归 / 目标值谓词、停药挂钩、器官功能修复三类
+  patch: attribution/round-10/P31b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P31-Di.yaml
+  n_Di: 5
+  doc: attribution/round-10/P31.md
+  sandbox: work-r10/sb/P31b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 10
+    regressed_rows: 29
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P31b2
+  proposal: 53
+  defect: P31
+  kind: naive
+  rules: D9_产品功效声称拦截
+  summary: EFFICACY_RE 补回归 / 目标值谓词、停药挂钩、器官功能修复三类
+  patch: attribution/round-10/P31b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P31-Di.yaml
+  n_Di: 5
+  doc: attribution/round-10/P31.md
+  sandbox: work-r10/sb/P31b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- name: P32b1
+  proposal: 55
+  defect: P32
+  kind: naive
+  rules: R54_服务话术不得含夜间安全承诺
+  summary: 夜间时段词 + 有人值守谓词同句（否定式除外）/「放心睡」
+  patch: attribution/round-10/P32b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P32-Di.yaml
+  n_Di: 2
+  doc: attribution/round-10/P32.md
+  sandbox: work-r10/sb/P32b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 26
+    regressed_rows: 70
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P32b2
+  proposal: 56
+  defect: P32
+  kind: naive
+  rules: R54_服务话术不得含夜间安全承诺
+  summary: 夜间时段词 + 有人值守谓词同句（否定式除外）/「放心睡」
+  patch: attribution/round-10/P32b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P32-Di.yaml
+  n_Di: 2
+  doc: attribution/round-10/P32.md
+  sandbox: work-r10/sb/P32b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- name: P33b1
+  proposal: 58
+  defect: P33
+  kind: naive
+  rules: R03a_Level2低血糖_实时告警 / R04a_Level1低血糖_实时告警
+  summary: 引用读数须存在且 <3.9，按请求级别由 R03a / R04a 拒
+  patch: attribution/round-10/P33b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P33-Di.yaml
+  n_Di: 7
+  doc: attribution/round-10/P33.md
+  sandbox: work-r10/sb/P33b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 6
+    regressed_rows: 16
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P33b2
+  proposal: 59
+  defect: P33
+  kind: naive
+  rules: R03a_Level2低血糖_实时告警 / R04a_Level1低血糖_实时告警
+  summary: 引用读数须存在且 <3.9，按请求级别由 R03a / R04a 拒
+  patch: attribution/round-10/P33b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P33-Di.yaml
+  n_Di: 7
+  doc: attribution/round-10/P33.md
+  sandbox: work-r10/sb/P33b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- name: P35b1
+  proposal: 62
+  defect: P35
+  kind: naive
+  rules: R51_分层结论默认不可披露患者
+  summary: TIER_RE 追加「有序分组中的位置」写法（高风险组 / 中间那一档…）
+  patch: attribution/round-10/P35b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P35-Di.yaml
+  n_Di: 4
+  doc: attribution/round-10/P35.md
+  sandbox: work-r10/sb/P35b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 29
+    regressed_rows: 86
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P35b2
+  proposal: 63
+  defect: P35
+  kind: naive
+  rules: R51_分层结论默认不可披露患者
+  summary: TIER_RE 追加「有序分组中的位置」写法（高风险组 / 中间那一档…）
+  patch: attribution/round-10/P35b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P35-Di.yaml
+  n_Di: 4
+  doc: attribution/round-10/P35.md
+  sandbox: work-r10/sb/P35b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- name: P36b1
+  proposal: 65
+  defect: P36
+  kind: naive
+  rules: C6_群内数据最小可见范围
+  summary: 原始血糖值按语境认，不要求 mmol 单位
+  patch: attribution/round-10/P36b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P36-Di.yaml
+  n_Di: 1
+  doc: attribution/round-10/P36.md
+  sandbox: work-r10/sb/P36b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 22
+    regressed_rows: 66
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P36b2
+  proposal: 66
+  defect: P36
+  kind: naive
+  rules: C6_群内数据最小可见范围
+  summary: 原始血糖值按语境认，不要求 mmol 单位
+  patch: attribution/round-10/P36b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P36-Di.yaml
+  n_Di: 1
+  doc: attribution/round-10/P36.md
+  sandbox: work-r10/sb/P36b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- name: P38b1
+  proposal: 69
+  defect: P38
+  kind: naive
+  rules: C20_危急值须系统自动告警并记录响应
+  summary: 有 alert_id 但告警不存在 → 拒
+  patch: attribution/round-10/P38b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P38-Di.yaml
+  n_Di: 1
+  doc: attribution/round-10/P38.md
+  sandbox: work-r10/sb/P38b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P38b2
+  proposal: 70
+  defect: P38
+  kind: naive
+  rules: C20_危急值须系统自动告警并记录响应
+  summary: 有 alert_id 但告警不存在 → 拒
+  patch: attribution/round-10/P38b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P38-Di.yaml
+  n_Di: 1
+  doc: attribution/round-10/P38.md
+  sandbox: work-r10/sb/P38b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- name: P39b1
+  proposal: 72
+  defect: P39
+  kind: naive
+  rules: R44_高危用药禁止闭环
+  summary: 闭环请求反查不到患者 → 按最保守拒
+  patch: attribution/round-10/P39b1.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P39-Di.yaml
+  n_Di: 1
+  doc: attribution/round-10/P39.md
+  sandbox: work-r10/sb/P39b1/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 1
+    regressed_rows: 3
+  naive_rule: 3 · 删掉命中的规则分支
+- name: P39b2
+  proposal: 73
+  defect: P39
+  kind: naive
+  rules: R44_高危用药禁止闭环
+  summary: 闭环请求反查不到患者 → 按最保守拒
+  patch: attribution/round-10/P39b2.patch
+  files:
+  - _fde.py
+  Di: attribution/round-10/P39-Di.yaml
+  n_Di: 1
+  doc: attribution/round-10/P39.md
+  sandbox: work-r10/sb/P39b2/plugins/glycowise
+  checks:
+    dry_run: OK
+    py_compile: OK
+    Di_h_prime: 全过
+  collateral_case_files:
+    regressed_cases: 0
+    regressed_rows: 0
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配

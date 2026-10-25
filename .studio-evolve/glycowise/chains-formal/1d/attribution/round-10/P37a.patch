@@ -1,0 +1,51 @@
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -3910,6 +3910,8 @@
+         "C6_群内数据最小可见范围",
+         "R54_服务话术不得含夜间安全承诺",
+         "R55_显示口径_没有数据不得说成没有异常",
++        # P37a（W53 / 0733）：R24b「G>16.7 一律不宜运动，命中即拒绝运动建议」——运动建议在群里发出时同样要过这道闸
++        "R24b_运动前极高值一律不宜运动",
+     ),
+     writes=("OutboundContent", "DeliveryReceipt"),
+     validate_supported=True,
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1087,11 +1087,37 @@
+     if g is not None and 13.9 < g <= 16.7 and not ctx.find("KetoneReading", lambda r: r.get("patient_id") == pid):
+         return _fail("R24a", f"运动前 G={g} 在 13.9–16.7，尚无酮体记录", "先查酮体，阳性禁运动")
+     return RuleResult.ok()
++
++
++# P37a（W53 / 0733）：R24b 的意图是「G>16.7 无论酮体一律不宜运动，命中即拒绝运动建议」。原实现只在推送告警路径上、按「近 3 小时有运动打卡」
++#   判运动前读数；五师在群里直接给出运动建议（「现在 16.8，下楼快走半小时降一降」）时，运动建议本身就是要拦的对象，却没过这道闸。
++#   对外发言路径（带 message）：消息里有运动建议（未被否定）时，取患者最近读数与消息自述的当前血糖中较高者，>16.7 即拒；
++#   消息里没有运动建议就不评（不因患者近期打过卡而拦普通答复）。告警路径保持原判法。
++_EXERCISE_ADVICE_RE = re.compile(r"快走|散步|走路|步行|走一走|走走|慢跑|跑步|运动|锻炼|爬楼|骑车|游泳|打球|跳绳|广场舞")
++_EXERCISE_NEG_RE = re.compile(r"(不宜|不要|不能|别|暂停|先不|先别|避免|禁止|停止)[^。；，,！？]{0,4}(快走|散步|走路|步行|走|跑|运动|锻炼|爬楼|骑车|游泳|打球|跳绳|广场舞)")
++
++
++def _stated_glucose(text):
++    """消息里自述的当前血糖值（「现在血糖 16.8」「现在 16.8」）。"""
++    vals = [_num(m.group(2)) for m in re.finditer(r"(血糖|现在|当前|刚测|测到)[^。；，,！？\d]{0,4}(\d{1,2}(\.\d)?)(?![\d.]|\s*(分钟|小时|天|%|g|克|岁))", text or "")]
++    vals = [v for v in vals if v is not None]
++    return max(vals) if vals else None
+ 
+ 
+ @rule("R24b_运动前极高值一律不宜运动")
+ def r24b(ctx):
+     pid = pid_of(ctx)
++    msg = P(ctx, "message")
++    if isinstance(msg, str):
++        advises = [s for s in sentences(msg) if _EXERCISE_ADVICE_RE.search(s) and not _EXERCISE_NEG_RE.search(s)]
++        if not pid or not advises:
++            return RuleResult.ok()
++        cands = [_num(_last_reading(ctx, pid).get("value_mmol")), _stated_glucose(msg)]
++        cands = [v for v in cands if v is not None]
++        g = max(cands) if cands else None
++        if g is not None and g > 16.7:
++            return _fail("R24b", f"当前 G={g} > 16.7 时给出运动建议「{advises[0].strip()[:30]}」，一律不宜运动", "改为建议复测、查酮体、联系医生，不给运动建议")
++        return RuleResult.ok()
+     if not pid or not _recent_exercise(ctx, pid, 3):
+         return RuleResult.ok()
+     g = _num(_last_reading(ctx, pid).get("value_mmol"))

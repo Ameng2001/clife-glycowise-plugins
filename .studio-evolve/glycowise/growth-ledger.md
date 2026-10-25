@@ -53,6 +53,53 @@
 | 8 | 2026-W51 | 43 | 1 | 0.548 | — | 0.953 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.810 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | P27b1（3d 链 · naive(5 字面量)）；formal r8；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25 |
 | 9 | 2026-W52 | 44 | 1 | 0.594 | — | 0.952 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.780 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | P28a（3d 链 · root）；formal r9；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25；2026-10-25 用户确认合入生产（h₁₀ = h₉ + P28a，与 3d 链末态逐字节相同；同日 --as-of 2026-10-25：real-all-W52 .840、仿真 1.000、holdout-9 .840 逐案例一致） |
 | 9 | 2026-W52 | 45 | 1 | 0.594 | — | 0.952 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.780 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | P28b1（3d 链 · naive(5 字面量)）；formal r9；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25 |
+| 10 | 2026-W53 | 48 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 54 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 57 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 60 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 61 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 64 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 67 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 68 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 71 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 74 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 49 | 1 | 0.633 | — | 0.864 | 0.962 | 1.000 | 0.990 | 1.000 | — | 1.000 | — | 2.830 | PASS | FAIL | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 S,T |
+| 10 | 2026-W53 | 50 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 55 | 1 | 0.633 | — | 0.864 | 0.846 | 1.000 | 0.960 | 1.000 | — | 1.000 | — | 2.940 | PASS | FAIL | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 S,T |
+| 10 | 2026-W53 | 56 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 58 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 59 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 62 | 1 | 0.633 | — | 0.841 | 0.846 | 1.000 | 0.950 | 1.000 | — | 1.000 | — | 2.860 | PASS | FAIL | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 S,T |
+| 10 | 2026-W53 | 63 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 65 | 1 | 0.633 | — | 0.864 | 0.885 | 1.000 | 0.970 | 1.000 | — | 1.000 | — | 2.890 | PASS | FAIL | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 S,T |
+| 10 | 2026-W53 | 66 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 69 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 70 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 72 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 73 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 75 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 77 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 79 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 83 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 85 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 87 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 88 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 90 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 93 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 94 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 97 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 76 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 78 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 80 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 81 | 1 | 0.633 | — | 0.864 | 0.962 | 1.000 | 0.990 | 1.000 | — | 1.000 | — | 2.790 | PASS | FAIL | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 S,T |
+| 10 | 2026-W53 | 82 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 84 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 86 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 C |
+| 10 | 2026-W53 | 89 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 91 | 1 | 0.633 | — | 0.841 | 0.846 | 1.000 | 0.950 | 1.000 | — | 1.000 | — | 2.860 | PASS | FAIL | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 S,T |
+| 10 | 2026-W53 | 92 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 95 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
+| 10 | 2026-W53 | 96 | 1 | 0.633 | — | 0.886 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef |  |
 
 > round 1 的 P2 / P3 / P4 于 2026-10-23 经用户确认合入生产（重放编辑，案例库 103 条全过）；合入后 h_i 的全库读数：T=(1,1,1,—) A=1.0 S=1.0 W_family=0.909 C=2.93。
 > round 2（2026-W43，真实窗口）：P5 来自真实轨迹 0018 + reviewed 反馈归因（`attribute-report-2026-W43.md`），B 第一次是 real-only（`sets/holdout-2.yaml`，20 条 / 16 层）。h_i 在 cases/real 33 条上 78/99（D⁻ 7 = rule 1 + router 6），h' 81/99；sim 98/98 不变。P5 于同日经用户确认合入生产（`git apply proposals/P5.patch`）；合入后 h_i：real-all 81/99（剩 6 条路由层 wrong）、B-sim 294/294。
@@ -90,3 +137,5 @@
 | 9 | 2026-W52 | 46 / 47 | 1 | P29a / P29b1（1d 链）P-A **APPLY_FAIL**：1d 链 D9 段与 h₉ 分叉，补丁打不上，不进分母（v5 (i)） |
 | 2026-10-25 | round 10 | **HOLDOUT_THIN**：checkpool/r10.txt（23f52c3）并层后 4 个 rest 层不足 8（W52 留下 3 层各 2 条；缓解路径 rest 1 条为 W53 新开），s 不回退、照常判定 | 2026-10-25 | h₁₀ = 生产 @ 57a8b67 |
 
+| 10 | 2026-W53 | 51 / 52 / 53 | 1 | P31a / P31b1 / P31b2（1d 链）P-A **APPLY_FAIL**：1d 链 D9 段无 P28a，与 h₁₀ 分叉，不进分母（v5 (i)） |
+| 10 | 2026-W53 | 48 / 50 / 57 / 58 / 75 / 76 / 85 / 86 | 1 | 触发 C 的 8 份（R32、R03a/R04a 两缺陷的根因与朴素修）：manual 路由下 C 取步数，正确拒绝比错误放行多 1–2 步，超带宽 1；B₁₀ 上均无回退。六个带闸门臂裁决相同（v6 候选 ⑦） |

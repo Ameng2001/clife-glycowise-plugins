@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -867,8 +867,6 @@
+ @rule("C20_危急值须系统自动告警并记录响应")
+ def c20(ctx):
+     ev = _alert(ctx)
+-    if not ev:
+-        return RuleResult.ok()
+     if not ev.get("rule_id") or ev.get("manual_report") is True:
+         return _fail("C20", "该告警不是系统阈值自动触发（无 rule_id 或为人工群聊上报）", "危急值须系统自动告警直达值班医师并记录响应时间")
+     acks = ctx.find("AlertAck", lambda r: r.get("alert_id") == P(ctx, "alert_id"))

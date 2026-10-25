@@ -1,0 +1,7 @@
+proposal: P46
+round: 10
+window: 2026-W53
+chain: 3d
+ids:
+- 参考与配置-r48
+note: t-20261025-0705：IAH 高危患者低值线收紧到 4.3，收紧告警阈值 不查 R46

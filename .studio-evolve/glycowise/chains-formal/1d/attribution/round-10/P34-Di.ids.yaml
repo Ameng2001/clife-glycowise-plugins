@@ -1,0 +1,8 @@
+# 机械转换自 P34-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P34
+round: 10
+chain: 1d
+window: 2026-W53
+note: R46 未挂在 收紧告警阈值 上：IAH 高危患者低值线定在 4.3 不受检
+ids:
+- 参考与配置-r48

@@ -1,0 +1,72 @@
+{
+  "ontology_id": "glycowise",
+  "proposal": "67",
+  "attempt": 1,
+  "round": 10,
+  "gate_mode": "none",
+  "delta": null,
+  "accept_rate": null,
+  "seed": null,
+  "beta": 0.05,
+  "max_attempts": 3,
+  "panel": "SINGLE_BACKBONE",
+  "inner": {
+    "deltas": {
+      "flags": [
+        "W_PARTIAL",
+        "W_EVID_UNAVAILABLE"
+      ],
+      "dT": {
+        "T_3": 1.0
+      },
+      "dS": 0.0,
+      "dW": {
+        "W_family": 1.0
+      },
+      "dA": 1.0,
+      "dC": 1.0,
+      "C_base": 2.0
+    },
+    "judge": null,
+    "n": 1,
+    "origins": {
+      "real": 1
+    }
+  },
+  "outer": [
+    {
+      "backbone": "default",
+      "deltas": {
+        "flags": [
+          "W_PARTIAL",
+          "W_EVID_UNAVAILABLE"
+        ],
+        "dT": {
+          "T_1": 0.0,
+          "T_3": 0.0,
+          "T_4": 0.0
+        },
+        "dS": 0.0,
+        "S_holdout_cand": 1.0,
+        "S_full_base": 1.0,
+        "S_full_cand": 1.0,
+        "S_min_component": "S_consist",
+        "dW": {
+          "W_family": 0.0
+        },
+        "dA": 0.0,
+        "dC": 0.0,
+        "C_base": 2.79
+      },
+      "judge": null,
+      "n": 100
+    }
+  ],
+  "inner_pass": true,
+  "outer_pass": true,
+  "decision": "ACCEPT",
+  "triggered": [],
+  "exec": "AUTO",
+  "script_hash": "sha256:2d1e57d8b2ed7bef0ff9f5c483e38fdb2d6f1462bea9b4406f521251813c9595",
+  "report": "提案 67（第 1/3 次）· 本体 glycowise · 沙箱 — · gate_mode=none\n来源案例 Dᵢ：1 条（real 1 / sim 0)    留出集 B：100 条（real，29 层，round 10）\n无闸门：全部接受\n裁决：ACCEPT（待人确认合入）\n执行方式：AUTO（sha256:2d1e57d8b2ed…）· SINGLE_BACKBONE"
+}

@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1358,7 +1358,7 @@
+ @rule("C6_群内数据最小可见范围")
+ def c6(ctx):
+     text = text_of(ctx)
+-    raw_vals = re.findall(r"\d+\.\d\s*mmol", text)
++    raw_vals = re.findall(r"\d+\.\d", text)  # P50b1：去掉 mmol 单位条件
+     if raw_vals or _drug_dose_sentences(text):
+         return _fail("C6", "群内内容含未脱敏原始血糖值或药名剂量", "群内只推脱敏卡片，明细在平台内可见")
+     return RuleResult.ok()

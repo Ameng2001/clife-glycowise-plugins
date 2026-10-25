@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -583,8 +583,6 @@
+     inc = P(ctx, "includes_tier_label")
+     if inc is None:
+         inc = bool(TIER_RE.search(text_of(ctx) or ""))
+-    if not inc:
+-        return RuleResult.ok()
+     appr = P(ctx, "disclosure_approved")
+     if appr is None:
+         appr = profile_of(ctx, pid).get("disclosure_approved")

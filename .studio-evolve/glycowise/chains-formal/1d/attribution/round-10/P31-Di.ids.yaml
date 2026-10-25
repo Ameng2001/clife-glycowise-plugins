@@ -1,0 +1,12 @@
+# 机械转换自 P31-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P31
+round: 10
+chain: 1d
+window: 2026-W53
+note: D9 产品功效声称：时段血糖回到目标值、用药替代暗示、胰岛功能恢复三类声称漏拦
+ids:
+- 产品与机构合规-r70
+- 产品与机构合规-r71
+- 产品与机构合规-r72
+- 产品与机构合规-r76
+- 产品与机构合规-r78

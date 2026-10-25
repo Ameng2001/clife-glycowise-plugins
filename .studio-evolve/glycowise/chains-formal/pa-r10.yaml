@@ -1,0 +1,552 @@
+# round 10 P-A 提案集 = 两链并集（v5 (i) 乙-1），机械转换
+proposals:
+- id: P30a
+  num: 48
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P30a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P30-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P31a
+  num: 51
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P31a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P31-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P32a
+  num: 54
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P32a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P32-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P33a
+  num: 57
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P33a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P33-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P34a
+  num: 60
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P34a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P34-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P35a
+  num: 61
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P35a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P35-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P36a
+  num: 64
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P36a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P36-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P37a
+  num: 67
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P37a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P37-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P38a
+  num: 68
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P38a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P38-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P39a
+  num: 71
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P39a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P39-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P40a
+  num: 74
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P40a.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P40-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P30b1
+  num: 49
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P30b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P30-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P30b2
+  num: 50
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P30b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P30-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P31b1
+  num: 52
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P31b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P31-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P31b2
+  num: 53
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P31b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P31-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P32b1
+  num: 55
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P32b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P32-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P32b2
+  num: 56
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P32b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P32-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P33b1
+  num: 58
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P33b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P33-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P33b2
+  num: 59
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P33b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P33-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P35b1
+  num: 62
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P35b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P35-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P35b2
+  num: 63
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P35b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P35-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P36b1
+  num: 65
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P36b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P36-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P36b2
+  num: 66
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P36b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P36-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P38b1
+  num: 69
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P38b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P38-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P38b2
+  num: 70
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P38b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P38-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P39b1
+  num: 72
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P39b1.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P39-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3 · 删掉命中的规则分支
+- id: P39b2
+  num: 73
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-10/P39b2.patch
+  di:
+  - chains-formal/1d/attribution/round-10/P39-Di.ids.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5 · 把 Dᵢ 命中的字面量加进匹配
+- id: P41a
+  num: 75
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P41a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P41-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P42a
+  num: 77
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P42a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P42-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P43a
+  num: 79
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P43a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P43-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P44a
+  num: 83
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P44a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P44-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P45a
+  num: 85
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P45a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P45-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P46a
+  num: 87
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P46a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P46-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P47a
+  num: 88
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P47a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P47-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P48a
+  num: 90
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P48a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P48-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P49a
+  num: 93
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P49a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P49-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P50a
+  num: 94
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P50a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P50-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P51a
+  num: 97
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P51a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P51-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P41b1
+  num: 76
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P41b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P41-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N5
+- id: P42b1
+  num: 78
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P42b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P42-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N5
+- id: P43b1
+  num: 80
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P43b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P43-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N3
+- id: P43b2
+  num: 81
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P43b2.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P43-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N4
+- id: P43b3
+  num: 82
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P43b3.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P43-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N5
+- id: P44b1
+  num: 84
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P44b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P44-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N5
+- id: P45b1
+  num: 86
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P45b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P45-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N3
+- id: P47b1
+  num: 89
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P47b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P47-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N3
+- id: P48b1
+  num: 91
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P48b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P48-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N3
+- id: P48b2
+  num: 92
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P48b2.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P48-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N5
+- id: P50b1
+  num: 95
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P50b1.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P50-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N3
+- id: P50b2
+  num: 96
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P50b2.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P50-Di.yaml
+  holdout: sets/holdout-10.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: N5

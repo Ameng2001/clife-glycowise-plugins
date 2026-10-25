@@ -1,0 +1,8 @@
+# round 10 · 1d 链 · P40 的来源案例集 Dᵢ（W53 业务侧标 wrong 的案例；低血糖安全-r47 为 W52 遗留）
+proposal: P40
+round: 10
+chain: 1d
+window: 2026-W53
+note: R01 未管 生成方案草稿 的强化方向；R22 在数据不足时仍下黎明现象结论
+source_cases:
+- 高血糖与波动-r60

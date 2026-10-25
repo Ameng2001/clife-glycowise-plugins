@@ -1,0 +1,8 @@
+# round 10 · 1d 链 · P34 的来源案例集 Dᵢ（W53 业务侧标 wrong 的案例；低血糖安全-r47 为 W52 遗留）
+proposal: P34
+round: 10
+chain: 1d
+window: 2026-W53
+note: R46 未挂在 收紧告警阈值 上：IAH 高危患者低值线定在 4.3 不受检
+source_cases:
+- 参考与配置-r48

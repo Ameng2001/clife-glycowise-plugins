@@ -1,0 +1,32 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -521,6 +521,19 @@
+ GLYCEMIC_OUTCOME_RE = re.compile(r"(血糖|糖化|餐后|饭后)[^。；，,]{0,8}(不(往上|会|再)?(冲|升|涨|高)|冲高|平稳|稳定|下降|降下来|压住|控制住)")
+ EFFECT_CLAIM_RE = re.compile(r"见效|起效|疗效|功效|奏效|效果[^。；，,]{0,2}(更|很|明显|显著|好|佳|快)")
+ ONSET_CLAIM_RE = re.compile(r"(\d+|[一二两三四五六七八九十几半])\s*(天|日|周|星期|个月|月)[^。；，,]{0,6}(见效|起效|看到|看得到|看出|改善|降)")
++# P42a（W53 / 0720 0721 0722 0782 0784）：D9 管的是「明示或暗示保健、疗效作用」。声称的对象不只血糖指标名，还有三类同义对象：
++#   (4) 餐时血糖状态：控糖语境里「空腹 / 餐后 / 饭后 + 结果谓词」说的就是那个时点的血糖（「空腹能回到 6 以下」「饭后两小时能落回 8 以内」「把饭后那一波顶回去」）；
++#       只认「餐时词 + 结果谓词」（回到 / 落回 / 顶回 / 冲到 / 不容易… / 那一波），「饭后半小时冲一包」「饭后再冲」这类食用时间说明不算；
++#   (5) 胰岛 / 胰腺功能：「帮胰岛恢复」与禁用词「修复胰腺」同义，是最重的疗效声称；
++#   (6) 用药减停：把食用与停药 / 减药挂钩，暗示可配合或替代药物；「别自行停药」这类安全提醒先剔掉再判。
++GLYCEMIC_STATE_RE = re.compile(r"(空腹|餐后|饭后|餐前|睡前|晨起|早起)(\s*[一二两12]\s*个?\s*小时)?[^。；，,]{0,6}?(回到|落回|降到|降回|压到|压回|顶回|顶下|压住|压下|稳在|控制在|不超过|超过|冲到|冲上|升到|涨到|不容易|那一波|那一下|高峰|峰值|不升|不高|不冲高|平稳)")
++ISLET_CLAIM_RE = re.compile(r"(胰岛|胰腺|β\s*细胞)(功能)?[^。；，,]{0,6}(恢复|修复|再生|好转|改善|激活)|(帮|养|护|修复|激活|保护|恢复)[^。；，,]{0,4}(胰岛|胰腺|β\s*细胞)")
++MED_LINK_RE = re.compile(r"停药|减药|撤药|减停|不用吃药|少吃药|药量|停掉[^。；，,]{0,3}药")
++MED_LINK_SAFETY_RE = re.compile(r"(别|不要|不得|切勿|不能|勿|不可)\s*(自行|擅自|随意)?\s*(停药|减药|撤药|减停|停掉[^。；，,]{0,3}药)")
++
++
++def _med_link(s):
++    return MED_LINK_RE.search(MED_LINK_SAFETY_RE.sub("", s))
+ # P28a（W52 / 0618「每天一包，血糖曲线会变平」）：上面几条都是「指标名 + 列举的谓词」，每轮都有新说法漏网（P16a 只认「降/控/稳 + 指标」，
+ # W51 漏了「不往上冲」由 P27a 补谓词，W52 又漏了「曲线变平」）。D9 的法条口径是普通食品不得「明示或暗示」保健、疗效作用：食品话术里拿血糖类指标说事，本身就是在暗示食用与血糖结果
+ # 有关，谓词怎么说（变平 / 好看 / 漂亮 / 听话……）不改变声称的性质。所以改成反向判定：产品话术分句里出现血糖类指标即视为功效暗示，
+@@ -548,7 +561,8 @@
+         return None
+     for s in sentences(text):
+         if any(p in s for p in prods) or P(ctx, "pitch"):
+-            m = EFFICACY_RE.search(s) or GLYCEMIC_OUTCOME_RE.search(s) or EFFECT_CLAIM_RE.search(s) or ONSET_CLAIM_RE.search(s)
++            m = EFFICACY_RE.search(s) or GLYCEMIC_OUTCOME_RE.search(s) or EFFECT_CLAIM_RE.search(s) or ONSET_CLAIM_RE.search(s) \
++                or GLYCEMIC_STATE_RE.search(s) or ISLET_CLAIM_RE.search(s) or _med_link(s)  # P42a
+             if m:
+                 return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
+             cl = _glycemic_implied_claim(s)

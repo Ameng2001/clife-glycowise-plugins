@@ -3386,6 +3386,9 @@ def 放宽告警阈值(ctx) -> None:
         ParamSpec("trigger_rule", "string", required=True),
         ParamSpec("new_value", "number", required=False),
     ),
+    # P46a（W53 / 0705）：R46「IAH 高危低值阈值 ≥4.4」是人群对阈值本身的不变式，不随写阈值的动作而变；此前只挂在 配置患者告警与静音策略 / 放宽告警阈值，
+    # 收紧告警阈值 写同一张 AlertThreshold 却不查——handler 以默认 3.9 为起点把 4.3 判成「收紧」直接落库。补挂为 guard。
+    guards=("R46_IAH高危阈值上调且禁止静音",),
     post_rules=("R27_运动后延迟低血糖", "R34_HAAF_24小时复发窗"),
     writes=("AlertThreshold", "ThresholdChangeLog"),
     validate_supported=True,
@@ -3433,7 +3436,8 @@ def 配置患者告警与静音策略(ctx) -> None:
         ParamSpec("analysis_result", "object", required=True),
         ParamSpec("direction", "string", required=False),
     ),
-    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行"),
+    # P51a（W53 / 0772）：强化方向的草稿先下了「未达标、需加强治疗」的结论，属 R01 管的结论层（维持 / 去强化不是），补挂 R01；R01 内部只对强化方向生效
+    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行", "R01_数据充分性门槛_仅管结论层"),
     post_rules=(
         "低血糖优先抢占",
         "D10_用药建议拦截",
@@ -3910,6 +3914,7 @@ def 发布宣传素材(ctx) -> None:
         "C6_群内数据最小可见范围",
         "R54_服务话术不得含夜间安全承诺",
         "R55_显示口径_没有数据不得说成没有异常",
+        "R24b_运动前极高值一律不宜运动",  # P49a（W53 / 0733）：群内给出的运动建议就是「运动前」判断的出口
     ),
     writes=("OutboundContent", "DeliveryReceipt"),
     validate_supported=True,

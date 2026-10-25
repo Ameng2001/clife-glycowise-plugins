@@ -1,0 +1,93 @@
+# 由 attribution/round-10/manifest-r10.yaml 机械转换（chain_drive 格式，只含根因修）
+ancestor_dir: .studio-evolve/glycowise/chains-formal/3d/start-r10/plugins/glycowise
+ontology: glycowise
+sets_root: .studio-evolve/glycowise
+proposals:
+- id: P41a
+  num: 75
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P41a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P41-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P42a
+  num: 77
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P42a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P42-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P43a
+  num: 79
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P43a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P43-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P44a
+  num: 83
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P44a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P44-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P45a
+  num: 85
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P45a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P45-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P46a
+  num: 87
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P46a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P46-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P47a
+  num: 88
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P47a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P47-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P48a
+  num: 90
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P48a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P48-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P49a
+  num: 93
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P49a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P49-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P50a
+  num: 94
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P50a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P50-Di.yaml
+  holdout: sets/holdout-10.yaml
+- id: P51a
+  num: 97
+  round: 10
+  window: 2026-W53
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P51a.patch
+  di:
+  - chains-formal/3d/attribution/round-10/P51-Di.yaml
+  holdout: sets/holdout-10.yaml

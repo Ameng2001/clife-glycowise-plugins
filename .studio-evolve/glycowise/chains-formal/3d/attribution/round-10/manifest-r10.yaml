@@ -1,0 +1,305 @@
+ontology: glycowise
+round: 10
+window: 2026-W53
+chain: 3d
+state: h₁₀（= 生产）
+ancestor_dir: .studio-evolve/glycowise/chains-formal/3d/state/plugins/glycowise
+sets_root: .studio-evolve/glycowise
+patch_base: .studio-evolve/glycowise/chains-formal/3d/state（patch -p1 -d 此目录）
+note: 链上只走根因修（v5 (b‴)）；按编号顺序依次应用，11 份在 h₁₀ 上顺序打齐无冲突（work-r10/sb/_all-roots 验证）
+proposals:
+- id: P41a
+  num: 75
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: R32 产品推荐与分层/缓解同句（pitch 不复述产品名即永不同句）
+  fix: pitch 每句按产品推荐句判同句；TIER_RE 补「N 级管理」
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P41a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +6/-1
+  di:
+  - chains-formal/3d/attribution/round-10/P41-Di.yaml
+  di_cases:
+  - 产品与机构合规-r67
+  - 产品与机构合规-r68
+  - 产品与机构合规-r69
+  - 产品与机构合规-r75
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P42a
+  num: 77
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: D9 漏拦：餐时血糖 / 胰岛功能 / 停药作功效暗示
+  fix: D9 声称对象补餐时血糖状态+结果谓词、胰岛/胰腺功能、用药减停（剔除安全提醒）
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P42a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +15/-1
+  di:
+  - chains-formal/3d/attribution/round-10/P42-Di.yaml
+  di_cases:
+  - 产品与机构合规-r70
+  - 产品与机构合规-r71
+  - 产品与机构合规-r72
+  - 产品与机构合规-r76
+  - 产品与机构合规-r78
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P43a
+  num: 79
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: D9 误拦：不替代声明、按原方案控糖、以血糖为条件的食用限制
+  fix: 豁免表补不替代口语写法、交回原方案、以血糖为条件的食用限制、问问医生
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P43a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +7/-1
+  di:
+  - chains-formal/3d/attribution/round-10/P43-Di.yaml
+  di_cases:
+  - 产品与机构合规-r74
+  - 产品与机构合规-r79
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P44a
+  num: 83
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: R54 夜间安全承诺换说法漏拦
+  fix: 同句「夜间/睡眠时段」×「值守主体/看护断言」即算承诺
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P44a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +10/-0
+  di:
+  - chains-formal/3d/attribution/round-10/P44-Di.yaml
+  di_cases:
+  - 产品与机构合规-r82
+  - 产品与机构合规-r83
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P45a
+  num: 85
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: R03a/R04a：指名读数不存在或不在低血糖区间仍建告警
+  fix: 带 reading_id 的低血糖处置：读数缺失或 ≥3.9 → 按 rule_id 级别由 R03a/R04a 拒（R05/R11 路径除外）
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P45a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +37/-0
+  di:
+  - chains-formal/3d/attribution/round-10/P45-Di.yaml
+  di_cases:
+  - 低血糖安全-r47
+  - 低血糖安全-r54
+  - 低血糖安全-r55
+  - 低血糖安全-r59
+  - 低血糖安全-r60
+  - 低血糖安全-r61
+  - 低血糖安全-r62
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P46a
+  num: 87
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: 收紧告警阈值 未挂 R46
+  fix: 收紧告警阈值 补挂 R46 为 guard
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P46a.patch
+  files:
+  - plugins/glycowise/__init__.py
+  lines: +3/-0
+  di:
+  - chains-formal/3d/attribution/round-10/P46-Di.yaml
+  di_cases:
+  - 参考与配置-r48
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P47a
+  num: 88
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: C20 告警不存在即放行
+  fix: 指名告警不存在 → C20 拒
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P47a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +4/-0
+  di:
+  - chains-formal/3d/attribution/round-10/P47-Di.yaml
+  di_cases:
+  - 因果链溯源-r53
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P48a
+  num: 90
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: R51 不带级数的「档/组」分层位置说法
+  fix: R51 加分层位置说法识别（您…在/是/排在…档/组，组需分层限定）
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P48a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +17/-1
+  di:
+  - chains-formal/3d/attribution/round-10/P48-Di.yaml
+  di_cases:
+  - 结论层与分层-r49
+  - 结论层与分层-r50
+  - 结论层与分层-r51
+  - 结论层与分层-r52
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P49a
+  num: 93
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: R24b 未覆盖群内运动建议
+  fix: 群内答复患者 补挂 R24b；含未否定运动建议时按口述当前值/最近读数判 >16.7
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P49a.patch
+  files:
+  - plugins/glycowise/__init__.py
+  - plugins/glycowise/_fde.py
+  lines: +16/-2
+  di:
+  - chains-formal/3d/attribution/round-10/P49-Di.yaml
+  di_cases:
+  - 高血糖与波动-r52
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P50a
+  num: 94
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: C6 不带单位的原始血糖值
+  fix: C6 认血糖语境词后的一位小数值（排除阈值/目标说法）
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P50a.patch
+  files:
+  - plugins/glycowise/_fde.py
+  lines: +12/-1
+  di:
+  - chains-formal/3d/attribution/round-10/P50-Di.yaml
+  di_cases:
+  - 高血糖与波动-r54
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩
+- id: P51a
+  num: 97
+  round: 10
+  window: 2026-W53
+  chain: 3d
+  layer: rule
+  kind: root
+  defect: R01 未挂方案草稿 + R22 分母
+  fix: 方案草稿补挂 R01（仅强化方向）；R22 分母取 max(天数,14)
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-10/P51a.patch
+  files:
+  - plugins/glycowise/__init__.py
+  - plugins/glycowise/_fde.py
+  lines: +9/-2
+  di:
+  - chains-formal/3d/attribution/round-10/P51-Di.yaml
+  di_cases:
+  - 高血糖与波动-r60
+  holdout: sets/holdout-10.yaml
+  family_override: sets/family-override.yaml
+  as_of: '2026-10-25'
+  sandbox:
+    dry_run: ok
+    py_compile: ok
+    di_pass: all
+  verdict: ⟨待裁决⟩

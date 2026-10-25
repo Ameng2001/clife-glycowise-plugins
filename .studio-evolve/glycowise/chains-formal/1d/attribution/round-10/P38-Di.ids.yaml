@@ -1,0 +1,8 @@
+# 机械转换自 P38-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P38
+round: 10
+chain: 1d
+window: 2026-W53
+note: C20：告警不存在时直接放行，给不存在的告警写回执
+ids:
+- 因果链溯源-r53

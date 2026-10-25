@@ -1,0 +1,22 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -734,8 +734,7 @@
+ def r03a(ctx):
+     r = _reading(ctx)
+     g = _num(r.get("value_mmol"))
+-    if g is None or g >= 3.0:
+-        return RuleResult.ok()
++    # P33b1（朴素·删掉命中的放行分支）：原「g is None or g >= 3.0 → 放行」删去
+     prev = _num(_prev_sample(ctx, r).get("value_mmol"))
+     ev = _staged_alert(ctx) or _alert(ctx)
+     if prev is None or prev >= 3.0:
+@@ -749,8 +748,7 @@
+ def r04a(ctx):
+     r = _reading(ctx)
+     g = _num(r.get("value_mmol"))
+-    if g is None or not (3.0 <= g < 3.9):
+-        return RuleResult.ok()
++    # P33b1（朴素·删掉命中的放行分支）：原「g is None or 不在 3.0–3.9 → 放行」删去
+     prev = _num(_prev_sample(ctx, r).get("value_mmol"))
+     if prev is None or prev >= 3.9:
+         return _fail("R04a", f"G={g} 在 3.0–3.9 但前一读数 {prev} 未确认（无前一读数或间隔 >{SAMPLE_GAP_MAX_MIN}min 不算连续），须连续 2 个读数", "等下一读数确认")

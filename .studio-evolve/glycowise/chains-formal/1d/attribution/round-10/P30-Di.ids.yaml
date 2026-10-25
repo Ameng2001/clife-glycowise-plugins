@@ -1,0 +1,11 @@
+# 机械转换自 P30-Di.yaml：只把 source_cases 改名为 ids（growth_metrics 只认 ids）；原文件未改
+proposal: P30
+round: 10
+chain: 1d
+window: 2026-W53
+note: R32 产品推荐合规闸：pitch 不复述产品名就凑不到「同句」；「三级管理」认不出
+ids:
+- 产品与机构合规-r67
+- 产品与机构合规-r68
+- 产品与机构合规-r69
+- 产品与机构合规-r75

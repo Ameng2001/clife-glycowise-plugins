@@ -1,0 +1,29 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -500,13 +500,25 @@
+     return RuleResult.ok()
+ 
+ 
++# P30a（W53 / 0718）：服务分层在门店口语里常说成「N 级管理」（「他现在属于三级管理」= L3）；「级管理 / 级管控」只指服务分层，
++#   不会与「三级医院 / 2 级低血糖」混淆。在 TIER_RE 上追加这一写法（R32 / D9 / R51 / 审核输出内容 共用同一口径）。
++TIER_RE = re.compile(TIER_RE.pattern + r"|[0-4零一二三四]\s*级\s*(管理|管控)")
++
++
+ def _product_gate(ctx, name):
+     text = text_of(ctx)
+     prods = product_mention(ctx, text)
+     if not prods:
+         return RuleResult.ok()
++    # P30a（W53 / 0717 0718 0719 0781）：IR R32 的「同句」指的是**推荐这件产品的那句话**与分层 / 缓解字样同句。生成产品推荐 的 pitch
++    #   就是这件 sku 的推荐话术，产品是它每一句的隐含主语（「按您目前的 L3 情况，每天一包」里「每天一包」说的就是英纽林）；
++    #   sku 名由 text_of 另起一行追加，pitch 不复述产品名就永远凑不到同一句，闸形同虚设。故 pitch 的每一句都按「提及产品的句子」审。
++    #   其它来源的文本（审核输出内容 的正文等）仍按字面产品名判同句，不受影响。
++    pitch = P(ctx, "pitch")
++    pitch_sents = {x.strip() for x in sentences(pitch)} if isinstance(pitch, str) else set()
+     for s in sentences(text):
+-        if any(p in s for p in prods) and (TIER_RE.search(s) or REMISSION_RE.search(s)):
++        about_product = any(p in s for p in prods) or s.strip() in pitch_sents
++        if about_product and (TIER_RE.search(s) or REMISSION_RE.search(s)):
+             return _fail(name, f"产品推荐与分层/缓解字样同句：「{s.strip()[:40]}」", "产品与分层结论、缓解/逆转字样分句分段，或删除产品推荐")
+     return None
+ 

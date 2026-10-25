@@ -1,0 +1,34 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -575,6 +575,22 @@
+         if attached is not True:
+             return _fail("R32", "产品推荐缺少「固体饮料，不替代药物」尾注", "附固定尾注后再出")
+     return RuleResult.ok()
++
++
++# P48a（W53 / 0723 0756 0769 0777）：R51 管的是「告诉患者他在哪一层」。分层结论除了带级数的写法（L3 / 三级 / 分层是 2 级），还有「把患者放进某一档 / 某一组」
++# 的位置说法：「您在中间那一档」「您是三个档里最轻的那档」「按评分您排在高风险组」「您这期被划在最需要盯的那一组」。
++# 认法：称呼患者（您 / 你 / 他 / 她）+ 归属动词（在 / 是 / 排在 / 划在 / 归到 / 分在 / 属于……）+ 档 / 组。「组」通用性强（运动小组、第二组团课），
++# 只在同一句另有分层限定（高 / 中 / 低风险、高危、最需要、重点、最轻 / 最重、中间）或评定语境（评分 / 评估 / 分层 / 这期）时才算。
++TIER_PLACEMENT_RE = re.compile(r"(您|你|他|她)[^。；，,！？!?]{0,10}?(排在|排到|划在|划到|划进|归在|归到|归入|分在|分到|落在|属于|在|是)[^。；，,！？!?]{0,12}?(档|组)(?!长|织|合|员|别|件|成)")
++TIER_GROUP_QUALIFIER_RE = re.compile(r"高风险|中风险|低风险|高危|最需要|重点|最轻|最重|中间|评分|评估|分层|分级|这期|本期")
++
++
++def _tier_placement(text):
++    for s in sentences(text or ""):
++        m = TIER_PLACEMENT_RE.search(s)
++        if m and (m.group(3) == "档" or TIER_GROUP_QUALIFIER_RE.search(s)):
++            return s.strip()
++    return None
+ 
+ 
+ @rule("R51_分层结论默认不可披露患者")
+@@ -582,7 +598,7 @@
+     pid = pid_of(ctx)
+     inc = P(ctx, "includes_tier_label")
+     if inc is None:
+-        inc = bool(TIER_RE.search(text_of(ctx) or ""))
++        inc = bool(TIER_RE.search(text_of(ctx) or "")) or bool(_tier_placement(text_of(ctx)))  # P48a
+     if not inc:
+         return RuleResult.ok()
+     appr = P(ctx, "disclosure_approved")

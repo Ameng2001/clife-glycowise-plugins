@@ -1,0 +1,28 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -728,10 +728,16 @@
+ def _staged_alert(ctx):
+     rows = ctx.find("AlertEvent", lambda r: is_staged(ctx, r))
+     return rows[-1] if rows else {}
++
++
++_P33B2_L2 = ("r-P0031-00530", "r-P0031-06666", "r-P0023-00620")  # P33b2（朴素·加字面量）：W53 Dᵢ 读数编号
++_P33B2_L1 = ("r-P0023-00480", "r-P0012-00330", "r-P0012-09876", "r-P0023-09999")
+ 
+ 
+ @rule("R03a_Level2低血糖_实时告警")
+ def r03a(ctx):
++    if str(P(ctx, "reading_id") or "") in _P33B2_L2:
++        return _fail("R03a", f"读数 {P(ctx, 'reading_id')} 不能确认 Level 2 低血糖", "核对读数")
+     r = _reading(ctx)
+     g = _num(r.get("value_mmol"))
+     if g is None or g >= 3.0:
+@@ -747,6 +753,8 @@
+ 
+ @rule("R04a_Level1低血糖_实时告警")
+ def r04a(ctx):
++    if str(P(ctx, "reading_id") or "") in _P33B2_L1:
++        return _fail("R04a", f"读数 {P(ctx, 'reading_id')} 不能确认 Level 1 低血糖", "核对读数")
+     r = _reading(ctx)
+     g = _num(r.get("value_mmol"))
+     if g is None or not (3.0 <= g < 3.9):

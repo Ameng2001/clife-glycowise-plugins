@@ -1,0 +1,12 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -584,8 +584,7 @@
+     inc = P(ctx, "includes_tier_label")
+     if inc is None:
+         inc = bool(TIER_RE.search(text_of(ctx) or ""))
+-    if not inc:
+-        return RuleResult.ok()
++    # P35b1（朴素·删掉命中的放行分支）：原「不含分层字样 → 放行」删去
+     appr = P(ctx, "disclosure_approved")
+     if appr is None:
+         appr = profile_of(ctx, pid).get("disclosure_approved")

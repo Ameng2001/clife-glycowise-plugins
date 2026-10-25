@@ -1,0 +1,26 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1354,11 +1354,22 @@
+         return _fail("C9", "签发记录不完整（签发人资质/时间戳/依据快照）", "补齐后推送")
+     return RuleResult.ok()
+ 
++
++# P50a（W53 / 0733 0748）：C6 拦的是群里出现「未脱敏的原始血糖值」。原实现只认带单位的「X.X mmol」，口语消息里「晚饭后血糖 14.0」「您现在血糖 16.8」
++# 不带单位同样是原始值。改为：血糖语境词（血糖 / 读数 / 测到 / 餐后 / 饭后 / 空腹 / 现在 / 复测……）后紧跟的一位小数值也算；
++# 阈值 / 目标说法（「低于 3.9」「控制在 7.0 以下」「3.9–10.0 之间」）不是患者的读数，排除。
++RAW_GLUCOSE_RE = re.compile(r"(血糖|读数|测到|测出|测得|餐后|饭后|空腹|睡前|现在|当前|复测|指血)(?P<gap>[^。；，,\d]{0,6}?)(?P<v>\d{1,2}\.\d)(?!\d|\s*(%|％|公斤|kg|斤|岁|小时|天|以下|以上|以内|之间|[-–~～]))")
++THRESHOLD_WORD_RE = re.compile(r"低于|高于|超过|小于|大于|不到|控制在|目标|达到|<|>|≤|≥")
+ 
++
++def _raw_glucose_values(text):
++    return [m.group("v") for m in RAW_GLUCOSE_RE.finditer(text or "") if not THRESHOLD_WORD_RE.search(m.group("gap"))]
++
++
+ @rule("C6_群内数据最小可见范围")
+ def c6(ctx):
+     text = text_of(ctx)
+-    raw_vals = re.findall(r"\d+\.\d\s*mmol", text)
++    raw_vals = re.findall(r"\d+\.\d\s*mmol", text) + _raw_glucose_values(text)  # P50a
+     if raw_vals or _drug_dose_sentences(text):
+         return _fail("C6", "群内内容含未脱敏原始血糖值或药名剂量", "群内只推脱敏卡片，明细在平台内可见")
+     return RuleResult.ok()
