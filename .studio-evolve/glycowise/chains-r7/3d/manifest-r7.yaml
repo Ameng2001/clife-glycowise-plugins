@@ -1,0 +1,8 @@
+ancestor_dir: .studio-evolve/glycowise/chains-r7/ancestor-h7/plugins/glycowise
+ontology: glycowise
+sets_root: .studio-evolve/glycowise
+proposals:
+  - {id: P22a, num: 28, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/3d/attribution/round-7/P22a.patch, di: [chains-r7/3d/attribution/round-7/P22-Di.yaml], holdout: sets/holdout-7.yaml}
+  - {id: P22b, num: 29, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/3d/attribution/round-7/P22b.patch, di: [chains-r7/3d/attribution/round-7/P22-Di.yaml], holdout: sets/holdout-7.yaml}
+  - {id: P23a, num: 30, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/3d/attribution/round-7/P23a.patch, di: [chains-r7/3d/attribution/round-7/P23-Di.yaml], holdout: sets/holdout-7.yaml}
+  - {id: P23b, num: 31, round: 7, window: 2026-W50, patch: .studio-evolve/glycowise/chains-r7/3d/attribution/round-7/P23b.patch, di: [chains-r7/3d/attribution/round-7/P23-Di.yaml], holdout: sets/holdout-7.yaml}

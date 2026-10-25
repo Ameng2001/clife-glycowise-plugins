@@ -66,7 +66,7 @@
   "C": {
     "steps": 2.925,
     "tokens": null,
-    "wall_s": 0.0012058333333333333
+    "wall_s": 0.0012366666666666667
   },
   "C_gate": 2.925,
   "runs": 3,
@@ -75,7 +75,7 @@
     "COST_BY_STEPS",
     "W_EVID_NOT_COMPUTED"
   ],
-  "family_override": ".studio-evolve/glycowise/sets/family-override.yaml",
+  "family_override": "/Users/liuyameng/Codes/clife-glycowise-plugins/.studio-evolve/glycowise/sets/family-override.yaml",
   "family_overridden": 0,
   "state": "h_i",
   "missing_cases": [],

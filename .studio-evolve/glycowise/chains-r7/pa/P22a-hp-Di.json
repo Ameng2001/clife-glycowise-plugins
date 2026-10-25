@@ -1,0 +1,46 @@
+{
+  "n_cases": 1,
+  "n_rows": 9,
+  "n_tier": {
+    "1": 0,
+    "2": 0,
+    "3": 3,
+    "4": 0
+  },
+  "origins": {
+    "real": 1
+  },
+  "case_pass": {
+    "因果链溯源-r29": 1.0
+  },
+  "T": {
+    "T_1": null,
+    "T_2": null,
+    "T_3": 1.0,
+    "T_4": null
+  },
+  "T_max": 3,
+  "A": 1.0,
+  "S_consist": 1.0,
+  "S_stable": 1.0,
+  "W_family": 1.0,
+  "C": {
+    "steps": 3.0,
+    "tokens": null,
+    "wall_s": 0.0006
+  },
+  "C_gate": 3.0,
+  "runs": 3,
+  "n_unscored": 0,
+  "flags": [
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "family_override": "/Users/liuyameng/Codes/clife-glycowise-plugins/.studio-evolve/glycowise/sets/family-override.yaml",
+  "family_overridden": 0,
+  "state": "h_prime",
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:adcc2548bbde82cca1dcf8b1f1b148d4747156986156420ffc7b1d7251b44c2e",
+  "exec": "AUTO"
+}

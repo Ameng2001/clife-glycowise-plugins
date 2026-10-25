@@ -1,0 +1,871 @@
+{
+ "n_proposals": 28,
+ "rounds": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7
+ ],
+ "modes": [
+  "3d",
+  "1d",
+  "random",
+  "1d-strict",
+  "none",
+  "3d-noT",
+  "3d-noS",
+  "3d-noW"
+ ],
+ "arms": {
+  "3d": {
+   "accept_rate": 0.8214285714285714,
+   "n_accept": 23,
+   "n_judged": 28,
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 23
+  },
+  "1d": {
+   "accept_rate": 0.9642857142857143,
+   "n_accept": 27,
+   "n_judged": 28,
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 27
+  },
+  "random": {
+   "accept_rate": 0.52,
+   "n_accept": 13,
+   "n_judged": 25,
+   "regress_rate": 0.07692307692307693,
+   "regress_any_rate": 0.0,
+   "n_any_known": 13
+  },
+  "1d-strict": {
+   "accept_rate": 0.88,
+   "n_accept": 22,
+   "n_judged": 25,
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 22
+  },
+  "none": {
+   "accept_rate": 1.0,
+   "n_accept": 25,
+   "n_judged": 25,
+   "regress_rate": 0.04,
+   "regress_any_rate": 0.0,
+   "n_any_known": 25
+  },
+  "3d-noT": {
+   "accept_rate": 0.88,
+   "n_accept": 22,
+   "n_judged": 25,
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 22
+  },
+  "3d-noS": {
+   "accept_rate": 0.88,
+   "n_accept": 22,
+   "n_judged": 25,
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 22
+  },
+  "3d-noW": {
+   "accept_rate": 0.88,
+   "n_accept": 22,
+   "n_judged": 25,
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "n_any_known": 22
+  }
+ },
+ "diffs": {
+  "regress_rate_diff": {
+   "value": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "boot": 1000
+  },
+  "regress_any_diff": {
+   "value": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "boot": 1000
+  },
+  "random_minus_3d": {
+   "value": 0.07692307692307693,
+   "ci95": [
+    0.0,
+    0.2631578947368421
+   ],
+   "boot": 1000
+  },
+  "1d-strict_minus_3d": {
+   "value": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "boot": 1000
+  },
+  "3d-noT_minus_3d": {
+   "value": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "boot": 1000
+  },
+  "3d-noS_minus_3d": {
+   "value": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "boot": 1000
+  },
+  "3d-noW_minus_3d": {
+   "value": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "boot": 1000
+  }
+ },
+ "divergent": {
+  "1d_accept_3d_reject": {
+   "n": 4,
+   "regress_rate": 0.0,
+   "regress_any_rate": 0.0,
+   "proposals": [
+    "10",
+    "11",
+    "10",
+    "11"
+   ]
+  },
+  "3d_accept_1d_reject": {
+   "n": 0,
+   "regress_rate": null,
+   "regress_any_rate": null,
+   "proposals": []
+  }
+ },
+ "reject_share_3d": {
+  "n_rejected": 5,
+  "T": 0,
+  "S": 0,
+  "W": 0,
+  "C": 0,
+  "strict": 5,
+  "outer": 0,
+  "unscored": 0,
+  "unknown": 0
+ },
+ "n": 23,
+ "flags": [
+  "ARM_MISSING:random,1d-strict,none,3d-noT,3d-noS,3d-noW",
+  "REGRESS_MIXED_B"
+ ],
+ "seed": 0,
+ "boot": 1000,
+ "tier_min": 8,
+ "tier_drop": 0.02,
+ "proposals": [
+  {
+   "round": 1,
+   "proposal": "2",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 2
+   }
+  },
+  {
+   "round": 1,
+   "proposal": "3",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 1
+   }
+  },
+  {
+   "round": 1,
+   "proposal": "4",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 2
+   }
+  },
+  {
+   "round": 2,
+   "proposal": "5",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 3,
+   "proposal": "6",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 4,
+   "proposal": "7",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 3
+   }
+  },
+  {
+   "round": 4,
+   "proposal": "8",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 5
+   }
+  },
+  {
+   "round": 5,
+   "proposal": "10",
+   "attempt": 4,
+   "accepted": {
+    "3d": false,
+    "1d": true,
+    "random": true,
+    "1d-strict": false,
+    "none": true,
+    "3d-noT": false,
+    "3d-noS": false,
+    "3d-noW": false
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": "strict",
+   "window": null,
+   "origins": {
+    "real": 5
+   }
+  },
+  {
+   "round": 5,
+   "proposal": "11",
+   "attempt": 1,
+   "accepted": {
+    "3d": false,
+    "1d": true,
+    "random": false,
+    "1d-strict": false,
+    "none": true,
+    "3d-noT": false,
+    "3d-noS": false,
+    "3d-noW": false
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": "strict",
+   "window": null,
+   "origins": {
+    "real": 5
+   }
+  },
+  {
+   "round": 5,
+   "proposal": "9",
+   "attempt": 4,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 5
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "10",
+   "attempt": 4,
+   "accepted": {
+    "3d": false,
+    "1d": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": "strict",
+   "window": null,
+   "origins": {
+    "real": 5
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "11",
+   "attempt": 4,
+   "accepted": {
+    "3d": false,
+    "1d": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": "strict",
+   "window": null,
+   "origins": {
+    "real": 5
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "12",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 3
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "13",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 2
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "14",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "sim": 3
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "16",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 2
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "17",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 2
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "18",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "19",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "20",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "21",
+   "attempt": 1,
+   "accepted": {
+    "3d": false,
+    "1d": false,
+    "random": true,
+    "1d-strict": false,
+    "none": true,
+    "3d-noT": false,
+    "3d-noS": false,
+    "3d-noW": false
+   },
+   "regress": 1,
+   "regress_why": [
+    "next:dA=-0.007"
+   ],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": "strict",
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "22",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "23",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 6,
+   "proposal": "9",
+   "attempt": 4,
+   "accepted": {
+    "3d": true,
+    "1d": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_next",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 5
+   }
+  },
+  {
+   "round": 7,
+   "proposal": "28",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 7,
+   "proposal": "29",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 7,
+   "proposal": "30",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 7,
+   "proposal": "31",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  }
+ ]
+}

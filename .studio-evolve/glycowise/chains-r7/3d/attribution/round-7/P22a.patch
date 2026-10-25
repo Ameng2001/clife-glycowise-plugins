@@ -1,0 +1,30 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -785,6 +785,11 @@
+     if ch not in TRUSTED_CHANNELS or conf is None or conf < 0.95:
+         return _fail("R53", f"来源通道 {ch or '未知'}（置信 {conf}）不得独立触发{level}告警", "先指血复测或健管师加急复核确认后再推")
+     return RuleResult.ok()
++
++
++# P22a：「低血糖风险已结束」式断言（闭环的语义形态，区别于「值已回升」）。否定形态（未脱离 / 没有排除）在 r44 里先剔除。
++RISK_CLEARED_RE = re.compile(r"(脱离|排除|消除)\s*(了)?\s*(低血糖)?\s*(的)?\s*(风险|危险)|(风险|危险)\s*(已经|已)?\s*(排除|消除|过去)"
++                             r"|(度过|渡过)\s*(了)?\s*危险期")
+ 
+ 
+ @rule("R44_高危用药禁止闭环")
+@@ -792,9 +797,14 @@
+     pid = pid_of(ctx)
+     act = str(P(ctx, "action_taken") or "")
+     # P17a（W47 / 0069）：否定式的闭环提法（「先不闭环」「暂不关闭」「不要结案」）不是闭环请求；去掉被否定的片段后再判
+-    act_eff = re.sub(r"(先不|暂不|不要|不用|不予|无需|未|别|不)\s*(闭环|关闭|结案|解除|close|resolve)", "", act)
++    act_eff = re.sub(r"(先不|暂不|不要|不用|不予|无需|尚未|还没|没有|并未|未|别|不)\s*(闭环|关闭|结案|解除|脱离|排除|消除|close|resolve)", "", act)
+     closing = any(k in act_eff for k in ("闭环", "关闭", "resolved", "resolve", "close", "结案", "解除", "恢复正常", "已处理完"))
++    # P22a（W50 / 0401）：闭环 = 把告警判为 resolved / HypoState 判为 closed，即宣称「低血糖风险已结束」；IR 允许的只是
++    # value_recovered（「值已回升」+ 保持复发观察窗）。「确认脱离低血糖风险」与 0402 的「确认低血糖风险解除」同义，
++    # 只是换了动词，此前因不在字面词表里漏放。按「风险已结束」的语义认，而不是逐个补词。
+     if not closing:
++        closing = bool(RISK_CLEARED_RE.search(act_eff))
++    if not closing:
+         return RuleResult.ok()
+     hs = (ctx.get("HypoState", pid) or {}) if pid else {}
+     if hypo_risk(ctx, pid) or hs.get("closure_blocked_reason") or hs.get("prolonged_risk") is True:

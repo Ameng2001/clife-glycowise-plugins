@@ -35,6 +35,10 @@
 | 6 | 2026-W47 | 21 | 1 | 0.857 | — | 0.882 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.925 | FAIL | PASS | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:b1cf36ede8ac2674 | P18b 朴素修 R38 删分支；Dᵢ 仍 IMPL_MISSING → 带闸门臂全 REVISE，none/random ACCEPT；未合入 |
 | 6 | 2026-W47 | 22 | 1 | 0.857 | — | 0.882 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.925 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:b1cf36ede8ac2674 | P19a 根因修 TIER_RE 分层口语写法；八臂同判；2026-10-24 用户确认合入生产（post-P1x h_i：B_6 .900 不变、real-all .830、sim .990 不变）|
 | 6 | 2026-W47 | 23 | 1 | 0.857 | — | 0.882 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.925 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:b1cf36ede8ac2674 | P19b 朴素修 TIER_RE 字面量；与 P19a 逐格相同；八臂同判；未合入 |
+| 7 | 2026-W50 | 28 | 1 | 0.385 | — | 0.824 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.925 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:adcc2548bbde82cc | P22a（3d 链根因 · R44 语义词表）；P-A 八臂全 ACCEPT；演练，未合入 |
+| 7 | 2026-W50 | 29 | 1 | 0.385 | — | 0.824 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.925 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:adcc2548bbde82cc | P22b（3d 链朴素 · 加字面量）；P-A 八臂全 ACCEPT；链上冲突；演练，未合入 |
+| 7 | 2026-W50 | 30 | 1 | 0.385 | — | 0.824 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.925 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:adcc2548bbde82cc | P23a（3d 链根因 · TIER_RE 评定动词）；P-A 七臂 + none ACCEPT、random REVISE；演练，未合入 |
+| 7 | 2026-W50 | 31 | 1 | 0.385 | — | 0.824 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.925 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:adcc2548bbde82cc | P23b（3d 链朴素 · 加字面量）；P-A 八臂全 ACCEPT；链上冲突；演练，未合入 |
 
 > round 1 的 P2 / P3 / P4 于 2026-10-23 经用户确认合入生产（重放编辑，案例库 103 条全过）；合入后 h_i 的全库读数：T=(1,1,1,—) A=1.0 S=1.0 W_family=0.909 C=2.93。
 > round 2（2026-W43，真实窗口）：P5 来自真实轨迹 0018 + reviewed 反馈归因（`attribute-report-2026-W43.md`），B 第一次是 real-only（`sets/holdout-2.yaml`，20 条 / 16 层）。h_i 在 cases/real 33 条上 78/99（D⁻ 7 = rule 1 + router 6），h' 81/99；sim 98/98 不变。P5 于同日经用户确认合入生产（`git apply proposals/P5.patch`）；合入后 h_i：real-all 81/99（剩 6 条路由层 wrong）、B-sim 294/294。

@@ -1,0 +1,88 @@
+{
+  "ontology_id": "glycowise",
+  "proposal": "31",
+  "attempt": 1,
+  "round": 7,
+  "gate_mode": "3d-noT",
+  "delta": null,
+  "accept_rate": null,
+  "seed": null,
+  "beta": 0.05,
+  "max_attempts": 3,
+  "panel": "SINGLE_BACKBONE",
+  "inner": {
+    "deltas": {
+      "flags": [
+        "W_PARTIAL",
+        "W_EVID_UNAVAILABLE"
+      ],
+      "dT": {
+        "T_3": 1.0
+      },
+      "dS": 0.0,
+      "dW": {
+        "W_family": 1.0
+      },
+      "dA": 1.0,
+      "dC": 1.0,
+      "C_base": 2.0
+    },
+    "judge": {
+      "growOK": true,
+      "costOK": true,
+      "strict": true,
+      "pass": true,
+      "reasons": [],
+      "triggered": [],
+      "band": 1.0
+    },
+    "n": 1,
+    "origins": {
+      "real": 1
+    }
+  },
+  "outer": [
+    {
+      "backbone": "default",
+      "deltas": {
+        "flags": [
+          "W_PARTIAL",
+          "W_EVID_UNAVAILABLE"
+        ],
+        "dT": {
+          "T_1": 0.0,
+          "T_3": 0.0,
+          "T_4": 0.0
+        },
+        "dS": 0.0,
+        "S_holdout_cand": 1.0,
+        "S_full_base": 1.0,
+        "S_full_cand": 1.0,
+        "S_min_component": "S_consist",
+        "dW": {
+          "W_family": 0.0
+        },
+        "dA": 0.0,
+        "dC": 0.0,
+        "C_base": 2.925
+      },
+      "judge": {
+        "growOK": true,
+        "costOK": true,
+        "strict": true,
+        "pass": true,
+        "reasons": [],
+        "triggered": [],
+        "band": 1.0
+      },
+      "n": 40
+    }
+  ],
+  "inner_pass": true,
+  "outer_pass": true,
+  "decision": "ACCEPT",
+  "triggered": [],
+  "exec": "AUTO",
+  "script_hash": "sha256:adcc2548bbde82cca1dcf8b1f1b148d4747156986156420ffc7b1d7251b44c2e",
+  "report": "提案 31（第 1/3 次）· 本体 glycowise · 沙箱 — · gate_mode=3d-noT\n来源案例 Dᵢ：1 条（real 1 / sim 0)    留出集 B：40 条（real，25 层，round 7）\n内关卡 g_in：\n  ΔT = (—, —, +1.00, —)   ΔS_consist = 0.000   ΔW = (—, +1.000)   ΔC_tok = 1.000（带宽 1.000）   ΔA = +1.000\n  growOK ✓  costOK ✓  strict ✓  → PASS   flags=['W_PARTIAL', 'W_EVID_UNAVAILABLE']\n外关卡 g_out（骨干 default）：\n  ΔT = (+0.00, —, +0.00, +0.00)   ΔS = 0.000（min 分量 = S_consist）   ΔW = (—, +0.000)   ΔC_tok = 0.000   ΔA = +0.000\n  growOK ✓  costOK ✓  → PASS   flags=['W_PARTIAL', 'W_EVID_UNAVAILABLE']\n裁决：ACCEPT（待人确认合入）\n执行方式：AUTO（sha256:adcc2548bbde…）· SINGLE_BACKBONE"
+}
