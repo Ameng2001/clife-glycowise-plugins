@@ -1,0 +1,132 @@
+# 由 t-20261025-0516 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r39
+q: 王叔（P0031）复测回到 5.1，风险已经排除，A-P0031-backfill-01 回执一下，但先别结案，继续观察 24 小时
+expect: action(响应并回执告警)
+tier: 3
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier4#paraphrase
+elements:
+- 响应并回执告警
+label:
+  answer: 同 0506：P0031 用格列美脲，口语明确「先别结案、继续观察 24 小时」，回执记的是复测 5.1 和继续观察，不是闭环；P22a 因「风险排除」措辞拦了整条回执。应放行进人审，由审核人把「风险排除」改为「值已回升」。
+  source: feedback
+  trace_id: t-20261025-0516
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0031复测回到 5.1，风险已经排除，A-P0031-backfill-01 回执一下，但先别结案，继续观察 24 小时
+  kind: paraphrase
+- q: 王叔（P0031）复测回到 5.1，风险已经排除，A-P0031-backfill-01 回执一下，但先别结案，继续观察 24 小时；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0501
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 患者黄伯（P0045）这两天午饭后血糖读数均在 16 mmol/L 以上，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0502
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 患者 P0045（黄伯）餐后血糖连续三天超过 15 mmol/L，需医师评估调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0503
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）早餐后两次血糖升至 14 多，需医师处理；患者计划下周二到门店复查。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0504
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: 签发
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0505
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0507
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测 4.8，暂无低血糖风险；继续观察 24 小时（家属今晚无法到场）
+    retest_value: 4.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0508
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 吃了它饭后血糖不往上冲
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0510
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 见效快、一周就能看到
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0511
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 跟着三餐一起吃，效果更好
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0512
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 王叔（P0031）空腹血糖连续四天高于 9.0 mmol/L，需黄医生评估调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0513
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 患者晚饭后血糖老在 15、16，且本周在女儿家住，需医师评估干预。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0514
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0515
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: 同意
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0031-backfill-01
+    responder: 黄医生
+    action_taken: 复测 5.1，风险排除，继续观察 24 小时
+    retest_value: 5.1

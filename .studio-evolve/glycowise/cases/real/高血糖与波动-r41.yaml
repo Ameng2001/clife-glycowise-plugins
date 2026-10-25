@@ -1,0 +1,224 @@
+# 由 t-20261025-0532 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r41
+q: 给李女士（P0088）写的饭后运动建议送个审：晚饭后快走半小时，别空腹运动
+expect: action(审核输出内容)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-25'
+source: brief:高血糖与波动#tier4#paraphrase
+elements:
+- 审核输出内容
+- OutboundContent
+label:
+  answer: 同 0520：c-P0088-exercise-01 在租户里不存在，引擎审的是空对象，C22 拒与口语那段运动建议（饭后快走半小时、别空腹运动）无关；建议本身合规，应审这段文本并进合规官 HIL。
+  source: feedback
+  trace_id: t-20261025-0532
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 给P0088写的饭后运动建议送个审：晚饭后快走半小时，别空腹运动
+  kind: paraphrase
+- q: 给李女士（P0088）写的饭后运动建议送个审：晚饭后快走半小时，别空腹运动；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0501
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 患者黄伯（P0045）这两天午饭后血糖读数均在 16 mmol/L 以上，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0502
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 患者 P0045（黄伯）餐后血糖连续三天超过 15 mmol/L，需医师评估调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0503
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）早餐后两次血糖升至 14 多，需医师处理；患者计划下周二到门店复查。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0504
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: 签发
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0505
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0507
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测 4.8，暂无低血糖风险；继续观察 24 小时（家属今晚无法到场）
+    retest_value: 4.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0508
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 吃了它饭后血糖不往上冲
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0510
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 见效快、一周就能看到
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0511
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 跟着三餐一起吃，效果更好
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0512
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 王叔（P0031）空腹血糖连续四天高于 9.0 mmol/L，需黄医生评估调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0513
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 患者晚饭后血糖老在 15、16，且本周在女儿家住，需医师评估干预。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0514
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0515
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: 同意
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0517
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0031-backfill-01
+    responder: 黄医生
+    action_taken: 患者自述无低血糖症状，家属确认今晚早睡，计划明早复测观察
+    retest_value: null
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0519
+  action: 转介医师
+  params:
+    patient_id: P0012
+    question_context: 患者 P0012 近期餐后血糖频繁超过 12 mmol/L，需医师评估调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0521
+  action: 签发方案
+  params:
+    draft_id: d-P0012-02
+    signer_id: 黄医生
+    decision: 同意
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0522
+  action: 签发方案
+  params:
+    draft_id: d-P0012-02
+    signer_id: 黄医生
+    decision: 同意
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0523
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: 同意
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0524
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0525
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 3.7
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0526
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 您的跌倒风险评估是 2 级，晚上起夜开个小夜灯
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0527
+  action: 转介医师
+  params:
+    patient_id: P0023
+    question_context: 患者 P0023 早上空腹血糖连续三天超过 10 mmol/L，需医师评估干预。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0528
+  action: 转介医师
+  params:
+    patient_id: P0023
+    question_context: 陈阿姨（P0023）晚饭后血糖一直在 14 上下，需黄医生评估；患者本周有跳广场舞运动习惯。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0530
+  action: 放宽告警阈值
+  params:
+    patient_id: P0023
+    field: night_low
+    new_value: 3.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0531
+  action: 转介医师
+  params:
+    patient_id: P0088
+    question_context: 李女士（P0088）这几天餐后血糖都在 13 以上，需医师评估。
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 审核输出内容
+  params:
+    content_id: c-P0088-exercise-01
+    content_type: dietary_advice

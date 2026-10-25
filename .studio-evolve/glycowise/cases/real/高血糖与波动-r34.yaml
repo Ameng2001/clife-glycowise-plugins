@@ -1,0 +1,140 @@
+# 由 t-20261025-0518 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r34
+q: 这段给刘阿姨（P0012）的控餐后建议帮我送审：晚饭先吃菜再吃主食，主食减三分之一；她这周孙子来住。
+expect: action(审核输出内容)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-25'
+source: brief:高血糖与波动#tier4#irrelevant_field
+elements:
+- 审核输出内容
+- OutboundContent
+label:
+  answer: 口语要送审的是一段新写的控餐建议（先菜后饭、主食减三分之一），本身不含禁用词、药名、功效声称。路由却填了 c-P0012-plan-02，那是另一条已存在的内容（「逆转有望，可以准备停药」），引擎审的是那条，D8 命中的「逆转 / 停药」与口语无关。审核对象错了，裁决不能代表这段建议。应审口语里的文本，进合规官 HIL；文本缺免责尾注（C22）应在送审时补上。
+  source: feedback
+  trace_id: t-20261025-0518
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 这段给P0012的控餐后建议帮我送审：晚饭先吃菜再吃主食，主食减三分之一；她这周孙子来住。
+  kind: paraphrase
+- q: 这段给刘阿姨（P0012）的控餐后建议帮我送审：晚饭先吃菜再吃主食，主食减三分之一；她这周孙子来住。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0501
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 患者黄伯（P0045）这两天午饭后血糖读数均在 16 mmol/L 以上，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0502
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 患者 P0045（黄伯）餐后血糖连续三天超过 15 mmol/L，需医师评估调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0503
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）早餐后两次血糖升至 14 多，需医师处理；患者计划下周二到门店复查。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0504
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: 签发
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0505
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0507
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测 4.8，暂无低血糖风险；继续观察 24 小时（家属今晚无法到场）
+    retest_value: 4.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0508
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 吃了它饭后血糖不往上冲
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0510
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 见效快、一周就能看到
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0511
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 跟着三餐一起吃，效果更好
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0512
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 王叔（P0031）空腹血糖连续四天高于 9.0 mmol/L，需黄医生评估调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0513
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 患者晚饭后血糖老在 15、16，且本周在女儿家住，需医师评估干预。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0514
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0515
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: 同意
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0517
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0031-backfill-01
+    responder: 黄医生
+    action_taken: 患者自述无低血糖症状，家属确认今晚早睡，计划明早复测观察
+    retest_value: null
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 1.0
+  action: 审核输出内容
+  params:
+    content_id: c-P0012-plan-02
+    content_type: plan_advice
