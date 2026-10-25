@@ -1,0 +1,27 @@
+# round 9 · 3d 链 · 归因清单（只列根因修；链上只走根因修，v5 (b‴)）
+# 路径相对 .studio-evolve/glycowise/；补丁用 patch -p1 -d chains-formal/3d/state 应用
+round: 9
+chain: 3d
+window: 2026-W52
+base_state: chains-formal/3d/state      # h₉ = 生产
+as_of: '2026-10-25'
+dminus_candidates: sets/r9-Dminus-candidates.yaml
+proposals:
+- proposal: 44
+  name: P28a
+  kind: root
+  defect: P28
+  layer: rule
+  rule: D9_产品功效声称拦截
+  summary: D9 改为反向判定——产品话术分句出现血糖类指标即视为功效暗示，只豁免监测提醒与不替代药物/遵医嘱声明（按片段剔除）
+  files: [plugins/glycowise/_fde.py]
+  patch: chains-formal/3d/attribution/round-9/P28a.patch
+  patch_lines: 37
+  di: chains-formal/3d/attribution/round-9/P28-Di.yaml
+  doc: chains-formal/3d/attribution/round-9/P28.md
+  sandbox: chains-formal/3d/work-r9/sb/P28a/plugins/glycowise
+  checks:
+    dry_run: ok
+    py_compile: ok
+    di: 3/3          # 1 案例 × (原题 + 2 变体)，runner --state h_prime --as-of 2026-10-25
+  naive_siblings: [P28b1]

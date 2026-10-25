@@ -45,3 +45,8 @@ proposals:
   41: {id: P26b3, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 26, chain: 3d, rule: 'naive(5 字面量)', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
   42: {id: P27a, kind: root, round: 8, window: 2026-W51, merged: true, pair: 27, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
   43: {id: P27b1, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 27, chain: 3d, rule: 'naive(5 字面量)', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
+  # round 9（formal 第 2 轮）
+  44: {id: P28a, kind: root, round: 9, window: 2026-W52, merged: false, pair: 28, chain: 3d, note: 'P-A 七臂 + none 接受；3d 链 ACCEPT'}
+  45: {id: P28b1, kind: naive, round: 9, window: 2026-W52, merged: false, pair: 28, chain: 3d, rule: '5 字面量', note: 'P-A 八臂全接受'}
+  46: {id: P29a, kind: root, round: 9, window: 2026-W52, merged: false, pair: 29, chain: 1d, note: 'P-A APPLY_FAIL（1d 链已分叉）；1d 链 ACCEPT'}
+  47: {id: P29b1, kind: naive, round: 9, window: 2026-W52, merged: false, pair: 29, chain: 1d, rule: '5 字面量', note: 'P-A APPLY_FAIL'}

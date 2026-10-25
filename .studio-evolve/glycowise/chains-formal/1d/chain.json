@@ -1,6 +1,6 @@
 {
   "gate_mode": "1d",
-  "ancestor_dir": ".studio-evolve/glycowise/chains-formal/ancestor-s/plugins/glycowise",
+  "ancestor_dir": ".studio-evolve/glycowise/chains-formal/1d/start-r9/plugins/glycowise",
   "ontology": "glycowise",
   "delta": null,
   "accept_rate": null,
@@ -9,17 +9,17 @@
   "note": "重放流近似：提案来自原始 3d 链的归因，各臂没有自己的归因；PATCH_CONFLICT 的提案不计入接受或拒绝。",
   "steps": [
     {
-      "id": "P24a",
-      "num": 32,
-      "round": 8,
-      "window": "2026-W51",
-      "state_before": "2523f85949949222",
+      "id": "P29a",
+      "num": 46,
+      "round": 9,
+      "window": "2026-W52",
+      "state_before": "98f594a57289542b",
       "patch": "APPLIED",
       "decision": "ACCEPT",
       "inner_pass": true,
       "outer_pass": true,
       "triggered": [],
-      "verdict": "verdicts/8-32-1-1d.json",
+      "verdict": "verdicts/9-46-1-1d.json",
       "Di": {
         "h_i": {
           "A": 0.0,
@@ -32,9 +32,9 @@
           "S_consist": 1.0,
           "W_family": 0.0,
           "C_gate": 2.0,
-          "n_cases": 4,
+          "n_cases": 1,
           "n_unscored": 0,
-          "file": "readings/P24a-hi-Di.json"
+          "file": "readings/P29a-hi-Di.json"
         },
         "h_prime": {
           "A": 1.0,
@@ -47,174 +47,92 @@
           "S_consist": 1.0,
           "W_family": 1.0,
           "C_gate": 3.0,
-          "n_cases": 4,
+          "n_cases": 1,
           "n_unscored": 0,
-          "file": "readings/P24a-hp-Di.json"
+          "file": "readings/P29a-hp-Di.json"
         }
       },
       "B": {
         "h_i": {
           "A": 0.84,
           "T": {
-            "T_1": 0.5483870967741935,
+            "T_1": 0.59375,
             "T_2": null,
-            "T_3": 0.9534883720930233,
-            "T_4": 1.0
+            "T_3": 0.9523809523809523,
+            "T_4": 0.9615384615384616
           },
           "S_consist": 1.0,
           "W_family": 1.0,
-          "C_gate": 2.79,
+          "C_gate": 2.78,
           "n_cases": 100,
           "n_unscored": 0,
-          "file": "readings/P24a-hi-B.json"
+          "file": "readings/P29a-hi-B.json"
         },
         "h_prime": {
           "A": 0.84,
           "T": {
-            "T_1": 0.5483870967741935,
+            "T_1": 0.59375,
             "T_2": null,
-            "T_3": 0.9534883720930233,
-            "T_4": 1.0
+            "T_3": 0.9523809523809523,
+            "T_4": 0.9615384615384616
           },
           "S_consist": 1.0,
           "W_family": 1.0,
-          "C_gate": 2.81,
+          "C_gate": 2.78,
           "n_cases": 100,
           "n_unscored": 0,
-          "file": "readings/P24a-hp-B.json"
+          "file": "readings/P29a-hp-B.json"
         }
       },
       "merged": true,
-      "state_after": "1d25f683611e901c",
-      "wall_s": 13.9
-    },
-    {
-      "id": "P25a",
-      "num": 34,
-      "round": 8,
-      "window": "2026-W51",
-      "state_before": "1d25f683611e901c",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/8-34-1-1d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 3.0,
-          "n_cases": 2,
-          "n_unscored": 0,
-          "file": "readings/P25a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.0,
-          "n_cases": 2,
-          "n_unscored": 0,
-          "file": "readings/P25a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.84,
-          "T": {
-            "T_1": 0.5483870967741935,
-            "T_2": null,
-            "T_3": 0.9534883720930233,
-            "T_4": 1.0
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.81,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P24a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.84,
-          "T": {
-            "T_1": 0.5483870967741935,
-            "T_2": null,
-            "T_3": 0.9534883720930233,
-            "T_4": 1.0
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.81,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P25a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "98f594a57289542b",
-      "wall_s": 8.0
+      "state_after": "80f111ed7ee9c1f0",
+      "wall_s": 15.2
     }
   ],
   "rounds": [
     {
-      "round": 8,
-      "holdout": "sets/holdout-8.yaml",
+      "round": 9,
+      "holdout": "sets/holdout-9.yaml",
       "holdout_next": null,
       "accepted": [
-        "P24a",
-        "P25a"
+        "P29a"
       ],
       "judged": [
-        "P24a",
-        "P25a"
+        "P29a"
       ],
-      "state": "98f594a57289542b",
+      "state": "80f111ed7ee9c1f0",
       "on_B": {
         "A": 0.84,
         "T": {
-          "T_1": 0.5483870967741935,
+          "T_1": 0.59375,
           "T_2": null,
-          "T_3": 0.9534883720930233,
-          "T_4": 1.0
+          "T_3": 0.9523809523809523,
+          "T_4": 0.9615384615384616
         },
         "S_consist": 1.0,
         "W_family": 1.0,
-        "C_gate": 2.81,
+        "C_gate": 2.78,
         "n_cases": 100,
         "n_unscored": 0,
-        "file": "readings/P25a-hp-B.json"
+        "file": "readings/P29a-hp-B.json"
       }
     }
   ],
   "final": {
-    "sets/holdout-8.yaml": {
+    "sets/holdout-9.yaml": {
       "A": 0.84,
       "T": {
-        "T_1": 0.5483870967741935,
+        "T_1": 0.59375,
         "T_2": null,
-        "T_3": 0.9534883720930233,
-        "T_4": 1.0
+        "T_3": 0.9523809523809523,
+        "T_4": 0.9615384615384616
       },
       "S_consist": 1.0,
       "W_family": 1.0,
-      "C_gate": 2.81,
+      "C_gate": 2.78,
       "n_cases": 100,
       "n_unscored": 0,
-      "file": "readings/P25a-hp-B.json"
+      "file": "readings/P29a-hp-B.json"
     },
     "sets/real-all-W51.yaml": {
       "A": 0.8419811320754716,
@@ -248,12 +166,11 @@
     }
   },
   "accepted": [
-    "P24a",
-    "P25a"
+    "P29a"
   ],
-  "n_judged": 2,
+  "n_judged": 1,
   "n_conflict": 0,
-  "final_state": "98f594a57289542b",
+  "final_state": "80f111ed7ee9c1f0",
   "script_hash": "sha256:2d1e57d8b2ed7bef0ff9f5c483e38fdb2d6f1462bea9b4406f521251813c9595",
   "exec": "AUTO",
   "family_override": ".studio-evolve/glycowise/sets/family-override.yaml",

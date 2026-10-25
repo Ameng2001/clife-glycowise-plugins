@@ -51,6 +51,8 @@
 | 8 | 2026-W51 | 40 | 1 | 0.548 | — | 0.837 | 1.000 | 1.000 | 0.950 | 1.000 | — | 1.000 | — | 2.790 | PASS | FAIL | REVISE | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | 触发 S,T；P26b2（3d 链 · naive(4 hard→soft)）；formal r8；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25 |
 | 8 | 2026-W51 | 41 | 1 | 0.548 | — | 0.953 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.790 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | P26b3（3d 链 · naive(5 字面量)）；formal r8；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25 |
 | 8 | 2026-W51 | 43 | 1 | 0.548 | — | 0.953 | 1.000 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.810 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | P27b1（3d 链 · naive(5 字面量)）；formal r8；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25 |
+| 9 | 2026-W52 | 44 | 1 | 0.594 | — | 0.952 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.780 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | P28a（3d 链 · root）；formal r9；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25 |
+| 9 | 2026-W52 | 45 | 1 | 0.594 | — | 0.952 | 0.962 | 1.000 | 1.000 | 1.000 | — | 1.000 | — | 2.780 | PASS | PASS | ACCEPT | AUTO/SINGLE_BACKBONE | 3d | sha256:2d1e57d8b2ed7bef | P28b1（3d 链 · naive(5 字面量)）；formal r9；归因代理 claude-opus-5-5 独立上下文 · 模板 b600b281；AS_OF 2026-10-25 |
 
 > round 1 的 P2 / P3 / P4 于 2026-10-23 经用户确认合入生产（重放编辑，案例库 103 条全过）；合入后 h_i 的全库读数：T=(1,1,1,—) A=1.0 S=1.0 W_family=0.909 C=2.93。
 > round 2（2026-W43，真实窗口）：P5 来自真实轨迹 0018 + reviewed 反馈归因（`attribute-report-2026-W43.md`），B 第一次是 real-only（`sets/holdout-2.yaml`，20 条 / 16 层）。h_i 在 cases/real 33 条上 78/99（D⁻ 7 = rule 1 + router 6），h' 81/99；sim 98/98 不变。P5 于同日经用户确认合入生产（`git apply proposals/P5.patch`）；合入后 h_i：real-all 81/99（剩 6 条路由层 wrong）、B-sim 294/294。
@@ -83,3 +85,5 @@
 | 2026-10-25 | **8** | checkpool/r8.txt（8128cb5 11:43:56，早于归因）：池 424，25 层全 ≥ 8 | 2026-10-25 | 生产 @ 08c8cf1（h₇ + P22a + P23a）|
 | 2026-10-25 | round 9 | **HOLDOUT_THIN**：checkpool/r9.txt（ac446a7）并层后 3 个 rest 层各 2 条（产品与机构合规、指标口径、数据与同意合规——W52 新开的 tier 格子），按 v5 (a′) s 不回退、照常判定 | 2026-10-25 | h₉ = 生产 @ ad3c7b6 |
 
+
+| 9 | 2026-W52 | 46 / 47 | 1 | P29a / P29b1（1d 链）P-A **APPLY_FAIL**：1d 链 D9 段与 h₉ 分叉，补丁打不上，不进分母（v5 (i)） |

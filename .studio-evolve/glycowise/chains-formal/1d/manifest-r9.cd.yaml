@@ -1,0 +1,13 @@
+# 由 attribution/round-9/manifest-r9.yaml 机械转换（chain_drive 格式，只含根因修）
+ancestor_dir: .studio-evolve/glycowise/chains-formal/1d/start-r9/plugins/glycowise
+ontology: glycowise
+sets_root: .studio-evolve/glycowise
+proposals:
+- id: P29a
+  num: 46
+  round: 9
+  window: 2026-W52
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-9/P29a.patch
+  di:
+  - chains-formal/1d/attribution/round-9/P29-Di.yaml
+  holdout: sets/holdout-9.yaml

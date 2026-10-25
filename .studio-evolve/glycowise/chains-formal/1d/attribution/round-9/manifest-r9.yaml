@@ -1,0 +1,23 @@
+# round 9 · 1d 链 · 提案清单（只列根因修——链上只走根因修，v5 (b‴)）
+# 朴素修另见 pa-extra-r9.yaml（同格式，只进 P-A）
+round: 9
+chain: 1d
+window: 2026-W52
+base_state: chains-formal/1d/state        # h_s + P24a + P25a
+patch_strip: 1                             # patch -p1 -d <base_state>
+as_of: '2026-10-25'
+proposals:
+- proposal: 46
+  name: P29a
+  kind: root
+  defect: D9_产品功效声称拦截 漏拦「波动形态」类功效声称（「血糖曲线会变平」）
+  layer: rule
+  rule: D9_产品功效声称拦截
+  files: [plugins/glycowise/_fde.py]
+  patch: P29a.patch
+  patch_sha256: 77fde4c61254529e14d0cb58be4abbbcecb4e77b97acfa300bb60742ba9d7499
+  patch_lines: {added: 12, removed: 0}
+  di: P29-Di.yaml
+  di_ids: [产品与机构合规-r56]
+  doc: P29.md
+  sandbox: {dry_run: ok, py_compile: ok, di_pass: 1/1, di_rows_pass: 3/3}

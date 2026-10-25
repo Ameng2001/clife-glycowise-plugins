@@ -1,0 +1,46 @@
+# round 9 P-A 提案集 = 两链并集（v5 (i) 乙-1），机械转换
+proposals:
+- id: P29a
+  num: 46
+  round: 9
+  window: 2026-W52
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-9/P29a.patch
+  di:
+  - chains-formal/1d/attribution/round-9/P29-Di.yaml
+  holdout: sets/holdout-9.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P29b1
+  num: 47
+  round: 9
+  window: 2026-W52
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-9/P29b1.patch
+  di:
+  - chains-formal/1d/attribution/round-9/P29-Di.yaml
+  holdout: sets/holdout-9.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5
+- id: P28a
+  num: 44
+  round: 9
+  window: 2026-W52
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-9/P28a.patch
+  di:
+  - chains-formal/3d/attribution/round-9/P28-Di.yaml
+  holdout: sets/holdout-9.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P28b1
+  num: 45
+  round: 9
+  window: 2026-W52
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-9/P28b1.patch
+  di:
+  - chains-formal/3d/attribution/round-9/P28-Di.yaml
+  holdout: sets/holdout-9.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 5

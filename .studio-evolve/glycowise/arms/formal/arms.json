@@ -1,7 +1,8 @@
 {
- "n_proposals": 12,
+ "n_proposals": 14,
  "rounds": [
-  8
+  8,
+  9
  ],
  "modes": [
   "3d",
@@ -15,68 +16,68 @@
  ],
  "arms": {
   "3d": {
-   "accept_rate": 0.6666666666666666,
-   "n_accept": 8,
-   "n_judged": 12,
+   "accept_rate": 0.7142857142857143,
+   "n_accept": 10,
+   "n_judged": 14,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
-   "n_any_known": 8
+   "n_any_known": 10
   },
   "1d": {
-   "accept_rate": 0.6666666666666666,
-   "n_accept": 8,
-   "n_judged": 12,
+   "accept_rate": 0.7142857142857143,
+   "n_accept": 10,
+   "n_judged": 14,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
-   "n_any_known": 8
+   "n_any_known": 10
   },
   "random": {
-   "accept_rate": 0.5833333333333334,
-   "n_accept": 7,
-   "n_judged": 12,
+   "accept_rate": 0.5714285714285714,
+   "n_accept": 8,
+   "n_judged": 14,
    "regress_rate": 0.0,
-   "regress_any_rate": 0.2857142857142857,
-   "n_any_known": 7
+   "regress_any_rate": 0.25,
+   "n_any_known": 8
   },
   "1d-strict": {
-   "accept_rate": 0.6666666666666666,
-   "n_accept": 8,
-   "n_judged": 12,
+   "accept_rate": 0.7142857142857143,
+   "n_accept": 10,
+   "n_judged": 14,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
-   "n_any_known": 8
+   "n_any_known": 10
   },
   "none": {
    "accept_rate": 1.0,
-   "n_accept": 12,
-   "n_judged": 12,
+   "n_accept": 14,
+   "n_judged": 14,
    "regress_rate": 0.0,
-   "regress_any_rate": 0.16666666666666666,
-   "n_any_known": 12
+   "regress_any_rate": 0.14285714285714285,
+   "n_any_known": 14
   },
   "3d-noT": {
-   "accept_rate": 0.6666666666666666,
-   "n_accept": 8,
-   "n_judged": 12,
+   "accept_rate": 0.7142857142857143,
+   "n_accept": 10,
+   "n_judged": 14,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
-   "n_any_known": 8
+   "n_any_known": 10
   },
   "3d-noS": {
-   "accept_rate": 0.6666666666666666,
-   "n_accept": 8,
-   "n_judged": 12,
+   "accept_rate": 0.7142857142857143,
+   "n_accept": 10,
+   "n_judged": 14,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
-   "n_any_known": 8
+   "n_any_known": 10
   },
   "3d-noW": {
-   "accept_rate": 0.6666666666666666,
-   "n_accept": 8,
-   "n_judged": 12,
+   "accept_rate": 0.7142857142857143,
+   "n_accept": 10,
+   "n_judged": 14,
    "regress_rate": 0.0,
    "regress_any_rate": 0.0,
-   "n_any_known": 8
+   "n_any_known": 10
   }
  },
  "diffs": {
@@ -162,8 +163,10 @@
   "unscored": 0,
   "unknown": 0
  },
- "n": 8,
- "flags": [],
+ "n": 10,
+ "flags": [
+  "REGRESS_MIXED_B"
+ ],
  "seed": 0,
  "boot": 1000,
  "tier_min": 8,
@@ -471,6 +474,56 @@
    "window": null,
    "origins": {
     "real": 4
+   }
+  },
+  {
+   "round": 9,
+   "proposal": "44",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": false,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
+   }
+  },
+  {
+   "round": 9,
+   "proposal": "45",
+   "attempt": 1,
+   "accepted": {
+    "3d": true,
+    "1d": true,
+    "random": true,
+    "1d-strict": true,
+    "none": true,
+    "3d-noT": true,
+    "3d-noS": true,
+    "3d-noW": true
+   },
+   "regress": 0,
+   "regress_why": [],
+   "regress_any": 0,
+   "regress_any_cases": [],
+   "regress_basis": "B_same",
+   "reject_dim_3d": null,
+   "window": null,
+   "origins": {
+    "real": 1
    }
   }
  ]

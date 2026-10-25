@@ -1,0 +1,5 @@
+# round 9 · 3d 链 · P28（D9 产品功效声称拦截漏判「血糖曲线会变平」）的来源案例集 Dᵢ
+# 来源：2026-W52 feedback.yaml 中 layer=rule 的 wrong 条目 t-20261025-0618
+ids:
+- 产品与机构合规-r56
+note: W52 / t-20261025-0618「每天一包，血糖曲线会变平」，期望 rejected(D9_产品功效声称拦截)，h₉ committed

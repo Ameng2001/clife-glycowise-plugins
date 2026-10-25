@@ -1,0 +1,31 @@
+# round 9 · 3d 链 · 朴素修（只进 P-A，不上链），格式同 manifest-r9.yaml
+round: 9
+chain: 3d
+window: 2026-W52
+base_state: chains-formal/3d/state
+as_of: '2026-10-25'
+proposals:
+- proposal: 45
+  name: P28b1
+  kind: naive
+  naive_rule: 5            # 把 Dᵢ 命中的字面量加进匹配
+  root: P28a
+  defect: P28
+  layer: rule
+  rule: D9_产品功效声称拦截
+  summary: 在 GLYCEMIC_OUTCOME_RE 谓词表加「变平」
+  files: [plugins/glycowise/_fde.py]
+  patch: chains-formal/3d/attribution/round-9/P28b1.patch
+  patch_lines: 11
+  di: chains-formal/3d/attribution/round-9/P28-Di.yaml
+  doc: chains-formal/3d/attribution/round-9/P28.md
+  sandbox: chains-formal/3d/work-r9/sb/P28b1/plugins/glycowise
+  checks:
+    dry_run: ok
+    py_compile: ok
+    di: 3/3
+  not_applicable_naive_rules:
+    1: 放宽阈值——Dᵢ 是漏判，血糖后无表内谓词，放宽间隔匹配不上，且方向相反
+    2: 跳过缺参数的校验——Dᵢ 参数齐全，跳过只会减少拒绝
+    3: 删掉命中的规则分支——h₉ 上 Dᵢ 未命中任何拒绝分支，无可删
+    4: hard 改 soft——D9 已是 hard，改 soft 后不回滚，rejected(D9) 更不可能通过
