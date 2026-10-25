@@ -21,16 +21,16 @@
    "accept_rate": 0.7625,
    "n_accept": 61,
    "n_judged": 80,
-   "regress_rate": 0.03278688524590164,
-   "regress_any_rate": 0.03278688524590164,
+   "regress_rate": 0.04918032786885246,
+   "regress_any_rate": 0.04918032786885246,
    "n_any_known": 61
   },
   "1d": {
    "accept_rate": 0.7625,
    "n_accept": 61,
    "n_judged": 80,
-   "regress_rate": 0.03278688524590164,
-   "regress_any_rate": 0.03278688524590164,
+   "regress_rate": 0.04918032786885246,
+   "regress_any_rate": 0.04918032786885246,
    "n_any_known": 61
   },
   "random": {
@@ -45,40 +45,40 @@
    "accept_rate": 0.7625,
    "n_accept": 61,
    "n_judged": 80,
-   "regress_rate": 0.03278688524590164,
-   "regress_any_rate": 0.03278688524590164,
+   "regress_rate": 0.04918032786885246,
+   "regress_any_rate": 0.04918032786885246,
    "n_any_known": 61
   },
   "none": {
    "accept_rate": 1.0,
    "n_accept": 80,
    "n_judged": 80,
-   "regress_rate": 0.1,
-   "regress_any_rate": 0.125,
+   "regress_rate": 0.1125,
+   "regress_any_rate": 0.1375,
    "n_any_known": 80
   },
   "3d-noT": {
    "accept_rate": 0.7625,
    "n_accept": 61,
    "n_judged": 80,
-   "regress_rate": 0.03278688524590164,
-   "regress_any_rate": 0.03278688524590164,
+   "regress_rate": 0.04918032786885246,
+   "regress_any_rate": 0.04918032786885246,
    "n_any_known": 61
   },
   "3d-noS": {
    "accept_rate": 0.7625,
    "n_accept": 61,
    "n_judged": 80,
-   "regress_rate": 0.03278688524590164,
-   "regress_any_rate": 0.03278688524590164,
+   "regress_rate": 0.04918032786885246,
+   "regress_any_rate": 0.04918032786885246,
    "n_any_known": 61
   },
   "3d-noW": {
    "accept_rate": 0.7625,
    "n_accept": 61,
    "n_judged": 80,
-   "regress_rate": 0.03278688524590164,
-   "regress_any_rate": 0.03278688524590164,
+   "regress_rate": 0.04918032786885246,
+   "regress_any_rate": 0.04918032786885246,
    "n_any_known": 61
   }
  },
@@ -100,10 +100,10 @@
    "boot": 1000
   },
   "random_minus_3d": {
-   "value": 0.08966209434593508,
+   "value": 0.07326865172298427,
    "ci95": [
-    0.023255813953488372,
-    0.1746031746031746
+    0.004357298474945537,
+    0.16568627450980394
    ],
    "boot": 1000
   },
@@ -166,9 +166,7 @@
   "unknown": 0
  },
  "n": 61,
- "flags": [
-  "REGRESS_MIXED_B"
- ],
+ "flags": [],
  "seed": 0,
  "boot": 1000,
  "tier_min": 8,
@@ -1769,7 +1767,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1790,11 +1788,16 @@
     "3d-noS": true,
     "3d-noW": true
    },
-   "regress": 0,
-   "regress_why": [],
-   "regress_any": 0,
-   "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress": 1,
+   "regress_why": [
+    "next:dA=-0.010",
+    "next:dT_3=-0.022"
+   ],
+   "regress_any": 1,
+   "regress_any_cases": [
+    "产品与机构合规-r84"
+   ],
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1817,16 +1820,15 @@
    },
    "regress": 1,
    "regress_why": [
-    "default:dA=-0.030",
-    "default:dT_3=-0.065"
+    "next:dA=-0.020",
+    "next:dT_3=-0.044"
    ],
    "regress_any": 1,
    "regress_any_cases": [
-    "产品与机构合规-r43",
     "产品与机构合规-r44",
-    "产品与机构合规-r72"
+    "产品与机构合规-r84"
    ],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": "outer",
    "window": null,
    "origins": {
@@ -1851,7 +1853,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1876,7 +1878,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1901,7 +1903,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1926,7 +1928,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1951,7 +1953,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -1976,7 +1978,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2001,7 +2003,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2026,7 +2028,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2051,7 +2053,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2076,7 +2078,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2101,7 +2103,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2126,7 +2128,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2151,7 +2153,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2176,7 +2178,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2201,7 +2203,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -2226,7 +2228,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
