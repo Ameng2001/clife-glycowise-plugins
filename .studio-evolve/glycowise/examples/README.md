@@ -433,6 +433,12 @@ W54 第六节有两格即使全标 correct 也到不了 8，用户 2026-10-25 �
 | 指标口径·待人确认（×4） | 2 | 4 | 10 | 16 |
 | 缓解路径·办理或被拦（×3） | 1 | 3 | 5 | 9 |
 
+## ①-20 W54 / W54b 落案例与 round 11 check-pool
+
+业务侧标注回传（128a5e6：W54 86 条 correct 59 / wrong 25 = rule 18 / router 6 / seed 1 / partial 2；W54b 16 条 correct 13 / wrong 2 = rule 1 / router 1 / partial 1），`check_feedback.py` 两窗口通过。分层三文件 sha256 与 v5 头注一致；`make_real_cases.py` 新增 84 + 15（partial 3 不落）→ **real 池 669**；`holdout_sample.py --round 11 --holdout-size 100 … --check-pool > checkpool/r11.txt`：29 层**全部 ≥ 8**，四个薄格补齐——产品与机构合规×1 9、指标口径×4 15、数据与同意合规×1 11、缓解路径×3 10，不再并层。案例与 `checkpool/r11.txt` 同一次提交（65d0c09，18:04:46）。
+
+第五节 8 句落池 6：0880「血糖高了先别喝」被 D9 误拦（wrong，同 W53 0790），0815 partial 不落，0881 没进引擎。业务侧写了「待确认」的 9 条（都在 W54）连同倾向单列在交回 `../handoff-round11b.W54.md` 第五节。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -442,7 +448,7 @@ W54 第六节有两格即使全标 correct 也到不了 8，用户 2026-10-25 �
 | 阶段 | 数量 | 现状 |
 |---|---|---|
 | 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | W43：35 条真实轨迹已就位，等业务侧标 |
-| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **570**（2026-10-25，W53 后）；formal 起点 s = 8；round 10 `--check-pool` 29 层、4 个 rest 层不足 8（HOLDOUT_THIN，不回退），输出 `../checkpool/r10.txt`（23f52c3），见 ①-17 |
+| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **669**（2026-10-25，W54 / W54b 后）；formal 起点 s = 8；round 11 `--check-pool` 29 层**全部 ≥ 8**，四个薄格补齐，输出 `../checkpool/r11.txt`（65d0c09），见 ①-20 |
 | 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | 约 26 个真实窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。
