@@ -394,18 +394,33 @@ def r35(ctx):
     return RuleResult.ok()
 
 
-@rule("R01_数据充分性门槛_仅管结论层")
-def r01(ctx):
-    pid = pid_of(ctx)
-    s = summary_of(ctx, pid)
+def _conclusion_window_gap(ctx, pid):
+    """P60a（W54b / 0905）：结论依据的窗口。调用方指名了 summary_id 就只认那一份——指名的汇总不存在或不属于该患者即「没有窗口指标」，
+    不得回退到患者别的汇总（原实现直接取最新一份 14 天汇总，审核人看到的依据与口语指名的窗口不一致）；没指名才取最新一份。
+    返回 (原因, 建议)；窗口充分返回 None。R01 与 R30 共用。"""
+    sid = P(ctx, "summary_id")
+    if sid:
+        s = ctx.get("CgmSummary", str(sid)) or {}
+        if not s:
+            return f"指名的窗口汇总 {sid} 不存在，没有窗口指标，结论层不出结论", "核对汇总编号，或先跑「计算窗口指标」"
+        if pid and s.get("patient_id") not in (None, pid):
+            return f"指名的窗口汇总 {sid} 属于 {s.get('patient_id')}，不是 {pid}", "核对汇总编号"
+    else:
+        s = summary_of(ctx, pid)
     days = _num(P(ctx, "days")) or _num(s.get("days"))
     active = _num(P(ctx, "active_pct")) or _num(s.get("active_pct"))
     if days is None or active is None:
-        return _fail("R01", "没有窗口指标（days / active_pct），结论层不出结论", "先跑「计算窗口指标」")
+        return "没有窗口指标（days / active_pct），结论层不出结论", "先跑「计算窗口指标」"
     if days < 14 or active < 70:
-        return _fail("R01", f"佩戴 {days:.0f} 天、有效数据 {active:.0f}%，未达 14 天 + ≥70%，只出趋势描述，禁出达标/分层/缓解结论",
-                     "继续佩戴至 14 天且有效率 ≥70% 后再出结论")
-    return RuleResult.ok()
+        return (f"佩戴 {days:.0f} 天、有效数据 {active:.0f}%，未达 14 天 + ≥70%，只出趋势描述，禁出达标/分层/缓解结论",
+                "继续佩戴至 14 天且有效率 ≥70% 后再出结论")
+    return None
+
+
+@rule("R01_数据充分性门槛_仅管结论层")
+def r01(ctx):
+    gap = _conclusion_window_gap(ctx, pid_of(ctx))
+    return _fail("R01", *gap) if gap else RuleResult.ok()
 
 
 @rule("R49_缺参数时按最保守执行")
@@ -419,6 +434,21 @@ def r49(ctx):
         return _fail("R49", f"患者 {pid} 没有画像，人群参数缺失", "先建立 PatientProfile（age / health_tier / target_profile）")
     if age is not None and tier is None and tp != "elderly":
         return _fail("R49", "有年龄但缺 health_tier，且未按最保守人群（elderly）执行", "补 health_tier 或显式置 target_profile=elderly 并标 population_params_stale")
+    return RuleResult.ok()
+
+
+@rule("R49_缺参数时按最保守执行_草稿依据缺失")
+def r49_basis(ctx):
+    """P57a：调用方指名的草稿依据（CgmSummary）不存在或不属于该患者 → 不出草稿。
+    没指名依据时不在这里管：新客无画像无汇总按 R49 原条最保守执行、照常出草稿（sim 参考与配置-12，专家抽检「R49 不是拒绝条件」）。"""
+    pid = pid_of(ctx)
+    sid = P(ctx, "analysis_result", "summary_id") or P(ctx, "summary_id")
+    if sid:
+        s = ctx.get("CgmSummary", str(sid)) or {}
+        if not s:
+            return _fail("R49", f"草稿依据的窗口汇总 {sid} 不存在，没有可依据的指标，按最保守执行不出草稿", "核对汇总编号，或先跑「计算窗口指标」")
+        if pid and s.get("patient_id") not in (None, pid):
+            return _fail("R49", f"草稿依据的窗口汇总 {sid} 属于 {s.get('patient_id')}，不是 {pid}", "核对汇总编号")
     return RuleResult.ok()
 
 
@@ -539,14 +569,27 @@ def _med_link(s):
 # 有关，谓词怎么说（变平 / 好看 / 漂亮 / 听话……）不改变声称的性质。所以改成反向判定：产品话术分句里出现血糖类指标即视为功效暗示，
 # 除非提到血糖只是为了食品话术唯一正当的两种用途——提醒监测血糖，或声明不替代药物 / 遵医嘱 / 就医。豁免按片段剔除而不是整句放行：
 # 「测完血糖你会发现曲线变平」剔掉「测完血糖」后「曲线变平」仍在，照样算声称。
-GLYCEMIC_INDICATOR_RE = re.compile(r"血糖|糖化|HbA1c|TIR|葡萄糖|曲线|波动")
+GLYCEMIC_INDICATOR_RE = re.compile(r"血糖|糖化|HbA1c|TIR|葡萄糖|曲线|波动"
+                                   # P52a（W54 / 0812 0877 0878）：P28a 的反向判定只认「血糖类指标名」这一种指称，可食品话术指向血糖结果的说法还有三种，
+                                   # 性质相同（明示或暗示食用与血糖结果有关），一并作为声称对象：
+                                   #   (7) 「糖」作效果动词的宾语：控糖语境里「克糖 / 控糖 / 稳糖 / 抗糖」「把糖控下来」的「糖」就是血糖；「无糖 / 低糖 / 含糖 / 代糖」是配料说明、「降糖药」是药名，不收；
+                                   #   (8) 承载血糖调节的器官：胰岛 / 胰腺 / β 细胞——P42a 只认「恢复 / 修复…」等谓词，「让胰腺歇一歇」「减轻胰岛负担」换个谓词就漏；
+                                   #       按反向判定，食品话术提到这些器官本身就是功能暗示（正当用途豁免照旧）；
+                                   #   (9) 测得的血糖值：「扎出来的数 / 测出来的值 / 指血 / 读数」说的就是血糖读数。
+                                   r"|(克|控|稳|抗|降|调|平|压)\s*糖(?!尿|果|浆|醇|精|分|类|水|块|药)|糖[^。；，,]{0,2}(控|降|稳|压)(下来|下去|住|得住)"
+                                   r"|胰岛|胰腺|β\s*细胞"
+                                   r"|(扎|测|量|验)[^。；，,]{0,3}?(出来|出)?的\s*(数|值|结果)|读数|指血")
 # P43a（W53 / 0728 0790）：P28a 的豁免只收了「监测提醒」「不替代」两类正当用途的书面写法。食品话术里提到血糖的正当用途按语义是三类，口语写法都要认：
 #   ① 声明不替代药物：「不能替代」之外还有「代替不了 / 替代不了 / 取代不了」；
 #   ② 把控糖交回原有治疗：「血糖照原来的办法控制」「血糖还按医生的方案来」——说的是血糖怎么管与本品无关，恰与功效声称相反；
 #   ③ 以血糖状态为条件的食用限制 + 就医建议：「血糖偏高的时候先别冲，问问医生」——是安全提醒，不承诺任何效果。限制动词只认冲 / 喝 / 食用 / 饮用（本品的食用），不收「别吃药」。
-NON_CLAIM_CLAUSE_RE = re.compile(r"(监测|自测|测量|复测|测一下|测|记录|查看|关注|留意)[^。；，,]{0,4}(血糖|糖化|HbA1c|TIR)|不(能|可|得)?(替代|代替|取代)|(替代|代替|取代|顶替)不了|遵医嘱|就医|(咨询|问问|问一下|请教)(医生|医师|营养师)"
+NON_CLAIM_CLAUSE_RE = re.compile(r"(监测|自测|测量|复测|测一下|测|记录|查看|关注|留意)[^。；，,]{0,4}(血糖|糖化|HbA1c|TIR|指血|读数)|不(能|可|得)?(替代|代替|取代)|(替代|代替|取代|顶替)不了|遵医嘱|就医|(咨询|问问|问一下|请教)(医生|医师|营养师)"
                                  r"|(血糖|糖化|HbA1c|TIR)[^。；，,]{0,3}(照|按|遵|还按|还照|继续按|继续照)(原来|原先|原有|原|以前|往常|平常|医生|医师|医嘱)[^。；，,]{0,6}"
-                                 r"|(血糖|糖化)[^。；，,]{0,6}(的时候|时|期间|情况下)[^。；，,]{0,3}(先别|别|不要|勿|暂停|先停|不宜)[^。；，,]{0,2}(冲|喝|食用|饮用)(?!药)")
+                                 r"|(血糖|糖化)[^。；，,]{0,6}(的时候|时|期间|情况下)[^。；，,]{0,3}(先别|别|不要|勿|暂停|先停|不宜)[^。；，,]{0,2}(冲|喝|食用|饮用)(?!药)"
+                                 # P53a（W54 / 0880）：第③类豁免认的是「以血糖状态为条件的食用限制」这层语义，条件句不只「…的时候 / 时」一种写法，
+                                 # 口语更常说「血糖高了就先别喝」「血糖偏高的话先别冲」。条件标记补「的话 / 了就 / 就」，但要求条件里写明血糖状态（高 / 偏高 / 超 / 不稳 / 低），
+                                 # 限制动词仍只认冲 / 喝 / 食用 / 饮用：「血糖高了就多喝一包」没有限制动词，照旧算声称。
+                                 r"|(血糖|糖化)[^。；，,]{0,3}(高|偏高|超标|超过|不稳|波动大|低|偏低)[^。；，,]{0,3}?(的话|了就|就)[^。；，,]{0,3}(先别|别|不要|勿|暂停|先停|不宜)[^。；，,]{0,2}(冲|喝|食用|饮用)(?!药)")
 CLAUSE_SPLIT = re.compile(r"[，,、：:]")
 
 
@@ -601,14 +644,29 @@ def r32(ctx):
 # 的位置说法：「您在中间那一档」「您是三个档里最轻的那档」「按评分您排在高风险组」「您这期被划在最需要盯的那一组」。
 # 认法：称呼患者（您 / 你 / 他 / 她）+ 归属动词（在 / 是 / 排在 / 划在 / 归到 / 分在 / 属于……）+ 档 / 组。「组」通用性强（运动小组、第二组团课），
 # 只在同一句另有分层限定（高 / 中 / 低风险、高危、最需要、重点、最轻 / 最重、中间）或评定语境（评分 / 评估 / 分层 / 这期）时才算。
-TIER_PLACEMENT_RE = re.compile(r"(您|你|他|她)[^。；，,！？!?]{0,10}?(排在|排到|划在|划到|划进|归在|归到|归入|分在|分到|落在|属于|在|是)[^。；，,！？!?]{0,12}?(档|组)(?!长|织|合|员|别|件|成)")
-TIER_GROUP_QUALIFIER_RE = re.compile(r"高风险|中风险|低风险|高危|最需要|重点|最轻|最重|中间|评分|评估|分层|分级|这期|本期")
+TIER_PLACEMENT_RE = re.compile(r"(您|你|他|她)[^。；，,！？!?]{0,10}?(排在|排到|划在|划到|划进|归在|归到|归入|分在|分到|落在|属于|在|是)[^。；，,！？!?]{0,12}?(档|组|类)(?!长|织|合|员|别|件|成|型|似|药|食)")
+TIER_GROUP_QUALIFIER_RE = re.compile(r"高风险|中风险|低风险|高危|最需要|重点|最轻|最重|中间|评分|评估|评级|分层|分级|这期|本期")
+# P54a（W54 / 0813 0839 0852 0860）：R51 的 includes_tier_label 管的是「把患者在某个分层 / 分型结论里的位置告诉患者」这层意思，
+# 不论用什么名目说出位置。P48a 只认「档 / 组」位置说法，同一结论另外还有四种说出口的方式：
+#   (1) 类：「您这个属于需要重点盯的那一类」——与「组」一样通用，同样要分层限定或评定语境才算；
+#   (2) 颜色等级：「您这期的风险评级是黄色」——红 / 黄 / 绿是分层的另一种标法，须与评级 / 风险 / 分层 / 等级名目同句；
+#   (3) 照护强度的序位：「按评估您需要最高强度的照护」——服务分层就是照护强度分级，「最高 / 第三级 + 强度 / 照护」说的就是层级，
+#       须称呼患者且有评定语境（评估 / 评分 / 按…结果 / 需要），「我们提供高标准服务」这类宣传不算；
+#   (4) 分型定论：「您这个分型已经定了，就是 2 型」——TIER_RE 只认「2 型糖尿病」全称，省掉「糖尿病」的定论说法同样是分型结论。
+TIER_COLOR_RE = re.compile(r"(风险|评级|等级|分级|分层|级别)[^。；，,！？!?]{0,6}?(红|橙|黄|绿)\s*(色|灯|档|级)|(红|橙|黄|绿)\s*(色|灯)?\s*(风险|等级|档)")
+CARE_RANK_RE = re.compile(r"(最高|最低|最强|最重|最轻|第\s*[一二三四1-4])\s*(强度|级别|等级|档|级)?\s*的?\s*(照护|管理|随访|干预|关注)")
+CARE_RANK_CTX_RE = re.compile(r"评估|评分|评级|评下来|分层|分级|结果|需要|属于")
+TYPE_VERDICT_RE = re.compile(r"(就是|属于|确定是|定为|判为|定了是|分型是)\s*[12一二]\s*型(?!号|传感器|试纸)")
 
 
 def _tier_placement(text):
     for s in sentences(text or ""):
         m = TIER_PLACEMENT_RE.search(s)
         if m and (m.group(3) == "档" or TIER_GROUP_QUALIFIER_RE.search(s)):
+            return s.strip()
+        if TIER_COLOR_RE.search(s) or TYPE_VERDICT_RE.search(s):  # P54a (2)(4)
+            return s.strip()
+        if CARE_RANK_RE.search(s) and re.search(r"您|你|他|她", s) and CARE_RANK_CTX_RE.search(s):  # P54a (3)
             return s.strip()
     return None
 
@@ -635,6 +693,15 @@ def r51(ctx):
 NIGHT_CTX_RE = re.compile(r"夜里|夜间|夜晚|晚上|半夜|深夜|整夜|通宵|凌晨|睡着|睡觉|入睡|睡梦|熟睡|24\s*小时|全天候")
 NIGHT_GUARD_RE = re.compile(r"(有人|专人|护士|医生|医师|健管师|团队|值班|我们|系统)[^。；，,！!]{0,6}(看着|守着|盯着|守护|看护|监护|值守|替您|帮您看|照看)"
                             r"|(看着|守着|盯着)(数据|血糖|曲线)|放心睡|安心睡")
+# P59a（W54 / 0892 0893）：R54 的「夜间安全承诺」是「夜里出事有人知道、有人管」这层意思。P44a 的值守要素只认「看着 / 守着」这一种（有人在看），
+# 同一承诺另外两种说法同样让患者以为夜里不必自己留意：
+#   (a) 响应承诺：「一有动静我们马上打给您」「有异常第一时间通知您」——承诺能在夜里发现并即时响应；
+#   (b) 责任转移：「晚上交给我们，您只管休息」「不用自己操心」——把夜间看护的责任揽过来。
+# 同句仍须有夜间语境；话术明说「工作时间 / 白天 / 次日」处理的是如实告知，不算承诺。
+NIGHT_RESPONSE_RE = re.compile(r"(我们|团队|系统|专人|护士|医生|医师|健管师|值班)[^。；，,！!]{0,4}(马上|立刻|立即|第一时间|随时|及时)[^。；，,！!]{0,3}(打给|打电话|电话|通知|联系|处理|赶到|叫醒|告诉|呼叫)"
+                               r"|(一有|只要有?|一旦|稍有)[^。；，,！!]{0,4}(动静|异常|情况|变化|波动|问题|不对)[^。；，,！!]{0,6}(马上|立刻|立即|第一时间|随时)")
+NIGHT_HANDOVER_RE = re.compile(r"交给(我们|团队|系统|专人|护士|医生)|(您|你)\s*(只管|尽管|安心|放心)\s*(睡|休息)|(不用|不必|无需)\s*(自己)?\s*(操心|担心|起来看|盯着|看着)")
+NIGHT_HONEST_RE = re.compile(r"工作时间|白天|次日|第二天|上班后|夜间无人|没有人值守|无法.{0,4}夜间")
 
 
 @rule("R54_服务话术不得含夜间安全承诺")
@@ -642,6 +709,9 @@ def r54(ctx):
     h = hits(text_of(ctx), NIGHT_PROMISE)
     if not h:
         h = [s.strip()[:30] for s in sentences(text_of(ctx)) if NIGHT_CTX_RE.search(s) and NIGHT_GUARD_RE.search(s)][:1]
+    if not h:  # P59a
+        h = [s.strip()[:30] for s in sentences(text_of(ctx)) if NIGHT_CTX_RE.search(s) and not NIGHT_HONEST_RE.search(s)
+             and (NIGHT_RESPONSE_RE.search(s) or NIGHT_HANDOVER_RE.search(s))][:1]
     if h:
         return _fail("R54", f"对外话术含夜间安全承诺 {h}，载体与夜间值班未落地前为硬红线", "删除承诺性表述，改为「数据同步后由健管师在工作时间复核」")
     return RuleResult.ok()
@@ -1377,6 +1447,13 @@ _SIGN_SCOPE = {"执业医师": None, "医师": None, "注册营养师": {"营养
 def d12(ctx):
     d = P(ctx, "draft_id")
     draft = (ctx.get("PlanDraft", str(d)) or {}) if d else {}
+    # P56a（W54 / 0858 0867 0875）：D12 的判定对象是「这份草稿的内容类别 × 签发人资质」。草稿不存在时没有内容可分类，原实现把类别兜成「综合」、
+    # 医师签发又直接放行，结果给一个不存在的编号（或已签发方案的编号）生成了 content_snapshot 为空、patient_id 为空的 PlanSigned。
+    # 归属分流无从判定 = 不能放行；与 P47a 对 C20「指名对象不存在即拒」同一口径。须排在医师免检之前。
+    if d and not draft:
+        signed = ctx.get("PlanSigned", str(d))
+        return _fail("D12", f"签发对象 {d} 不是现存的方案草稿" + ("（它是已签发方案，系统没有复签动作）" if signed else "（PlanDraft 里没有这个编号）") + "，无法按内容判定签发归属",
+                     "核对草稿号；已签发方案需修改时重新起草再签发")
     cat = draft.get("category")
     if cat is None:
         c = str(draft.get("content", ""))
@@ -1421,7 +1498,12 @@ def c9(ctx):
 # P50a（W53 / 0733 0748）：C6 拦的是群里出现「未脱敏的原始血糖值」。原实现只认带单位的「X.X mmol」，口语消息里「晚饭后血糖 14.0」「您现在血糖 16.8」
 # 不带单位同样是原始值。改为：血糖语境词（血糖 / 读数 / 测到 / 餐后 / 饭后 / 空腹 / 现在 / 复测……）后紧跟的一位小数值也算；
 # 阈值 / 目标说法（「低于 3.9」「控制在 7.0 以下」「3.9–10.0 之间」）不是患者的读数，排除。
-RAW_GLUCOSE_RE = re.compile(r"(血糖|读数|测到|测出|测得|餐后|饭后|空腹|睡前|现在|当前|复测|指血)(?P<gap>[^。；，,\d]{0,6}?)(?P<v>\d{1,2}\.\d)(?!\d|\s*(%|％|公斤|kg|斤|岁|小时|天|以下|以上|以内|之间|[-–~～]))")
+RAW_GLUCOSE_RE = re.compile(r"(血糖|读数|测到|测出|测得|餐后|饭后|空腹|睡前|现在|当前|复测|指血"
+                            # P55a（W54 / 0838）：C6 要认的是「患者的某次读数」。读数在口语里除了靠血糖语境词，更常靠时间锚点指认——「刚才 16.9」「早上 5.2」
+                            # 「昨晚 3.8」说的都是那一刻的读数；R24b 的 STATED_CURRENT_G_RE 早已把「刚才 / 刚测 / 这会儿 / 目前」认作当前读数，C6 的口径落后于它。
+                            # 补时间锚点；为免把「早上 7.5 点」「37.5 度」「3.5 公里」当读数，单位排除表同步补 点 / 度 / 公里 / 千米 / 元 / 步。
+                            r"|刚才|刚刚|刚测|这会儿|目前|今早|早上|早起|晨起|起床|上午|中午|下午|晚上|昨晚|夜里|半夜|凌晨)"
+                            r"(?P<gap>[^。；，,\d]{0,6}?)(?P<v>\d{1,2}\.\d)(?!\d|\s*(%|％|公斤|kg|斤|岁|小时|天|以下|以上|以内|之间|点|度|℃|公里|千米|元|步|[-–~～]))")
 THRESHOLD_WORD_RE = re.compile(r"低于|高于|超过|小于|大于|不到|控制在|目标|达到|<|>|≤|≥")
 
 
@@ -1644,10 +1726,23 @@ def _remission_criteria(ctx, pid):
     return meets, {"days": days, "meds": meds, "hba1c": hba1c, "gmi": gmi, "premises": premises, "method": method}
 
 
+# P58a（W54 / 0879）：IR §5 判定缓解结果 的 HIL 是「医师（面诊告知，唯一）」——缓解结论只经医师面诊告知患者，不论是否达标。
+# R29 原来只挂在 判定缓解结果 上，群内答复患者 不查，于是「您已经达到缓解标准了，恭喜」能直接发到群里（周先生化验达标，「未达标用缓解字样」那支也不会响）。
+# 群内出口只认「缓解定论」（达到 / 实现 / 进入 / 已经…缓解，缓解标准 / 状态，糖尿病 / 血糖…缓解），症状缓解（头晕缓解了）不算。
+REMISSION_VERDICT_RE = re.compile(r"(达到|达成|实现|进入|算是?|属于|已经|已)[^。；，,！？!?]{0,4}(缓解|逆转)|(缓解|逆转)\s*(标准|状态|成功)|(糖尿病|血糖|控糖)[^。；，,！？!?]{0,4}(缓解|逆转)")
+SYMPTOM_RE = re.compile(r"症状|头晕|头痛|疼|痛|不适|乏力|心慌|手抖|出汗|饥饿感|口渴|便秘|腹泻|恶心|咳")
+
+
 @rule("R29_缓解判定")
 def r29(ctx):
     pid = pid_of(ctx)
     if not pid:
+        return RuleResult.ok()
+    so = staged_outbound(ctx)
+    if so.get("content_type") == "群内答复":  # P58a：群内出口只查缓解定论，与是否达标无关
+        for cl in re.split(r"[。；，,！？!?\n]", str(so.get("body") or "")):
+            if REMISSION_VERDICT_RE.search(cl) and not SYMPTOM_RE.search(cl):
+                return _fail("R29", f"群内宣告缓解结论：「{cl.strip()[:30]}」。缓解结论只能由医师面诊告知（唯一渠道）", "删除缓解表述；约医师面诊告知")
         return RuleResult.ok()
     meets, d = _remission_criteria(ctx, pid)
     staged = ctx.find("RemissionAssessment", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid)
@@ -1674,6 +1769,10 @@ def r17(ctx):
 def r30(ctx):
     pid = pid_of(ctx)
     if not pid:
+        return RuleResult.ok()
+    # P60a：在 判定缓解结果 里（本次暂存了 RemissionAssessment），ABCD 筛查给出的「不进缓解路径」本身也是缓解类结论，同属 R01 关闭的结论层（IR §4.1 B5）。
+    # 依据窗口不充分时 R01 已关闭结论层，这里不再另出结论；入组判定 等不挂 R01 的动作照旧筛查。
+    if ctx.find("RemissionAssessment", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid) and _conclusion_window_gap(ctx, pid):
         return RuleResult.ok()
     prof = profile_of(ctx, pid)
     labs = ctx.find("LabResult", lambda r: r.get("patient_id") == pid)
