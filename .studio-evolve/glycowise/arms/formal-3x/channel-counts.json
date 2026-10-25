@@ -1,0 +1,12 @@
+{
+ "n_proposals": 80,
+ "channels": {},
+ "outer_dS": {
+  "lt0": 11,
+  "lt0_with_dA_ge0": 0
+ },
+ "S_readings": {
+  "(1.0, 1.0)": 1667,
+  "(None, 1.0)": 133
+ }
+}
