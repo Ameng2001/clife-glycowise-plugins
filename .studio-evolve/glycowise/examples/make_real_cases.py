@@ -112,10 +112,17 @@ def expect_of(t, fb):
     return f"action({t['action']})", None
 
 
+ROUTE_CONFIDENCE = 0.95
+
+
 def route_of(t):
+    """窗口当时的路由意图。2026-10-25 修：置信度不再取轨迹顶层 `confidence`——那是动作 handler 执行后自设的置信度
+    （如读数不存在时设 0.3），不是路由意图的置信度；轨迹里不记录路由置信度。凡进了轨迹的请求在录制时都已过路由门槛
+    （intent compiler min_confidence 0.55），回放取常数 ROUTE_CONFIDENCE。引擎只在路由门槛处用意图置信度，HIL 等判断用 handler 置信度，
+    所以对原值 ≥ 0.55 的案例结果不变；只修正原值 < 0.55 的案例（W43–W52 全池仅 低血糖安全-r47）。"""
     if t["kind"] == "execute":
-        return {"kind": "action", "confidence": float(t.get("confidence", 0.95)), "action": t["action"], "params": dict(t["inputs_snapshot"]["params"])}
-    return {"kind": "query", "confidence": float(t.get("confidence", 0.95)), "oql": t["oql"]}
+        return {"kind": "action", "confidence": ROUTE_CONFIDENCE, "action": t["action"], "params": dict(t["inputs_snapshot"]["params"])}
+    return {"kind": "query", "confidence": ROUTE_CONFIDENCE, "oql": t["oql"]}
 
 
 def expect_not_of(t, fb, expect_rule):

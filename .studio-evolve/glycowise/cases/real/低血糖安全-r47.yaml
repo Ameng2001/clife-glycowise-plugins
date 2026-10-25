@@ -245,9 +245,10 @@ setup:
   actor_role: 医师
 route:
   kind: action
-  confidence: 0.3
+  confidence: 0.95
   action: 触发低血糖处置
   params:
     patient_id: P0023
     reading_id: r-P0023-00480
     rule_id: Level 1
+route_confidence_note: 2026-10-25 重新落池——原路由置信度 0.3 是 handler 执行后自设的置信度，被 make_real_cases 误当作路由置信度，回放在路由门槛（0.55）处转追问、规则评不到；按修正后的脚本取 0.95（录制时已过路由门槛）。其余字段不变。
