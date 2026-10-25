@@ -512,6 +512,15 @@ def _product_gate(ctx, name):
 
 
 EFFICACY_RE = re.compile(r"(降|控|稳|调节|改善|逆转|治|根治)[^。；，,]{0,6}(血糖|糖化|胰岛|HbA1c|并发症)|(血糖|糖化)[^。；，,]{0,6}(稳得住|稳住|降|正常|达标|不升)|疗程|坚持(吃|用|服)[^。；，,]{0,8}(个月|周|天)")
+# P27a（W51 / 0508 0510 0511 0539）：D9 的依据是食品安全法第 71、73 条与广告法第 17、28 条——普通食品不得明示或暗示具有保健、疗效作用。
+# EFFICACY_RE 只认「降/控/稳 + 指标名」这一种显式句式，同一声称的另外三种表达形态都漏了：
+#   (1) 血糖走向承诺：把食用与餐后/饭后血糖的走向挂钩（不冲高、不往上冲、不升、平稳、降下来……）。控糖语境里「餐后 / 饭后」指的就是餐后血糖；
+#   (2) 疗效断言：见效、起效、疗效、功效，或「效果」+ 程度 / 比较（更好、明显、显著）——食品没有可宣称的「效果」，对控糖人群说「效果」就是控糖效果；
+#   (3) 起效时间承诺：N 天 / 周 / 个月 + 见效、看到、改善、降。
+# 三类只在产品话术句（含产品名或本次是 pitch）里判，与 EFFICACY_RE 同一入口。
+GLYCEMIC_OUTCOME_RE = re.compile(r"(血糖|糖化|餐后|饭后)[^。；，,]{0,8}(不(往上|会|再)?(冲|升|涨|高)|冲高|平稳|稳定|下降|降下来|压住|控制住)")
+EFFECT_CLAIM_RE = re.compile(r"见效|起效|疗效|功效|奏效|效果[^。；，,]{0,2}(更|很|明显|显著|好|佳|快)")
+ONSET_CLAIM_RE = re.compile(r"(\d+|[一二两三四五六七八九十几半])\s*(天|日|周|星期|个月|月)[^。；，,]{0,6}(见效|起效|看到|看得到|看出|改善|降)")
 
 
 def _efficacy_claim(ctx, name):
@@ -523,7 +532,7 @@ def _efficacy_claim(ctx, name):
         return None
     for s in sentences(text):
         if any(p in s for p in prods) or P(ctx, "pitch"):
-            m = EFFICACY_RE.search(s)
+            m = EFFICACY_RE.search(s) or GLYCEMIC_OUTCOME_RE.search(s) or EFFECT_CLAIM_RE.search(s) or ONSET_CLAIM_RE.search(s)
             if m:
                 return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
     return None
@@ -793,6 +802,13 @@ def r53(ctx):
 # P22a：「低血糖风险已结束」式断言（闭环的语义形态，区别于「值已回升」）。否定形态（未脱离 / 没有排除）在 r44 里先剔除。
 RISK_CLEARED_RE = re.compile(r"(脱离|排除|消除)\s*(了)?\s*(低血糖)?\s*(的)?\s*(风险|危险)|(风险|危险)\s*(已经|已)?\s*(排除|消除|过去)"
                              r"|(度过|渡过)\s*(了)?\s*危险期")
+# P26a（W51 / 0506 0516）：IR R44 拒的是「写入 alert.resolved」（把告警判为已结束），允许的是 AlertEvent 状态机里的 value_recovered
+# （值已回升 + 保持复发观察窗）。「脱离风险 / 风险排除」只是闭环的断言形态；同一条回执若明确保留复发观察（继续观察 N 小时 / 明早再看 /
+# 保持观察 / 先别结案），这条回执的去向就是 value_recovered 而不是 resolved——措辞不当交给 HIL 审核人改成「值已回升」，不整条拒。
+# 显式闭环词（闭环 / 结案 / 关闭 … 且未被否定）仍按闭环判，不看观察条款。
+KEEP_OBSERVING_RE = re.compile(r"(继续|保持|再|留)\s*(观察|观测|监测)|观察\s*(窗|期)"
+                               r"|(明早|明天|明晚|今晚|稍后|过会儿?|\d+\s*(小时|h|分钟))\s*(再|后)?\s*(看|测|复测|复查|观察)"
+                               r"|(先别|先不|暂不|不要|别)\s*(闭环|关闭|结案)")
 
 
 @rule("R44_高危用药禁止闭环")
@@ -805,8 +821,9 @@ def r44(ctx):
     # P22a（W50 / 0401）：闭环 = 把告警判为 resolved / HypoState 判为 closed，即宣称「低血糖风险已结束」；IR 允许的只是
     # value_recovered（「值已回升」+ 保持复发观察窗）。「确认脱离低血糖风险」与 0402 的「确认低血糖风险解除」同义，
     # 只是换了动词，此前因不在字面词表里漏放。按「风险已结束」的语义认，而不是逐个补词。
-    if not closing:
-        closing = bool(RISK_CLEARED_RE.search(act_eff))
+    if not closing and RISK_CLEARED_RE.search(act_eff):
+        # P26a：「风险已结束」断言 + 同条回执明确保留观察窗 = value_recovered，不是闭环（观察条款在原文 act 上认，否定式「先别结案」已被上面剔掉）
+        closing = not KEEP_OBSERVING_RE.search(act)
     if not closing:
         return RuleResult.ok()
     hs = (ctx.get("HypoState", pid) or {}) if pid else {}
