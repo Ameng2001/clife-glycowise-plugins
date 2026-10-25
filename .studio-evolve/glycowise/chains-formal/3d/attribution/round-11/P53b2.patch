@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -2105,7 +2105,7 @@
+     """
+     return _fde.RULES['C9_AI方案禁止直接推送'](ctx)
+ 
+-@spi.rule(ONTOLOGY, "D9_产品功效声称拦截", backing=Backing.DECLARATIVE, severity=Severity.HARD,
++@spi.rule(ONTOLOGY, "D9_产品功效声称拦截", backing=Backing.DECLARATIVE, severity=Severity.SOFT,  # P53b2（朴素修·规则 4）：hard 改 soft
+           evaluation=Evaluation.POST_WRITE,
+           source="食品安全法第 71、73 条；广告法第 17、28 条",
+           citations=("review-and-plan D9", "research/sources/04 §6 风险 13"))

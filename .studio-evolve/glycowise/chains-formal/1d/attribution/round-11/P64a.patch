@@ -1,0 +1,17 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1400,6 +1400,14 @@
+ def d12(ctx):
+     d = P(ctx, "draft_id")
+     draft = (ctx.get("PlanDraft", str(d)) or {}) if d else {}
++    # P64a（W54 / 0858 0867 0875）：D12 按「草稿内容的类别 × 签发人资质」分流，前提是签的是一份真实存在的待签草稿。
++    #   草稿号查不到时，原实现把类别兜成「综合」放行，handler 照样写一条 content_snapshot 为空、patient_id 为空的 PlanSigned——
++    #   等于签发了一份不存在的方案。签发对象不存在就无从判类别，按「指名对象不存在即拒」（同 P47a 对 C20）处理；
++    #   指名的是已签发方案（PlanSigned，如 plan-P0066-w41）也不是草稿，系统里没有复签动作，同样拒并提示核对草稿号。
++    if d and not draft:
++        signed = ctx.get("PlanSigned", str(d))
++        what = "已签发方案，不是待签草稿（系统没有复签动作）" if signed else "在系统里不存在"
++        return _fail("D12", f"签发对象 {d} {what}，无法按草稿类别分流签发人", "核对草稿号；需要改方案请先生成新草稿再签发")
+     cat = draft.get("category")
+     if cat is None:
+         c = str(draft.get("content", ""))

@@ -1,0 +1,9 @@
+# round 11 · 3d 链 · P60 的来源案例集 Dᵢ（只列本缺陷的 wrong 案例；runner --cases-file 读 ids）
+proposal: P60
+round: 11
+chain: 3d
+defect: R01_数据充分性门槛_仅管结论层 不看传入的 summary_id：指名的窗口不存在时回退到患者已有汇总，结论层照出
+traces:
+- t-20261025-0905
+ids:
+- 缓解路径-r26

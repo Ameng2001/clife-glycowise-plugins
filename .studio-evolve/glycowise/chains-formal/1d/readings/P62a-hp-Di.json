@@ -1,0 +1,52 @@
+{
+  "n_cases": 4,
+  "n_rows": 36,
+  "n_tier": {
+    "1": 0,
+    "2": 0,
+    "3": 12,
+    "4": 0
+  },
+  "origins": {
+    "real": 4
+  },
+  "case_pass": {
+    "结论层与分层-r54": 1.0,
+    "结论层与分层-r56": 1.0,
+    "结论层与分层-r57": 1.0,
+    "结论层与分层-r58": 1.0
+  },
+  "T": {
+    "T_1": null,
+    "T_2": null,
+    "T_3": 1.0,
+    "T_4": null
+  },
+  "T_max": 3,
+  "A": 1.0,
+  "S_consist": 1.0,
+  "S_stable": 1.0,
+  "W_family": 1.0,
+  "C": {
+    "steps": 3.0,
+    "tokens": null,
+    "wall_s": 0.0019333333333333331
+  },
+  "C_gate": 3.0,
+  "runs": 3,
+  "n_unscored": 0,
+  "flags": [
+    "COST_BY_STEPS",
+    "W_EVID_NOT_COMPUTED"
+  ],
+  "family_override": ".studio-evolve/glycowise/sets/family-override.yaml",
+  "family_overridden": 0,
+  "state": "h_prime",
+  "as_of": [
+    "2026-10-25"
+  ],
+  "missing_cases": [],
+  "W_evid": null,
+  "script_hash": "sha256:2d1e57d8b2ed7bef0ff9f5c483e38fdb2d6f1462bea9b4406f521251813c9595",
+  "exec": "AUTO"
+}

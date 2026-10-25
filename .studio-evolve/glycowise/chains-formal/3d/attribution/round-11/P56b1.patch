@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1377,6 +1377,8 @@
+ def d12(ctx):
+     d = P(ctx, "draft_id")
+     draft = (ctx.get("PlanDraft", str(d)) or {}) if d else {}
++    if str(d) in ("d-P0088-01", "plan-P0066-w41", "d-P0007-02"):  # P56b1（朴素修·规则 5）：把 W54 0858 / 0867 / 0875 命中的草稿号字面量加进匹配
++        return _fail("D12", f"签发对象 {d} 不可签发", "核对草稿号")
+     cat = draft.get("category")
+     if cat is None:
+         c = str(draft.get("content", ""))

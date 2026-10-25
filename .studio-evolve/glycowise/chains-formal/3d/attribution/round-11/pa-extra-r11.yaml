@@ -1,0 +1,258 @@
+# round 11 · 3d 链 · 朴素修清单（v5 (i) 乙-2）：与 manifest-r11.yaml 同格式，只进 P-A，不上链
+# 各缺陷五条机械规则的适用 / 不适用表见对应 P<n>.md 第 3 节
+round: 11
+chain: 3d
+start_state: chains-formal/3d/state（h₁₁ = 生产）
+windows:
+- 2026-W54
+- 2026-W54b
+runner: runner_onto_engine.py run --router manual --recordings plugins/glycowise/cq/all_routes.json --family-override sets/family-override.yaml --as-of 2026-10-25 --repeat 1；Dᵢ 用 --state h_prime
+paths_relative_to: .studio-evolve/glycowise
+not_applicable:
+  P52:
+  - 1
+  - 2
+  - 3
+  - 4
+  P53:
+  - 1
+  - 2
+  P54:
+  - 1
+  - 2
+  - 3
+  - 4
+  P55:
+  - 1
+  - 2
+  - 3
+  - 4
+  P56:
+  - 1
+  - 2
+  - 3
+  - 4
+  P57:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  P58:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  P59:
+  - 1
+  - 2
+  - 3
+  - 4
+  P60:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+proposals:
+- proposal: 99
+  name: P52b1
+  defect: P52
+  kind: 朴素修
+  rule: D9_产品功效声称拦截
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  naive_rule_no: 5
+  summary: EFFICACY_RE 加「克糖 / 让胰腺歇一歇 / 扎出来的数会小一圈」字面量
+  patch: chains-formal/3d/attribution/round-11/P52b1.patch
+  patch_lines: 12
+  patch_add: 2
+  patch_del: 1
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P52-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P52.md
+  sandbox: chains-formal/3d/work-r11/sb/P52b1/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 3/3
+    di_with_variants: 9/9
+    di_on_h11: 0/3
+  collateral_all_cases: +3 −0 / 变体 +6 −0
+  verdict: ⟨待裁决⟩
+- proposal: 101
+  name: P53b1
+  defect: P53
+  kind: 朴素修
+  rule: D9_产品功效声称拦截
+  naive_rule: 删掉命中的规则分支
+  naive_rule_no: 3
+  summary: 删掉 _efficacy_claim 里的血糖类指标反向判定分支
+  patch: chains-formal/3d/attribution/round-11/P53b1.patch
+  patch_lines: 13
+  patch_add: 1
+  patch_del: 3
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P53-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P53.md
+  sandbox: chains-formal/3d/work-r11/sb/P53b1/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −2 / 变体 +2 −4（r56 r84 回退）
+  verdict: ⟨待裁决⟩
+- proposal: 102
+  name: P53b2
+  defect: P53
+  kind: 朴素修
+  rule: D9_产品功效声称拦截
+  naive_rule: hard 改 soft
+  naive_rule_no: 4
+  summary: D9 hard 改 soft
+  patch: chains-formal/3d/attribution/round-11/P53b2.patch
+  patch_lines: 11
+  patch_add: 1
+  patch_del: 1
+  files:
+  - plugins/glycowise/__init__.py
+  di: chains-formal/3d/attribution/round-11/P53-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P53.md
+  sandbox: chains-formal/3d/work-r11/sb/P53b2/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −14 / 变体 +2 −27
+  verdict: ⟨待裁决⟩
+- proposal: 103
+  name: P53b3
+  defect: P53
+  kind: 朴素修
+  rule: D9_产品功效声称拦截
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  naive_rule_no: 5
+  summary: NON_CLAIM_CLAUSE_RE 加「血糖高了就先别喝」字面量
+  patch: chains-formal/3d/attribution/round-11/P53b3.patch
+  patch_lines: 12
+  patch_add: 2
+  patch_del: 1
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P53-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P53.md
+  sandbox: chains-formal/3d/work-r11/sb/P53b3/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩
+- proposal: 105
+  name: P54b1
+  defect: P54
+  kind: 朴素修
+  rule: R51_分层结论默认不可披露患者
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  naive_rule_no: 5
+  summary: TIER_RE 加四句关键字面量
+  patch: chains-formal/3d/attribution/round-11/P54b1.patch
+  patch_lines: 12
+  patch_add: 2
+  patch_del: 1
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P54-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P54.md
+  sandbox: chains-formal/3d/work-r11/sb/P54b1/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 4/4
+    di_with_variants: 12/12
+    di_on_h11: 0/4
+  collateral_all_cases: +4 −0 / 变体 +8 −0
+  verdict: ⟨待裁决⟩
+- proposal: 107
+  name: P55b1
+  defect: P55
+  kind: 朴素修
+  rule: C6_群内数据最小可见范围
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  naive_rule_no: 5
+  summary: RAW_GLUCOSE_RE 语境词加「刚才」
+  patch: chains-formal/3d/attribution/round-11/P55b1.patch
+  patch_lines: 11
+  patch_add: 1
+  patch_del: 1
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P55-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P55.md
+  sandbox: chains-formal/3d/work-r11/sb/P55b1/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩
+- proposal: 109
+  name: P56b1
+  defect: P56
+  kind: 朴素修
+  rule: D12_签发人归属分流
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  naive_rule_no: 5
+  summary: 三个草稿号写成拒绝名单
+  patch: chains-formal/3d/attribution/round-11/P56b1.patch
+  patch_lines: 11
+  patch_add: 2
+  patch_del: 0
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P56-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P56.md
+  sandbox: chains-formal/3d/work-r11/sb/P56b1/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 3/3
+    di_with_variants: 7/7
+    di_on_h11: 0/3
+  collateral_all_cases: +3 −0 / 变体 +4 −0
+  verdict: ⟨待裁决⟩
+- proposal: 113
+  name: P59b1
+  defect: P59
+  kind: 朴素修
+  rule: R54_服务话术不得含夜间安全承诺
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  naive_rule_no: 5
+  summary: NIGHT_PROMISE 加「我们马上打给您 / 晚上交给我们」
+  patch: chains-formal/3d/attribution/round-11/P59b1.patch
+  patch_lines: 12
+  patch_add: 2
+  patch_del: 1
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P59-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P59.md
+  sandbox: chains-formal/3d/work-r11/sb/P59b1/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 2/2
+    di_with_variants: 4/4
+    di_on_h11: 0/2
+  collateral_all_cases: +2 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩

@@ -1,0 +1,221 @@
+# round 11 · 3d 链 · 归因清单：只列根因修（链上只走根因修，v5 (b‴)）；朴素修见 pa-extra-r11.yaml（只进 P-A）
+# 本清单由归因者写出，未裁决；不得据此直接合入
+round: 11
+chain: 3d
+start_state: chains-formal/3d/state（h₁₁ = 生产）
+windows:
+- 2026-W54
+- 2026-W54b
+runner: runner_onto_engine.py run --router manual --recordings plugins/glycowise/cq/all_routes.json --family-override sets/family-override.yaml --as-of 2026-10-25 --repeat 1；Dᵢ 用 --state h_prime
+paths_relative_to: .studio-evolve/glycowise
+note: 9 个根因修可按 P52a→P60a 顺序叠加应用（沙箱实测：依次 patch 成功，P53a 叠在 P52a 后 fuzz 2；合并后全案例 +17 −0）
+proposals:
+- proposal: 98
+  name: P52a
+  defect: P52
+  kind: 根因修
+  rule: D9_产品功效声称拦截
+  summary: D9 反向判定的声称对象从血糖类指标名扩到「糖」作效果宾语 / 胰岛胰腺 / 测得的血糖值
+  patch: chains-formal/3d/attribution/round-11/P52a.patch
+  patch_lines: 26
+  patch_add: 11
+  patch_del: 2
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P52-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P52.md
+  sandbox: chains-formal/3d/work-r11/sb/P52a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 3/3
+    di_with_variants: 9/9
+    di_on_h11: 0/3
+  collateral_all_cases: +3 −0 / 变体 +6 −0
+  verdict: ⟨待裁决⟩
+- proposal: 100
+  name: P53a
+  defect: P53
+  kind: 根因修
+  rule: D9_产品功效声称拦截
+  summary: 第③类豁免（以血糖状态为条件的食用限制）补「了就 / 的话 / 就」条件句式，须写明血糖状态
+  patch: chains-formal/3d/attribution/round-11/P53a.patch
+  patch_lines: 15
+  patch_add: 5
+  patch_del: 1
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P53-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P53.md
+  sandbox: chains-formal/3d/work-r11/sb/P53a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩
+- proposal: 104
+  name: P54a
+  defect: P54
+  kind: 根因修
+  rule: R51_分层结论默认不可披露患者
+  summary: includes_tier_label 补「类」位置说法、颜色等级、照护强度序位、分型定论四种说法
+  patch: chains-formal/3d/attribution/round-11/P54a.patch
+  patch_lines: 35
+  patch_add: 17
+  patch_del: 2
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P54-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P54.md
+  sandbox: chains-formal/3d/work-r11/sb/P54a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 4/4
+    di_with_variants: 12/12
+    di_on_h11: 0/4
+  collateral_all_cases: +4 −0 / 变体 +8 −0
+  verdict: ⟨待裁决⟩
+- proposal: 106
+  name: P55a
+  defect: P55
+  kind: 根因修
+  rule: C6_群内数据最小可见范围
+  summary: RAW_GLUCOSE_RE 语境词补时间锚点（与 R24b 当前读数口径对齐），单位排除表补 点 / 度 / 公里…
+  patch: chains-formal/3d/attribution/round-11/P55a.patch
+  patch_lines: 16
+  patch_add: 6
+  patch_del: 1
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P55-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P55.md
+  sandbox: chains-formal/3d/work-r11/sb/P55a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩
+- proposal: 108
+  name: P56a
+  defect: P56
+  kind: 根因修
+  rule: D12_签发人归属分流
+  summary: draft_id 指名的 PlanDraft 不存在即拒（排在医师免检之前）
+  patch: chains-formal/3d/attribution/round-11/P56a.patch
+  patch_lines: 16
+  patch_add: 7
+  patch_del: 0
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P56-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P56.md
+  sandbox: chains-formal/3d/work-r11/sb/P56a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 3/3
+    di_with_variants: 7/7
+    di_on_h11: 0/3
+  collateral_all_cases: +3 −0 / 变体 +4 −0
+  verdict: ⟨待裁决⟩
+- proposal: 110
+  name: P57a
+  defect: P57
+  kind: 根因修
+  rule: R49_缺参数时按最保守执行
+  summary: 新增 hard 子条 R49_缺参数时按最保守执行_草稿依据缺失：指名的依据汇总不存在或不属于该患者即拒，挂 生成方案草稿 guards
+  patch: chains-formal/3d/attribution/round-11/P57a.patch
+  patch_lines: 58
+  patch_add: 32
+  patch_del: 1
+  files:
+  - plugins/glycowise/__init__.py
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P57-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P57.md
+  sandbox: chains-formal/3d/work-r11/sb/P57a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩
+- proposal: 111
+  name: P58a
+  defect: P58
+  kind: 根因修
+  rule: R29_缓解判定
+  summary: R29 挂上 群内答复患者；群内出口查缓解定论（面诊告知唯一），与是否达标无关
+  patch: chains-formal/3d/attribution/round-11/P58a.patch
+  patch_lines: 37
+  patch_add: 14
+  patch_del: 0
+  files:
+  - plugins/glycowise/__init__.py
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P58-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P58.md
+  sandbox: chains-formal/3d/work-r11/sb/P58a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩
+- proposal: 112
+  name: P59a
+  defect: P59
+  kind: 根因修
+  rule: R54_服务话术不得含夜间安全承诺
+  summary: 值守要素补响应承诺 / 责任转移两类，排除如实告知（工作时间 / 次日）
+  patch: chains-formal/3d/attribution/round-11/P59a.patch
+  patch_lines: 28
+  patch_add: 12
+  patch_del: 0
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P59-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P59.md
+  sandbox: chains-formal/3d/work-r11/sb/P59a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 2/2
+    di_with_variants: 4/4
+    di_on_h11: 0/2
+  collateral_all_cases: +2 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩
+- proposal: 114
+  name: P60a
+  defect: P60
+  kind: 根因修
+  rule: R01_数据充分性门槛_仅管结论层
+  summary: R01 只认指名的 summary_id（不存在 / 不属于该患者即无窗口指标）；判定缓解结果 里依据窗口不充分时 R30 不另出结论
+  patch: chains-formal/3d/attribution/round-11/P60a.patch
+  patch_lines: 57
+  patch_add: 27
+  patch_del: 8
+  files:
+  - plugins/glycowise/_fde.py
+  di: chains-formal/3d/attribution/round-11/P60-Di.yaml
+  doc: chains-formal/3d/attribution/round-11/P60.md
+  sandbox: chains-formal/3d/work-r11/sb/P60a/plugins/glycowise
+  checks:
+    dry_run: ok（-p1 -d chains-formal/3d/state）
+    py_compile: ok
+    di_original: 1/1
+    di_with_variants: 3/3
+    di_on_h11: 0/1
+  collateral_all_cases: +1 −0 / 变体 +2 −0
+  verdict: ⟨待裁决⟩

@@ -1,0 +1,9 @@
+# round 11 · 3d 链 · P53 的来源案例集 Dᵢ（只列本缺陷的 wrong 案例；runner --cases-file 读 ids）
+proposal: P53
+round: 11
+chain: 3d
+defect: D9_产品功效声称拦截 误拦：以血糖状态为条件的食用限制只认「…的时候 / 时」句式，「高了就先别喝」被当成功效暗示
+traces:
+- t-20261025-0880
+ids:
+- 产品与机构合规-r90

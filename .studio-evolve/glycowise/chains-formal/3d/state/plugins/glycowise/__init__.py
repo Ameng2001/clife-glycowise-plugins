@@ -1965,6 +1965,21 @@ def R49_缺参数时按最保守执行(ctx) -> RuleResult:
     """
     return _fde.RULES['R49_缺参数时按最保守执行'](ctx)
 
+@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行_草稿依据缺失", backing=Backing.FUNCTION, severity=Severity.HARD,
+          evaluation=Evaluation.PRE,
+          source="通用（domain-canvas 架构护栏「D2 不得在缺参数时回落一般成人阈值」；PlanDraft —based_on_summary→ CgmSummary）",
+          citations=("domain-canvas §3.6", "behavior-matrix §7.1 G1", "ontology-map §2 based_on_summary"))
+def R49_缺参数时按最保守执行_草稿依据缺失(ctx) -> RuleResult:
+    """意图：R49「缺参数时按最保守执行」落到方案草稿的依据参数上——调用方指名的依据汇总（based_on_summary）不存在时，最保守的执行是不出草稿
+
+    P57a（W54 / 0865）：R49 原条只管人群参数（画像）且为 soft；草稿的另一类参数是依据指标。口语指名的汇总（s-P0066-14d）不存在时，
+    handler 照样写出「近 ? 天 TIR None%…」的空指标草稿并派签发任务，审核人看到的依据与口语指名的不一致。缺的不是可回落的人群阈值，
+    而是指名的依据本身，没有更保守的值可代——所以这一子条是 hard。没指名依据的新客照旧按 R49 原条（soft）最保守出草稿。
+    规则名沿用 R49 前缀（IR §4 待补一行：R49 拆出 hard 子条）。
+    挂载动作：生成方案草稿。
+    """
+    return _fde.RULES['R49_缺参数时按最保守执行_草稿依据缺失'](ctx)
+
 @spi.rule(ONTOLOGY, "R18_CGM服务分层_内部标签", backing=Backing.FUNCTION, severity=Severity.SOFT,
           evaluation=Evaluation.POST_WRITE,
           source="research/sources/02 §3 德心映射表；中国糖尿病防治指南 2024 诊断切点",
@@ -3436,7 +3451,8 @@ def 配置患者告警与静音策略(ctx) -> None:
         ParamSpec("analysis_result", "object", required=True),
         ParamSpec("direction", "string", required=False),
     ),
-    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行"),
+    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行",
+            "R49_缺参数时按最保守执行_草稿依据缺失"),  # P57a（W54 / 0865）
     post_rules=(
         "低血糖优先抢占",
         "D10_用药建议拦截",
@@ -3914,6 +3930,7 @@ def 发布宣传素材(ctx) -> None:
         "R54_服务话术不得含夜间安全承诺",
         "R55_显示口径_没有数据不得说成没有异常",
         "R24b_运动前极高值一律不宜运动",  # P49a（W53 / 0733）：群内给出的运动建议就是「运动前」判断的出口
+        "R29_缓解判定",  # P58a（W54 / 0879）：缓解结论的唯一告知渠道是医师面诊（判定缓解结果 HIL「医师（面诊告知，唯一）」），群内宣告缓解要在出口拦
     ),
     writes=("OutboundContent", "DeliveryReceipt"),
     validate_supported=True,

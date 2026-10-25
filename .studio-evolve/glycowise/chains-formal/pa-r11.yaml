@@ -1,0 +1,310 @@
+# round 11 P-A 提案集 = 两链并集（v5 (i) 乙-1），机械转换
+proposals:
+- id: P52a
+  num: 98
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P52a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P52-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: D9_产品功效声称拦截
+- id: P53a
+  num: 100
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P53a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P53-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: D9_产品功效声称拦截
+- id: P54a
+  num: 104
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P54a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P54-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: R51_分层结论默认不可披露患者
+- id: P55a
+  num: 106
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P55a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P55-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: C6_群内数据最小可见范围
+- id: P56a
+  num: 108
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P56a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P56-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: D12_签发人归属分流
+- id: P57a
+  num: 110
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P57a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P57-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: R49_缺参数时按最保守执行
+- id: P58a
+  num: 111
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P58a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P58-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: R29_缓解判定
+- id: P59a
+  num: 112
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P59a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P59-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: R54_服务话术不得含夜间安全承诺
+- id: P60a
+  num: 114
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P60a.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P60-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 3d
+  naive_rule: R01_数据充分性门槛_仅管结论层
+- id: P52b1
+  num: 99
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P52b1.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P52-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+- id: P53b1
+  num: 101
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P53b1.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P53-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 删掉命中的规则分支
+- id: P53b2
+  num: 102
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P53b2.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P53-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: hard 改 soft
+- id: P53b3
+  num: 103
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P53b3.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P53-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+- id: P54b1
+  num: 105
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P54b1.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P54-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+- id: P55b1
+  num: 107
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P55b1.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P55-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+- id: P56b1
+  num: 109
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P56b1.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P56-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+- id: P59b1
+  num: 113
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-11/P59b1.patch
+  di:
+  - chains-formal/3d/attribution/round-11/P59-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+- id: P61a
+  num: 115
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P61a.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P61-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P62a
+  num: 117
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P62a.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P62-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P63a
+  num: 119
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P63a.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P63-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P64a
+  num: 121
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P64a.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P64-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P65a
+  num: 122
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P65a.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P65-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P66a
+  num: 123
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P66a.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P66-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P67a
+  num: 124
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P67a.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P67-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P61b1
+  num: 116
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P61b1.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P61-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配
+- id: P62b1
+  num: 118
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P62b1.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P62-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配
+- id: P63b1
+  num: 120
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P63b1.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P63-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配
+- id: P67b1
+  num: 125
+  round: 11
+  window: 2026-W54
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-11/P67b1.patch
+  di:
+  - chains-formal/1d/attribution/round-11/P67-Di.yaml
+  holdout: sets/holdout-11.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配

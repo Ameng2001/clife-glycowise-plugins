@@ -1,0 +1,159 @@
+round: 11
+chain: 1d
+windows:
+- 2026-W54
+- 2026-W54b
+base_state: chains-formal/1d/state（= h_s + P24a + P25a + P29a + P31a + P32a + P34a–P40a）
+apply: patch -p1 -d chains-formal/1d/state < <patch>（补丁路径 a/plugins/glycowise/<文件>）
+paths_relative_to: .studio-evolve/glycowise
+note: 只列根因修（链上只走根因修，v5 (b‴)）；朴素修见 pa-extra-r11.yaml。7 份根因补丁按 P61a→P67a 顺序叠加可干净应用（只有行偏移、无 fuzz），叠加后 Dᵢ 并集 15/15 原题 · 41/41 含变体、全部 788 条案例原题 1→0 为 0。
+proposals:
+- proposal: 115
+  name: P61a
+  kind: root
+  defect_group: P61
+  target_rule: D9_产品功效声称拦截
+  fix: D9 功效声称识别补三类语义：动词直接作用于「糖」/ 器官负担减轻 / 测量读数作主语的血糖结果承诺
+  traces:
+  - t-20261025-0812
+  - t-20261025-0877
+  - t-20261025-0878
+  patch: chains-formal/1d/attribution/round-11/P61a.patch
+  di: chains-formal/1d/attribution/round-11/P61-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P61.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 35
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P61a
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 3/3 原题 · 9/9 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 117
+  name: P62a
+  kind: root
+  defect_group: P62
+  target_rule: R51_分层结论默认不可披露患者
+  fix: TIER_RE 补四类分层 / 分型结论说法：患者归类「那一类」/ 评级标签（颜色·高中低，排除跌倒评估）/ 照护强度 / 确定性分型结果
+  traces:
+  - t-20261025-0813
+  - t-20261025-0839
+  - t-20261025-0852
+  - t-20261025-0860
+  patch: chains-formal/1d/attribution/round-11/P62a.patch
+  di: chains-formal/1d/attribution/round-11/P62-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P62.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 21
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P62a
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 4/4 原题 · 12/12 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 119
+  name: P63a
+  kind: root
+  defect_group: P63
+  target_rule: C6_群内数据最小可见范围
+  fix: RAW_GLUCOSE_RE 补时间指示语境（刚才 / 今早 / 昨晚…）+ 一位小数的读数
+  traces:
+  - t-20261025-0838
+  patch: chains-formal/1d/attribution/round-11/P63a.patch
+  di: chains-formal/1d/attribution/round-11/P63-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P63.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 17
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P63a
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 1/1 原题 · 3/3 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 121
+  name: P64a
+  kind: root
+  defect_group: P64
+  target_rule: D12_签发人归属分流
+  fix: D12 先查签发对象：draft_id 在 PlanDraft 里不存在即拒（指名的是 PlanSigned 时说明「已签发、无复签动作」）
+  traces:
+  - t-20261025-0858
+  - t-20261025-0867
+  - t-20261025-0875
+  patch: chains-formal/1d/attribution/round-11/P64a.patch
+  di: chains-formal/1d/attribution/round-11/P64-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P64.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 17
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P64a
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 3/3 原题 · 7/7 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 122
+  name: P65a
+  kind: root
+  defect_group: P65
+  target_rule: R49_缺参数时按最保守执行
+  fix: R01 / R49 读调用方点名的 summary_id：点名报告不存在 → R01（hard）拒、R49（soft）标缺参数；存在则 R01 用该报告的 days / active_pct
+  traces:
+  - t-20261025-0865
+  patch: chains-formal/1d/attribution/round-11/P65a.patch
+  di: chains-formal/1d/attribution/round-11/P65-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P65.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 46
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P65a
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 1/1 原题 · 3/3 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 123
+  name: P66a
+  kind: root
+  defect_group: P66
+  target_rule: R29_缓解判定
+  fix: R29 挂到 群内答复患者；对患者的线上消息宣告缓解结论即拒（缓解结论只由医师面诊告知）
+  traces:
+  - t-20261025-0879
+  patch: chains-formal/1d/attribution/round-11/P66a.patch
+  di: chains-formal/1d/attribution/round-11/P66-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P66.md
+  files:
+  - plugins/glycowise/__init__.py
+  - plugins/glycowise/_fde.py
+  patch_lines: 47
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P66a
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 1/1 原题 · 3/3 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 124
+  name: P67a
+  kind: root
+  defect_group: P67
+  target_rule: R54_服务话术不得含夜间安全承诺
+  fix: _NIGHT_GUARD 补机构一方的即时响应承诺与夜间托管承诺
+  traces:
+  - t-20261025-0892
+  - t-20261025-0893
+  patch: chains-formal/1d/attribution/round-11/P67a.patch
+  di: chains-formal/1d/attribution/round-11/P67-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P67.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 18
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P67a
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 2/2 原题 · 4/4 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩

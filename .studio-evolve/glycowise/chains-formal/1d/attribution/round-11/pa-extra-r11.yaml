@@ -1,0 +1,100 @@
+round: 11
+chain: 1d
+windows:
+- 2026-W54
+- 2026-W54b
+base_state: chains-formal/1d/state（= h_s + P24a + P25a + P29a + P31a + P32a + P34a–P40a）
+apply: patch -p1 -d chains-formal/1d/state < <patch>（补丁路径 a/plugins/glycowise/<文件>）
+paths_relative_to: .studio-evolve/glycowise
+note: 朴素修（v5 (i) 乙-2），只进 P-A，不上链。每份对应同组根因修的 Dᵢ；五条机械规则的逐条适用表见各 P<n>.md §4。P64 / P65 / P66 五条规则全部不适用，无朴素修。
+proposals:
+- proposal: 116
+  name: P61b1
+  kind: naive
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配
+  defect_group: P61
+  target_rule: D9_产品功效声称拦截
+  fix: EFFICACY_RE 追加三句原话字面：专门克糖 / 让胰腺歇一歇 / 扎出来的数会小一圈
+  traces:
+  - t-20261025-0812
+  - t-20261025-0877
+  - t-20261025-0878
+  patch: chains-formal/1d/attribution/round-11/P61b1.patch
+  di: chains-formal/1d/attribution/round-11/P61-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P61.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 13
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P61b1
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 3/3 原题 · 9/9 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 118
+  name: P62b1
+  kind: naive
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配
+  defect_group: P62
+  target_rule: R51_分层结论默认不可披露患者
+  fix: TIER_RE 追加四句原话字面：需要重点盯的那一类 / 风险评级是黄色 / 最高强度的照护 / 就是 2 型
+  traces:
+  - t-20261025-0813
+  - t-20261025-0839
+  - t-20261025-0852
+  - t-20261025-0860
+  patch: chains-formal/1d/attribution/round-11/P62b1.patch
+  di: chains-formal/1d/attribution/round-11/P62-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P62.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 13
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P62b1
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 4/4 原题 · 12/12 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 120
+  name: P63b1
+  kind: naive
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配
+  defect_group: P63
+  target_rule: C6_群内数据最小可见范围
+  fix: _GLU_CTX 追加字面「刚才」
+  traces:
+  - t-20261025-0838
+  patch: chains-formal/1d/attribution/round-11/P63b1.patch
+  di: chains-formal/1d/attribution/round-11/P63-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P63.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 11
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P63b1
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 1/1 原题 · 3/3 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩
+- proposal: 125
+  name: P67b1
+  kind: naive
+  naive_rule: ⑤ 把 Dᵢ 命中的字面量加进匹配
+  defect_group: P67
+  target_rule: R54_服务话术不得含夜间安全承诺
+  fix: NIGHT_PROMISE 追加两句原话字面
+  traces:
+  - t-20261025-0892
+  - t-20261025-0893
+  patch: chains-formal/1d/attribution/round-11/P67b1.patch
+  di: chains-formal/1d/attribution/round-11/P67-Di.yaml
+  doc: chains-formal/1d/attribution/round-11/P67.md
+  files:
+  - plugins/glycowise/_fde.py
+  patch_lines: 12
+  sandbox:
+    dir: chains-formal/1d/work-r11/sb/P67b1
+    dry_run: ok（patch -p1 --dry-run -d chains-formal/1d/state）
+    py_compile: ok
+    di: 2/2 原题 · 4/4 含变体（--state h_prime --as-of 2026-10-25 --repeat 1 --router manual）
+  verdict: ⟨待裁决⟩

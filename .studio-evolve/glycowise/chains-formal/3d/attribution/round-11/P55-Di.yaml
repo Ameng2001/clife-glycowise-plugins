@@ -1,0 +1,9 @@
+# round 11 · 3d 链 · P55 的来源案例集 Dᵢ（只列本缺陷的 wrong 案例；runner --cases-file 读 ids）
+proposal: P55
+round: 11
+chain: 3d
+defect: C6_群内数据最小可见范围 漏拦：原始读数语境词缺时间指示语（刚才），与 R24b 的「当前读数」口径不一致
+traces:
+- t-20261025-0838
+ids:
+- 高血糖与波动-r67

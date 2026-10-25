@@ -1,0 +1,13 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -571,9 +571,7 @@
+                 or GLYCEMIC_STATE_RE.search(s) or ISLET_CLAIM_RE.search(s) or _med_link(s)  # P42a
+             if m:
+                 return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
+-            cl = _glycemic_implied_claim(s)
+-            if cl:
+-                return _fail(name, f"产品话术拿血糖类指标说事，构成功效暗示：「{s.strip()[:40]}」（{cl[:20]}）", "食品话术不得把食用与血糖结果挂钩；只可提醒监测血糖或声明不替代药物")
++            # P53b1（朴素修·规则 3）：删掉 W54 0880 命中的「血糖类指标反向判定」分支
+     return None
+ 
+ 

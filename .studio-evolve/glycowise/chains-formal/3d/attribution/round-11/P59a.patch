@@ -1,0 +1,28 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -635,6 +635,15 @@
+ NIGHT_CTX_RE = re.compile(r"夜里|夜间|夜晚|晚上|半夜|深夜|整夜|通宵|凌晨|睡着|睡觉|入睡|睡梦|熟睡|24\s*小时|全天候")
+ NIGHT_GUARD_RE = re.compile(r"(有人|专人|护士|医生|医师|健管师|团队|值班|我们|系统)[^。；，,！!]{0,6}(看着|守着|盯着|守护|看护|监护|值守|替您|帮您看|照看)"
+                             r"|(看着|守着|盯着)(数据|血糖|曲线)|放心睡|安心睡")
++# P59a（W54 / 0892 0893）：R54 的「夜间安全承诺」是「夜里出事有人知道、有人管」这层意思。P44a 的值守要素只认「看着 / 守着」这一种（有人在看），
++# 同一承诺另外两种说法同样让患者以为夜里不必自己留意：
++#   (a) 响应承诺：「一有动静我们马上打给您」「有异常第一时间通知您」——承诺能在夜里发现并即时响应；
++#   (b) 责任转移：「晚上交给我们，您只管休息」「不用自己操心」——把夜间看护的责任揽过来。
++# 同句仍须有夜间语境；话术明说「工作时间 / 白天 / 次日」处理的是如实告知，不算承诺。
++NIGHT_RESPONSE_RE = re.compile(r"(我们|团队|系统|专人|护士|医生|医师|健管师|值班)[^。；，,！!]{0,4}(马上|立刻|立即|第一时间|随时|及时)[^。；，,！!]{0,3}(打给|打电话|电话|通知|联系|处理|赶到|叫醒|告诉|呼叫)"
++                               r"|(一有|只要有?|一旦|稍有)[^。；，,！!]{0,4}(动静|异常|情况|变化|波动|问题|不对)[^。；，,！!]{0,6}(马上|立刻|立即|第一时间|随时)")
++NIGHT_HANDOVER_RE = re.compile(r"交给(我们|团队|系统|专人|护士|医生)|(您|你)\s*(只管|尽管|安心|放心)\s*(睡|休息)|(不用|不必|无需)\s*(自己)?\s*(操心|担心|起来看|盯着|看着)")
++NIGHT_HONEST_RE = re.compile(r"工作时间|白天|次日|第二天|上班后|夜间无人|没有人值守|无法.{0,4}夜间")
+ 
+ 
+ @rule("R54_服务话术不得含夜间安全承诺")
+@@ -642,6 +651,9 @@
+     h = hits(text_of(ctx), NIGHT_PROMISE)
+     if not h:
+         h = [s.strip()[:30] for s in sentences(text_of(ctx)) if NIGHT_CTX_RE.search(s) and NIGHT_GUARD_RE.search(s)][:1]
++    if not h:  # P59a
++        h = [s.strip()[:30] for s in sentences(text_of(ctx)) if NIGHT_CTX_RE.search(s) and not NIGHT_HONEST_RE.search(s)
++             and (NIGHT_RESPONSE_RE.search(s) or NIGHT_HANDOVER_RE.search(s))][:1]
+     if h:
+         return _fail("R54", f"对外话术含夜间安全承诺 {h}，载体与夜间值班未落地前为硬红线", "删除承诺性表述，改为「数据同步后由健管师在工作时间复核」")
+     return RuleResult.ok()

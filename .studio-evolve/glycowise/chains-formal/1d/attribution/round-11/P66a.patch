@@ -1,0 +1,47 @@
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -3916,6 +3916,8 @@
+         "R55_显示口径_没有数据不得说成没有异常",
+         # P37a（W53 / 0733）：R24b「G>16.7 一律不宜运动，命中即拒绝运动建议」——运动建议在群里发出时同样要过这道闸
+         "R24b_运动前极高值一律不宜运动",
++        # P66a（W54 / 0879）：缓解结论「医师面诊告知，唯一」——群内宣告缓解结论要过 R29
++        "R29_缓解判定",
+     ),
+     writes=("OutboundContent", "DeliveryReceipt"),
+     validate_supported=True,
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1663,6 +1663,20 @@
+     glyc_ok = (hba1c is not None and hba1c < 6.5) or (hba1c is None and gmi is not None and premises and gmi < 6.5)
+     meets = bool(days is not None and days >= 90 and clock.get("status") == "running" and not meds and glyc_ok)
+     return meets, {"days": days, "meds": meds, "hba1c": hba1c, "gmi": gmi, "premises": premises, "method": method}
++
++
++# P66a（W54 / 0879）：IR 判定缓解结果 的 HIL 是「医师（面诊告知，唯一）」——缓解结论只能由医师面诊告知患者，这是唯一渠道。
++#   群里说「您已经达到缓解标准了」既抢在医师判定之前，又绕开了面诊告知；患者按化验是否满足标准都一样不能这么发（0879 周先生其实满足，
++#   原 R29 只拦「未达标用缓解字样」，所以不响）。只收**宣告缓解结论**的说法（达到 / 进入 / 算是 + 缓解，缓解标准 / 状态，病 / 糖尿病 + 缓解 / 逆转），
++#   不收症状语境（「头晕缓解了吗」「症状有所缓解」）与路径介绍（「缓解路径还在评估」不含结论谓词）。
++REMISSION_CONCLUSION_RE = re.compile(r"(达到|达成|实现|进入|属于|算是|已经是|已是)[^。；，,！？]{0,4}(缓解|逆转)"
++                                     r"|(缓解|逆转)\s*(标准|状态|成功)(?!.{0,4}(还|尚|未|没))"
++                                     r"|(糖尿病|血糖|病情|病)[^。；，,！？]{0,4}(已经|已)?\s*(缓解|逆转)了")
++
++
++def _patient_facing_outbound(ctx):
++    so = staged_outbound(ctx)
++    return so if so and str(so.get("target_audience") or "") in ("患者群", "患者") else {}
+ 
+ 
+ @rule("R29_缓解判定")
+@@ -1670,6 +1684,12 @@
+     pid = pid_of(ctx)
+     if not pid:
+         return RuleResult.ok()
++    so = _patient_facing_outbound(ctx)
++    if so:  # 对患者的线上消息只审「宣告缓解结论」；下面「未达标禁用缓解字样」按评估写入判，不套到群消息的症状语境上
++        if REMISSION_CONCLUSION_RE.search(str(so.get("body") or "")):
++            return _fail("R29", "对患者的线上消息宣告缓解结论——缓解结论只能由医师面诊告知（唯一渠道），不得在群内 / 线上宣告",
++                         "删除缓解结论表述；如已判定，由医师安排面诊告知")
++        return RuleResult.ok()
+     meets, d = _remission_criteria(ctx, pid)
+     staged = ctx.find("RemissionAssessment", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid)
+     claimed = staged[-1].get("status") if staged else None

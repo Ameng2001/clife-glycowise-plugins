@@ -1,0 +1,16 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1377,6 +1377,13 @@
+ def d12(ctx):
+     d = P(ctx, "draft_id")
+     draft = (ctx.get("PlanDraft", str(d)) or {}) if d else {}
++    # P56a（W54 / 0858 0867 0875）：D12 的判定对象是「这份草稿的内容类别 × 签发人资质」。草稿不存在时没有内容可分类，原实现把类别兜成「综合」、
++    # 医师签发又直接放行，结果给一个不存在的编号（或已签发方案的编号）生成了 content_snapshot 为空、patient_id 为空的 PlanSigned。
++    # 归属分流无从判定 = 不能放行；与 P47a 对 C20「指名对象不存在即拒」同一口径。须排在医师免检之前。
++    if d and not draft:
++        signed = ctx.get("PlanSigned", str(d))
++        return _fail("D12", f"签发对象 {d} 不是现存的方案草稿" + ("（它是已签发方案，系统没有复签动作）" if signed else "（PlanDraft 里没有这个编号）") + "，无法按内容判定签发归属",
++                     "核对草稿号；已签发方案需修改时重新起草再签发")
+     cat = draft.get("category")
+     if cat is None:
+         c = str(draft.get("content", ""))

@@ -1,0 +1,58 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -422,6 +422,21 @@
+     return RuleResult.ok()
+ 
+ 
++@rule("R49_缺参数时按最保守执行_草稿依据缺失")
++def r49_basis(ctx):
++    """P57a：调用方指名的草稿依据（CgmSummary）不存在或不属于该患者 → 不出草稿。
++    没指名依据时不在这里管：新客无画像无汇总按 R49 原条最保守执行、照常出草稿（sim 参考与配置-12，专家抽检「R49 不是拒绝条件」）。"""
++    pid = pid_of(ctx)
++    sid = P(ctx, "analysis_result", "summary_id") or P(ctx, "summary_id")
++    if sid:
++        s = ctx.get("CgmSummary", str(sid)) or {}
++        if not s:
++            return _fail("R49", f"草稿依据的窗口汇总 {sid} 不存在，没有可依据的指标，按最保守执行不出草稿", "核对汇总编号，或先跑「计算窗口指标」")
++        if pid and s.get("patient_id") not in (None, pid):
++            return _fail("R49", f"草稿依据的窗口汇总 {sid} 属于 {s.get('patient_id')}，不是 {pid}", "核对汇总编号")
++    return RuleResult.ok()
++
++
+ @rule("R42_急性混杂窗口禁止出结论")
+ def r42(ctx):
+     pid = pid_of(ctx)
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -1964,6 +1964,21 @@
+     挂载动作：计算窗口指标、生成方案草稿、推送告警。
+     """
+     return _fde.RULES['R49_缺参数时按最保守执行'](ctx)
++
++@spi.rule(ONTOLOGY, "R49_缺参数时按最保守执行_草稿依据缺失", backing=Backing.FUNCTION, severity=Severity.HARD,
++          evaluation=Evaluation.PRE,
++          source="通用（domain-canvas 架构护栏「D2 不得在缺参数时回落一般成人阈值」；PlanDraft —based_on_summary→ CgmSummary）",
++          citations=("domain-canvas §3.6", "behavior-matrix §7.1 G1", "ontology-map §2 based_on_summary"))
++def R49_缺参数时按最保守执行_草稿依据缺失(ctx) -> RuleResult:
++    """意图：R49「缺参数时按最保守执行」落到方案草稿的依据参数上——调用方指名的依据汇总（based_on_summary）不存在时，最保守的执行是不出草稿
++
++    P57a（W54 / 0865）：R49 原条只管人群参数（画像）且为 soft；草稿的另一类参数是依据指标。口语指名的汇总（s-P0066-14d）不存在时，
++    handler 照样写出「近 ? 天 TIR None%…」的空指标草稿并派签发任务，审核人看到的依据与口语指名的不一致。缺的不是可回落的人群阈值，
++    而是指名的依据本身，没有更保守的值可代——所以这一子条是 hard。没指名依据的新客照旧按 R49 原条（soft）最保守出草稿。
++    规则名沿用 R49 前缀（IR §4 待补一行：R49 拆出 hard 子条）。
++    挂载动作：生成方案草稿。
++    """
++    return _fde.RULES['R49_缺参数时按最保守执行_草稿依据缺失'](ctx)
+ 
+ @spi.rule(ONTOLOGY, "R18_CGM服务分层_内部标签", backing=Backing.FUNCTION, severity=Severity.SOFT,
+           evaluation=Evaluation.POST_WRITE,
+@@ -3436,7 +3451,8 @@
+         ParamSpec("analysis_result", "object", required=True),
+         ParamSpec("direction", "string", required=False),
+     ),
+-    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行"),
++    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行",
++            "R49_缺参数时按最保守执行_草稿依据缺失"),  # P57a（W54 / 0865）
+     post_rules=(
+         "低血糖优先抢占",
+         "D10_用药建议拦截",

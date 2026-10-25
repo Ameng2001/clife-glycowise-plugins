@@ -1,0 +1,9 @@
+# round 11 · 3d 链 · P58 的来源案例集 Dᵢ（只列本缺陷的 wrong 案例；runner --cases-file 读 ids）
+proposal: P58
+round: 11
+chain: 3d
+defect: R29_缓解判定 未挂群内出口：缓解结论只能由医师面诊告知，群内答复患者不查缓解宣告
+traces:
+- t-20261025-0879
+ids:
+- 结论层与分层-r60

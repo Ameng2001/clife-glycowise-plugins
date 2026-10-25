@@ -1,6 +1,6 @@
 {
   "gate_mode": "3d",
-  "ancestor_dir": ".studio-evolve/glycowise/chains-formal/3d/start-r10/plugins/glycowise",
+  "ancestor_dir": ".studio-evolve/glycowise/chains-formal/3d/start-r11/plugins/glycowise",
   "ontology": "glycowise",
   "delta": null,
   "accept_rate": null,
@@ -9,821 +9,97 @@
   "note": "重放流近似：提案来自原始 3d 链的归因，各臂没有自己的归因；PATCH_CONFLICT 的提案不计入接受或拒绝。",
   "steps": [
     {
-      "id": "P41a",
-      "num": 75,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "091be8df0978f96d",
-      "patch": "APPLIED",
-      "decision": "REVISE",
-      "inner_pass": false,
-      "outer_pass": true,
-      "triggered": [
-        "C"
-      ],
-      "verdict": "verdicts/10-75-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 4,
-          "n_unscored": 0,
-          "file": "readings/P41a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 4.0,
-          "n_cases": 4,
-          "n_unscored": 0,
-          "file": "readings/P41a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P41a-hi-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P41a-hp-B.json"
-        }
-      },
-      "merged": false,
-      "state_after": "091be8df0978f96d",
-      "wall_s": 16.1
-    },
-    {
-      "id": "P42a",
-      "num": 77,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "091be8df0978f96d",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-77-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 5,
-          "n_unscored": 0,
-          "file": "readings/P42a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.0,
-          "n_cases": 5,
-          "n_unscored": 0,
-          "file": "readings/P42a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P41a-hi-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P42a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "0a7f4d6c4528397c",
-      "wall_s": 10.0
-    },
-    {
-      "id": "P43a",
-      "num": 79,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "0a7f4d6c4528397c",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-79-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 3.0,
-          "n_cases": 2,
-          "n_unscored": 0,
-          "file": "readings/P43a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.0,
-          "n_cases": 2,
-          "n_unscored": 0,
-          "file": "readings/P43a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P42a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P43a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "5eb4b9d024ccd552",
-      "wall_s": 9.7
-    },
-    {
-      "id": "P44a",
-      "num": 83,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "5eb4b9d024ccd552",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-83-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 2,
-          "n_unscored": 0,
-          "file": "readings/P44a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.0,
-          "n_cases": 2,
-          "n_unscored": 0,
-          "file": "readings/P44a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P43a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P44a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "c8cf9fcc7d58b65a",
-      "wall_s": 9.8
-    },
-    {
-      "id": "P45a",
-      "num": 85,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "c8cf9fcc7d58b65a",
-      "patch": "APPLIED",
-      "decision": "REVISE",
-      "inner_pass": false,
-      "outer_pass": true,
-      "triggered": [
-        "C"
-      ],
-      "verdict": "verdicts/10-85-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 7,
-          "n_unscored": 0,
-          "file": "readings/P45a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.142857142857143,
-          "n_cases": 7,
-          "n_unscored": 0,
-          "file": "readings/P45a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P44a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P45a-hp-B.json"
-        }
-      },
-      "merged": false,
-      "state_after": "c8cf9fcc7d58b65a",
-      "wall_s": 10.6
-    },
-    {
-      "id": "P46a",
-      "num": 87,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "c8cf9fcc7d58b65a",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-87-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P46a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P46a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P44a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P46a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "0d97def36532d094",
-      "wall_s": 10.1
-    },
-    {
-      "id": "P47a",
-      "num": 88,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "0d97def36532d094",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-88-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P47a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P47a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P46a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P47a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "3b02860888598f0d",
-      "wall_s": 9.9
-    },
-    {
-      "id": "P48a",
-      "num": 90,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "3b02860888598f0d",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-90-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 4,
-          "n_unscored": 0,
-          "file": "readings/P48a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.0,
-          "n_cases": 4,
-          "n_unscored": 0,
-          "file": "readings/P48a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P47a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P48a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "0cfa90385f12a34d",
-      "wall_s": 10.3
-    },
-    {
-      "id": "P49a",
-      "num": 93,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "0cfa90385f12a34d",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-93-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P49a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P49a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P48a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P49a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "de37d51a06bd69e1",
-      "wall_s": 9.9
-    },
-    {
-      "id": "P50a",
-      "num": 94,
-      "round": 10,
-      "window": "2026-W53",
-      "state_before": "de37d51a06bd69e1",
-      "patch": "APPLIED",
-      "decision": "ACCEPT",
-      "inner_pass": true,
-      "outer_pass": true,
-      "triggered": [],
-      "verdict": "verdicts/10-94-1-3d.json",
-      "Di": {
-        "h_i": {
-          "A": 0.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 0.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 0.0,
-          "C_gate": 2.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P50a-hi-Di.json"
-        },
-        "h_prime": {
-          "A": 1.0,
-          "T": {
-            "T_1": null,
-            "T_2": null,
-            "T_3": 1.0,
-            "T_4": null
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 3.0,
-          "n_cases": 1,
-          "n_unscored": 0,
-          "file": "readings/P50a-hp-Di.json"
-        }
-      },
-      "B": {
-        "h_i": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P49a-hp-B.json"
-        },
-        "h_prime": {
-          "A": 0.83,
-          "T": {
-            "T_1": 0.6333333333333333,
-            "T_2": null,
-            "T_3": 0.8863636363636364,
-            "T_4": 0.9615384615384616
-          },
-          "S_consist": 1.0,
-          "W_family": 1.0,
-          "C_gate": 2.79,
-          "n_cases": 100,
-          "n_unscored": 0,
-          "file": "readings/P50a-hp-B.json"
-        }
-      },
-      "merged": true,
-      "state_after": "d6ab2c0e480f19c3",
-      "wall_s": 9.9
-    },
-    {
-      "id": "P51a",
-      "num": 97,
-      "round": 10,
-      "window": "2026-W53",
+      "id": "P52a",
+      "num": 98,
+      "round": 11,
+      "window": "2026-W54",
       "state_before": "d6ab2c0e480f19c3",
       "patch": "APPLIED",
       "decision": "ACCEPT",
       "inner_pass": true,
       "outer_pass": true,
       "triggered": [],
-      "verdict": "verdicts/10-97-1-3d.json",
+      "verdict": "verdicts/11-98-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 3,
+          "n_unscored": 0,
+          "file": "readings/P52a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 3,
+          "n_unscored": 0,
+          "file": "readings/P52a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P52a-hi-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P52a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "d23d76eb1eeddbe4",
+      "wall_s": 18.5
+    },
+    {
+      "id": "P53a",
+      "num": 100,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "d23d76eb1eeddbe4",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-100-1-3d.json",
       "Di": {
         "h_i": {
           "A": 0.0,
@@ -838,7 +114,167 @@
           "C_gate": 3.0,
           "n_cases": 1,
           "n_unscored": 0,
-          "file": "readings/P51a-hi-Di.json"
+          "file": "readings/P53a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P53a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P52a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P53a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "91e280f42cbc5273",
+      "wall_s": 11.1
+    },
+    {
+      "id": "P54a",
+      "num": 104,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "91e280f42cbc5273",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-104-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 4,
+          "n_unscored": 0,
+          "file": "readings/P54a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 4,
+          "n_unscored": 0,
+          "file": "readings/P54a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P53a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P54a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "702ba1d1720ef7e2",
+      "wall_s": 11.5
+    },
+    {
+      "id": "P55a",
+      "num": 106,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "702ba1d1720ef7e2",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-106-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P55a-hi-Di.json"
         },
         "h_prime": {
           "A": 1.0,
@@ -853,123 +289,521 @@
           "C_gate": 3.0,
           "n_cases": 1,
           "n_unscored": 0,
-          "file": "readings/P51a-hp-Di.json"
+          "file": "readings/P55a-hp-Di.json"
         }
       },
       "B": {
         "h_i": {
           "A": 0.83,
           "T": {
-            "T_1": 0.6333333333333333,
+            "T_1": 0.5357142857142857,
             "T_2": null,
-            "T_3": 0.8863636363636364,
+            "T_3": 0.9347826086956522,
             "T_4": 0.9615384615384616
           },
           "S_consist": 1.0,
           "W_family": 1.0,
-          "C_gate": 2.79,
+          "C_gate": 2.83,
           "n_cases": 100,
           "n_unscored": 0,
-          "file": "readings/P50a-hp-B.json"
+          "file": "readings/P54a-hp-B.json"
         },
         "h_prime": {
           "A": 0.83,
           "T": {
-            "T_1": 0.6333333333333333,
+            "T_1": 0.5357142857142857,
             "T_2": null,
-            "T_3": 0.8863636363636364,
+            "T_3": 0.9347826086956522,
             "T_4": 0.9615384615384616
           },
           "S_consist": 1.0,
           "W_family": 1.0,
-          "C_gate": 2.79,
+          "C_gate": 2.83,
           "n_cases": 100,
           "n_unscored": 0,
-          "file": "readings/P51a-hp-B.json"
+          "file": "readings/P55a-hp-B.json"
         }
       },
       "merged": true,
-      "state_after": "2d3abd6f816807f2",
-      "wall_s": 9.8
+      "state_after": "7e2529dd1a4c4146",
+      "wall_s": 11.2
+    },
+    {
+      "id": "P56a",
+      "num": 108,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "7e2529dd1a4c4146",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-108-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 3,
+          "n_unscored": 0,
+          "file": "readings/P56a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 3,
+          "n_unscored": 0,
+          "file": "readings/P56a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P55a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P56a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "51b0649db4f5af14",
+      "wall_s": 11.4
+    },
+    {
+      "id": "P57a",
+      "num": 110,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "51b0649db4f5af14",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-110-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P57a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P57a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P56a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P57a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "1b781aba879a2c0d",
+      "wall_s": 11.1
+    },
+    {
+      "id": "P58a",
+      "num": 111,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "1b781aba879a2c0d",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-111-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P58a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P58a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.83,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P57a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.84,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P58a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "96cd2541eda3ee3c",
+      "wall_s": 11.1
+    },
+    {
+      "id": "P59a",
+      "num": 112,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "96cd2541eda3ee3c",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-112-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 2.0,
+          "n_cases": 2,
+          "n_unscored": 0,
+          "file": "readings/P59a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 2,
+          "n_unscored": 0,
+          "file": "readings/P59a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.84,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P58a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.84,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P59a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "466855551b0a861d",
+      "wall_s": 11.3
+    },
+    {
+      "id": "P60a",
+      "num": 114,
+      "round": 11,
+      "window": "2026-W54",
+      "state_before": "466855551b0a861d",
+      "patch": "APPLIED",
+      "decision": "ACCEPT",
+      "inner_pass": true,
+      "outer_pass": true,
+      "triggered": [],
+      "verdict": "verdicts/11-114-1-3d.json",
+      "Di": {
+        "h_i": {
+          "A": 0.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 0.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 0.0,
+          "C_gate": 3.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P60a-hi-Di.json"
+        },
+        "h_prime": {
+          "A": 1.0,
+          "T": {
+            "T_1": null,
+            "T_2": null,
+            "T_3": 1.0,
+            "T_4": null
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 3.0,
+          "n_cases": 1,
+          "n_unscored": 0,
+          "file": "readings/P60a-hp-Di.json"
+        }
+      },
+      "B": {
+        "h_i": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.84,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P59a-hp-B.json"
+        },
+        "h_prime": {
+          "A": 0.83,
+          "T": {
+            "T_1": 0.5357142857142857,
+            "T_2": null,
+            "T_3": 0.9347826086956522,
+            "T_4": 0.9615384615384616
+          },
+          "S_consist": 1.0,
+          "W_family": 1.0,
+          "C_gate": 2.82,
+          "n_cases": 100,
+          "n_unscored": 0,
+          "file": "readings/P60a-hp-B.json"
+        }
+      },
+      "merged": true,
+      "state_after": "bcedc3f9b384e106",
+      "wall_s": 11.1
     }
   ],
   "rounds": [
     {
-      "round": 10,
-      "holdout": "sets/holdout-10.yaml",
+      "round": 11,
+      "holdout": "sets/holdout-11.yaml",
       "holdout_next": null,
       "accepted": [
-        "P42a",
-        "P43a",
-        "P44a",
-        "P46a",
-        "P47a",
-        "P48a",
-        "P49a",
-        "P50a",
-        "P51a"
+        "P52a",
+        "P53a",
+        "P54a",
+        "P55a",
+        "P56a",
+        "P57a",
+        "P58a",
+        "P59a",
+        "P60a"
       ],
       "judged": [
-        "P41a",
-        "P42a",
-        "P43a",
-        "P44a",
-        "P45a",
-        "P46a",
-        "P47a",
-        "P48a",
-        "P49a",
-        "P50a",
-        "P51a"
+        "P52a",
+        "P53a",
+        "P54a",
+        "P55a",
+        "P56a",
+        "P57a",
+        "P58a",
+        "P59a",
+        "P60a"
       ],
-      "state": "2d3abd6f816807f2",
+      "state": "bcedc3f9b384e106",
       "on_B": {
         "A": 0.83,
         "T": {
-          "T_1": 0.6333333333333333,
+          "T_1": 0.5357142857142857,
           "T_2": null,
-          "T_3": 0.8863636363636364,
+          "T_3": 0.9347826086956522,
           "T_4": 0.9615384615384616
         },
         "S_consist": 1.0,
         "W_family": 1.0,
-        "C_gate": 2.79,
+        "C_gate": 2.82,
         "n_cases": 100,
         "n_unscored": 0,
-        "file": "readings/P51a-hp-B.json"
+        "file": "readings/P60a-hp-B.json"
       }
     }
   ],
   "final": {
-    "sets/holdout-10.yaml": {
+    "sets/holdout-11.yaml": {
       "A": 0.83,
       "T": {
-        "T_1": 0.6333333333333333,
+        "T_1": 0.5357142857142857,
         "T_2": null,
-        "T_3": 0.8863636363636364,
+        "T_3": 0.9347826086956522,
         "T_4": 0.9615384615384616
       },
       "S_consist": 1.0,
       "W_family": 1.0,
-      "C_gate": 2.79,
+      "C_gate": 2.82,
       "n_cases": 100,
       "n_unscored": 0,
-      "file": "readings/P51a-hp-B.json"
+      "file": "readings/P60a-hp-B.json"
     },
-    "sets/real-all-W53.yaml": {
-      "A": 0.8350877192982457,
+    "sets/real-all-W54.yaml": {
+      "A": 0.8475336322869955,
       "T": {
-        "T_1": 0.62,
+        "T_1": 0.6204819277108434,
         "T_2": null,
-        "T_3": 0.8732394366197183,
-        "T_4": 0.9926470588235294
+        "T_3": 0.8869047619047619,
+        "T_4": 0.9940119760479041
       },
       "S_consist": 1.0,
       "W_family": 1.0,
-      "C_gate": 2.7982456140350878,
-      "n_cases": 570,
+      "C_gate": 2.795216741405082,
+      "n_cases": 669,
       "n_unscored": 0,
-      "file": "readings/final-real-all-W53.json"
+      "file": "readings/final-real-all-W54.json"
     },
     "sets/B-sim.yaml": {
       "A": 1.0,
@@ -988,19 +822,19 @@
     }
   },
   "accepted": [
-    "P42a",
-    "P43a",
-    "P44a",
-    "P46a",
-    "P47a",
-    "P48a",
-    "P49a",
-    "P50a",
-    "P51a"
+    "P52a",
+    "P53a",
+    "P54a",
+    "P55a",
+    "P56a",
+    "P57a",
+    "P58a",
+    "P59a",
+    "P60a"
   ],
-  "n_judged": 11,
+  "n_judged": 9,
   "n_conflict": 0,
-  "final_state": "2d3abd6f816807f2",
+  "final_state": "bcedc3f9b384e106",
   "script_hash": "sha256:2d1e57d8b2ed7bef0ff9f5c483e38fdb2d6f1462bea9b4406f521251813c9595",
   "exec": "AUTO",
   "family_override": ".studio-evolve/glycowise/sets/family-override.yaml",

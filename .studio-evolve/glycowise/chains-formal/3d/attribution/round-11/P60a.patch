@@ -1,0 +1,57 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -394,20 +394,35 @@
+     return RuleResult.ok()
+ 
+ 
+-@rule("R01_数据充分性门槛_仅管结论层")
+-def r01(ctx):
+-    pid = pid_of(ctx)
+-    s = summary_of(ctx, pid)
++def _conclusion_window_gap(ctx, pid):
++    """P60a（W54b / 0905）：结论依据的窗口。调用方指名了 summary_id 就只认那一份——指名的汇总不存在或不属于该患者即「没有窗口指标」，
++    不得回退到患者别的汇总（原实现直接取最新一份 14 天汇总，审核人看到的依据与口语指名的窗口不一致）；没指名才取最新一份。
++    返回 (原因, 建议)；窗口充分返回 None。R01 与 R30 共用。"""
++    sid = P(ctx, "summary_id")
++    if sid:
++        s = ctx.get("CgmSummary", str(sid)) or {}
++        if not s:
++            return f"指名的窗口汇总 {sid} 不存在，没有窗口指标，结论层不出结论", "核对汇总编号，或先跑「计算窗口指标」"
++        if pid and s.get("patient_id") not in (None, pid):
++            return f"指名的窗口汇总 {sid} 属于 {s.get('patient_id')}，不是 {pid}", "核对汇总编号"
++    else:
++        s = summary_of(ctx, pid)
+     days = _num(P(ctx, "days")) or _num(s.get("days"))
+     active = _num(P(ctx, "active_pct")) or _num(s.get("active_pct"))
+     if days is None or active is None:
+-        return _fail("R01", "没有窗口指标（days / active_pct），结论层不出结论", "先跑「计算窗口指标」")
++        return "没有窗口指标（days / active_pct），结论层不出结论", "先跑「计算窗口指标」"
+     if days < 14 or active < 70:
+-        return _fail("R01", f"佩戴 {days:.0f} 天、有效数据 {active:.0f}%，未达 14 天 + ≥70%，只出趋势描述，禁出达标/分层/缓解结论",
+-                     "继续佩戴至 14 天且有效率 ≥70% 后再出结论")
+-    return RuleResult.ok()
++        return (f"佩戴 {days:.0f} 天、有效数据 {active:.0f}%，未达 14 天 + ≥70%，只出趋势描述，禁出达标/分层/缓解结论",
++                "继续佩戴至 14 天且有效率 ≥70% 后再出结论")
++    return None
+ 
+ 
++@rule("R01_数据充分性门槛_仅管结论层")
++def r01(ctx):
++    gap = _conclusion_window_gap(ctx, pid_of(ctx))
++    return _fail("R01", *gap) if gap else RuleResult.ok()
++
++
+ @rule("R49_缺参数时按最保守执行")
+ def r49(ctx):
+     pid = pid_of(ctx)
+@@ -1674,6 +1689,10 @@
+ def r30(ctx):
+     pid = pid_of(ctx)
+     if not pid:
++        return RuleResult.ok()
++    # P60a：在 判定缓解结果 里（本次暂存了 RemissionAssessment），ABCD 筛查给出的「不进缓解路径」本身也是缓解类结论，同属 R01 关闭的结论层（IR §4.1 B5）。
++    # 依据窗口不充分时 R01 已关闭结论层，这里不再另出结论；入组判定 等不挂 R01 的动作照旧筛查。
++    if ctx.find("RemissionAssessment", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid) and _conclusion_window_gap(ctx, pid):
+         return RuleResult.ok()
+     prof = profile_of(ctx, pid)
+     labs = ctx.find("LabResult", lambda r: r.get("patient_id") == pid)

@@ -101,3 +101,32 @@ proposals:
   95: {id: P50b1, kind: naive, round: 10, window: 2026-W53, merged: false, pair: 50, chain: 3d, rule: 'N3', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
   96: {id: P50b2, kind: naive, round: 10, window: 2026-W53, merged: false, pair: 50, chain: 3d, rule: 'N5', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
   97: {id: P51a, kind: root, round: 10, window: 2026-W53, merged: false, pair: 51, chain: 3d, note: '未合入：R22 分母改 14 天的口径待本体负责人定（2026-10-25 用户）；P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none；3d 链 ACCEPT'}
+  # round 11（formal 第 4 轮，末轮）· 3d 先 1d 后；朴素修只进 P-A
+  98: {id: P52a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 52, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random；3d 链 ACCEPT'}
+  99: {id: P52b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 52, chain: 3d, rule: '把 Dᵢ 命中的字面量加进匹配', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  100: {id: P53a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 53, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none；3d 链 ACCEPT'}
+  101: {id: P53b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 53, chain: 3d, rule: '删掉命中的规则分支', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
+  102: {id: P53b2, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 53, chain: 3d, rule: 'hard 改 soft', note: 'P-A 接受臂 none；带闸门臂拒因 outer'}
+  103: {id: P53b3, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 53, chain: 3d, rule: '把 Dᵢ 命中的字面量加进匹配', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
+  104: {id: P54a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 54, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random；3d 链 ACCEPT'}
+  105: {id: P54b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 54, chain: 3d, rule: '把 Dᵢ 命中的字面量加进匹配', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  106: {id: P55a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 55, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none；3d 链 ACCEPT'}
+  107: {id: P55b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 55, chain: 3d, rule: '把 Dᵢ 命中的字面量加进匹配', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  108: {id: P56a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 56, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none；3d 链 ACCEPT'}
+  109: {id: P56b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 56, chain: 3d, rule: '把 Dᵢ 命中的字面量加进匹配', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
+  110: {id: P57a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 57, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none；3d 链 ACCEPT'}
+  111: {id: P58a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 58, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random；3d 链 ACCEPT'}
+  112: {id: P59a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 59, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none；3d 链 ACCEPT'}
+  113: {id: P59b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 59, chain: 3d, rule: '把 Dᵢ 命中的字面量加进匹配', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  114: {id: P60a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 60, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random；3d 链 ACCEPT'}
+  115: {id: P61a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 61, chain: 1d, note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）；1d 链 ACCEPT'}
+  116: {id: P61b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 61, chain: 1d, rule: '⑤ 把 Dᵢ 命中的字面量加进匹配', note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）'}
+  117: {id: P62a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 62, chain: 1d, note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）；1d 链 ACCEPT'}
+  118: {id: P62b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 62, chain: 1d, rule: '⑤ 把 Dᵢ 命中的字面量加进匹配', note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）'}
+  119: {id: P63a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 63, chain: 1d, note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）；1d 链 ACCEPT'}
+  120: {id: P63b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 63, chain: 1d, rule: '⑤ 把 Dᵢ 命中的字面量加进匹配', note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）'}
+  121: {id: P64a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 64, chain: 1d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random；1d 链 ACCEPT'}
+  122: {id: P65a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 65, chain: 1d, note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）；1d 链 REVISE（成本维 C）'}
+  123: {id: P66a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 66, chain: 1d, note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）；1d 链 ACCEPT'}
+  124: {id: P67a, kind: root, round: 11, window: 2026-W54, merged: false, pair: 67, chain: 1d, note: 'P-A APPLY_FAIL（1d 链与 h₁₁ 分叉）；1d 链 ACCEPT'}
+  125: {id: P67b1, kind: naive, round: 11, window: 2026-W54, merged: false, pair: 67, chain: 1d, rule: '⑤ 把 Dᵢ 命中的字面量加进匹配', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}

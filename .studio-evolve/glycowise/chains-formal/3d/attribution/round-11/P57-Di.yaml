@@ -1,0 +1,9 @@
+# round 11 · 3d 链 · P57 的来源案例集 Dᵢ（只列本缺陷的 wrong 案例；runner --cases-file 读 ids）
+proposal: P57
+round: 11
+chain: 3d
+defect: R49_缺参数时按最保守执行 漏拦：草稿依据（指名的窗口汇总 / 任何窗口指标）缺失时照样出空指标草稿；R49 只查画像且为 soft
+traces:
+- t-20261025-0865
+ids:
+- 高血糖与波动-r71

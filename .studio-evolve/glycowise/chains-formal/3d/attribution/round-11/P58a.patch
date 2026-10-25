@@ -1,0 +1,37 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -1644,11 +1644,24 @@
+     return meets, {"days": days, "meds": meds, "hba1c": hba1c, "gmi": gmi, "premises": premises, "method": method}
+ 
+ 
++# P58a（W54 / 0879）：IR §5 判定缓解结果 的 HIL 是「医师（面诊告知，唯一）」——缓解结论只经医师面诊告知患者，不论是否达标。
++# R29 原来只挂在 判定缓解结果 上，群内答复患者 不查，于是「您已经达到缓解标准了，恭喜」能直接发到群里（周先生化验达标，「未达标用缓解字样」那支也不会响）。
++# 群内出口只认「缓解定论」（达到 / 实现 / 进入 / 已经…缓解，缓解标准 / 状态，糖尿病 / 血糖…缓解），症状缓解（头晕缓解了）不算。
++REMISSION_VERDICT_RE = re.compile(r"(达到|达成|实现|进入|算是?|属于|已经|已)[^。；，,！？!?]{0,4}(缓解|逆转)|(缓解|逆转)\s*(标准|状态|成功)|(糖尿病|血糖|控糖)[^。；，,！？!?]{0,4}(缓解|逆转)")
++SYMPTOM_RE = re.compile(r"症状|头晕|头痛|疼|痛|不适|乏力|心慌|手抖|出汗|饥饿感|口渴|便秘|腹泻|恶心|咳")
++
++
+ @rule("R29_缓解判定")
+ def r29(ctx):
+     pid = pid_of(ctx)
+     if not pid:
+         return RuleResult.ok()
++    so = staged_outbound(ctx)
++    if so.get("content_type") == "群内答复":  # P58a：群内出口只查缓解定论，与是否达标无关
++        for cl in re.split(r"[。；，,！？!?\n]", str(so.get("body") or "")):
++            if REMISSION_VERDICT_RE.search(cl) and not SYMPTOM_RE.search(cl):
++                return _fail("R29", f"群内宣告缓解结论：「{cl.strip()[:30]}」。缓解结论只能由医师面诊告知（唯一渠道）", "删除缓解表述；约医师面诊告知")
++        return RuleResult.ok()
+     meets, d = _remission_criteria(ctx, pid)
+     staged = ctx.find("RemissionAssessment", lambda r: is_staged(ctx, r) and r.get("patient_id") == pid)
+     claimed = staged[-1].get("status") if staged else None
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -3914,6 +3914,7 @@
+         "R54_服务话术不得含夜间安全承诺",
+         "R55_显示口径_没有数据不得说成没有异常",
+         "R24b_运动前极高值一律不宜运动",  # P49a（W53 / 0733）：群内给出的运动建议就是「运动前」判断的出口
++        "R29_缓解判定",  # P58a（W54 / 0879）：缓解结论的唯一告知渠道是医师面诊（判定缓解结果 HIL「医师（面诊告知，唯一）」），群内宣告缓解要在出口拦
+     ),
+     writes=("OutboundContent", "DeliveryReceipt"),
+     validate_supported=True,
