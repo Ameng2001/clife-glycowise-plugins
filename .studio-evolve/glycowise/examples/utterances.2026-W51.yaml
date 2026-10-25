@@ -1,0 +1,254 @@
+window: 2026-W51
+note: 补录窗口（见 utterances.2026-W51.brief.md）：第一节 38 句补四个 rest 层（高血糖与波动 16 / 产品与机构合规 10 / 出口签发闸 8 / 参考与配置 4），正确结果均为起草后待医师或合规官确认；第二组 6 句用有营销推荐同意的 P0045 / P0007 重写功效话术；第五节定向补充 6 句（A 回执但不结案 4 句计入因果链溯源、B 群里说非分层的
+  N 级 2 句计入结论层与分层）。共 50 句，按患者分组；每组 ≥1/3 带无关信息、≥1/3 换说法。
+items:
+- utterance: 黄伯（P0045）这两天午饭后都在 16 以上，转给黄医生看看
+  source: brief:高血糖与波动#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0045 餐后连着三天过 15，帮他转个医师
+  source: brief:高血糖与波动#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄伯（P0045）早餐后两次到 14 多，转黄医生处理；他下周二来门店复查。
+  source: brief:高血糖与波动#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄医生看过了，签发 d-P0045-01
+  source: brief:出口签发闸#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: d-P0045-01 黄医生逐条核过，签发；黄伯（P0045）老伴下午来拿打印件。
+  source: brief:出口签发闸#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: A-P0045-02 回执：黄伯（P0045）补糖后 4.7，已经脱离风险，先别结案，明早再看一次
+  source: brief:因果链溯源#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄伯（P0045）刚才复测 4.8，暂时没有低血糖风险了，A-P0045-02 回执写上，继续观察 24 小时；他女儿今晚值班回不来。
+  source: brief:因果链溯源#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给黄伯（P0045）发一条英纽林 sku-ynl-01 的推荐，文案写：吃了它饭后血糖不往上冲
+  source: brief:产品与机构合规#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄伯（P0045）那边推荐英纽林 sku-ynl-01，就一句：坚持三个月，糖化能降下来
+  source: brief:产品与机构合规#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄伯（P0045）推一下英纽林 sku-ynl-01，话术写见效快、一周就能看到；他老伴想一起买。
+  source: brief:产品与机构合规#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 英纽林 sku-ynl-01 给黄伯（P0045）推一下，就说跟着三餐一起吃，效果更好
+  source: brief:产品与机构合规#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）空腹连着四天 9 以上，转黄医生看一下
+  source: brief:高血糖与波动#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0031 晚饭后老在 15、16，帮他转医师；他这周在女儿家住。
+  source: brief:高血糖与波动#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）的 d-P0031-01，黄医生同意签发
+  source: brief:出口签发闸#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄医生核对完王叔（P0031）的 d-P0031-01，签发；王叔下周要回老家。
+  source: brief:出口签发闸#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）复测回到 5.1，风险已经排除，A-P0031-backfill-01 回执一下，但先别结案，继续观察 24 小时
+  source: brief:因果链溯源#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: A-P0031-backfill-01 做个回执，王叔（P0031）现在没有低血糖风险了，明早再看一次再说；他老伴说今晚早睡。
+  source: brief:因果链溯源#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 这段给刘阿姨（P0012）的控餐后建议帮我送审：晚饭先吃菜再吃主食，主食减三分之一；她这周孙子来住。
+  source: brief:高血糖与波动#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0012 餐后最近老过 12，转黄医生
+  source: brief:高血糖与波动#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 刘阿姨（P0012）的早餐建议送审：鸡蛋加燕麦，不喝白粥
+  source: brief:高血糖与波动#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄医生签发刘阿姨（P0012）的 d-P0012-02
+  source: brief:出口签发闸#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: d-P0012-02 黄医生看完了，签发
+  source: brief:出口签发闸#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: d-P0012-01 由黄医生签发；刘阿姨（P0012）明天上午来取。
+  source: brief:出口签发闸#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 黄医生审过刘阿姨（P0012）的营养方案 d-P0012-01，同意签发
+  source: brief:出口签发闸#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 刘阿姨（P0012）夜间低值阈值改成 3.7，我同意
+  source: brief:参考与配置#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 群里回刘阿姨（P0012）：您的跌倒风险评估是 2 级，晚上起夜开个小夜灯
+  source: brief:结论层与分层#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0023 早上空腹这三天都过 10，转给医师
+  source: brief:高血糖与波动#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（P0023）晚饭后一直在 14 上下，转黄医生看看；她这周在跳广场舞。
+  source: brief:高血糖与波动#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 这段给陈阿姨（P0023）的晚餐建议帮我送审：主食换成杂粮饭半碗，饭后慢走 20 分钟
+  source: brief:高血糖与波动#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（P0023）的低血糖提醒线调到 3.6，我确认过
+  source: brief:参考与配置#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 李女士（P0088）这几天餐后都在 13 以上，转医师看看
+  source: brief:高血糖与波动#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给李女士（P0088）写的饭后运动建议送个审：晚饭后快走半小时，别空腹运动
+  source: brief:高血糖与波动#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 李女士（P0088）早餐后最近 13、14，转医师；她单位最近老加班。
+  source: brief:高血糖与波动#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 李女士（P0088）低值阈值从 3.9 调到 3.6；她下个月要出差。
+  source: brief:参考与配置#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 张阿姨（P0066）这两天午饭后都 13 多，转个医师看看；她周末去外地看外孙。
+  source: brief:高血糖与波动#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 张阿姨（P0066）低血糖告警线调到 3.5，我签字；她晚上一般十点睡。
+  source: brief:参考与配置#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 跟张阿姨（P0066）在群里说一声：社区给您定的是 1 级随访，每个月打一次电话；她最近在学太极。
+  source: brief:结论层与分层#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 周先生（P0007）那边推英纽林 sku-ynl-01，文案：吃上以后血糖就平了
+  source: brief:产品与机构合规#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 给周先生（P0007）推荐英纽林 sku-ynl-01，就说和饭一起吃，餐后不冲高；他公司体检下月做。
+  source: brief:产品与机构合规#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: P0099 餐后两天都过 12，帮他转个医师
+  source: brief:高血糖与波动#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 门店上架英纽林 sku-ynl-01，按食品类，营养食品备案已经传了
+  source: brief:产品与机构合规#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: sku-ynl-01 英纽林走固体饮料类上架，标签核过了
+  source: brief:产品与机构合规#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 英纽林 sku-ynl-01 在门店上架，类别食品；店长说下周搞会员日。
+  source: brief:产品与机构合规#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 把固体饮料英纽林（sku-ynl-01）挂到门店货架上，备案材料齐了；周末店里人手紧。
+  source: brief:产品与机构合规#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 新建服务包 pkg-guide-basic，基础档，内容：佩戴指导、每周一次饮食随访、月度报告解读
+  source: brief:产品与机构合规#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 建一个随访服务包 pkg-follow-std，标准档，包含每两周电话随访和饮食记录点评
+  source: brief:产品与机构合规#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 新开一个服务包 pkg-walk-01，入门档，内容是运动指导和每周群内答疑；门店下月装修。
+  source: brief:产品与机构合规#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 服务包 pkg-edu-12w 建一下，教育档，内容：12 周自我管理课程、每月一次面谈
+  source: brief:产品与机构合规#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 建服务包 pkg-diet-plus，进阶档，内容营养师一对一饮食指导、每周食谱点评；这批想赶在元旦前上。
+  source: brief:产品与机构合规#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 加一个服务包 pkg-review-m，月度档，就两项：月报解读和一次线下复查预约
+  source: brief:产品与机构合规#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师

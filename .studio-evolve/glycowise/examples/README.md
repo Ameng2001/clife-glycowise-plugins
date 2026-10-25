@@ -272,6 +272,37 @@ W50 出口签发闸 8 句原句重录（W50 句序 12 / 13 / 22 / 23 / 24 / 45 /
 
 抽 holdout-7、重建 real-W50 集、按 B_7 判回退由论文小组按 handoff-round7 二-3 起继续。
 
+## ①-12 补录窗口：`trajectories/2026-W51/`
+
+按论文小组 `utterances.2026-W51.brief.md`（含第五节追加）写 50 句（`utterances.2026-W51.yaml`，评审表 `utterances.2026-W51.review.md`，交接 `../handoff-round8.W51.md`）。录前复核会话上下文：d-P0045-01 / d-P0031-01 / d-P0012-02 / d-P0012-01 四份草稿与黄医生 / 陈营养师两个签发人都在；生产插件为合入 P22a / P23a 后的 08c8cf1。2026-10-25 录（`--window 2026-W51 --seq-base 500`）。
+
+写法上偏离 brief 三处（评审表第三节）：签发闸 8 句全由黄医生签，因为陈营养师资质已过期（`cred-chen`），由她签必被 D11a 拒；产品层不写「发布宣传素材」，因为 seed 里没有合规素材的 content_id；高血糖层的送审只写 4 句，并预先标了风险。
+
+| 项 | 值 |
+|---|---|
+| 轨迹 | **49 条**，全是 execute：pending_hil 38 / rejected 7 / committed 4 |
+| 非轨迹 | 1 句 clarify（0538，P0007 功效话术，大模型点破疗效承诺后反问） |
+| 回放 | sequential 49/49 |
+| 成本 | 342,371 token |
+| 反馈 | `feedback.yaml` draft，49 条待业务侧标注 |
+
+各部分进引擎与引擎裁决（对错留给标注）：
+
+| 部分 | 句数 | 进引擎 | 引擎裁决 |
+|---|---|---|---|
+| 高血糖与波动 · 转介医师 | 12 | 12 | 全部 pending_hil |
+| 高血糖与波动 · 送审 | 4 | 4 | 全部 rejected（C22，0518 另有 D8） |
+| 产品与机构合规 · 上架 + 服务包 | 10 | 10 | 全部 pending_hil |
+| 出口签发闸 · 黄医生签 | 8 | 8 | 全部 pending_hil |
+| 参考与配置 · 非高危放宽 | 4 | 4 | 全部 pending_hil |
+| 第二组 · 功效话术（P0045 / P0007） | 6 | 5 | D9 拒 1（0509），committed 4（0508 / 0510 / 0511 / 0539） |
+| 第五节 A · 回执不结案 | 4 | 4 | R44 拒 2（0506 / 0516），pending_hil 2（0507 / 0517） |
+| 第五节 B · 非分层 N 级 | 2 | 2 | 全部 pending_hil |
+
+送审 4 句的风险兑现了，**标注时请特别看**：「审核输出内容」要已有的 content_id，大模型在 0518 填了库里已有但内容不相干的 c-P0012-plan-02（那条含「逆转 / 停药」），在 0520 / 0529 / 0532 编了 seed 里不存在的 c-P0012-breakfast-01 / c-P0023-dinner-01 / c-P0088-exercise-01。审核的不是口语里给的那段建议原文，C22 拒的是空内容缺免责尾注。
+
+第五节 A 组：引擎只认 action_taken 字段。0506 / 0516 路由把「已经脱离风险 / 风险排除」原样写进 action_taken 被 R44 拒；0507 / 0517 路由改写成「暂无低血糖风险 / 自述无症状」后放行。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
