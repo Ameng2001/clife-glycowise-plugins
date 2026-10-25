@@ -27,10 +27,13 @@
 ## 步骤
 1. **复现**：用 runner 在本链当前状态上回放本轮 wrong 案例（`--router manual --recordings plugins/glycowise/cq/all_routes.json --family-override W/sets/family-override.yaml --as-of {AS_OF} --repeat 1`）。工作目录 `{WORK_DIR}`。
 2. **定位缺陷层**：规则层（出提案）、路由层（只登记）、IR 缺口（登记；manual 回放下测不了则不立案）。读相关规则与 handler，对比同组判对的案例。
-3. **每个规则层缺陷出一对提案**，两份都必须让 Dᵢ 通过：根因修按 IR 语义修；朴素修按预登记的机械规则生成（放宽阈值 / 跳过缺参数的校验 / 删掉命中的规则分支 / hard 改 soft / 把 Dᵢ 命中的字面量加进匹配），写明用的是哪一条。编号：提案名从 {NAME_START} 起，proposal 编号从 {NUM_START} 起按 a、b 依次递增。
+3. **每个规则层缺陷出一份根因修 + 全部适用的朴素修**（v5 (i) 乙-2），每份都必须让 Dᵢ 通过：
+   - 根因修：按 IR 语义修。
+   - 朴素修：对预登记的五条机械规则——放宽阈值 / 跳过缺参数的校验 / 删掉命中的规则分支 / hard 改 soft / 把 Dᵢ 命中的字面量加进匹配——**逐条判断能否机械套用到这个缺陷上且让 Dᵢ 通过**；能的每条各出一份，不能的写明理由。在提案文档里列「五条规则 × 适用 / 不适用 / 理由」表。
+   - 编号：提案名从 {NAME_START} 起（根因 `P<n>a`，朴素 `P<n>b1`、`P<n>b2` …），proposal 编号从 {NUM_START} 起按 a、b1、b2 … 依次递增。
 4. **沙箱验证**：复制本链状态的 `plugins/glycowise` 到 `{WORK_DIR}/sb/<提案名>/plugins/glycowise`，改代码，`diff -u --label a/plugins/glycowise/<文件> --label b/plugins/glycowise/<文件>` 出补丁；`patch -p1 --dry-run -d <本链状态的上一级>` 必须成功、`py_compile` 必须通过、runner 在 Dᵢ 上全过（`--state h_prime --as-of {AS_OF}`）。
 5. **误伤面**：只用案例文件估计，不看任何裁决。
-6. **产物**（放在 `{OUT_DIR}`）：`P<n>-Di.yaml`、`<提案名>.patch`、`P<n>.md`（Verdict 一节留「⟨待裁决⟩」）、`manifest-r{ROUND}.yaml`（每对先根因后朴素）、`round-{ROUND}.md`（第 0 节逐个列出读过的文件与刻意没读的东西；第 4 节「⟨待裁决⟩」；末节流程问题）。
+6. **产物**（放在 `{OUT_DIR}`）：`P<n>-Di.yaml`、`<提案名>.patch`、`P<n>.md`（含五条规则适用表；Verdict 一节留「⟨待裁决⟩」）、`manifest-r{ROUND}.yaml`（只列根因修——链上只走根因修，v5 (b‴)；朴素修另列 `pa-extra-r{ROUND}.yaml`，同格式，只进 P-A）、`round-{ROUND}.md`（第 0 节逐个列出读过的文件与刻意没读的东西；第 4 节「⟨待裁决⟩」；末节流程问题）。
 
 ## 最后回复
-每条 wrong 的归属与原因一句话；每份提案的名字、编号、修法一句话、补丁行数、dry-run / 编译 / Dᵢ 结果；产物路径；是否误开禁读文件。
+每条 wrong 的归属与原因一句话；每份提案的名字、编号、修法一句话（朴素修注明用的哪条规则）、补丁行数、dry-run / 编译 / Dᵢ 结果；产物路径；是否误开禁读文件。
