@@ -1,0 +1,11 @@
+--- a/plugins/glycowise/__init__.py
++++ b/plugins/glycowise/__init__.py
+@@ -1582,7 +1582,7 @@
+     """
+     return _fde.RULES['R34_HAAF_24小时复发窗'](ctx)
+ 
+-@spi.rule(ONTOLOGY, "R44_高危用药禁止闭环", backing=Backing.FUNCTION, severity=Severity.HARD,
++@spi.rule(ONTOLOGY, "R44_高危用药禁止闭环", backing=Backing.FUNCTION, severity=Severity.SOFT,  # P26b2（朴素修·hard 改 soft）
+           evaluation=Evaluation.PRE,
+           source="TODO(FDE): 补依据（机制方向由 Endocrine Society 2022 与中国糖尿病防治指南 2024 用药章节支持，但\"可持续 24–72 小时\"这个具体时长在两份基准文档里均无逐字出处）",
+           citations=("daily-monitoring D21", "behavior-matrix §6 hypo_state"))

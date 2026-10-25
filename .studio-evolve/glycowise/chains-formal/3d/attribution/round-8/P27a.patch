@@ -1,0 +1,27 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -512,6 +512,15 @@
+ 
+ 
+ EFFICACY_RE = re.compile(r"(降|控|稳|调节|改善|逆转|治|根治)[^。；，,]{0,6}(血糖|糖化|胰岛|HbA1c|并发症)|(血糖|糖化)[^。；，,]{0,6}(稳得住|稳住|降|正常|达标|不升)|疗程|坚持(吃|用|服)[^。；，,]{0,8}(个月|周|天)")
++# P27a（W51 / 0508 0510 0511 0539）：D9 的依据是食品安全法第 71、73 条与广告法第 17、28 条——普通食品不得明示或暗示具有保健、疗效作用。
++# EFFICACY_RE 只认「降/控/稳 + 指标名」这一种显式句式，同一声称的另外三种表达形态都漏了：
++#   (1) 血糖走向承诺：把食用与餐后/饭后血糖的走向挂钩（不冲高、不往上冲、不升、平稳、降下来……）。控糖语境里「餐后 / 饭后」指的就是餐后血糖；
++#   (2) 疗效断言：见效、起效、疗效、功效，或「效果」+ 程度 / 比较（更好、明显、显著）——食品没有可宣称的「效果」，对控糖人群说「效果」就是控糖效果；
++#   (3) 起效时间承诺：N 天 / 周 / 个月 + 见效、看到、改善、降。
++# 三类只在产品话术句（含产品名或本次是 pitch）里判，与 EFFICACY_RE 同一入口。
++GLYCEMIC_OUTCOME_RE = re.compile(r"(血糖|糖化|餐后|饭后)[^。；，,]{0,8}(不(往上|会|再)?(冲|升|涨|高)|冲高|平稳|稳定|下降|降下来|压住|控制住)")
++EFFECT_CLAIM_RE = re.compile(r"见效|起效|疗效|功效|奏效|效果[^。；，,]{0,2}(更|很|明显|显著|好|佳|快)")
++ONSET_CLAIM_RE = re.compile(r"(\d+|[一二两三四五六七八九十几半])\s*(天|日|周|星期|个月|月)[^。；，,]{0,6}(见效|起效|看到|看得到|看出|改善|降)")
+ 
+ 
+ def _efficacy_claim(ctx, name):
+@@ -523,7 +532,7 @@
+         return None
+     for s in sentences(text):
+         if any(p in s for p in prods) or P(ctx, "pitch"):
+-            m = EFFICACY_RE.search(s)
++            m = EFFICACY_RE.search(s) or GLYCEMIC_OUTCOME_RE.search(s) or EFFECT_CLAIM_RE.search(s) or ONSET_CLAIM_RE.search(s)
+             if m:
+                 return _fail(name, f"产品话术含功效/疗程声称：「{s.strip()[:40]}」（{m.group(0)}）", "食品不得声称降糖、控糖、疗程效果；改为中性描述或删除")
+     return None

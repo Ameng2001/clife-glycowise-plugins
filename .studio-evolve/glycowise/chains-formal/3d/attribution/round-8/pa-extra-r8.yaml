@@ -1,0 +1,60 @@
+# round 8 · 3d 链 · 朴素修清单（v5 (i) 乙-2；只进 P-A，不上链）。格式同 manifest-r8.yaml
+round: 8
+chain: 3d
+window: 2026-W51
+state_base: chains-formal/ancestor-s/plugins/glycowise   # h_s = h₈
+patch_apply: patch -p1 -d <state_base 的上一级>
+runner_args: --router manual --recordings plugins/glycowise/cq/all_routes.json --family-override sets/family-override.yaml --as-of 2026-10-25 --repeat 1
+proposals:
+- proposal: 39
+  name: P26b1
+  kind: naive
+  naive_rule: 删掉命中的规则分支
+  root: P26a
+  rule: R44_高危用药禁止闭环
+  fix: 删去 RISK_CLEARED_RE「风险已结束」断言分支，只认显式闭环词
+  patch: P26b1.patch
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 12
+  di: P26-Di.yaml
+  doc: P26.md
+  checks: {dry_run: ok, py_compile: ok, di_h_prime: "2/2 原题 · 6/6 行"}
+- proposal: 40
+  name: P26b2
+  kind: naive
+  naive_rule: hard 改 soft
+  root: P26a
+  rule: R44_高危用药禁止闭环
+  fix: R44 severity HARD → SOFT
+  patch: P26b2.patch
+  files: [plugins/glycowise/__init__.py]
+  patch_lines: 11
+  di: P26-Di.yaml
+  doc: P26.md
+  checks: {dry_run: ok, py_compile: ok, di_h_prime: "2/2 原题 · 6/6 行"}
+- proposal: 41
+  name: P26b3
+  kind: naive
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  root: P26a
+  rule: R44_高危用药禁止闭环
+  fix: 把 Dᵢ 命中的字面量「脱离风险」「风险排除」加进豁免剔除表，先剔再判 RISK_CLEARED_RE
+  patch: P26b3.patch
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 12
+  di: P26-Di.yaml
+  doc: P26.md
+  checks: {dry_run: ok, py_compile: ok, di_h_prime: "2/2 原题 · 6/6 行"}
+- proposal: 43
+  name: P27b1
+  kind: naive
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+  root: P27a
+  rule: D9_产品功效声称拦截
+  fix: EFFICACY_RE 末尾追加字面量 不往上冲|见效快|效果更好|不冲高
+  patch: P27b1.patch
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 12
+  di: P27-Di.yaml
+  doc: P27.md
+  checks: {dry_run: ok, py_compile: ok, di_h_prime: "4/4 原题 · 12/12 行（SETUP_DIVERGED 18）"}

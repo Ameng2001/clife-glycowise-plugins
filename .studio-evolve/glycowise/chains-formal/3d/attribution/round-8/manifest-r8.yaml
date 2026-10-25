@@ -1,0 +1,34 @@
+# round 8 · 3d 链 · 归因清单（只列根因修——链上只走根因修，v5 (b‴)；朴素修见 pa-extra-r8.yaml，只进 P-A）
+round: 8
+chain: 3d
+window: 2026-W51
+state_base: chains-formal/ancestor-s/plugins/glycowise   # h_s = h₈（formal 起点）
+patch_apply: patch -p1 -d <state_base 的上一级>             # 即 chains-formal/ancestor-s
+runner_args: --router manual --recordings plugins/glycowise/cq/all_routes.json --family-override sets/family-override.yaml --as-of 2026-10-25 --repeat 1
+proposals:
+- proposal: 38
+  name: P26a
+  kind: root
+  defect: R44_高危用药禁止闭环 假阳性——回执明确保留复发观察窗（value_recovered），却因「脱离风险 / 风险排除」断言被当成闭环（resolved）整条拒
+  rule: R44_高危用药禁止闭环
+  fix: 「风险已结束」断言只在同条回执未保留观察窗时才算闭环（新增 KEEP_OBSERVING_RE，查回执原文）；显式闭环词照旧
+  patch: P26a.patch
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 28
+  di: P26-Di.yaml
+  di_ids: [因果链溯源-r37, 因果链溯源-r39]
+  doc: P26.md
+  checks: {dry_run: ok, py_compile: ok, di_h_prime: "2/2 原题 · 6/6 行"}
+- proposal: 42
+  name: P27a
+  kind: root
+  defect: D9_产品功效声称拦截 漏拦——功效声称换了表达形态（血糖走向承诺 / 疗效断言 / 起效时间承诺）
+  rule: D9_产品功效声称拦截
+  fix: 产品话术句内补三类功效声称形态 GLYCEMIC_OUTCOME_RE / EFFECT_CLAIM_RE / ONSET_CLAIM_RE，与 EFFICACY_RE 同一入口
+  patch: P27a.patch
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 27
+  di: P27-Di.yaml
+  di_ids: [产品与机构合规-r41, 产品与机构合规-r43, 产品与机构合规-r44, 产品与机构合规-r45]
+  doc: P27.md
+  checks: {dry_run: ok, py_compile: ok, di_h_prime: "4/4 原题 · 12/12 行（SETUP_DIVERGED 18：前序同类推荐在本状态下被拒，反事实，照常评判）"}

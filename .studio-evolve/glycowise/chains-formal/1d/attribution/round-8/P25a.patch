@@ -1,0 +1,34 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -793,6 +793,10 @@
+ # P22a：「低血糖风险已结束」式断言（闭环的语义形态，区别于「值已回升」）。否定形态（未脱离 / 没有排除）在 r44 里先剔除。
+ RISK_CLEARED_RE = re.compile(r"(脱离|排除|消除)\s*(了)?\s*(低血糖)?\s*(的)?\s*(风险|危险)|(风险|危险)\s*(已经|已)?\s*(排除|消除|过去)"
+                              r"|(度过|渡过)\s*(了)?\s*危险期")
++# P25a（W51 / 0506 0516）：回执里明确「不闭环」的处置——被否定的闭环提法（先别结案 / 暂不闭环）或保留复发观察窗（继续观察 / 明早再看 / 观察 24 小时）。
++# 这正是 IR 允许的 value_recovered 形态：值已回升 + 保持观察窗，告警不写 resolved。
++NEG_CLOSE_RE = re.compile(r"(先不|暂不|不要|不用|不予|无需|尚未|还没|没有|并未|未|别|不)\s*(闭环|关闭|结案|解除|脱离|排除|消除|close|resolve)")
++KEEP_OPEN_RE = re.compile(r"(继续|保持|持续|留院|留观)\s*观察|观察\s*[0-9一二两三]+\s*(小时|h|天)|(明早|明天|明晨|今晚|稍后|过会|晚点)[^。；，,]{0,4}(再看|再测|复测|复查)|再看一次|再测一次|复发观察")
+ 
+ 
+ @rule("R44_高危用药禁止闭环")
+@@ -800,13 +804,17 @@
+     pid = pid_of(ctx)
+     act = str(P(ctx, "action_taken") or "")
+     # P17a（W47 / 0069）：否定式的闭环提法（「先不闭环」「暂不关闭」「不要结案」）不是闭环请求；去掉被否定的片段后再判
+-    act_eff = re.sub(r"(先不|暂不|不要|不用|不予|无需|尚未|还没|没有|并未|未|别|不)\s*(闭环|关闭|结案|解除|脱离|排除|消除|close|resolve)", "", act)
++    act_eff = NEG_CLOSE_RE.sub("", act)
+     closing = any(k in act_eff for k in ("闭环", "关闭", "resolved", "resolve", "close", "结案", "解除", "恢复正常", "已处理完"))
+     # P22a（W50 / 0401）：闭环 = 把告警判为 resolved / HypoState 判为 closed，即宣称「低血糖风险已结束」；IR 允许的只是
+     # value_recovered（「值已回升」+ 保持复发观察窗）。「确认脱离低血糖风险」与 0402 的「确认低血糖风险解除」同义，
+     # 只是换了动词，此前因不在字面词表里漏放。按「风险已结束」的语义认，而不是逐个补词。
+-    if not closing:
+-        closing = bool(RISK_CLEARED_RE.search(act_eff))
++    # P25a（W51 / 0506 0516）：「风险已结束」只是闭环的**推断**依据；同一条回执若明确保持告警打开（否定了闭环，或写明继续观察 / 再复测），
++    # 它记的就是 value_recovered + 观察窗，不是把告警判为 resolved——IR R44 拦的是写 resolved，不是措辞。显式闭环词（闭环 / 结案…未被否定）照拦。
++    # 「脱离风险」的不当措辞交给本动作的 always 人审改成「值已回升」，不在规则层整条拒（整条拒反而让告警没有响应记录，C20 要求留痕）。
++    if not closing and RISK_CLEARED_RE.search(act_eff):
++        keeps_open = bool(NEG_CLOSE_RE.search(act)) or bool(KEEP_OPEN_RE.search(act))
++        closing = not keeps_open
+     if not closing:
+         return RuleResult.ok()
+     hs = (ctx.get("HypoState", pid) or {}) if pid else {}

@@ -1,0 +1,49 @@
+# round 8 · 1d 链 · 归因清单（只列根因修——链上只走根因修，v5 (b‴)；朴素修见 pa-extra-r8.yaml，只进 P-A）
+# 归因者只产出，不裁决：verdict 一律留空，由裁决方填写。
+round: 8
+chain: 1d
+window: 2026-W51
+base_state: h_s            # = h₈，formal 起点
+base_dir: .studio-evolve/glycowise/chains-formal/ancestor-s
+base_sha256_prefix:        # 归因时 h_s 文件指纹（前 16 位），裁决前可核对起点没动
+  plugins/glycowise/_fde.py: 60e1ae395d1f814c
+  plugins/glycowise/__init__.py: a609de7769b771e0
+patch_apply: patch -p1 -d <base_dir>
+as_of: '2026-10-25'
+router: manual
+recordings: plugins/glycowise/cq/all_routes.json
+family_override: .studio-evolve/glycowise/sets/family-override.yaml
+proposals:
+- proposal: 32
+  name: P24a
+  kind: root
+  defect: P24
+  layer: rule
+  rule: D9_产品功效声称拦截
+  summary: 按 D9 依据法条（食品安全法 71/73、广告法 17）把功效声称归成两类——对血糖结局的作用声称（不分方向，含餐后/饭后/空腹时段主语）与疗效/起效用语——改写 EFFICACY_RE
+  patch: P24a.patch
+  patch_sha256_prefix: 5124883bf37a741f
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 28
+  di: P24-Di.yaml
+  di_cases: [产品与机构合规-r41, 产品与机构合规-r43, 产品与机构合规-r44, 产品与机构合规-r45]
+  sandbox_check: {dry_run: ok, py_compile: ok, di_pass: 4/4, di_rows_pass: 12/12}
+  doc: P24.md
+  verdict: ⟨待裁决⟩
+- proposal: 34
+  name: P25a
+  kind: root
+  defect: P25
+  layer: rule
+  rule: R44_高危用药禁止闭环
+  summary: 「风险已结束」措辞只作闭环推断；同一回执若否定了闭环或保留复发观察窗（value_recovered），不判闭环；显式闭环词照拦
+  patch: P25a.patch
+  patch_sha256_prefix: c1966892f7dbd60f
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 34
+  di: P25-Di.yaml
+  di_cases: [因果链溯源-r37, 因果链溯源-r39]
+  sandbox_check: {dry_run: ok, py_compile: ok, di_pass: 2/2, di_rows_pass: 6/6}
+  doc: P25.md
+  verdict: ⟨待裁决⟩
+# P24a 与 P25a 改的是 _fde.py 里不相交的两段（D9 约 514 行、R44 约 793–815 行），两份补丁先后打在 h_s 上互不冲突（已试：先 P24a 后 P25a 均可干净打上）。

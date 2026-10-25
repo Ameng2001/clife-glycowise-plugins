@@ -1,0 +1,134 @@
+# round 8 P-A 提案集 = 两链并集（v5 (i) 乙-1），机械转换
+proposals:
+- id: P24a
+  num: 32
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-8/P24a.patch
+  di:
+  - chains-formal/1d/attribution/round-8/P24-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P25a
+  num: 34
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-8/P25a.patch
+  di:
+  - chains-formal/1d/attribution/round-8/P25-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: root
+  chain: 1d
+  naive_rule: null
+- id: P24b1
+  num: 33
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-8/P24b1.patch
+  di:
+  - chains-formal/1d/attribution/round-8/P24-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5
+- id: P25b1
+  num: 35
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-8/P25b1.patch
+  di:
+  - chains-formal/1d/attribution/round-8/P25-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 3
+- id: P25b2
+  num: 36
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-8/P25b2.patch
+  di:
+  - chains-formal/1d/attribution/round-8/P25-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 4
+- id: P25b3
+  num: 37
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/1d/attribution/round-8/P25b3.patch
+  di:
+  - chains-formal/1d/attribution/round-8/P25-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 1d
+  naive_rule: 5
+- id: P26a
+  num: 38
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P26a.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P26-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P27a
+  num: 42
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P27a.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P27-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: root
+  chain: 3d
+  naive_rule: null
+- id: P26b1
+  num: 39
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P26b1.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P26-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 删掉命中的规则分支
+- id: P26b2
+  num: 40
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P26b2.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P26-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: hard 改 soft
+- id: P26b3
+  num: 41
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P26b3.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P26-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配
+- id: P27b1
+  num: 43
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P27b1.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P27-Di.yaml
+  holdout: sets/holdout-8.yaml
+  kind: naive
+  chain: 3d
+  naive_rule: 把 Dᵢ 命中的字面量加进匹配

@@ -1,0 +1,9 @@
+# round 8 · 3d 链 · P26 来源案例集 Dᵢ（R44_高危用药禁止闭环 假阳性：回执明确保留观察窗却因「脱离风险 / 风险排除」措辞被当成闭环整条拒）
+proposal: P26
+round: 8
+window: 2026-W51
+chain: 3d
+state_base: h_s（= h₈，chains-formal/ancestor-s）
+ids:
+- 因果链溯源-r37   # t-20261025-0506
+- 因果链溯源-r39   # t-20261025-0516

@@ -32,3 +32,16 @@ proposals:
   29: {id: P22b, kind: naive, round: 7, window: 2026-W50, merged: false, pair: 22, chain: 3d, rule: 把 Dᵢ 字面量加进匹配, note: 3d 链 PATCH_CONFLICT；P-A 八臂全 ACCEPT}
   30: {id: P23a, kind: root,  round: 7, window: 2026-W50, merged: true, pair: 23, chain: 3d, note: TIER_RE 加评定动词 + N 级；3d 链 ACCEPT；P-A 七臂 + none ACCEPT，random REVISE}
   31: {id: P23b, kind: naive, round: 7, window: 2026-W50, merged: false, pair: 23, chain: 3d, rule: 把 Dᵢ 字面量加进匹配, note: 3d 链 PATCH_CONFLICT；P-A 八臂全 ACCEPT}
+  # round 8（formal 第一轮 s）· 两链独立上下文代理归因；朴素修只进 P-A
+  32: {id: P24a, kind: root, round: 8, window: 2026-W51, merged: false, pair: 24, chain: 1d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  33: {id: P24b1, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 24, chain: 1d, rule: 'naive(5 字面量)', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  34: {id: P25a, kind: root, round: 8, window: 2026-W51, merged: false, pair: 25, chain: 1d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  35: {id: P25b1, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 25, chain: 1d, rule: 'naive(3 删分支)', note: 'P-A 接受臂 none'}
+  36: {id: P25b2, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 25, chain: 1d, rule: 'naive(4 hard→soft)', note: 'P-A 接受臂 none/random'}
+  37: {id: P25b3, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 25, chain: 1d, rule: 'naive(5 字面量)', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
+  38: {id: P26a, kind: root, round: 8, window: 2026-W51, merged: false, pair: 26, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
+  39: {id: P26b1, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 26, chain: 3d, rule: 'naive(3 删分支)', note: 'P-A 接受臂 none/random'}
+  40: {id: P26b2, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 26, chain: 3d, rule: 'naive(4 hard→soft)', note: 'P-A 接受臂 none/random'}
+  41: {id: P26b3, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 26, chain: 3d, rule: 'naive(5 字面量)', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none/random'}
+  42: {id: P27a, kind: root, round: 8, window: 2026-W51, merged: false, pair: 27, chain: 3d, note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}
+  43: {id: P27b1, kind: naive, round: 8, window: 2026-W51, merged: false, pair: 27, chain: 3d, rule: 'naive(5 字面量)', note: 'P-A 接受臂 3d/3d-noT/3d-noS/3d-noW/1d/1d-strict/none'}

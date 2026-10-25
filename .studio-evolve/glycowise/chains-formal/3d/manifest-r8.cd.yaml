@@ -1,0 +1,21 @@
+# 由 attribution/round-8/manifest-r8.yaml 机械转换（chain_drive 格式，只含根因修）
+ancestor_dir: .studio-evolve/glycowise/chains-formal/ancestor-s/plugins/glycowise
+ontology: glycowise
+sets_root: .studio-evolve/glycowise
+proposals:
+- id: P26a
+  num: 38
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P26a.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P26-Di.yaml
+  holdout: sets/holdout-8.yaml
+- id: P27a
+  num: 42
+  round: 8
+  window: 2026-W51
+  patch: .studio-evolve/glycowise/chains-formal/3d/attribution/round-8/P27a.patch
+  di:
+  - chains-formal/3d/attribution/round-8/P27-Di.yaml
+  holdout: sets/holdout-8.yaml

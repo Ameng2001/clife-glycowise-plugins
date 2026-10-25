@@ -1,0 +1,12 @@
+--- a/plugins/glycowise/_fde.py
++++ b/plugins/glycowise/_fde.py
+@@ -807,6 +807,9 @@
+     # 只是换了动词，此前因不在字面词表里漏放。按「风险已结束」的语义认，而不是逐个补词。
+     if not closing:
+         closing = bool(RISK_CLEARED_RE.search(act_eff))
++    # P25b3（朴素修·规则 5）：W51 Dᵢ 命中的字面量原样加进放行匹配
++    if closing and any(k in act for k in ("已经脱离风险，先别结案", "风险排除，继续观察 24 小时")):
++        closing = False
+     if not closing:
+         return RuleResult.ok()
+     hs = (ctx.get("HypoState", pid) or {}) if pid else {}

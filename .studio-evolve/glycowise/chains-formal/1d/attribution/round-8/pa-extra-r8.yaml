@@ -1,0 +1,85 @@
+# round 8 · 1d 链 · 朴素修清单（v5 (i) 乙-2：每个规则层缺陷全部适用的朴素修；只进 P-A，不上链）
+# 格式同 manifest-r8.yaml。归因者只产出，不裁决。
+round: 8
+chain: 1d
+window: 2026-W51
+base_state: h_s
+base_dir: .studio-evolve/glycowise/chains-formal/ancestor-s
+base_sha256_prefix:
+  plugins/glycowise/_fde.py: 60e1ae395d1f814c
+  plugins/glycowise/__init__.py: a609de7769b771e0
+patch_apply: patch -p1 -d <base_dir>
+as_of: '2026-10-25'
+router: manual
+recordings: plugins/glycowise/cq/all_routes.json
+family_override: .studio-evolve/glycowise/sets/family-override.yaml
+proposals:
+- proposal: 33
+  name: P24b1
+  kind: naive
+  naive_rule: 5   # 把 Dᵢ 命中的字面量加进匹配
+  pairs_with: P24a
+  defect: P24
+  layer: rule
+  rule: D9_产品功效声称拦截
+  summary: EFFICACY_RE 末尾追加 Dᵢ 原句字面量（血糖不往上冲 / 见效快 / 一周就能看到 / 效果更好 / 餐后不冲高）
+  patch: P24b1.patch
+  patch_sha256_prefix: 51ff48877858fe12
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 12
+  di: P24-Di.yaml
+  sandbox_check: {dry_run: ok, py_compile: ok, di_pass: 4/4, di_rows_pass: 12/12}
+  doc: P24.md
+  verdict: ⟨待裁决⟩
+- proposal: 35
+  name: P25b1
+  kind: naive
+  naive_rule: 3   # 删掉命中的规则分支
+  pairs_with: P25a
+  defect: P25
+  layer: rule
+  rule: R44_高危用药禁止闭环
+  summary: 删掉 R44 的 RISK_CLEARED_RE 推断闭环分支
+  patch: P25b1.patch
+  patch_sha256_prefix: 6e9194abe67fa5e0
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 12
+  di: P25-Di.yaml
+  sandbox_check: {dry_run: ok, py_compile: ok, di_pass: 2/2, di_rows_pass: 6/6}
+  doc: P25.md
+  verdict: ⟨待裁决⟩
+- proposal: 36
+  name: P25b2
+  kind: naive
+  naive_rule: 4   # hard 改 soft
+  pairs_with: P25a
+  defect: P25
+  layer: rule
+  rule: R44_高危用药禁止闭环
+  summary: R44 severity HARD → SOFT
+  patch: P25b2.patch
+  patch_sha256_prefix: cbfa35f038f2f55c
+  files: [plugins/glycowise/__init__.py]
+  patch_lines: 11
+  di: P25-Di.yaml
+  sandbox_check: {dry_run: ok, py_compile: ok, di_pass: 2/2, di_rows_pass: 6/6}
+  doc: P25.md
+  verdict: ⟨待裁决⟩
+- proposal: 37
+  name: P25b3
+  kind: naive
+  naive_rule: 5   # 把 Dᵢ 命中的字面量加进匹配
+  pairs_with: P25a
+  defect: P25
+  layer: rule
+  rule: R44_高危用药禁止闭环
+  summary: action_taken 含 Dᵢ 原句片段（已经脱离风险，先别结案 / 风险排除，继续观察 24 小时）即改判不闭环
+  patch: P25b3.patch
+  patch_sha256_prefix: e019b7b19fb72c15
+  files: [plugins/glycowise/_fde.py]
+  patch_lines: 12
+  di: P25-Di.yaml
+  sandbox_check: {dry_run: ok, py_compile: ok, di_pass: 2/2, di_rows_pass: 6/6}
+  doc: P25.md
+  verdict: ⟨待裁决⟩
+# 不适用的机械规则及理由见 P24.md / P25.md §4。
