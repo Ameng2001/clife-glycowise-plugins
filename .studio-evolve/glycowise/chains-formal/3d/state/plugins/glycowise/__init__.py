@@ -3436,8 +3436,7 @@ def 配置患者告警与静音策略(ctx) -> None:
         ParamSpec("analysis_result", "object", required=True),
         ParamSpec("direction", "string", required=False),
     ),
-    # P51a（W53 / 0772）：强化方向的草稿先下了「未达标、需加强治疗」的结论，属 R01 管的结论层（维持 / 去强化不是），补挂 R01；R01 内部只对强化方向生效
-    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行", "R01_数据充分性门槛_仅管结论层"),
+    guards=("R35_夜间覆盖不足禁强化", "R42_急性混杂窗口禁止出结论", "R37_疑似1型LADA红旗", "R49_缺参数时按最保守执行"),
     post_rules=(
         "低血糖优先抢占",
         "D10_用药建议拦截",

@@ -116,6 +116,7 @@
 
 | round | file | size | strata | thin |
 |-------|------|------|--------|------|
+| 11 | holdout-11.yaml | 100 | 29 | no |
 | 10 | holdout-10.yaml | 100 | 29 | no |
 | 9 | holdout-9.yaml | 100 | 28 | no |
 | 8 | holdout-8.yaml | 100 | 25 | no |
@@ -139,3 +140,4 @@
 
 | 10 | 2026-W53 | 51 / 52 / 53 | 1 | P31a / P31b1 / P31b2（1d 链）P-A **APPLY_FAIL**：1d 链 D9 段无 P28a，与 h₁₀ 分叉，不进分母（v5 (i)） |
 | 10 | 2026-W53 | 48 / 50 / 57 / 58 / 75 / 76 / 85 / 86 | 1 | 触发 C 的 8 份（R32、R03a/R04a 两缺陷的根因与朴素修）：manual 路由下 C 取步数，正确拒绝比错误放行多 1–2 步，超带宽 1；B₁₀ 上均无回退。六个带闸门臂裁决相同（v6 候选 ⑦） |
+| 2026-10-25 | round 11 | check-pool 通过：checkpool/r11.txt（65d0c09 18:04:46，早于归因）池 669，29 层全 ≥ 8，无 HOLDOUT_THIN；holdout-11 100 / 29 层 seed 11（排除 D⁻ 27） | 2026-10-25 | h₁₁ = 生产 @ ae0e174（P51a 暂缓，3d 链状态同步为 h₁₁，见 chains-formal/3d/STATE-NOTE.md） |

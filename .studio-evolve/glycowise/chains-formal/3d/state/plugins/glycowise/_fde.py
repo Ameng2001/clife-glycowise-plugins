@@ -397,10 +397,6 @@ def r35(ctx):
 @rule("R01_数据充分性门槛_仅管结论层")
 def r01(ctx):
     pid = pid_of(ctx)
-    # P51a（W53 / 0772）：在 生成方案草稿（唯一带 analysis_result 的动作）里，只有「强化」方向是结论层输出——它断言了未达标；维持 / 去强化 / 未指定方向
-    # 只是趋势层草稿，不受数据门槛约束（W52 0657：6 天数据出维持方向草稿，判对）。
-    if P(ctx, "analysis_result") is not None and _direction(ctx) != "强化":
-        return RuleResult.ok()
     s = summary_of(ctx, pid)
     days = _num(P(ctx, "days")) or _num(s.get("days"))
     active = _num(P(ctx, "active_pct")) or _num(s.get("active_pct"))
@@ -1115,9 +1111,7 @@ def r22(ctx):
         at7 = [v for t, v in pts if t.hour == 7]
         if at3 and at7 and min(at7) - min(at3) >= 1.1:
             days_hit += 1
-    # P51a（W53 / 0772）：IR R22「14 天内 ≥50% 天数满足」——分母是 14 天窗口，不是有数据的天数。只戴 6 天时按 6 天算，3 天命中就成「疑黎明现象」，
-    # 等于在数据不足时下了模式结论；分母取 max(有数据天数, 14)。
-    if by_day and days_hit / max(len(by_day), 14) >= 0.5:
+    if by_day and days_hit / len(by_day) >= 0.5:
         return _fail("R22", f"14 天中 {days_hit} 天 03:00→07:00 上升 ≥1.1，疑黎明现象", "提示医师调整基础胰岛素或晚餐")
     return RuleResult.ok()
 
