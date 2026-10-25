@@ -1,0 +1,41 @@
+# 由 t-20261025-0702 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r49
+q: 黄伯（P0045）复测 3.1，A-P0045-02 回执写已加餐
+expect: action(响应并回执告警)
+tier: 4
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-25'
+source: brief:低血糖安全#tier4#paraphrase
+elements:
+- 响应并回执告警
+label:
+  answer: 复测 3.1 仍在 L1（3.0–3.9），离 L2 只差 0.1；口语只要求回执写已加餐，回执 retest_value=3.1、action_taken=已加餐，不结案，进 HIL，成立。
+  source: feedback
+  trace_id: t-20261025-0702
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045复测 3.1，A-P0045-02 回执写已加餐
+  kind: paraphrase
+- q: 黄伯（P0045）复测 3.1，A-P0045-02 回执写已加餐；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0701
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 3.1

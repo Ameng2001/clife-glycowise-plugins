@@ -1,0 +1,63 @@
+# 由 t-20261025-0704 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 高血糖与波动-r51
+q: 黄伯（P0045）饭后到 16.6，依据 s-P0045-14d 起草调整方向的方案；他明天要去钓鱼。
+expect: action(生成方案草稿)
+tier: 3
+family: 高血糖与波动
+origin: real
+observed_at: '2026-10-25'
+source: brief:高血糖与波动#tier3#irrelevant_field
+elements:
+- 生成方案草稿
+- CgmSummary
+label:
+  answer: 口语要的是「调整方向」的草稿，路由把 direction 填成了「强化」，于是被「低血糖优先抢占」拒（黄伯 TBR 2.0% ≥ 老年上限 1%）。按口语应 committed 一份草稿：写 PlanDraft，patient_id=P0045，direction=调整，依据 s-P0045-14d，正文含「低血糖优先：先处理低血糖时段，本期不加强降糖」；context_note
+    不应写入「明天去钓鱼」。
+  source: feedback
+  trace_id: t-20261025-0704
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0045饭后到 16.6，依据 s-P0045-14d 起草调整方向的方案；他明天要去钓鱼。
+  kind: paraphrase
+- q: 黄伯（P0045）饭后到 16.6，依据 s-P0045-14d 起草调整方向的方案；他明天要去钓鱼。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0701
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0702
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 3.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0703
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 生成方案草稿
+  params:
+    patient_id: P0045
+    analysis_result:
+      postprandial_peak: 16.6
+      reference_summary: s-P0045-14d
+      context_note: 患者明日有钓鱼活动计划
+    direction: 强化

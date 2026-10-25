@@ -1,0 +1,32 @@
+# 由 t-20261025-0701 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r48
+q: 黄伯（P0045）复测正好 3.9，A-P0045-02 先回执一下
+expect: action(响应并回执告警)
+tier: 4
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-25'
+source: brief:低血糖安全#tier4
+elements:
+- 响应并回执告警
+label:
+  answer: 复测正好 3.9：L1 线是 <3.9，3.9 不算低血糖，但对磺脲 + IAH 高危的黄伯还在 4.4 的告警线以下。口语只要求回执、没提结案，回执 retest_value=3.9、不置 resolved，进 HIL，成立。
+  source: feedback
+  trace_id: t-20261025-0701
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045复测正好 3.9，A-P0045-02 先回执一下
+  kind: paraphrase
+- q: 黄伯（P0045）复测正好 3.9，A-P0045-02 先回执一下；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 0.95
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9

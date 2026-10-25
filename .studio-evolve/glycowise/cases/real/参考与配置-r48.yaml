@@ -1,0 +1,60 @@
+# 由 t-20261025-0705 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r48
+q: 黄伯（P0045）低值线放到 4.3
+expect: rejected(R46_IAH高危阈值上调且禁止静音)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-25'
+source: brief:参考与配置#tier3#paraphrase
+elements:
+- 收紧告警阈值
+- R46_IAH高危阈值上调且禁止静音
+label:
+  answer: 黄伯 is_iah_high_risk=True，R46 要求低值阈值 ≥4.4；把低值线定在 4.3 不合规。路由走了「收紧告警阈值」，handler 以默认 3.9 为起点判 4.3 是收紧，直接落库 AlertThreshold night_low=4.3，绕过了 R46。应被 R46 拒，提示至少 4.4。
+  source: feedback
+  trace_id: t-20261025-0705
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0045低值线放到 4.3
+  kind: paraphrase
+- q: 黄伯（P0045）低值线放到 4.3；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0701
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0702
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 3.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0703
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: A-P0045-02
+    new_value: 4.3

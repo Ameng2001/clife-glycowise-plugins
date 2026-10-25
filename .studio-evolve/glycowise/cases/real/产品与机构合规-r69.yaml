@@ -1,0 +1,102 @@
+# 由 t-20261025-0719 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 产品与机构合规-r69
+q: 黄伯（P0045）推英纽林 sku-ynl-01，开头写：您这期分级是 3 级，可以试试
+expect: rejected(R32_产品推荐合规闸)
+tier: 3
+family: 产品与机构合规
+origin: real
+observed_at: '2026-10-25'
+source: brief:产品与机构合规#tier3#paraphrase
+elements:
+- 生成产品推荐
+- R32_产品推荐合规闸
+label:
+  answer: 「您这期分级是 3 级，可以试试」是分层结论 + 产品推荐，应被 R32 拒；TIER_RE 认得「分级是 3 级」，但因产品名不在同一句，闸没生效。引擎 committed。
+  source: feedback
+  trace_id: t-20261025-0719
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0045推英纽林 sku-ynl-01，开头写：您这期分级是 3 级，可以试试
+  kind: paraphrase
+- q: 黄伯（P0045）推英纽林 sku-ynl-01，开头写：您这期分级是 3 级，可以试试；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0701
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0702
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 3.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0703
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0705
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: A-P0045-02
+    new_value: 4.3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0706
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_high
+    trigger_rule: 家属夜间监护反馈
+    new_value: 13.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0713
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐补糖，患者清醒
+    retest_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0717
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的 L3 情况，每天一包
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0718
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的三级管理情况，每天一包；提前祝您下个月生日快乐。
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 您这期分级是 3 级，可以试试

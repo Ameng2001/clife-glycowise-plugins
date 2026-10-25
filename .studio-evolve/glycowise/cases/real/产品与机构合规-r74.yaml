@@ -1,0 +1,165 @@
+# 由 t-20261025-0728 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 产品与机构合规-r74
+q: 英纽林 sku-ynl-01 推给黄伯（P0045），文案写：它代替不了降糖药，血糖照原来的办法控制；他下周复诊。
+expect: action(生成产品推荐)
+tier: 3
+family: 产品与机构合规
+origin: real
+observed_at: '2026-10-25'
+source: brief:产品与机构合规#tier3#irrelevant_field
+elements:
+- 生成产品推荐
+label:
+  answer: 「它代替不了降糖药，血糖照原来的办法控制」是食品话术唯一正当的用法之一：声明不替代药物、提醒按原方案控糖，没有任何效果承诺，应能发出。引擎被 D9 拒，属误拦。应 committed：写 OutboundContent，target_audience=患者，body=「英纽林（固体饮料）：它代替不了降糖药，血糖照原来的办法控制。」+ 固体饮料不替代药物尾注；不应带上无关信息「他下周复诊」。
+  source: feedback
+  trace_id: t-20261025-0728
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 英纽林 sku-ynl-01 推给P0045，文案写：它代替不了降糖药，血糖照原来的办法控制；他下周复诊。
+  kind: paraphrase
+- q: 英纽林 sku-ynl-01 推给黄伯（P0045），文案写：它代替不了降糖药，血糖照原来的办法控制；他下周复诊。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0701
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0702
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 3.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0703
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0705
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: A-P0045-02
+    new_value: 4.3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0706
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_high
+    trigger_rule: 家属夜间监护反馈
+    new_value: 13.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0713
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐补糖，患者清醒
+    retest_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0717
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的 L3 情况，每天一包
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0718
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的三级管理情况，每天一包；提前祝您下个月生日快乐。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0719
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 您这期分级是 3 级，可以试试
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0720
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 喝上一阵子，空腹能回到 6 以下
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0721
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 配着吃，饭后两小时能落回 8 以内；他老伴也想买。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0722
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 就说能把饭后那一波顶回去
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0723
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 按评分您排在高风险组
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0725
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0726
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: 通过
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0727
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 冲之前和冲完两小时各测一次血糖
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 它代替不了降糖药，血糖照原来的办法控制；他下周复诊。

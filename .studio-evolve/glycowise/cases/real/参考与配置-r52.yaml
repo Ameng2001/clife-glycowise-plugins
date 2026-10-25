@@ -1,0 +1,177 @@
+# 由 t-20261025-0730 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r52
+q: 黄伯（P0045）的低值告警线目前设在几
+expect: query
+tier: 1
+family: 参考与配置
+origin: real
+observed_at: '2026-10-25'
+source: brief:参考与配置#tier1#paraphrase
+elements:
+- AlertThreshold
+label:
+  answer: 窗口内 0705 已把黄伯 night_low 落成 4.3，查到 1 行，与当时库里的状态一致，查询本身成立。
+  source: feedback
+  trace_id: t-20261025-0730
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045的低值告警线目前设在几
+  kind: paraphrase
+setup:
+- trace_id: t-20261025-0701
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0702
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 3.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0703
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0705
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: A-P0045-02
+    new_value: 4.3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0706
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_high
+    trigger_rule: 家属夜间监护反馈
+    new_value: 13.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0713
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐补糖，患者清醒
+    retest_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0717
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的 L3 情况，每天一包
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0718
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的三级管理情况，每天一包；提前祝您下个月生日快乐。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0719
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 您这期分级是 3 级，可以试试
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0720
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 喝上一阵子，空腹能回到 6 以下
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0721
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 配着吃，饭后两小时能落回 8 以内；他老伴也想买。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0722
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 就说能把饭后那一波顶回去
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0723
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 按评分您排在高风险组
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0725
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0726
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: 通过
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0727
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 冲之前和冲完两小时各测一次血糖
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0729
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 英纽林照常冲，血糖低的时候别空腹喝；他孙子在帮他看手机。
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: AlertThreshold
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    - field: field
+      op: eq
+      value: night_low
+    select:
+    - current_value

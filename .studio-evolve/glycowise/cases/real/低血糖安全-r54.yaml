@@ -1,0 +1,176 @@
+# 由 t-20261025-0732 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 低血糖安全-r54
+q: 王叔（P0031）r-P0031-00530 测到 2.9，马上走低血糖处置；他老伴在旁边。
+expect: rejected(R03a_Level2低血糖_实时告警)
+tier: 3
+family: 低血糖安全
+origin: real
+observed_at: '2026-10-25'
+source: brief:低血糖安全#tier3#irrelevant_field
+elements:
+- 触发低血糖处置
+- R03a_Level2低血糖_实时告警
+- GlucoseReading
+label:
+  answer: 按 seed，r-P0031-00530 是 10.8（10-16 12:30，vendor_api），不是口语说的 2.9；它也不是当前读数。业务上应以系统里这条读数的值为准：10.8 不是低血糖，不该建低血糖告警。引擎却 committed，按实际值写了一条低级别 AlertEvent（value=10.8）。如果口语的 2.9 是新的指血值，应先作为指血读数录入再判，而不是挂到这条旧读数上。「老伴在旁边」是无关信息。应被
+    R03a 拒。
+  source: feedback
+  trace_id: t-20261025-0732
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0031r-P0031-00530 测到 2.9，马上走低血糖处置；他老伴在旁边。
+  kind: paraphrase
+- q: 王叔（P0031）r-P0031-00530 测到 2.9，马上走低血糖处置；他老伴在旁边。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0701
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0702
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 3.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0703
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐
+    retest_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0705
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: A-P0045-02
+    new_value: 4.3
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0706
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_high
+    trigger_rule: 家属夜间监护反馈
+    new_value: 13.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0713
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 已加餐补糖，患者清醒
+    retest_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0717
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的 L3 情况，每天一包
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0718
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 按您目前的三级管理情况，每天一包；提前祝您下个月生日快乐。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0719
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 您这期分级是 3 级，可以试试
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0720
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 喝上一阵子，空腹能回到 6 以下
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0721
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 配着吃，饭后两小时能落回 8 以内；他老伴也想买。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0722
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 就说能把饭后那一波顶回去
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0723
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 按评分您排在高风险组
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0725
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0726
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: 通过
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0727
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 冲之前和冲完两小时各测一次血糖
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0729
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 英纽林照常冲，血糖低的时候别空腹喝；他孙子在帮他看手机。
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 触发低血糖处置
+  params:
+    patient_id: P0031
+    reading_id: r-P0031-00530
+    rule_id: hypo_immediate_action
