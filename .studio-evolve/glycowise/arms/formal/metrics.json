@@ -2,24 +2,24 @@
  "metrics": {
   "regress_rate_diff": 0.0,
   "regress_any_diff": 0.0,
-  "random_minus_3d": 0.42857142857142855,
+  "random_minus_3d": 0.0,
   "1d-strict_minus_3d": 0.0,
   "3d-noT_minus_3d": 0.0,
   "3d-noS_minus_3d": 0.0,
   "3d-noW_minus_3d": 0.0,
   "regress_rate_3d": 0.0,
   "regress_rate_1d": 0.0,
-  "regress_rate_random": 0.42857142857142855,
+  "regress_rate_random": 0.0,
   "regress_rate_1d-strict": 0.0,
-  "regress_rate_none": 0.3333333333333333,
+  "regress_rate_none": 0.0,
   "regress_rate_3d-noT": 0.0,
   "regress_rate_3d-noS": 0.0,
   "regress_rate_3d-noW": 0.0,
   "regress_any_rate_3d": 0.0,
   "regress_any_rate_1d": 0.0,
-  "regress_any_rate_random": 0.42857142857142855,
+  "regress_any_rate_random": 0.2857142857142857,
   "regress_any_rate_1d-strict": 0.0,
-  "regress_any_rate_none": 0.3333333333333333,
+  "regress_any_rate_none": 0.16666666666666666,
   "regress_any_rate_3d-noT": 0.0,
   "regress_any_rate_3d-noS": 0.0,
   "regress_any_rate_3d-noW": 0.0,
@@ -35,9 +35,7 @@
   "divergent_regress_rate": null
  },
  "n": 8,
- "flags": [
-  "REGRESS_ON_SAME_B"
- ],
+ "flags": [],
  "ci": {
   "regress_rate_diff": [
    0.0,
@@ -49,7 +47,7 @@
   ],
   "random_minus_3d": [
    0.0,
-   0.8
+   0.0
   ],
   "1d-strict_minus_3d": [
    0.0,
