@@ -303,6 +303,29 @@ W50 出口签发闸 8 句原句重录（W50 句序 12 / 13 / 22 / 23 / 24 / 45 /
 
 第五节 A 组：引擎只认 action_taken 字段。0506 / 0516 路由把「已经脱离风险 / 风险排除」原样写进 action_taken 被 R44 拒；0507 / 0517 路由改写成「暂无低血糖风险 / 自述无症状」后放行。
 
+## ①-13 W51 落案例与 round 8 check-pool
+
+业务侧标注回传（40c68d6：49 条 reviewed，correct 38 / wrong 10 = rule 6 / router 4 / partial 1），`check_feedback.py` 验收通过。按 `../formal-runbook.md` 第 1 节：分层三文件（`sets/family-override.yaml`、`holdout_sample.py`、`_common.py`）sha256 与 v5 头注一致；`make_real_cases.py --window 2026-W51` 新增 48（partial 0517 不落）→ **real 池 424**；`holdout_sample.py --round 8 --holdout-size 100 --stratify family,tier --merge-min 8 --family-override … --check-pool > checkpool/r8.txt`：**25 层全部 ≥ 8，无需并层**。案例与 `checkpool/r8.txt` 同一次提交（8128cb5，2026-10-25 11:43:56），早于本轮任何归因。
+
+W50 时四个薄层的现状：
+
+| 层 | W50 后 | W51 新增 | 现在 |
+|---|---|---|---|
+| 高血糖与波动×4 | 1（并入 rest） | 12 | 13 |
+| 产品与机构合规×4 | 4（并入 rest） | 10 | 14 |
+| 出口签发闸×4 | 5（并入 rest） | 8 | 13 |
+| 参考与配置×4 | 7（并入 rest） | 4 | 11 |
+
+W51 48 条的层：tier4 37、tier3 11。
+
+定向补充 12 句的落池：
+
+- **功效话术重写（6）**：落 5 条，全部 tier3（产品与机构合规-r41–r45）；0538 没进引擎。0509 correct（D9 拒），0508 / 0510 / 0511 / 0539 wrong，truth_expect = rejected(D9)。
+- **回执不结案（4）**：落 3 条；0517 partial 不落。0507 correct（tier4）；0506 / 0516 wrong（P22a 误拦），truth_expect = action(响应并回执告警)。
+- **非分层 N 级（2）**：落 2 条，都 correct（tier4），P23a 没有误拦。
+
+一处口径记下：wrong 案例的 tier 由 truth_expect 推出，而 `action(动作名)` 不区分直接落库和进人审，一律落 tier3。所以 0506 / 0516（回执，应进 HIL）和送审 4 条（审核输出内容，应进 HIL）落了 tier3，同类的 correct 案例都在 tier4。共 6 条，只会让 tier4 少计，不影响本次通过；分层规则已随 v5 冻结，改它属于 amend。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -312,7 +335,7 @@ W50 出口签发闸 8 句原句重录（W50 句序 12 / 13 / 22 / 23 / 24 / 45 /
 | 阶段 | 数量 | 现状 |
 |---|---|---|
 | 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | W43：35 条真实轨迹已就位，等业务侧标 |
-| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **376**（W43–W49b 348 + W50 26 + W50b 2，2026-10-24）；`--check-pool`（override，并层 8）25 层，**4 个 rest 层不足 8**：产品与机构合规 4 / 出口签发闸 5 / 参考与配置 7 / 高血糖与波动 1，见 ①-11 |
+| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **424**（W43–W50b 376 + W51 48，2026-10-25）；round 8 `--check-pool`（holdout-size 100，并层 8，override）25 层**全部 ≥ 8，前置通过**，输出 `../checkpool/r8.txt`（8128cb5），见 ①-13 |
 | 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | 约 26 个真实窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。
