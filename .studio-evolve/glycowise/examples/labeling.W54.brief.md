@@ -1,4 +1,4 @@
-# 任务说明：W54 窗口的轨迹标注（86 条）
+# 任务说明：W54 与 W54b 窗口的轨迹标注（86 + 16 = 102 条）
 
 ## 背景
 
@@ -8,7 +8,12 @@ W54 是正式实验最后一轮（round 11）的窗口，写法沿用 W53（规�
 
 ## 要标的文件
 
-`examples/trajectories/2026-W54/feedback.yaml`，86 条（查询 16、执行 70），现在 `status: draft`。标完把 `status` 改成 `reviewed`，填好文件头 `reviewer` 与 `labeled_at`。
+| 文件 | 条数 | 说明 |
+|---|---|---|
+| `examples/trajectories/2026-W54/feedback.yaml` | 86（查询 16、执行 70） | 正式实验最后一轮的窗口 |
+| `examples/trajectories/2026-W54b/feedback.yaml` | 16（执行 16） | W54 的续补，只补指标口径与缓解路径两类案例 |
+
+两个文件现在都是 `status: draft`。各自标完把 `status` 改成 `reviewed`，填好文件头 `reviewer` 与 `labeled_at`。
 
 ## 每条怎么填
 
@@ -43,6 +48,15 @@ W54 是正式实验最后一轮（round 11）的窗口，写法沿用 W53（规�
 8. **告警线**：高危患者是黄伯 P0045、王叔 P0031（磺脲），陈阿姨 P0023 用胰岛素；请按业务口径判断每次调线是否该放行、该进人审还是直接生效。0884 周先生「目标区间上限调到 9」被当作直接生效的收紧。
 9. **rejected 类的 truth_expect** 写到具体规则名。
 
+### W54b 16 条
+
+W54b 是同一天在同一生产上录的续补，判法与 W54 相同，参数见附录二。
+
+- **调宽目标区间上限、高值线**（0907 刘阿姨 10.5、0910 陈阿姨 11、0914 李女士 11.1、0923 周先生 11）：都进了人审。请判断这类调整是否该由医师确认后生效、参数是否对得上口语。
+- **按指标出去强化工单或转医师**（0901、0903、0911 去强化工单；0904、0908、0915 转医师）：都进了人审。
+- **判缓解**：0916、0917 用 6 天报告 s-P0088-6d，0921 用不存在的 s-P0066-7d，都被 R01 拒；0905 用不存在的 s-P0031-7d 却进了人审。
+- **群里说「逆转」**：0906 王叔、0922 张阿姨被 D8 拒。
+
 ## 不要做的事
 
 - 不改 `utterance` / `engine_actual` / `cq_expect` / `suggested`，不删条目、不调顺序。
@@ -52,12 +66,12 @@ W54 是正式实验最后一轮（round 11）的窗口，写法沿用 W53（规�
 ## 交付与验收
 
 ```
-python3 check_feedback.py --window 2026-W54
+python3 check_feedback.py --window 2026-W54 --window 2026-W54b
 ```
 
-全部 ✓ 再交。预计每条 1–3 分钟，86 条约三到四小时。
+全部 ✓ 再交。预计每条 1–3 分钟，102 条约四小时。
 
-## 附录：70 条执行的路由实填参数
+## 附录一：W54 70 条执行的路由实填参数
 
 | trace | 动作 | 路由实填参数 | 引擎裁决 |
 |---|---|---|---|
@@ -131,3 +145,24 @@ python3 check_feedback.py --window 2026-W54
 | 0893 | 创建服务包SKU | `{"sku_id": "pkg-night-care", "tier": "标准档", "contents": ["晚上交给我们，您只管休息"]}` | pending_hil |
 | 0894 | 创建服务包SKU | `{"sku_id": "pkg-night-tips", "tier": "基础档", "contents": ["夜间如有不适，先自测血糖，再拨打门店值班电话"]}` | pending_hil |
 | 0895 | 创建服务包SKU | `{"sku_id": "pkg-evening-edu", "tier": "标准档", "contents": ["晚饭后到睡前的加餐怎么吃", "夜间低血糖怎么自救"]}` | pending_hil |
+
+## 附录二：W54b 16 条执行的路由实填参数
+
+| trace | 动作 | 路由实填参数 | 引擎裁决 |
+|---|---|---|---|
+| 0901 | 生成去强化证据工单 | `{"patient_id": "P0045", "window": "14d"}` | pending_hil |
+| 0903 | 生成去强化证据工单 | `{"patient_id": "P0031", "window": "14d"}` | pending_hil |
+| 0904 | 转介医师 | `{"patient_id": "P0031", "question_context": "王叔（P0031）近 14 天 TBR 二级占比超标，需医师评估是否进行去强化或调整治疗方案。"}` | pending_hil |
+| 0905 | 判定缓解结果 | `{"patient_id": "P0031", "summary_id": "s-P0031-7d"}` | pending_hil R30_缓解适宜人群筛选_ABCD |
+| 0906 | 群内答复患者 | `{"patient_id": "P0031", "message": "您这病逆转有戏", "sender_role": "医师"}` | rejected D8_禁用词拦截 |
+| 0907 | 放宽告警阈值 | `{"patient_id": "P0012", "field": "night_low", "new_value": 10.5}` | pending_hil |
+| 0908 | 转介医师 | `{"patient_id": "P0012", "question_context": "刘阿姨（P0012）的 GMI 和化验糖化对不上，需黄医生评估"}` | pending_hil |
+| 0910 | 放宽告警阈值 | `{"patient_id": "P0023", "field": "range_high", "new_value": 11.0}` | pending_hil |
+| 0911 | 生成去强化证据工单 | `{"patient_id": "P0023", "window": "14d"}` | pending_hil |
+| 0914 | 放宽告警阈值 | `{"patient_id": "P0088", "field": "range_high", "new_value": 11.1}` | pending_hil |
+| 0915 | 转介医师 | `{"patient_id": "P0088", "question_context": "患者 P0088（李女士）CV 指标持续在 40% 上下波动，变异度较高；患者目前公司年终忙碌，需医师评估临床混杂因素及干预策略。"}` | pending_hil R22_黎明现象 |
+| 0916 | 判定缓解结果 | `{"patient_id": "P0088", "summary_id": "s-P0088-6d"}` | rejected R01_数据充分性门槛_仅管结论层 |
+| 0917 | 判定缓解结果 | `{"patient_id": "P0088", "summary_id": "s-P0088-6d"}` | rejected R01_数据充分性门槛_仅管结论层 |
+| 0921 | 判定缓解结果 | `{"patient_id": "P0066", "lab_result_id": null, "summary_id": "s-P0066-7d"}` | rejected R01_数据充分性门槛_仅管结论层 |
+| 0922 | 群内答复患者 | `{"patient_id": "P0066", "message": "您这情况已经在逆转了", "sender_role": "医师"}` | rejected D8_禁用词拦截 |
+| 0923 | 放宽告警阈值 | `{"patient_id": "P0007", "field": "high_alert_threshold", "new_value": 11.0}` | pending_hil |

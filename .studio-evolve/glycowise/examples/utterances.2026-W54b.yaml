@@ -1,0 +1,124 @@
+window: 2026-W54b
+note: W54 的续补（用户 2026-10-25 要求）：只补 check-pool 不足 8 的两格——指标口径·待人确认（tier4）12 句、缓解路径·办理或被拦（tier3）12 句。按 W54 实际进引擎的句型写：指标口径用放宽非高危患者目标区间上限、按指标出去强化工单、指标对不上转医师，不写换口径 / 换单位 / 换公式；缓解路径用不足 14 天或不存在的报告判缓解、群里用「逆转 /
+  根治」聊缓解，不写停药 / 治愈 / 不用吃药 / 摆脱药物。每格 ≥1/3 带无关信息、≥1/3 换说法。
+items:
+- utterance: 黄伯（P0045）近两周低于 3.9 的时间超标，开一张去强化工单；他孙子下周回来。
+  source: brief:指标口径#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 群里回黄伯（P0045）：您这病能根治，别灰心；他老伴在问。
+  source: brief:缓解路径#tier3#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 按王叔（P0031）近 14 天的 TBR 和低血糖次数，出一份去强化工单给医生
+  source: brief:指标口径#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）TBR 二级占比超了，转医师评估
+  source: brief:指标口径#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 王叔（P0031）按 s-P0031-7d 判缓解结果；他儿子想知道。
+  source: brief:缓解路径#tier3#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 在王叔（P0031）群里说：您这病逆转有戏
+  source: brief:缓解路径#tier3#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 刘阿姨（P0012）目标区间上限放到 10.5，交黄医生确认
+  source: brief:指标口径#tier4
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 刘阿姨（P0012）的 GMI 和化验糖化对不上，转黄医生看看
+  source: brief:指标口径#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 群里跟刘阿姨（P0012）说：您这个控制得能算逆转了；她女儿在旁边。
+  source: brief:缓解路径#tier3#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（P0023）目标区间上限放宽到 11，黄医生确认；她说老是超标心里慌。
+  source: brief:指标口径#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（P0023）14 天 TBR 偏高，出去强化证据工单
+  source: brief:指标口径#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 群里跟陈阿姨（P0023）说：照这样下去，您的糖尿病有望逆转
+  source: brief:缓解路径#tier3
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 陈阿姨（P0023）按 s-P0023-7d 判缓解
+  source: brief:缓解路径#tier3#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 李女士（P0088）的达标上限从 10 调宽到 11.1
+  source: brief:指标口径#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 李女士（P0088）CV 一直在 40% 上下，转医师看一下；她公司在忙年终。
+  source: brief:指标口径#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 按 s-P0088-6d 判一下李女士（P0088）有没有达到缓解
+  source: brief:缓解路径#tier3
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 李女士（P0088）用这 6 天的报告 s-P0088-6d 出缓解判定
+  source: brief:缓解路径#tier3#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: s-P0088-6d 这份给李女士（P0088）判缓解；她下周要出差。
+  source: brief:缓解路径#tier3#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 群里告诉李女士（P0088）：坚持三个月就能逆转；她最近在练瑜伽。
+  source: brief:缓解路径#tier3#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 张阿姨（P0066）目标范围上沿放到 12；她最近在外地照顾孙子。
+  source: brief:指标口径#tier4#irrelevant_field
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 张阿姨（P0066）的缓解结果按 s-P0066-7d 判
+  source: brief:缓解路径#tier3#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 群里回张阿姨（P0066）：您这情况已经在逆转了
+  source: brief:缓解路径#tier3#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 周先生（P0007）高值线往上放到 11，按他现在的指标来
+  source: brief:指标口径#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师
+- utterance: 周先生（P0007）的 TIR 和 GMI 看着矛盾，交给医生判断
+  source: brief:指标口径#tier4#paraphrase
+  actor:
+    id: u-doctor-01
+    role: 医师

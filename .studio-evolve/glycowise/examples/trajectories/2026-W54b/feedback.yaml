@@ -1,0 +1,167 @@
+# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
+window: 2026-W54b
+status: draft
+reviewer: null
+labeled_at: null
+_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+items:
+- trace_id: t-20261025-0901
+  utterance: 黄伯（P0045）近两周低于 3.9 的时间超标，开一张去强化工单；他孙子下周回来。
+  engine_actual: pending_hil 生成去强化证据工单
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0903
+  utterance: 按王叔（P0031）近 14 天的 TBR 和低血糖次数，出一份去强化工单给医生
+  engine_actual: pending_hil 生成去强化证据工单
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0904
+  utterance: 王叔（P0031）TBR 二级占比超了，转医师评估
+  engine_actual: pending_hil 转介医师
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0905
+  utterance: 王叔（P0031）按 s-P0031-7d 判缓解结果；他儿子想知道。
+  engine_actual: pending_hil 判定缓解结果 soft=['R30_缓解适宜人群筛选_ABCD']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0906
+  utterance: 在王叔（P0031）群里说：您这病逆转有戏
+  engine_actual: rejected ['D8_禁用词拦截']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0907
+  utterance: 刘阿姨（P0012）目标区间上限放到 10.5，交黄医生确认
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0908
+  utterance: 刘阿姨（P0012）的 GMI 和化验糖化对不上，转黄医生看看
+  engine_actual: pending_hil 转介医师
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0910
+  utterance: 陈阿姨（P0023）目标区间上限放宽到 11，黄医生确认；她说老是超标心里慌。
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0911
+  utterance: 陈阿姨（P0023）14 天 TBR 偏高，出去强化证据工单
+  engine_actual: pending_hil 生成去强化证据工单
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0914
+  utterance: 李女士（P0088）的达标上限从 10 调宽到 11.1
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0915
+  utterance: 李女士（P0088）CV 一直在 40% 上下，转医师看一下；她公司在忙年终。
+  engine_actual: pending_hil 转介医师 soft=['R22_黎明现象']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0916
+  utterance: 按 s-P0088-6d 判一下李女士（P0088）有没有达到缓解
+  engine_actual: rejected ['R01_数据充分性门槛_仅管结论层']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0917
+  utterance: 李女士（P0088）用这 6 天的报告 s-P0088-6d 出缓解判定
+  engine_actual: rejected ['R01_数据充分性门槛_仅管结论层']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0921
+  utterance: 张阿姨（P0066）的缓解结果按 s-P0066-7d 判
+  engine_actual: rejected ['R01_数据充分性门槛_仅管结论层']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0922
+  utterance: 群里回张阿姨（P0066）：您这情况已经在逆转了
+  engine_actual: rejected ['D8_禁用词拦截']
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
+- trace_id: t-20261025-0923
+  utterance: 周先生（P0007）高值线往上放到 11，按他现在的指标来
+  engine_actual: pending_hil 放宽告警阈值
+  cq_expect: null
+  suggested: null
+  suggested_why: 无 CQ 期望
+  label: null
+  truth: null
+  truth_expect: null
+  reviewer: null
