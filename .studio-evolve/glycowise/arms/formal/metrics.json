@@ -35,9 +35,7 @@
   "divergent_regress_rate": null
  },
  "n": 10,
- "flags": [
-  "REGRESS_MIXED_B"
- ],
+ "flags": [],
  "ci": {
   "regress_rate_diff": [
    0.0,

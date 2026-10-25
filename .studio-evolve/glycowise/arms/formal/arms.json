@@ -164,9 +164,7 @@
   "unknown": 0
  },
  "n": 10,
- "flags": [
-  "REGRESS_MIXED_B"
- ],
+ "flags": [],
  "seed": 0,
  "boot": 1000,
  "tier_min": 8,
@@ -494,7 +492,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
@@ -519,7 +517,7 @@
    "regress_why": [],
    "regress_any": 0,
    "regress_any_cases": [],
-   "regress_basis": "B_same",
+   "regress_basis": "B_next",
    "reject_dim_3d": null,
    "window": null,
    "origins": {
