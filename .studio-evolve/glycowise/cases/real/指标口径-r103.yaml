@@ -1,0 +1,30 @@
+# 由 t-20261025-0901 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r103
+q: 黄伯（P0045）近两周低于 3.9 的时间超标，开一张去强化工单；他孙子下周回来。
+expect: action(生成去强化证据工单)
+tier: 4
+family: 指标口径
+origin: real
+observed_at: '2026-10-25'
+source: brief:指标口径#tier4#irrelevant_field
+elements:
+- 生成去强化证据工单
+label:
+  answer: 黄伯 14 天 TBR 2.0% 超老年上限 1%，出去强化证据工单交医师接单，进 HIL，成立。「孙子下周回来」没进参数。
+  source: feedback
+  trace_id: t-20261025-0901
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045近两周低于 3.9 的时间超标，开一张去强化工单；他孙子下周回来。
+  kind: paraphrase
+- q: 黄伯（P0045）近两周低于 3.9 的时间超标，开一张去强化工单；他孙子下周回来。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup: []
+route:
+  kind: action
+  confidence: 0.95
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d

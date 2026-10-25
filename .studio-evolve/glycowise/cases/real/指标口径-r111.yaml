@@ -1,0 +1,104 @@
+# 由 t-20261025-0923 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r111
+q: 周先生（P0007）高值线往上放到 11，按他现在的指标来
+expect: action(放宽告警阈值)
+tier: 4
+family: 指标口径
+origin: real
+observed_at: '2026-10-25'
+source: brief:指标口径#tier4#paraphrase
+elements:
+- 放宽告警阈值
+label:
+  answer: 周先生无降糖药、非高危，高值线放到 11 走医师 HIL，参数与口语一致，成立。
+  source: feedback
+  trace_id: t-20261025-0923
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0007高值线往上放到 11，按他现在的指标来
+  kind: paraphrase
+- q: 周先生（P0007）高值线往上放到 11，按他现在的指标来；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0901
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0903
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0904
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 王叔（P0031）近 14 天 TBR 二级占比超标，需医师评估是否进行去强化或调整治疗方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0905
+  action: 判定缓解结果
+  params:
+    patient_id: P0031
+    summary_id: s-P0031-7d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0907
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 10.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0908
+  action: 转介医师
+  params:
+    patient_id: P0012
+    question_context: 刘阿姨（P0012）的 GMI 和化验糖化对不上，需黄医生评估
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0910
+  action: 放宽告警阈值
+  params:
+    patient_id: P0023
+    field: range_high
+    new_value: 11.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0911
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0023
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0914
+  action: 放宽告警阈值
+  params:
+    patient_id: P0088
+    field: range_high
+    new_value: 11.1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0915
+  action: 转介医师
+  params:
+    patient_id: P0088
+    question_context: 患者 P0088（李女士）CV 指标持续在 40% 上下波动，变异度较高；患者目前公司年终忙碌，需医师评估临床混杂因素及干预策略。
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 放宽告警阈值
+  params:
+    patient_id: P0007
+    field: high_alert_threshold
+    new_value: 11.0

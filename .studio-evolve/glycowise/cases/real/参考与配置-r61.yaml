@@ -1,0 +1,64 @@
+# 由 t-20261025-0810 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 参考与配置-r61
+q: 黄伯（P0045）复测回到 4.3，低值告警线改到 4.0
+expect: rejected(R46_IAH高危阈值上调且禁止静音)
+tier: 3
+family: 参考与配置
+origin: real
+observed_at: '2026-10-25'
+source: brief:参考与配置#tier3#paraphrase
+elements:
+- 收紧告警阈值
+- R46_IAH高危阈值上调且禁止静音
+label:
+  answer: 黄伯 IAH 高危，低值线 4.0 <4.4，R46（P46a 已挂到收紧动作）拒成立；「复测回到 4.3」不改变下限。
+  source: feedback
+  trace_id: t-20261025-0810
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045复测回到 4.3，低值告警线改到 4.0
+  kind: paraphrase
+- q: 黄伯（P0045）复测回到 4.3，低值告警线改到 4.0；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0801
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）晚饭后血糖读数 13.9，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0802
+  action: 放宽告警阈值
+  params:
+    patient_id: P0045
+    field: high_alert_threshold
+    new_value: 16.7
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0803
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0805
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 1
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 收紧告警阈值
+  params:
+    patient_id: P0045
+    field: night_low
+    trigger_rule: manual_adjustment
+    new_value: 4.0

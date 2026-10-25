@@ -1,0 +1,116 @@
+# 由 t-20261025-0820 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 数据与同意合规-r29
+q: 黄伯（P0045）的同意书是哪个版本；他老伴在问。
+expect: query
+tier: 1
+family: 数据与同意合规
+origin: real
+observed_at: '2026-10-25'
+source: brief:数据与同意合规#tier1#irrelevant_field
+elements:
+- ConsentRecord
+label:
+  answer: consent-P0045 version=v2.1，查到 1 行，成立。
+  source: feedback
+  trace_id: t-20261025-0820
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0045的同意书是哪个版本；他老伴在问。
+  kind: paraphrase
+setup:
+- trace_id: t-20261025-0801
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）晚饭后血糖读数 13.9，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0802
+  action: 放宽告警阈值
+  params:
+    patient_id: P0045
+    field: high_alert_threshold
+    new_value: 16.7
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0803
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0805
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0812
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 专门克糖；他女婿也有糖尿病。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0813
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 您这个属于需要重点盯的那一类
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0814
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0815
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 它是食品，替不了您的降糖药，药照常吃；他下周复诊。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0816
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 您被排在周四上午的太极小组
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0819
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: query
+  confidence: 0.95
+  oql:
+    start: ConsentRecord
+    where:
+    - field: patient_id
+      op: eq
+      value: P0045
+    select:
+    - version
+    - signed_at
+    - scope_items
+    order_by:
+    - field: signed_at
+      desc: true
+    limit: 1

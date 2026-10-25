@@ -1,0 +1,60 @@
+# 由 t-20261025-0808 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r57
+q: A-P0045-ocr-01 升到危急，转给值班医师处理
+expect: rejected(R53_低置信通道不得独立触发危急告警)
+tier: 3
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier3#paraphrase
+elements:
+- 升级告警
+- R53_低置信通道不得独立触发危急告警
+label:
+  answer: OCR 告警升到危急（level=3，与口语一致），R53 拒成立。
+  source: feedback
+  trace_id: t-20261025-0808
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: A-P0045-ocr-01 升到危急，转给值班医师处理；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0801
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）晚饭后血糖读数 13.9，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0802
+  action: 放宽告警阈值
+  params:
+    patient_id: P0045
+    field: high_alert_threshold
+    new_value: 16.7
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0803
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0805
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 1
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 升级告警
+  params:
+    alert_id: A-P0045-ocr-01
+    level: 3

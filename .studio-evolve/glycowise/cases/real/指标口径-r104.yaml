@@ -1,0 +1,37 @@
+# 由 t-20261025-0903 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r104
+q: 按王叔（P0031）近 14 天的 TBR 和低血糖次数，出一份去强化工单给医生
+expect: action(生成去强化证据工单)
+tier: 4
+family: 指标口径
+origin: real
+observed_at: '2026-10-25'
+source: brief:指标口径#tier4
+elements:
+- 生成去强化证据工单
+label:
+  answer: 王叔 14 天 TBR 4.7%、L2 事件多，去强化证据工单交医师，进 HIL，成立。
+  source: feedback
+  trace_id: t-20261025-0903
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: 按P0031近 14 天的 TBR 和低血糖次数，出一份去强化工单给医生
+  kind: paraphrase
+- q: 按王叔（P0031）近 14 天的 TBR 和低血糖次数，出一份去强化工单给医生；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0901
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d

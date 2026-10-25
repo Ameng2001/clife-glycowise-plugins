@@ -1,0 +1,64 @@
+# 由 t-20261025-0806 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r55
+q: A-P0045-05 回执，黄伯（P0045）复测 5.1；他刚吃完早饭。
+expect: rejected(C20_危急值须系统自动告警并记录响应)
+tier: 3
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier3#irrelevant_field
+elements:
+- 响应并回执告警
+- C20_危急值须系统自动告警并记录响应
+label:
+  answer: A-P0045-05 在系统里不存在，C20（P47a）按「指名告警不存在即拒」拒成立。
+  source: feedback
+  trace_id: t-20261025-0806
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: A-P0045-05 回执，P0045复测 5.1；他刚吃完早饭。
+  kind: paraphrase
+- q: A-P0045-05 回执，黄伯（P0045）复测 5.1；他刚吃完早饭。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0801
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）晚饭后血糖读数 13.9，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0802
+  action: 放宽告警阈值
+  params:
+    patient_id: P0045
+    field: high_alert_threshold
+    new_value: 16.7
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0803
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0805
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 1
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-05
+    responder: 黄医生
+    action_taken: 患者自述刚吃完早饭，复测血糖 5.1 mmol/L，确认为餐后正常波动，无需额外处置
+    retest_value: 5.1

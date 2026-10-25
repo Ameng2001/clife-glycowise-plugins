@@ -1,0 +1,54 @@
+# 由 t-20261025-0805 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 因果链溯源-r54
+q: A-P0045-02 已经结案的那条，再升一级到高
+expect: action(升级告警)
+tier: 4
+family: 因果链溯源
+origin: real
+observed_at: '2026-10-25'
+source: brief:因果链溯源#tier3#paraphrase
+elements:
+- 升级告警
+- AlertEvent
+label:
+  answer: 口语的前提不成立：A-P0045-02 在演示数据里没有结案记录，当前级别已经是「高」。「再升一级到高」自相矛盾，路由还填了 level=1，按 LEVEL_NUM 是「中」，等于以「升级」的名义写了一条降到中的 AlertEscalation。应先澄清；若确要升级，应写 AlertEscalation，alert_id=A-P0045-02，level=3（危急，即从高再升一级），target=值班医师，进值班医师
+    HIL。
+  source: feedback
+  trace_id: t-20261025-0805
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: A-P0045-02 已经结案的那条，再升一级到高；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0801
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）晚饭后血糖读数 13.9，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0802
+  action: 放宽告警阈值
+  params:
+    patient_id: P0045
+    field: high_alert_threshold
+    new_value: 16.7
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0803
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 1

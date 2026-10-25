@@ -1,0 +1,44 @@
+# 由 t-20261025-0904 + 反馈（correct）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 指标口径-r105
+q: 王叔（P0031）TBR 二级占比超了，转医师评估
+expect: action(转介医师)
+tier: 4
+family: 指标口径
+origin: real
+observed_at: '2026-10-25'
+source: brief:指标口径#tier4
+elements:
+- 转介医师
+label:
+  answer: P0031 TBR 二级占比超标，转医师评估，只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
+  source: feedback
+  trace_id: t-20261025-0904
+  reviewer: Ameng2001
+  feedback_label: correct
+variants:
+- q: P0031TBR 二级占比超了，转医师评估
+  kind: paraphrase
+- q: 王叔（P0031）TBR 二级占比超了，转医师评估；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0901
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0903
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 王叔（P0031）近 14 天 TBR 二级占比超标，需医师评估是否进行去强化或调整治疗方案。

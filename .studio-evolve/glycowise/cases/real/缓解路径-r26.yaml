@@ -1,0 +1,54 @@
+# 由 t-20261025-0905 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 缓解路径-r26
+q: 王叔（P0031）按 s-P0031-7d 判缓解结果；他儿子想知道。
+expect: rejected(R01_数据充分性门槛_仅管结论层)
+tier: 3
+family: 缓解路径
+origin: real
+observed_at: '2026-10-25'
+source: brief:缓解路径#tier3#irrelevant_field
+elements:
+- 判定缓解结果
+- R01_数据充分性门槛_仅管结论层
+label:
+  answer: s-P0031-7d 在演示数据里不存在（王叔只有 14 天汇总）。口语按 7 天报告判缓解，引擎没拒，R01 用了王叔的 14 天汇总，判定进了人审，审核人看到的依据与口语不一致。按口语给的报告，应被 R01 拒（同窗 0921「s-P0066-7d」被 R01 拒）。王叔在用格列美脲 + 二甲双胍，本来就不满足缓解前提。
+  source: feedback
+  trace_id: t-20261025-0905
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: P0031按 s-P0031-7d 判缓解结果；他儿子想知道。
+  kind: paraphrase
+- q: 王叔（P0031）按 s-P0031-7d 判缓解结果；他儿子想知道。；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0901
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0903
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0904
+  action: 转介医师
+  params:
+    patient_id: P0031
+    question_context: 王叔（P0031）近 14 天 TBR 二级占比超标，需医师评估是否进行去强化或调整治疗方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 判定缓解结果
+  params:
+    patient_id: P0031
+    summary_id: s-P0031-7d
+expect_not:
+- R30_缓解适宜人群筛选_ABCD

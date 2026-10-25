@@ -1,0 +1,254 @@
+# 由 t-20261025-0858 + 反馈（wrong）自动落成的真实案例（evolve-attribute 第 1 步产出；外关卡留出集的唯一来源）
+id: 出口签发闸-r57
+q: 黄医生签发 d-P0088-01
+expect: rejected(D12_签发人归属分流)
+tier: 3
+family: 出口签发闸
+origin: real
+observed_at: '2026-10-25'
+source: brief:出口签发闸#tier3#paraphrase
+elements:
+- 签发方案
+- D12_签发人归属分流
+- PlanDraft
+label:
+  answer: d-P0088-01 在演示数据里不存在（李女士没有任何方案草稿），签发动作拿不到草稿内容，handler 照样会写一条 content_snapshot 为空、patient_id 为空的 PlanSigned 进人审。签发对象不存在就该拒，提示核对草稿号，不能生成已签发方案。
+  source: feedback
+  trace_id: t-20261025-0858
+  reviewer: Ameng2001
+  feedback_label: wrong
+variants:
+- q: 黄医生签发 d-P0088-01；家属说他最近睡得还行。
+  kind: irrelevant_field
+setup:
+- trace_id: t-20261025-0801
+  action: 转介医师
+  params:
+    patient_id: P0045
+    question_context: 黄伯（P0045）晚饭后血糖读数 13.9，需医师评估餐后高血糖情况及调整方案。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0802
+  action: 放宽告警阈值
+  params:
+    patient_id: P0045
+    field: high_alert_threshold
+    new_value: 16.7
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0803
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0045-02
+    responder: 黄医生
+    action_taken: 患者复测确认
+    retest_value: 3.8
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0805
+  action: 升级告警
+  params:
+    alert_id: A-P0045-02
+    level: 1
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0812
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 专门克糖；他女婿也有糖尿病。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0813
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 您这个属于需要重点盯的那一类
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0814
+  action: 签发方案
+  params:
+    draft_id: d-P0045-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0815
+  action: 生成产品推荐
+  params:
+    patient_id: P0045
+    sku_id: sku-ynl-01
+    pitch: 它是食品，替不了您的降糖药，药照常吃；他下周复诊。
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0816
+  action: 群内答复患者
+  params:
+    patient_id: P0045
+    message: 您被排在周四上午的太极小组
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0819
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0045
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0823
+  action: 收紧告警阈值
+  params:
+    patient_id: P0031
+    field: night_low
+    trigger_rule: physician_adjustment
+    new_value: 4.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0824
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0031-backfill-01
+    responder: 黄医生
+    action_taken: 已进食
+    retest_value: 4.0
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0830
+  action: 签发方案
+  params:
+    draft_id: d-P0031-01
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0832
+  action: 生成去强化证据工单
+  params:
+    patient_id: P0031
+    window: 14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0835
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 3.5
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0836
+  action: 响应并回执告警
+  params:
+    alert_id: A-P0012-01
+    responder: 黄医生
+    action_taken: 人没事
+    retest_value: 3.9
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0838
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 刚才 16.9，先别去广场跳舞，过一小时再测
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0839
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 您这期的风险评级是黄色
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0840
+  action: 签发方案
+  params:
+    draft_id: d-P0012-02
+    signer_id: 黄医生
+    decision: approved
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0841
+  action: 签发方案
+  params:
+    draft_id: d-P0012-01
+    signer_id: 黄医生
+    decision: 同意执行
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0842
+  action: 群内答复患者
+  params:
+    patient_id: P0012
+    message: 咱们的目标是空腹 7.0 以下，饭后两小时 10 以下
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0843
+  action: 放宽告警阈值
+  params:
+    patient_id: P0012
+    field: night_low
+    new_value: 11
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0847
+  action: 转介医师
+  params:
+    patient_id: P0023
+    question_context: 陈阿姨早饭后血糖 13.9，需医师评估
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0848
+  action: 收紧告警阈值
+  params:
+    patient_id: P0023
+    field: night_low
+    trigger_rule: user_request
+    new_value: 4.4
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0850
+  action: 放宽告警阈值
+  params:
+    patient_id: P0023
+    field: night_low
+    new_value: 3.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0852
+  action: 群内答复患者
+  params:
+    patient_id: P0023
+    message: 按评估您需要最高强度的照护
+    sender_role: 医师
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0855
+  action: 判定缓解结果
+  params:
+    patient_id: P0023
+    summary_id: s-P0023-14d
+  actor_id: u-doctor-01
+  actor_role: 医师
+- trace_id: t-20261025-0857
+  action: 放宽告警阈值
+  params:
+    patient_id: P0088
+    field: night_low
+    new_value: 3.6
+  actor_id: u-doctor-01
+  actor_role: 医师
+route:
+  kind: action
+  confidence: 0.95
+  action: 签发方案
+  params:
+    draft_id: d-P0088-01
+    signer_id: 黄医生
+    decision: 签发
