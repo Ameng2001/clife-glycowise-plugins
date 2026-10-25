@@ -44,3 +44,9 @@
 - **随机对照**：baselines.md 登记 gate-random-matched「每轮接受率匹配三维臂、seeds 3」；formal 执行固定 p = 0.6、seed 0。按登记口径离线重做（`rq1-resample/random_matched.py`）：3 个 seed 平均回退 .092（三维 .022），20 个 seed 全部高于三维。
 - **本体口径**：criteria v3 §3.4 规定回退判定只用本体口径（去掉路由层与 seed 层案例）；formal 只算了全集口径。按登记口径补算（`compute.py --ontology-only`，剔除 114 条）：各臂回退率与全集口径相同。
 - **影响**：三项补算都不改变任何判定（RQ-1 差值恒为 0）。论文按登记口径报告，原实现版本注明来源。
+
+## D-8（2026-10-25 补记，round 8–11 · 修订循环）：REVISE 后没有重试
+
+- **条文**：闸门判定式（v3 起）与 config `max_attempts: 3`——内外关卡任一不过记 REVISE，提案可修订后再提交，三次不过才丢弃。
+- **实际**：formal 80 份 P-A 裁决全部是 attempt 1；19 份 REVISE（8 份成本维、11 份外关卡）都没有第 2、3 次尝试。链上（P-B）同样没有重试。
+- **影响**：不改任何判定（两臂接受集逐份相同，重试对两臂对称）；但「P41a / P45a 两个缺陷留在生产里」的直接原因是没有重试。第 2 次内审（reviewer-methodology W6）发现。
