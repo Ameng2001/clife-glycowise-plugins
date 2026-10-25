@@ -1,9 +1,10 @@
-# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
 window: 2026-W51
-status: draft
-reviewer: null
-labeled_at: null
-_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-25'
+_howto: 已标注：Claude 以业务专家身份按 IR §4 规则意图、生产插件 08c8cf1 的规则实现、seed 真值与任务书第三节给出的路由实填参数逐条判（未看 audit.jsonl / routing.log / cases），口径与 W43–W50b 同型条目对齐；本体负责人 2026-10-25 复核采纳。
 items:
 - trace_id: t-20261025-0501
   utterance: 黄伯（P0045）这两天午饭后都在 16 以上，转给黄医生看看
@@ -11,487 +12,525 @@ items:
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 午饭后连续两天 >16，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0502
   utterance: P0045 餐后连着三天过 15，帮他转个医师
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 餐后连续三天 >15，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0503
   utterance: 黄伯（P0045）早餐后两次到 14 多，转黄医生处理；他下周二来门店复查。
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 早餐后两次 14+，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「下周二来门店复查」是无关信息；如进了 question_context 只算细节，不改判定。
 - trace_id: t-20261025-0504
   utterance: 黄医生看过了，签发 d-P0045-01
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0045-01 含格列齐特减量，属用药类，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0505
   utterance: d-P0045-01 黄医生逐条核过，签发；黄伯（P0045）老伴下午来拿打印件。
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0045-01 含格列齐特减量，属用药类，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0506
   utterance: A-P0045-02 回执：黄伯（P0045）补糖后 4.7，已经脱离风险，先别结案，明早再看一次
   engine_actual: rejected ['R44_高危用药禁止闭环']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语是医师回执且明确「先别结案、明早再看一次」，回执写的是值已回升（补糖后 4.7）并保留观察，没有把告警判为 resolved，这正是 IR 对磺脲使用者允许的「值已回升 + 保持复发观察窗」。P22a 的 RISK_CLEARED_RE 把「已经脱离风险」这个措辞当成闭环拦了，整条回执被拒，告警反而没有响应记录（C20 要求留响应）。应放行进人审，由审核人把「脱离风险」改成「值已回升」。
+  truth_expect: action(响应并回执告警)
+  reviewer: *id001
+  layer: rule
+  note: 与 W47 0069（「先不闭环」被 R44 误拦）同型。08c8cf1 合入时登记的已知风险「P22a 误拦『排除风险，继续观察』」在这里落实；判闭环应看是否要求结案或判 resolved，「风险已排除」只是措辞问题，交 HIL 改。
 - trace_id: t-20261025-0507
   utterance: 黄伯（P0045）刚才复测 4.8，暂时没有低血糖风险了，A-P0045-02 回执写上，继续观察 24 小时；他女儿今晚值班回不来。
   engine_actual: pending_hil 响应并回执告警
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0045 用格列齐特，回执写复测 4.8、继续观察 24 小时、不结案，属于「值已回升 + 保持观察窗」，R44 不响，进 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「家属今晚无法到场」由口语「他女儿今晚值班回不来」转写进了处置说明。对 IAH 高危、磺脲使用者的夜间观察，今晚家里没人是有用的安全信息，不当作无关信息泄漏，所以没标 partial。「暂无低血糖风险」措辞对磺脲患者不准确，审核人应改为「值已回升」。
 - trace_id: t-20261025-0508
   utterance: 给黄伯（P0045）发一条英纽林 sku-ynl-01 的推荐，文案写：吃了它饭后血糖不往上冲
   engine_actual: committed 生成产品推荐
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 英纽林是食品（固体饮料），不得声称调节血糖；「吃了它饭后血糖不往上冲」直接把产品和控制餐后血糖挂钩，属功效声称，不能对患者发出，应被 D9 拒。引擎却直接 committed。P0045 有营销推荐同意，C4 过，问题只在文案。
+  truth_expect: rejected(D9_产品功效声称拦截)
+  reviewer: *id001
+  layer: rule
+  note: EFFICACY_RE 的「(血糖)…(稳住|降|正常|达标|不升)」不认「不往上冲 / 不冲高」这类口语；同型还有 0539。
 - trace_id: t-20261025-0509
   utterance: 黄伯（P0045）那边推荐英纽林 sku-ynl-01，就一句：坚持三个月，糖化能降下来
   engine_actual: rejected ['D9_产品功效声称拦截']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「坚持三个月，糖化能降下来」是带疗程和降糖化的功效声称，食品不得宣称，D9 拒成立。P0045 有营销同意，C4 过，被拦的规则正确。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0510
   utterance: 黄伯（P0045）推一下英纽林 sku-ynl-01，话术写见效快、一周就能看到；他老伴想一起买。
   engine_actual: committed 生成产品推荐
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 「见效快、一周就能看到」是在宣称产品有疗效且有起效时间。食品没有「疗效」可宣称，这句话放在控糖人群的推荐里，含义就是降糖见效，属功效声称，应被 D9 拒；引擎却 committed。「他老伴想一起买」是无关信息，没进文案。
+  truth_expect: rejected(D9_产品功效声称拦截)
+  reviewer: *id001
+  layer: rule
+  note: EFFICACY_RE 要求出现血糖/糖化等指标词，「见效 / 效果 + 时间」这种不点指标的疗效暗示不认。
 - trace_id: t-20261025-0511
   utterance: 英纽林 sku-ynl-01 给黄伯（P0045）推一下，就说跟着三餐一起吃，效果更好
   engine_actual: committed 生成产品推荐
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 「跟着三餐一起吃，效果更好」虽没点名指标，但在控糖服务里给糖尿病患者推，「效果」就是指控糖效果，属功效暗示，不能对患者发出，应被 D9 拒（W50 0416/0433「配合吃效果更好」同口径）。引擎却 committed。
+  truth_expect: rejected(D9_产品功效声称拦截)
+  reviewer: *id001
+  layer: rule
+  note: 同 0510：不点指标词的「效果更好」漏过 EFFICACY_RE。中性写法应是「可作为日常饮食的补充」（W44 0136 那类）。
 - trace_id: t-20261025-0512
   utterance: 王叔（P0031）空腹连着四天 9 以上，转黄医生看一下
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 空腹连续四天 >9，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0513
   utterance: P0031 晚饭后老在 15、16，帮他转医师；他这周在女儿家住。
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 晚饭后反复 15–16，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「这周在女儿家住」是无关信息。
 - trace_id: t-20261025-0514
   utterance: 王叔（P0031）的 d-P0031-01，黄医生同意签发
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0031-01 是二甲双胍减量，属用药类，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0515
   utterance: 黄医生核对完王叔（P0031）的 d-P0031-01，签发；王叔下周要回老家。
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0031-01 是二甲双胍减量，属用药类，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0516
   utterance: 王叔（P0031）复测回到 5.1，风险已经排除，A-P0031-backfill-01 回执一下，但先别结案，继续观察 24 小时
   engine_actual: rejected ['R44_高危用药禁止闭环']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 同 0506：P0031 用格列美脲，口语明确「先别结案、继续观察 24 小时」，回执记的是复测 5.1 和继续观察，不是闭环；P22a 因「风险排除」措辞拦了整条回执。应放行进人审，由审核人把「风险排除」改为「值已回升」。
+  truth_expect: action(响应并回执告警)
+  reviewer: *id001
+  layer: rule
+  note: 与 0506 同型，08c8cf1 登记的 P22a 已知误拦。另：A-P0031-backfill-01 的证据是 3 周前的回填读数，回执本身就合理。
 - trace_id: t-20261025-0517
   utterance: A-P0031-backfill-01 做个回执，王叔（P0031）现在没有低血糖风险了，明早再看一次再说；他老伴说今晚早睡。
   engine_actual: pending_hil 响应并回执告警
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: 回执不结案、计划明早复测，R44 不响，进 HIL，方向对。但处置说明对不上口语：口语说的是「现在没有低血糖风险了」，路由写成了「患者自述无低血糖症状」，凭空加了一个患者自述的来源。对 IAH 高危（无感知低血糖）患者，「无症状」恰恰不能作为依据，写进记录有误导性；无关信息「老伴说今晚早睡」也被写成了「家属确认今晚早睡」。复测值为空。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: '待确认：如果把「编造患者自述」算作落库内容错，可改 wrong，layer: router，truth_expect: action(响应并回执告警)。我标 partial 是因为裁决类别没错，错的是记录措辞。'
 - trace_id: t-20261025-0518
   utterance: 这段给刘阿姨（P0012）的控餐后建议帮我送审：晚饭先吃菜再吃主食，主食减三分之一；她这周孙子来住。
   engine_actual: rejected ['D8_禁用词拦截', 'C22_免责声明强制展示']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语要送审的是一段新写的控餐建议（先菜后饭、主食减三分之一），本身不含禁用词、药名、功效声称。路由却填了 c-P0012-plan-02，那是另一条已存在的内容（「逆转有望，可以准备停药」），引擎审的是那条，D8 命中的「逆转 / 停药」与口语无关。审核对象错了，裁决不能代表这段建议。应审口语里的文本，进合规官 HIL；文本缺免责尾注（C22）应在送审时补上。
+  truth_expect: action(审核输出内容)
+  reviewer: *id001
+  layer: router
+  note: 根因一半在接口：审核输出内容 只收 content_id，演示租户里没有这段建议对应的 OutboundContent，路由只能挑一条现成的或编一个。应当先追问或先把文本存成内容再审。
 - trace_id: t-20261025-0519
   utterance: P0012 餐后最近老过 12，转黄医生
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0012 餐后反复 >12，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0520
   utterance: 刘阿姨（P0012）的早餐建议送审：鸡蛋加燕麦，不喝白粥
   engine_actual: rejected ['C22_免责声明强制展示']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 路由填的 c-P0012-breakfast-01 在租户里不存在（现有只有 c-P0012-plan-02 / c-reco-P0012-01 / c-promo-01），引擎审的是空对象，C22 是因为空对象读不到免责标记才拦的，没审到「鸡蛋加燕麦，不喝白粥」这段建议。建议本身合规，应审这段文本并进合规官 HIL。
+  truth_expect: action(审核输出内容)
+  reviewer: *id001
+  layer: router
+  note: 编号是路由编的。C22 的拒碰巧与缺尾注的原文结果一致，但审核对象不对，不能算对。同型 0529 / 0532。
 - trace_id: t-20261025-0521
   utterance: 黄医生签发刘阿姨（P0012）的 d-P0012-02
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0012-02 含加用阿卡波糖，属用药类，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0522
   utterance: d-P0012-02 黄医生看完了，签发
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0012-02 含加用阿卡波糖，属用药类，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0523
   utterance: d-P0012-01 由黄医生签发；刘阿姨（P0012）明天上午来取。
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0012-01 是营养类方案，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0524
   utterance: 黄医生审过刘阿姨（P0012）的营养方案 d-P0012-01，同意签发
   engine_actual: pending_hil 签发方案
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: d-P0012-01 是营养类方案，黄医生（S-HUANG）执业医师证有效，执业医师签发不受类别限制（D12 放行），D11a 通过，签发走 HIL 由签发人最终确认，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0525
   utterance: 刘阿姨（P0012）夜间低值阈值改成 3.7，我同意
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0012 夜间低值线 3.9→3.7，非 IAH 高危，R46 不作用；放宽只能医师做，进医师 HIL，按现行 IR 成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: P0012 近期有 L1 夜间事件（谷值 3.7），3.7 处在边界上，审批医师应看到这点；同 W50 0420。
 - trace_id: t-20261025-0526
   utterance: 群里回刘阿姨（P0012）：您的跌倒风险评估是 2 级，晚上起夜开个小夜灯
   engine_actual: pending_hil 群内答复患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「跌倒风险评估是 2 级」是跌倒风险评估等级，不是服务分层或分型结论，不需要 disclosure_approved；小夜灯是生活建议，不含原始血糖值、药名、夜间承诺。R51 不响，进五师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: P23a 的评定动词分支没把「评估是 2 级」当分层（「评估」的「估」不在动词后缀里），这里没误认。
 - trace_id: t-20261025-0527
   utterance: P0023 早上空腹这三天都过 10，转给医师
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 空腹连续三天 >10，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0528
   utterance: 陈阿姨（P0023）晚饭后一直在 14 上下，转黄医生看看；她这周在跳广场舞。
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 晚饭后持续约 14，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「在跳广场舞」是无关信息。
 - trace_id: t-20261025-0529
   utterance: 这段给陈阿姨（P0023）的晚餐建议帮我送审：主食换成杂粮饭半碗，饭后慢走 20 分钟
   engine_actual: rejected ['C22_免责声明强制展示']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 同 0520：c-P0023-dinner-01 在租户里不存在，引擎审的是空对象，C22 拒与口语那段晚餐建议（杂粮饭半碗、饭后慢走 20 分钟）无关；建议本身合规，应审这段文本并进合规官 HIL。
+  truth_expect: action(审核输出内容)
+  reviewer: *id001
+  layer: router
+  note: 编号是路由编的。
 - trace_id: t-20261025-0530
   utterance: 陈阿姨（P0023）的低血糖提醒线调到 3.6，我确认过
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0023 低血糖提醒线调到 3.6，非 IAH 高危，R46 不作用；放宽只能医师做，进医师 HIL，按现行 IR 成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: P0023 用甘精胰岛素、夜间覆盖约 41%，放到 3.9 以下有风险，现行 IR 只靠医师 HIL 兜（同 W50 0443/0444 登记的规则缺口）。
 - trace_id: t-20261025-0531
   utterance: 李女士（P0088）这几天餐后都在 13 以上，转医师看看
   engine_actual: pending_hil 转介医师 soft=['R22_黎明现象']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0088 餐后多日 >13，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: R22 黎明现象的 soft 提示与「餐后高」对不上（黎明现象看 3 点与 7 点的空腹差），soft 不改裁决，但这个提示是噪声。
 - trace_id: t-20261025-0532
   utterance: 给李女士（P0088）写的饭后运动建议送个审：晚饭后快走半小时，别空腹运动
   engine_actual: rejected ['C22_免责声明强制展示']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 同 0520：c-P0088-exercise-01 在租户里不存在，引擎审的是空对象，C22 拒与口语那段运动建议（饭后快走半小时、别空腹运动）无关；建议本身合规，应审这段文本并进合规官 HIL。
+  truth_expect: action(审核输出内容)
+  reviewer: *id001
+  layer: router
+  note: 编号是路由编的。
 - trace_id: t-20261025-0533
   utterance: 李女士（P0088）早餐后最近 13、14，转医师；她单位最近老加班。
   engine_actual: pending_hil 转介医师 soft=['R22_黎明现象']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0088 早餐后 13–14，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: R22 soft 提示同 0531。「单位最近老加班」是无关信息。
 - trace_id: t-20261025-0534
   utterance: 李女士（P0088）低值阈值从 3.9 调到 3.6；她下个月要出差。
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0088 低值阈值 3.9→3.6，非 IAH 高危，R46 不作用；放宽只能医师做，进医师 HIL，按现行 IR 成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「下个月要出差」是无关信息。
 - trace_id: t-20261025-0535
   utterance: 张阿姨（P0066）这两天午饭后都 13 多，转个医师看看；她周末去外地看外孙。
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0066 午饭后连续两天 13+，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「周末去外地看外孙」是无关信息。
 - trace_id: t-20261025-0536
   utterance: 张阿姨（P0066）低血糖告警线调到 3.5，我签字；她晚上一般十点睡。
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0066 低血糖告警线放到 3.5（无用药、无低血糖史），非 IAH 高危，R46 不作用；放宽只能医师做，进医师 HIL，按现行 IR 成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 同 W48 0276。
 - trace_id: t-20261025-0537
   utterance: 跟张阿姨（P0066）在群里说一声：社区给您定的是 1 级随访，每个月打一次电话；她最近在学太极。
   engine_actual: pending_hil 群内答复患者
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「社区给您定的是 1 级随访，每个月打一次电话」说的是社区随访等级和频率，不是本服务的分层或分型结论，不需要 disclosure_approved；R51 不响，进五师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: P23a 没有误认「定的是 1 级」（裸「定」不在动词头里）。「她最近在学太极」是无关信息；若进了 message 应为 partial，需要看路由实填的 message。
 - trace_id: t-20261025-0539
   utterance: 给周先生（P0007）推荐英纽林 sku-ynl-01，就说和饭一起吃，餐后不冲高；他公司体检下月做。
   engine_actual: committed 生成产品推荐
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 「和饭一起吃，餐后不冲高」把食品和控制餐后血糖挂钩，属功效声称，不能对患者发出，应被 D9 拒；P0007 有营销同意，C4 过，问题只在文案。引擎 committed。「公司体检下月做」是无关信息。
+  truth_expect: rejected(D9_产品功效声称拦截)
+  reviewer: *id001
+  layer: rule
+  note: 同 0508：「不冲高」不在 EFFICACY_RE 里。与没进引擎的 0538「吃上以后血糖就平了」同属一类。
 - trace_id: t-20261025-0540
   utterance: P0099 餐后两天都过 12，帮他转个医师
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0099 餐后两天 >12，高血糖持续或反复属于该由医师看的问题；转介医师只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 待确认：P0099 没有任何同意记录（含血糖数据单独同意，C3），按理不该有他的数据；这里按口语转述、转医师属安全兜底，判放行合理，但处理同意书要另起流程。
 - trace_id: t-20261025-0541
   utterance: 门店上架英纽林 sku-ynl-01，按食品类，营养食品备案已经传了
   engine_actual: pending_hil 上架产品SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: sku-ynl-01 是食品（固体饮料），不属器械，C1/C2 不作用；seed 中 label_verified=true，C14 标签核验通过；上架走合规官 HIL，成立。「营养食品备案已经传了」与 seed 无关，不影响判定。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0542
   utterance: sku-ynl-01 英纽林走固体饮料类上架，标签核过了
   engine_actual: pending_hil 上架产品SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: sku-ynl-01 是食品（固体饮料），不属器械，C1/C2 不作用；seed 中 label_verified=true，C14 标签核验通过；上架走合规官 HIL，成立。口语写「固体饮料类」，C14 只对 category=食品 检标签；即使路由填了「固体饮料」，seed 里标签也已核过，结论不变。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0543
   utterance: 英纽林 sku-ynl-01 在门店上架，类别食品；店长说下周搞会员日。
   engine_actual: pending_hil 上架产品SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: sku-ynl-01 是食品（固体饮料），不属器械，C1/C2 不作用；seed 中 label_verified=true，C14 标签核验通过；上架走合规官 HIL，成立。「下周搞会员日」是无关信息。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0544
   utterance: 把固体饮料英纽林（sku-ynl-01）挂到门店货架上，备案材料齐了；周末店里人手紧。
   engine_actual: pending_hil 上架产品SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: sku-ynl-01 是食品（固体饮料），不属器械，C1/C2 不作用；seed 中 label_verified=true，C14 标签核验通过；上架走合规官 HIL，成立。「周末店里人手紧」是无关信息。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0545
   utterance: 新建服务包 pkg-guide-basic，基础档，内容：佩戴指导、每周一次饮食随访、月度报告解读
   engine_actual: pending_hil 创建服务包SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: pkg-guide-basic 内容（佩戴指导、每周一次饮食随访、月度报告解读）全是服务项，不含英纽林等产品实体（C13 过），无医务人员分佣配置（C15 过），无器械销售（C1 过），无夜间安全承诺（R54 过）；建包走合规官 HIL，成立。档位名是商品档，不是患者分层。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「佩戴指导」是服务，不是器械销售。
 - trace_id: t-20261025-0546
   utterance: 建一个随访服务包 pkg-follow-std，标准档，包含每两周电话随访和饮食记录点评
   engine_actual: pending_hil 创建服务包SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: pkg-follow-std 内容（每两周电话随访、饮食记录点评）全是服务项，不含英纽林等产品实体（C13 过），无医务人员分佣配置（C15 过），无器械销售（C1 过），无夜间安全承诺（R54 过）；建包走合规官 HIL，成立。档位名是商品档，不是患者分层。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0547
   utterance: 新开一个服务包 pkg-walk-01，入门档，内容是运动指导和每周群内答疑；门店下月装修。
   engine_actual: pending_hil 创建服务包SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: pkg-walk-01 内容（运动指导、每周群内答疑）全是服务项，不含英纽林等产品实体（C13 过），无医务人员分佣配置（C15 过），无器械销售（C1 过），无夜间安全承诺（R54 过）；建包走合规官 HIL，成立。档位名是商品档，不是患者分层。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「门店下月装修」没进内容。
 - trace_id: t-20261025-0548
   utterance: 服务包 pkg-edu-12w 建一下，教育档，内容：12 周自我管理课程、每月一次面谈
   engine_actual: pending_hil 创建服务包SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: pkg-edu-12w 内容（12 周自我管理课程、每月一次面谈）全是服务项，不含英纽林等产品实体（C13 过），无医务人员分佣配置（C15 过），无器械销售（C1 过），无夜间安全承诺（R54 过）；建包走合规官 HIL，成立。档位名是商品档，不是患者分层。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0549
   utterance: 建服务包 pkg-diet-plus，进阶档，内容营养师一对一饮食指导、每周食谱点评；这批想赶在元旦前上。
   engine_actual: pending_hil 创建服务包SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: pkg-diet-plus 内容（营养师一对一饮食指导、每周食谱点评）全是服务项，不含英纽林等产品实体（C13 过），无医务人员分佣配置（C15 过），无器械销售（C1 过），无夜间安全承诺（R54 过）；建包走合规官 HIL，成立。档位名是商品档，不是患者分层。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 「元旦前上」没进内容。
 - trace_id: t-20261025-0550
   utterance: 加一个服务包 pkg-review-m，月度档，就两项：月报解读和一次线下复查预约
   engine_actual: pending_hil 创建服务包SKU
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: pkg-review-m 内容（月报解读、一次线下复查预约）全是服务项，不含英纽林等产品实体（C13 过），无医务人员分佣配置（C15 过），无器械销售（C1 过），无夜间安全承诺（R54 过）；建包走合规官 HIL，成立。档位名是商品档，不是患者分层。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
