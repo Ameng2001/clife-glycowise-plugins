@@ -351,6 +351,12 @@ W51 48 条的层：tier4 37、tier3 11。
 - **B · 效果承诺 3 句**：0618「血糖曲线会变平」committed，0617 / 0671 没进引擎。
 - **B · 普通介绍 3 句**：全部 committed（0619 / 0620 / 0672）。
 
+## ①-15 W52 落案例与 round 9 check-pool
+
+业务侧标注回传（e42674c：72 条 reviewed，correct 56 / wrong 15 = router 9 / seed 4 / rule 2 / partial 1），`check_feedback.py` 通过。分层三文件 sha256 与 v5 头注一致；`make_real_cases.py --window 2026-W52` 新增 71（partial 0656 不落）→ **real 池 495**（tier1 19 / tier3 32 / tier4 20）；`holdout_sample.py --round 9 --holdout-size 100 … --check-pool > checkpool/r9.txt`：28 层，并层后 3 个 rest 层各 2 条不足 8——产品与机构合规（×1：0677 / 0678）、指标口径（×4：0613 / 0655）、数据与同意合规（×1：0627 / 0674），都是 W52 第一次在该族开出的 tier 格子。formal 已开，按 `../formal-runbook.md` 记 HOLDOUT_THIN、不回退，由论文小组记账。案例与 `checkpool/r9.txt` 同一次提交（ac446a7，14:18:42）。
+
+定向 12 句落池 9：A 结案 2（R44 拒，correct）、A 再看看 3（进人审，correct）、B 效果承诺 1（0618 wrong，应被 D9 拒）、B 普通介绍 3（correct）。交回 `../handoff-round9b.W52.md`。
+
 ## ③ 数据源：`config.yaml` 的 `sources` 段
 
 完整样例见 `config.sources.yaml`（postgres 55 个对象、clickhouse 7 个对象；密码走 `${GLYCOWISE_PG_RO_PASSWORD}` / `${GLYCOWISE_CH_RO_PASSWORD}`；每个 store 带 `probe.limit: 20` 与超时；文末有 psql / clickhouse-client 连通性自检命令）。evolve-ground 对 IR §6 每一行跑 `SELECT … LIMIT 20` 取样写进 §8；要求只读账号、假名化视图、能从跑管线的机器直连。主机名目前是占位，业务侧开通账号后替换。
@@ -360,7 +366,7 @@ W51 48 条的层：tier4 37、tier3 11。
 | 阶段 | 数量 | 现状 |
 |---|---|---|
 | 最小可开工（验证接法） | 一个窗口 20 条有反馈轨迹，含 ≥3 条 wrong | W43：35 条真实轨迹已就位，等业务侧标 |
-| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **424**（W43–W50b 376 + W51 48，2026-10-25）；round 8 `--check-pool`（holdout-size 100，并层 8，override）25 层**全部 ≥ 8，前置通过**，输出 `../checkpool/r8.txt`（8128cb5），见 ①-13 |
+| 正式 run 门槛 | 累计 ≥200 条有反馈轨迹，8 个分层各 ≥16 | real 池 **495**（2026-10-25，W52 后）；formal 起点 s = 8；round 9 `--check-pool` 28 层、3 个新开 rest 层各 2 条（HOLDOUT_THIN，不回退），输出 `../checkpool/r9.txt`（ac446a7），见 ①-15 |
 | 全程 | 15 轮 × 3 seed，≥900 条有反馈轨迹 | 约 26 个真实窗口 |
 
 没反馈的轨迹可以多收，但不参与归因。
