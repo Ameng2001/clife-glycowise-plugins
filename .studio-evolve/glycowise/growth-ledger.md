@@ -69,6 +69,7 @@
 
 | round | file | size | strata | thin |
 |-------|------|------|--------|------|
+| 10 | holdout-10.yaml | 100 | 29 | no |
 | 9 | holdout-9.yaml | 100 | 28 | no |
 | 8 | holdout-8.yaml | 100 | 25 | no |
 | 7 | holdout-7.yaml | 40 | 25 | no |
@@ -87,3 +88,5 @@
 
 
 | 9 | 2026-W52 | 46 / 47 | 1 | P29a / P29b1（1d 链）P-A **APPLY_FAIL**：1d 链 D9 段与 h₉ 分叉，补丁打不上，不进分母（v5 (i)） |
+| 2026-10-25 | round 10 | **HOLDOUT_THIN**：checkpool/r10.txt（23f52c3）并层后 4 个 rest 层不足 8（W52 留下 3 层各 2 条；缓解路径 rest 1 条为 W53 新开），s 不回退、照常判定 | 2026-10-25 | h₁₀ = 生产 @ 57a8b67 |
+
