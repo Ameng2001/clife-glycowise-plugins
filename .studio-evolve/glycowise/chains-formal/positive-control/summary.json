@@ -1,0 +1,488 @@
+[
+ {
+  "class": "i",
+  "base": "P42a",
+  "round": 10,
+  "construction": {
+   "t3_to_fail": [
+    "产品与机构合规-r04",
+    "产品与机构合规-r09"
+   ],
+   "t1_to_pass": [
+    "低血糖安全-r33",
+    "低血糖安全-r36"
+   ]
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "3d-noT": [
+    "ACCEPT",
+    []
+   ],
+   "3d-noS": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "3d-noW": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "ACCEPT",
+    []
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "ACCEPT",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "i",
+  "base": "P43a",
+  "round": 10,
+  "construction": {
+   "t3_to_fail": [
+    "产品与机构合规-r04",
+    "产品与机构合规-r09"
+   ],
+   "t1_to_pass": [
+    "低血糖安全-r33",
+    "低血糖安全-r36"
+   ]
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "3d-noT": [
+    "ACCEPT",
+    []
+   ],
+   "3d-noS": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "3d-noW": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "ACCEPT",
+    []
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "ACCEPT",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "i",
+  "base": "P44a",
+  "round": 10,
+  "construction": {
+   "t3_to_fail": [
+    "产品与机构合规-r04",
+    "产品与机构合规-r09"
+   ],
+   "t1_to_pass": [
+    "低血糖安全-r33",
+    "低血糖安全-r36"
+   ]
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "3d-noT": [
+    "ACCEPT",
+    []
+   ],
+   "3d-noS": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "3d-noW": [
+    "REVISE",
+    [
+     "T"
+    ]
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "ACCEPT",
+    []
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "ACCEPT",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "ii",
+  "base": "P42a",
+  "round": 10,
+  "construction": {
+   "family_dropped": "指标口径",
+   "to_fail": [
+    "指标口径-r03",
+    "指标口径-r84",
+    "指标口径-r85",
+    "指标口径-r92"
+   ],
+   "compensate_to_pass": [
+    "指标口径-r14",
+    "指标口径-r77",
+    "数据与同意合规-r02",
+    "因果链溯源-r35"
+   ]
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noT": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noS": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noW": [
+    "ACCEPT",
+    []
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "ACCEPT",
+    []
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "ACCEPT",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "ii",
+  "base": "P43a",
+  "round": 10,
+  "construction": {
+   "family_dropped": "指标口径",
+   "to_fail": [
+    "指标口径-r03",
+    "指标口径-r84",
+    "指标口径-r85",
+    "指标口径-r92"
+   ],
+   "compensate_to_pass": [
+    "指标口径-r14",
+    "指标口径-r77",
+    "数据与同意合规-r02",
+    "因果链溯源-r35"
+   ]
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noT": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noS": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noW": [
+    "ACCEPT",
+    []
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "ACCEPT",
+    []
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "ACCEPT",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "ii",
+  "base": "P44a",
+  "round": 10,
+  "construction": {
+   "family_dropped": "指标口径",
+   "to_fail": [
+    "指标口径-r03",
+    "指标口径-r84",
+    "指标口径-r85",
+    "指标口径-r92"
+   ],
+   "compensate_to_pass": [
+    "指标口径-r14",
+    "指标口径-r77",
+    "数据与同意合规-r02",
+    "因果链溯源-r35"
+   ]
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noT": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noS": [
+    "REVISE",
+    [
+     "W"
+    ]
+   ],
+   "3d-noW": [
+    "ACCEPT",
+    []
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "ACCEPT",
+    []
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "ACCEPT",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "iii",
+  "base": "P52a",
+  "round": 11,
+  "construction": {
+   "steps_minus": 1
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    []
+   ],
+   "3d-noT": [
+    "REVISE",
+    []
+   ],
+   "3d-noS": [
+    "REVISE",
+    []
+   ],
+   "3d-noW": [
+    "REVISE",
+    []
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "REVISE",
+    [
+     "A"
+    ]
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "ACCEPT",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "iii",
+  "base": "P53a",
+  "round": 11,
+  "construction": {
+   "steps_minus": 1
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    []
+   ],
+   "3d-noT": [
+    "REVISE",
+    []
+   ],
+   "3d-noS": [
+    "REVISE",
+    []
+   ],
+   "3d-noW": [
+    "REVISE",
+    []
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "REVISE",
+    [
+     "A"
+    ]
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "REVISE",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ },
+ {
+  "class": "iii",
+  "base": "P54a",
+  "round": 11,
+  "construction": {
+   "steps_minus": 1
+  },
+  "decisions": {
+   "3d": [
+    "REVISE",
+    []
+   ],
+   "3d-noT": [
+    "REVISE",
+    []
+   ],
+   "3d-noS": [
+    "REVISE",
+    []
+   ],
+   "3d-noW": [
+    "REVISE",
+    []
+   ],
+   "1d": [
+    "ACCEPT",
+    []
+   ],
+   "1d-strict": [
+    "REVISE",
+    [
+     "A"
+    ]
+   ],
+   "none": [
+    "ACCEPT",
+    []
+   ],
+   "random": [
+    "REVISE",
+    []
+   ]
+  },
+  "expected_3d_reject_1d_accept": true
+ }
+]

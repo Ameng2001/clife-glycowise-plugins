@@ -1,0 +1,90 @@
+{
+  "ontology_id": "glycowise",
+  "proposal": "9008",
+  "attempt": 1,
+  "round": 11,
+  "gate_mode": "3d",
+  "delta": null,
+  "accept_rate": null,
+  "seed": null,
+  "beta": 0.05,
+  "max_attempts": 3,
+  "panel": "SINGLE_BACKBONE",
+  "inner": {
+    "deltas": {
+      "flags": [
+        "W_PARTIAL",
+        "W_EVID_UNAVAILABLE"
+      ],
+      "dT": {
+        "T_3": 0.0
+      },
+      "dS": 0.0,
+      "dW": {
+        "W_family": 0.0
+      },
+      "dA": 0.0,
+      "dC": -1.0,
+      "C_base": 2.0
+    },
+    "judge": {
+      "growOK": true,
+      "costOK": true,
+      "strict": false,
+      "pass": false,
+      "reasons": [
+        "无严格改善（T / S / W 无一项 > 0；v2 起 ΔC<0 不算）"
+      ],
+      "triggered": [],
+      "band": 1.0
+    },
+    "n": 4,
+    "origins": {
+      "real": 4
+    }
+  },
+  "outer": [
+    {
+      "backbone": "default",
+      "deltas": {
+        "flags": [
+          "W_PARTIAL",
+          "W_EVID_UNAVAILABLE"
+        ],
+        "dT": {
+          "T_1": 0.0,
+          "T_3": 0.0,
+          "T_4": 0.0
+        },
+        "dS": 0.0,
+        "S_holdout_cand": 1.0,
+        "S_full_base": 1.0,
+        "S_full_cand": 1.0,
+        "S_min_component": "S_consist",
+        "dW": {
+          "W_family": 0.0
+        },
+        "dA": 0.0,
+        "dC": 0.0,
+        "C_base": 2.83
+      },
+      "judge": {
+        "growOK": true,
+        "costOK": true,
+        "strict": true,
+        "pass": true,
+        "reasons": [],
+        "triggered": [],
+        "band": 1.0
+      },
+      "n": 100
+    }
+  ],
+  "inner_pass": false,
+  "outer_pass": true,
+  "decision": "REVISE",
+  "triggered": [],
+  "exec": "AUTO",
+  "script_hash": "sha256:2d1e57d8b2ed7bef0ff9f5c483e38fdb2d6f1462bea9b4406f521251813c9595",
+  "report": "提案 9008（第 1/3 次）· 本体 glycowise · 沙箱 — · gate_mode=3d\n来源案例 Dᵢ：4 条（real 4 / sim 0)    留出集 B：100 条（real，29 层，round 11）\n内关卡 g_in：\n  ΔT = (—, —, +0.00, —)   ΔS_consist = 0.000   ΔW = (—, +0.000)   ΔC_tok = -1.000（带宽 1.000）   ΔA = +0.000\n  growOK ✓  costOK ✓  strict ✗  → FAIL   原因：无严格改善（T / S / W 无一项 > 0；v2 起 ΔC<0 不算）   flags=['W_PARTIAL', 'W_EVID_UNAVAILABLE']\n外关卡 g_out（骨干 default）：\n  ΔT = (+0.00, —, +0.00, +0.00)   ΔS = 0.000（min 分量 = S_consist）   ΔW = (—, +0.000)   ΔC_tok = 0.000   ΔA = +0.000\n  growOK ✓  costOK ✓  → PASS   flags=['W_PARTIAL', 'W_EVID_UNAVAILABLE']\n裁决：REVISE（退回归因，触发维度：—）\n执行方式：AUTO（sha256:2d1e57d8b2ed…）· SINGLE_BACKBONE"
+}
