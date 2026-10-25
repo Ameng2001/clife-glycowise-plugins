@@ -1,0 +1,5 @@
+formal 起点 s = 8（criteria v5 (a′)）
+判定依据：checkpool/r8.txt（提交 8128cb5，2026-10-25 11:43:56 +0800，早于 round 8 任何归因文件）——池 424 ≥ 200，25 层，并层后不足 8 的层 0 个。
+跑前核对（论文组复核 2026-10-25）：sets/family-override.yaml sha256:8a5a9e3a…，holdout_sample.py sha256:30688119…，_common.py sha256:a8a75d46…，与 v5 头注一致；归因模板 protocol/attribution-prompt.v1.md sha256:b600b281…。
+formal 轮次：round 8–11。AS_OF（round 8）= 2026-10-25。
+RQ-2 基准 h_s = h₈ = 生产 plugins/glycowise @ 08c8cf1（h₇ + P22a + P23a），复制到 chains-formal/ancestor-s/。round 7 的 1d 演练链（chains-r7/1d）自此不再使用。

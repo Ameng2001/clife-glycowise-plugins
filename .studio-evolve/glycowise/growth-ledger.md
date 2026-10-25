@@ -55,9 +55,17 @@
 
 | round | file | size | strata | thin |
 |-------|------|------|--------|------|
+| 8 | holdout-8.yaml | 100 | 25 | no |
 | 7 | holdout-7.yaml | 40 | 25 | no |
 | 6 | holdout-6.yaml | 40 | 25 | no |
 | 5 | holdout-5.yaml | 40 | 20 | no |
 | 4 | holdout-4.yaml | 40 | 20 | no |
 | 3 | holdout-3.yaml | 40 | 20 | no |
 | 2 | holdout-2.yaml | 20 | 16 | no |
+
+## formal 起点
+
+| 判定 | s | 依据 | AS_OF | h_s |
+|---|---|---|---|---|
+| 2026-10-25 | **8** | checkpool/r8.txt（8128cb5 11:43:56，早于归因）：池 424，25 层全 ≥ 8 | 2026-10-25 | 生产 @ 08c8cf1（h₇ + P22a + P23a）|
+
