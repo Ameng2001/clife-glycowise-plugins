@@ -3386,6 +3386,9 @@ def 放宽告警阈值(ctx) -> None:
         ParamSpec("trigger_rule", "string", required=True),
         ParamSpec("new_value", "number", required=False),
     ),
+    # P46a（W53 / 0705）：R46「IAH 高危低值阈值 ≥4.4」是人群对阈值本身的不变式，不随写阈值的动作而变；此前只挂在 配置患者告警与静音策略 / 放宽告警阈值，
+    # 收紧告警阈值 写同一张 AlertThreshold 却不查——handler 以默认 3.9 为起点把 4.3 判成「收紧」直接落库。补挂为 guard。
+    guards=("R46_IAH高危阈值上调且禁止静音",),
     post_rules=("R27_运动后延迟低血糖", "R34_HAAF_24小时复发窗"),
     writes=("AlertThreshold", "ThresholdChangeLog"),
     validate_supported=True,
@@ -3910,6 +3913,7 @@ def 发布宣传素材(ctx) -> None:
         "C6_群内数据最小可见范围",
         "R54_服务话术不得含夜间安全承诺",
         "R55_显示口径_没有数据不得说成没有异常",
+        "R24b_运动前极高值一律不宜运动",  # P49a（W53 / 0733）：群内给出的运动建议就是「运动前」判断的出口
     ),
     writes=("OutboundContent", "DeliveryReceipt"),
     validate_supported=True,
