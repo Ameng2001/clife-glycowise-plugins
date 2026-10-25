@@ -1,9 +1,11 @@
-# 待标注清单（status: draft）——引擎真实裁决已列出，label 全部为空，等业务侧填写。draft 状态不得进 evolve-attribute。
 window: 2026-W54b
-status: draft
-reviewer: null
-labeled_at: null
-_howto: 业务侧逐条填 label（correct/partial/wrong）、truth（一句真实答案或真实根因）；wrong 还要 truth_expect；reviewer 写自己的 id/role；全部填完把 status 改成 reviewed。suggested 只是机器比对 CQ 期望的参考，不是标签。
+status: reviewed
+reviewer: &id001
+  id: Ameng2001
+  role: 本体负责人
+labeled_at: '2026-10-25'
+_howto: 已标注：Claude 以业务专家身份按 IR §4 规则意图、生产 h₁₁（ae0e174）的规则与 handler 实现、seed 真值（按录制日 2026-10-25 核对）与任务书附录的路由实填参数逐条判（未看 audit.jsonl / routing.log / cases），口径与 W43–W53 同型条目对齐；wrong 且期望为 action 的条目在 truth 写明落库对象与字段值，拿不准的条目在
+  note 写「待确认：倾向 X，原因 …」。本体负责人 2026-10-25 复核采纳。
 items:
 - trace_id: t-20261025-0901
   utterance: 黄伯（P0045）近两周低于 3.9 的时间超标，开一张去强化工单；他孙子下周回来。
@@ -11,157 +13,168 @@ items:
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 黄伯 14 天 TBR 2.0% 超老年上限 1%，出去强化证据工单交医师接单，进 HIL，成立。「孙子下周回来」没进参数。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0903
   utterance: 按王叔（P0031）近 14 天的 TBR 和低血糖次数，出一份去强化工单给医生
   engine_actual: pending_hil 生成去强化证据工单
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 王叔 14 天 TBR 4.7%、L2 事件多，去强化证据工单交医师，进 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0904
   utterance: 王叔（P0031）TBR 二级占比超了，转医师评估
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0031 TBR 二级占比超标，转医师评估，只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 去强化证据工单（0903）与转医师都合适。
 - trace_id: t-20261025-0905
   utterance: 王叔（P0031）按 s-P0031-7d 判缓解结果；他儿子想知道。
   engine_actual: pending_hil 判定缓解结果 soft=['R30_缓解适宜人群筛选_ABCD']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: s-P0031-7d 在演示数据里不存在（王叔只有 14 天汇总）。口语按 7 天报告判缓解，引擎没拒，R01 用了王叔的 14 天汇总，判定进了人审，审核人看到的依据与口语不一致。按口语给的报告，应被 R01 拒（同窗 0921「s-P0066-7d」被 R01 拒）。王叔在用格列美脲 + 二甲双胍，本来就不满足缓解前提。
+  truth_expect: rejected(R01_数据充分性门槛_仅管结论层)
+  reviewer: *id001
+  layer: rule
+  note: R01 取窗口指标时不看传入的 summary_id，直接按患者回退到已有汇总。「儿子想知道」是无关信息。
 - trace_id: t-20261025-0906
   utterance: 在王叔（P0031）群里说：您这病逆转有戏
   engine_actual: rejected ['D8_禁用词拦截']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「逆转」是禁用词，D8 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0907
   utterance: 刘阿姨（P0012）目标区间上限放到 10.5，交黄医生确认
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
-  truth_expect: null
-  reviewer: null
+  label: wrong
+  truth: 口语是把刘阿姨目标区间上限放到 10.5、交黄医生确认。路由填 field=night_low、new_value=10.5，等于把夜间低值告警线设成 10.5。应写 AlertThreshold，field=range_high，current_value=10.5，ThresholdChangeLog before=10、after=10.5，进医师 HIL。
+  truth_expect: action(放宽告警阈值)
+  reviewer: *id001
+  layer: router
+  note: 与 W54 0843 同型（目标区间上限被填成 night_low）。
 - trace_id: t-20261025-0908
   utterance: 刘阿姨（P0012）的 GMI 和化验糖化对不上，转黄医生看看
   engine_actual: pending_hil 转介医师
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0012 GMI 与化验糖化对不上，转医师评估，只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: seed 里刘阿姨没有 HbA1c 化验（只有 P0007 有），口语前提无法核实，转医师核对正合适。
 - trace_id: t-20261025-0910
   utterance: 陈阿姨（P0023）目标区间上限放宽到 11，黄医生确认；她说老是超标心里慌。
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 陈阿姨目标区间上限放宽到 11，口语要黄医生确认，路由填 field=range_high、new_value=11，参数对得上，进医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 老年 + 胰岛素患者放宽上限可以减少过度治疗，由医师决定；「老是超标心里慌」不是临床理由。ThresholdChangeLog before 会记成默认 3.9。act_tighten / act_loosen 找不到阈值行时一律用 3.9 作默认起点（W53 0706 / 0750 已立案，h₁₁ 未修）；seed 也没有各患者的高值 / 目标区间行。
 - trace_id: t-20261025-0911
   utterance: 陈阿姨（P0023）14 天 TBR 偏高，出去强化证据工单
   engine_actual: pending_hil 生成去强化证据工单
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 陈阿姨用甘精胰岛素、夜间覆盖 40%，命中 R50（夜间低覆盖 + 高危用药进临床队列），出去强化证据工单交医师，进 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 口语说「14 天 TBR 偏高」不准确：s-P0023-14d 的 TBR 是 0.7%，没超老年上限 1%；依据实际是夜间低覆盖导致 TBR 被低估（同 W52 0655）。
 - trace_id: t-20261025-0914
   utterance: 李女士（P0088）的达标上限从 10 调宽到 11.1
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: partial
+  truth: 李女士达标上限从 10 调宽到 11.1，field=range_high、new_value=11.1，进医师 HIL，方向对。但 seed 没有她的 range_high 行，ThresholdChangeLog 的 before 会记成默认 3.9，与口语的 10 对不上。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: 同 W53 0779 口径（改动记录起点错判 partial）。act_tighten / act_loosen 找不到阈值行时一律用 3.9 作默认起点（W53 0706 / 0750 已立案，h₁₁ 未修）；seed 也没有各患者的高值 / 目标区间行。
 - trace_id: t-20261025-0915
   utterance: 李女士（P0088）CV 一直在 40% 上下，转医师看一下；她公司在忙年终。
   engine_actual: pending_hil 转介医师 soft=['R22_黎明现象']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: P0088 CV 持续约 40%，转医师评估，只生成转介记录、不含用药建议（D10 不响），走医师 HIL，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: R22 黎明现象 soft 是噪声提示。「公司忙年终」被写进 question_context 并解读为临床混杂因素，对医师评估有参考价值，不算泄漏。
 - trace_id: t-20261025-0916
   utterance: 按 s-P0088-6d 判一下李女士（P0088）有没有达到缓解
   engine_actual: rejected ['R01_数据充分性门槛_仅管结论层']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: s-P0088-6d 只有 6 天，R01 禁出缓解结论，拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0917
   utterance: 李女士（P0088）用这 6 天的报告 s-P0088-6d 出缓解判定
   engine_actual: rejected ['R01_数据充分性门槛_仅管结论层']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 同 0916，R01 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0921
   utterance: 张阿姨（P0066）的缓解结果按 s-P0066-7d 判
   engine_actual: rejected ['R01_数据充分性门槛_仅管结论层']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: s-P0066-7d 不存在，张阿姨也没有任何读数，没有窗口指标，R01 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0922
   utterance: 群里回张阿姨（P0066）：您这情况已经在逆转了
   engine_actual: rejected ['D8_禁用词拦截']
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 「逆转」是禁用词，D8 拒成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
 - trace_id: t-20261025-0923
   utterance: 周先生（P0007）高值线往上放到 11，按他现在的指标来
   engine_actual: pending_hil 放宽告警阈值
   cq_expect: null
   suggested: null
   suggested_why: 无 CQ 期望
-  label: null
-  truth: null
+  label: correct
+  truth: 周先生无降糖药、非高危，高值线放到 11 走医师 HIL，参数与口语一致，成立。
   truth_expect: null
-  reviewer: null
+  reviewer: *id001
+  note: ThresholdChangeLog before 会记成默认 3.9。act_tighten / act_loosen 找不到阈值行时一律用 3.9 作默认起点（W53 0706 / 0750 已立案，h₁₁ 未修）；seed 也没有各患者的高值 / 目标区间行。
