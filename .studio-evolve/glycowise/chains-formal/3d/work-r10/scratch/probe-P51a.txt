@@ -1,0 +1,30 @@
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"可以和早餐一起冲着喝"}
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"每天一包，当早餐搭配"}
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"您是二级管理，配着吃"}
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"饭后半小时冲一包"}
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"空腹别喝，饭后再冲"}
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"喝了以后餐后不容易冲到 10 以上"}
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"别自行停药，它只是加餐"}
+COMMIT [] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"养护胰腺，慢慢就好"}
+REJECT ['D9_产品功效声称拦截'] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"取代不了药，血糖还按医生的方案来"}
+REJECT ['D9_产品功效声称拦截'] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"血糖低的时候别喝，先补糖"}
+REJECT ['D9_产品功效声称拦截'] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"每天一包，血糖曲线会变平"}
+REJECT ['D9_产品功效声称拦截'] | 生成产品推荐 {"patient_id":"P0045","sku_id":"sku-ynl-01","pitch":"血糖高的时候喝它能压下来"}
+COMMIT [] | 创建服务包SKU {"sku_id":"pkg-x1","tier":"基础档","contents":["晚上睡前测一次血糖，第二天健管师看报告"]}
+COMMIT [] | 创建服务包SKU {"sku_id":"pkg-x2","tier":"基础档","contents":["夜里也有护士盯着曲线"]}
+COMMIT [] | 创建服务包SKU {"sku_id":"pkg-x3","tier":"基础档","contents":["白天专人看着数据，工作时间回复"]}
+COMMIT [] | 群内答复患者 {"patient_id":"P0012","message":"您在第二组团课，周三上午","sender_role":"健管师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0012","message":"您这周在运动小组里打卡最积极","sender_role":"健管师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0012","message":"今天的饮食您做得很好","sender_role":"健管师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0012","message":"按评估您属于需要重点关注的那组","sender_role":"医师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0031","message":"王叔，您现在血糖偏高，先别运动，复测后联系医生","sender_role":"医师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0031","message":"饭后可以散步 20 分钟","sender_role":"健管师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0031","message":"血糖低于 3.9 时请先补 15 克糖","sender_role":"健管师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0031","message":"空腹目标控制在 7.0 以下","sender_role":"健管师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0031","message":"HbA1c 6.5% 是参考线，具体看医生","sender_role":"健管师"}
+COMMIT [] | 群内答复患者 {"patient_id":"P0031","message":"您现在血糖 18.2，快走半小时降一降","sender_role":"医师"}
+COMMIT [] | 触发低血糖处置 {"patient_id":"P0012","reading_id":"r-P0012-00330","rule_id":"R05_即将低血糖预测告警"}
+COMMIT [] | 触发低血糖处置 {"patient_id":"P0012","reading_id":"r-P0012-00330","rule_id":"R11_严重高血糖"}
+COMMIT [] | 响应并回执告警 {"alert_id":"A-P0012-01","responder":"黄医生","action_taken":"已电话随访","retest_value":5.2}
+COMMIT [] | 生成方案草稿 {"patient_id":"P0088","analysis_result":{"summary_id":"s-P0088-6d"},"direction":"维持"}
+REJECT ['低血糖优先抢占', 'R14_TAR_L1超标'] | 生成方案草稿 {"patient_id":"P0012","analysis_result":{"summary_id":"s-P0012-14d"},"direction":"强化"}

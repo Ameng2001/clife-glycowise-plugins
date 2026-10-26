@@ -1,0 +1,5 @@
+["群内答复患者", {"patient_id": "P0007", "message": "恭喜，您的糖尿病已经缓解", "sender_role": "医师"}]
+["群内答复患者", {"patient_id": "P0012", "message": "按目前进度，下个月有望进入缓解状态", "sender_role": "医师"}]
+["群内答复患者", {"patient_id": "P0012", "message": "头晕缓解了吗？", "sender_role": "医师"}]
+["群内答复患者", {"patient_id": "P0007", "message": "缓解的结果下周面诊时医生当面跟您说", "sender_role": "医师"}]
+["群内答复患者", {"patient_id": "P0012", "message": "症状已经缓解就好，继续观察", "sender_role": "医师"}]

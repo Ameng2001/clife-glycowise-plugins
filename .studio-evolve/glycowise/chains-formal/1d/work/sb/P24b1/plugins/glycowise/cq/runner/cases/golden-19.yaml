@@ -1,0 +1,16 @@
+id: golden-19
+q: 让陈营养师把 P0012 的方案草稿 d-P0012-01 签了
+expect: rejected(D11a_签发人资质失效自动冻结)
+tier: 3
+family: golden
+origin: sim
+observed_at: '2026-10-23'
+elements: []
+label:
+  answer: rejected(D11a_签发人资质失效自动冻结)
+  source: simulate
+variants:
+- kind: original
+  q: 营养师的注册证上个月过期了，让她把这份方案签了
+- kind: with_fact
+  q: 陈营养师的注册证上个月过期了，让她把 P0012 的方案草稿 d-P0012-01 签了

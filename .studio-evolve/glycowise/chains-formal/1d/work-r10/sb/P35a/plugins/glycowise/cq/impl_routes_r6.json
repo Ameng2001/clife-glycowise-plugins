@@ -1,0 +1,137 @@
+{
+ "给周先生（P0007）把缓解时钟的 Day0 确认在 2026 年 7 月 28 日": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0007",
+   "day0": "2026-07-28"
+  }
+ },
+ "P0007 的缓解时钟 Day0 定 2026-07-28，医师确认。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0007",
+   "day0": "2026-07-28"
+  }
+ },
+ "给周先生（P0007）把缓解时钟的 Day0 确认在 2026 年 7 月 28 日，他说那天刚好是生日。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0007",
+   "day0": "2026-07-28"
+  }
+ },
+ "张阿姨（P0066）停药满期了，医师确认缓解时钟 Day0 为 2026 年 10 月 1 日，启动缓解观察": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0066",
+   "day0": "2026-10-01"
+  }
+ },
+ "P0066 缓解时钟 Day0 = 2026-10-01，启动。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0066",
+   "day0": "2026-10-01"
+  }
+ },
+ "张阿姨（P0066）停药满期了，医师确认缓解时钟 Day0 为 2026 年 10 月 1 日，启动缓解观察；她女儿陪着来的。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0066",
+   "day0": "2026-10-01"
+  }
+ },
+ "医师给刘阿姨（P0012）确认缓解时钟 Day0 为 2026 年 9 月 15 日": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0012",
+   "day0": "2026-09-15"
+  }
+ },
+ "P0012 的缓解时钟 Day0 确认为 2026-09-15。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0012",
+   "day0": "2026-09-15"
+  }
+ },
+ "医师给刘阿姨（P0012）确认缓解时钟 Day0 为 2026 年 9 月 15 日；她问要不要换个传感器。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "确认缓解时钟Day0",
+  "params": {
+   "patient_id": "P0012",
+   "day0": "2026-09-15"
+  }
+ },
+ "黄伯（P0045）凌晨那条告警 A-P0045-02 对应的读数被厂商标为传感器压迫伪差撤回了，撤销这条告警并发更正说明": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "撤销更正已发出告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "reason": "厂商将对应读数标为传感器压迫伪差并撤回"
+  }
+ },
+ "A-P0045-02 的读数被撤回了，撤销告警并更正。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "撤销更正已发出告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "reason": "厂商将对应读数标为传感器压迫伪差并撤回"
+  }
+ },
+ "黄伯（P0045）凌晨那条告警 A-P0045-02 对应的读数被厂商标为传感器压迫伪差撤回了，撤销这条告警并发更正说明；他女儿早上打电话来问过。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "撤销更正已发出告警",
+  "params": {
+   "alert_id": "A-P0045-02",
+   "reason": "厂商将对应读数标为传感器压迫伪差并撤回"
+  }
+ },
+ "王叔（P0031）那条回填告警 A-P0031-backfill-01 的读数核对下来是错误批次、已更正，撤销告警并发更正说明": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "撤销更正已发出告警",
+  "params": {
+   "alert_id": "A-P0031-backfill-01",
+   "reason": "回填批次读数经核对为错误批次，已更正"
+  }
+ },
+ "A-P0031-backfill-01 读数更正了，撤销这条回填告警。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "撤销更正已发出告警",
+  "params": {
+   "alert_id": "A-P0031-backfill-01",
+   "reason": "回填批次读数经核对为错误批次，已更正"
+  }
+ },
+ "王叔（P0031）那条回填告警 A-P0031-backfill-01 的读数核对下来是错误批次、已更正，撤销告警并发更正说明；他下周去儿子家住。": {
+  "kind": "action",
+  "confidence": 0.95,
+  "action": "撤销更正已发出告警",
+  "params": {
+   "alert_id": "A-P0031-backfill-01",
+   "reason": "回填批次读数经核对为错误批次，已更正"
+  }
+ }
+}

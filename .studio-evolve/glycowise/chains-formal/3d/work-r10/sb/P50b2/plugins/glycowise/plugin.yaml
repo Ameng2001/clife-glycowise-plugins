@@ -1,0 +1,140 @@
+# 控糖场景本体插件清单（plugin.yaml）
+#
+# 这是哪一类插件（本仓库有两类，别混）：
+#   kind: onto-engine —— clife-onto-engine 的 Python 本体插件，由 /studio-ontology:compile 从五要素 IR
+#     编译而来，在引擎仓库内被加载，填满 Object/Link/Function/Rule/Action/Mapping/CQ 七个 SPI 槽位。
+#   另一类是 glycowise-compliance/ 等四个 studio 的 Claude Code 技能插件（skill-map 的产物，尚未生成），
+#     它们是 skill/agent 包，不是本体插件，与本目录不共享代码、不互相 import。
+#
+# schema(槽位1)/function·rule·action(槽位3/4)/CQ(槽位7) 用 Python 声明（__init__.py，本清单不重复）；
+# mappings(槽位2) 由 __init__.py 末尾的 spi.load_mappings 自行加载；
+# 此处补齐声明式的槽位 5（术语表）/ 6（复核角色）。加载：spi.load_manifest(此文件)。
+
+plugin: glycowise
+ontology: glycowise          # 引擎 load_manifest 硬读此键，不可写成 ontology_id
+version: 0.1.1
+engine_compat: ">=0.1.0"
+kind: onto-engine
+bounded_context: 控糖服务（CGM 数据摄入 → 指标 → 临床规则 → 方案签发 → 履约与缓解判定）
+
+generated_by: studio-ontology
+generated_at: 2026-09-05
+source_ir: studio/changes/glycowise/ontology-map.md
+
+# ---------------------------------------------------------------------------
+# 槽位 5 · 术语表：规范用词 + 别名，喂给意图编译器让 LLM 用规范键。
+# 本领域的术语陷阱特别多，且多数不是拼写问题而是**语义混淆**——混了会出临床事故或合规事故。
+# ---------------------------------------------------------------------------
+glossary:
+  - term: TIR
+    aliases: [目标范围内时间, time_in_range, 达标时间, 血糖达标率]
+    definition: 葡萄糖在 3.9–10.0 mmol/L 的时间占比。一般成人目标 >70%，老年/高危 >50%（ATTD 2019；中国老年糖尿病诊疗指南 2024）
+
+  - term: TBR
+    aliases: [低于范围时间, time_below_range, 低血糖时间]
+    definition: 低于 3.9 mmol/L 的时间占比。一般成人 <4%，老年 <1%。**夜间数据缺口会让此值被系统性低估**
+
+  - term: TAR
+    aliases: [高于范围时间, time_above_range]
+    definition: 高于 10.0（L1）或 13.9（L2）mmol/L 的时间占比
+
+  - term: GMI
+    aliases: [葡萄糖管理指标, glucose_management_indicator, 估算糖化]
+    definition: 由平均葡萄糖推算的糖化血红蛋白当量。**不等于实测 HbA1c**，两者差 ≥0.5% 时以实测为准
+
+  - term: 实时告警
+    aliases: [低血糖告警, realtime_alert]
+    definition: 连续 2 个读数低于阈值即触发，叠加斜率外推的预测性告警。**绝不可用回顾统计的"持续 ≥15 分钟"作触发条件**——那会人为延后一刻钟（见 R03a/R04a）
+
+  - term: 回顾事件统计
+    aliases: [低血糖事件计数, hypo_episode, 事件次数]
+    definition: 低于阈值**持续 ≥15 分钟**才计一次（Danne 2017），用于事后统计、防压迫伪差。**只用于统计，不用于实时触发**（见 R03b/R04b）
+
+  - term: 数据充分性门槛
+    aliases: [R01, 14天70%, active_pct门槛]
+    definition: 14 天佩戴 + ≥70% 有效数据。**只关闭达标/分层/缓解这一类结论输出，不关安全告警**——做成全局闸会静音佩戴早期的夜间低血糖
+
+  - term: 夜间覆盖率
+    aliases: [nocturnal_coverage_pct, 夜间有效率]
+    definition: 夜间时段有效读数占比。低于 70% 时 TBR 与低血糖次数是**下限而非实际值**，此时禁止生成加强降糖方向的方案草稿
+
+  - term: 缓解
+    aliases: [remission, 糖尿病缓解]
+    definition: 停用降糖药 ≥3 个月后 HbA1c<6.5%（ADA 2021；中国专家共识 2021）。**只在医师面诊语境按共识严格定义使用，不得用于广告**
+
+  - term: 逆转
+    aliases: [治愈, 根治, 停药]
+    definition: ⛔ **对外禁用词**。共识明确不再使用"逆转/治愈"。任何输出命中此词应被合规闸拦截（见 D8–D11、C13）
+
+  - term: 紧急告警
+    aliases: [红色预警, 高危告警]
+    definition: 本场景对严重低血糖等事件的统一称呼。**刻意不用"危急值"**——那是检验医学术语，带法定台账与时限义务
+
+  - term: 服务分层
+    aliases: [分型, 分级, L0L1L2L3L4]
+    definition: 由 CGM 指标推导的**内部服务分层标签**。CGM 不能用于诊断，此标签默认不可披露患者，披露须医师授权
+
+  - term: 没有数据
+    aliases: [数据缺口, 未同步, data_gap]
+    definition: 未采集到读数。**在老人端、子女端、健管师队列三处都不得与"没有异常"呈现为同一形态**（最高优先级显示规则，见 R55）
+
+  - term: 固体饮料
+    aliases: [医学营养产品, MNT产品, 营养干预品]
+    definition: 普通食品。**不得宣称降血糖、修复胰腺、逆转糖尿病，不得称"MNT 医学营养治疗"**；服务与产品须在合同、收款、话术、AI 输出上物理分离
+
+  - term: 传感器读数序号
+    aliases: [sensor_reading_seq, 读数序号]
+    definition: 去重键的唯一合法锚点。**不得改用厂商记录 ID 或按分钟取整的墙钟时间**——事后重算历史会让 GMI 基线断、缓解判定前后对比失效（不可逆，见 R48）
+
+# ---------------------------------------------------------------------------
+# 槽位 6 · 复核角色（HIL）：谁复核哪个动作。此前只散在各 Action 的 HilPolicy 里，此处声明式化。
+# ---------------------------------------------------------------------------
+agents:
+  - role: 医师
+    reviews: [签发方案, 输出服务分层标签, 转介医师, 生成去强化证据工单, 判定缓解, 调整用药方案]
+    description: 承担全部临床与法律责任。凡涉及疾病判断、用药加减停、分层结论对外披露、缓解判定，必须由其签发。AI 只出草稿（互联网诊疗监管细则第 21 条）
+
+  - role: 注册营养师
+    reviews: [签发方案]
+    description: 膳食营养类方案的签发人，分级授权中承接非用药类，为医师分流
+
+  - role: 运动康复师
+    reviews: [签发方案]
+    description: 运动处方类方案的签发人
+
+  - role: 药师
+    reviews: [维护用药清单, 转介医师]
+    description: 用药清单核对与新鲜度维护。用药清单是所有用药相关规则分支的共同前提
+
+  - role: 合规官
+    reviews: [发布宣传素材, 生成产品推荐, 创建服务包SKU, 上架产品SKU, 建立厂商云通道对接, 处理数据主体权利请求, 撤回同意, 维护凭证台账]
+    description: 红线复核。覆盖广告法/食品安全法功效声称、服务与产品分离、器械经营资质、PIPL 权利响应与资质台账变更
+
+  - role: 店长
+    reviews: [兑现结果承诺]
+    description: 与医师联合确认。结果承诺涉及广告法「不得保证治愈或承诺有效率」的边界
+
+  - role: 患者本人
+    reviews: [签署单独同意书]
+    description: PIPL 敏感个人信息须本人逐项勾选并电子签名，七项范围不得合并；**子女不得代患者同意**
+
+# ---------------------------------------------------------------------------
+counts:
+  objects: 62
+  links: 40
+  functions: 28
+  rules: 92          # declarative 30 / function-backed 62
+  actions: 63
+  mappings: 62
+  cq: 28
+
+fde_todo:
+  function_backed_rules: 62      # 规则函数体待填
+  action_handlers: 63            # Action 回写逻辑待填
+  rules_missing_source: 7        # source 标 TODO(FDE) 补依据
+  seed_reference_data: 1
+
+# 治理约定（与引擎 okf.py 语义一致，已核实）：
+#   source    —— 权威出处（指南条目 / 法条条款号）。export_okf 以此为「依据」渲染；gaps.py 也查此字段。
+#   citations —— 内部可追溯性（本项目分析产物路径）。为补充信息，不作权威依据。
+# 因此 91 条 citations 指向内部文档不构成 OKF 导出缺陷。

@@ -1,0 +1,15 @@
+expect: action(响应并回执告警)
+family: probe
+id: p25-05
+origin: probe
+q: probe p25-05
+route:
+  action: 响应并回执告警
+  confidence: 1.0
+  kind: action
+  params:
+    action_taken: 复测 4.9，风险已消除，今晚睡前再测一次
+    alert_id: A-P0045-02
+    responder: 黄医生
+    retest_value: 4.6
+tier: 0

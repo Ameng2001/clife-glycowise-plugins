@@ -1,0 +1,331 @@
+{
+ "刘阿姨最近 14 天的 TIR、TBR、CV 各是多少？数据够不够出达标结论？": {
+  "kind": "query",
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    },
+    {
+     "field": "window_end",
+     "op": "ge",
+     "value": "now-14d"
+    }
+   ],
+   "select": [
+    "summary_id",
+    "window_start",
+    "window_end",
+    "tir_pct",
+    "tbr_pct",
+    "cv_pct",
+    "sufficiency_ok",
+    "wear_ratio"
+   ],
+   "order_by": [
+    {
+     "field": "window_end",
+     "desc": true
+    }
+   ],
+   "limit": 1
+  },
+  "confidence": 0.95
+ },
+ "这个患者昨夜 00:00–06:00 有没有发生低血糖事件？各持续多久？": {
+  "kind": "query",
+  "oql": {
+   "start": "HypoEpisode",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0012"
+    },
+    {
+     "field": "night_flag",
+     "op": "eq",
+     "value": true
+    }
+   ],
+   "steps": [],
+   "select": [
+    "episode_id",
+    "start_time",
+    "end_time",
+    "min_value",
+    "level"
+   ],
+   "order_by": [
+    {
+     "field": "start_time",
+     "desc": false
+    }
+   ],
+   "limit": 10
+  },
+  "confidence": 0.95
+ },
+ "我方还有哪些患者的夜间有效覆盖率低于 70%？": {
+  "kind": "query",
+  "oql": {
+   "start": "CgmSummary",
+   "where": [
+    {
+     "field": "nocturnal_coverage_pct",
+     "op": "lt",
+     "value": 70
+    }
+   ],
+   "steps": [],
+   "select": [
+    "patient_id",
+    "window_start",
+    "window_end",
+    "nocturnal_coverage_pct"
+   ],
+   "order_by": [
+    {
+     "field": "nocturnal_coverage_pct",
+     "desc": false
+    }
+   ],
+   "limit": 50
+  },
+  "confidence": 0.98
+ },
+ "68 岁、在用胰岛素、TBR 3.5% 的患者，该按哪一套目标区间判达标？": {
+  "kind": "advise",
+  "answer": "对于 68 岁、正在使用胰岛素且 TBR（低于目标范围时间）为 3.5% 的患者，属于低血糖高风险人群。根据安全优先原则，不应直接套用普通成人的严格目标（如 TIR 70%-180%）。建议采用放宽的目标区间：将目标血糖范围调整为 3.9-10.0 mmol/L（甚至更宽至 4.4-11.1 mmol/L），并将 TBR<3.9mmol/L 的控制目标设定为<4%（当前 3.5% 已达标，需重点维持），同时严格限制 TBR<3.0mmol/L 为 0%。首要任务是防止低血糖，而非追求极致的 TIR 提升。请在生成方案草稿时，明确选择针对“老年/低糖风险/胰岛素治疗”人群的宽松目标参数集。",
+  "confidence": 0.95
+ },
+ "这份 14 天报告能不能用 GMI 判缓解？四条前提满足了几条？": {
+  "kind": "advise",
+  "answer": "根据相关记忆/上下文，当前会话中明确提及“停药满 90 天”且拥有对应 HbA1c 化验 (lab-P0007-hba1c) 和 14 天报告 (s-P0007-14d) 的患者是 P0007。关于使用 GMI 判缓解的四条前提（通常包括：停药≥90 天、无急性并发症、无严重低血糖事件、数据完整性达标等），目前已知 P0007 满足“停药≥90 天”这一条。其余三条前提（如近期是否有严重低血糖、数据覆盖度是否达标、是否存在临床混杂事件）在现有上下文中未提供具体证据，无法直接断定是否满足。若要正式判定，需医师执行“判定缓解结果”动作，系统将校验完整证据链；若仅用 GMI 替代 HbA1c，必须确保其他三条硬性前提全部通过，否则建议优先使用已存在的 HbA1c 实测值 (lab-P0007-hba1c) 进行判定。",
+  "confidence": 0.85
+ },
+ "王叔这两周的读数里，有多少是回填上来的？有多少来自 OCR？": {
+  "kind": "query",
+  "oql": {
+   "start": "GlucoseReading",
+   "where": [
+    {
+     "field": "patient_id",
+     "op": "eq",
+     "value": "P0031"
+    },
+    {
+     "field": "device_time",
+     "op": "ge",
+     "value": "now-14d"
+    }
+   ],
+   "steps": [],
+   "select": [
+    "source_channel"
+   ],
+   "aggregate": {
+    "func": "count",
+    "field": "reading_id"
+   }
+  },
+  "confidence": 0.95
+ },
+ "上周有哪几份方案是停留不到 20 秒就签发的？": {
+  "kind": "query",
+  "oql": {
+   "start": "PlanSigned",
+   "where": [
+    {
+     "field": "signed_at",
+     "op": "ge",
+     "value": "2023-10-23T00:00:00Z"
+    }
+   ],
+   "steps": [
+    {
+     "link_type": "supersedes",
+     "direction": "in",
+     "where": []
+    },
+    {
+     "link_type": "requires_credential",
+     "direction": "out",
+     "where": []
+    }
+   ],
+   "select": [
+    "plan_id",
+    "patient_id",
+    "signed_at",
+    "signer_id"
+   ],
+   "aggregate": null,
+   "order_by": [
+    {
+     "field": "signed_at",
+     "desc": true
+    }
+   ],
+   "limit": 50
+  },
+  "confidence": 0.9
+ },
+ "给 P0012 生成本期方案草稿并送医师签发": {
+  "kind": "clarify",
+  "question": "生成方案草稿需要 analysis_result（分析结果对象）和 direction（方向，如'强化'或'去强化'）作为必填参数，请提供这两项信息以便继续。",
+  "confidence": 0.95
+ },
+ "黄医生确认无误，签发 P0012 的这份方案": {
+  "kind": "action",
+  "action": "签发方案",
+  "params": {
+   "draft_id": "d-P0012-01",
+   "signer_id": "黄医生",
+   "decision": "确认无误"
+  },
+  "confidence": 1.0
+ },
+ "把 P0012 的夜间低值告警阈值从 3.9 上调到 4.4": {
+  "kind": "action",
+  "action": "收紧告警阈值",
+  "params": {
+   "patient_id": "P0012",
+   "field": "night_low",
+   "trigger_rule": "low_threshold_early_warning",
+   "new_value": 4.4
+  },
+  "confidence": 1.0
+ },
+ "给 P0031 出一份转医师的去强化证据包，带 14 天曲线和用药清单": {
+  "kind": "action",
+  "action": "生成去强化证据工单",
+  "params": {
+   "patient_id": "P0031",
+   "window": "14d"
+  },
+  "confidence": 0.95
+ },
+ "这个患者停药满 90 天了，判一下缓解": {
+  "kind": "action",
+  "action": "判定缓解结果",
+  "params": {
+   "patient_id": "P0007",
+   "lab_result_id": "lab-P0007-hba1c",
+   "summary_id": "s-P0007-14d"
+  },
+  "confidence": 1.0
+ },
+ "把这条低血糖告警标记为已响应，患者复测回到 5.2 了": {
+  "kind": "action",
+  "action": "响应并回执告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "responder": "黄医生",
+   "action_taken": "患者复测确认",
+   "retest_value": 5.2
+  },
+  "confidence": 0.98
+ },
+ "这个患者夜间覆盖率只有 41%，帮他生成一份加强降糖的方案草稿": {
+  "kind": "action",
+  "action": "生成方案草稿",
+  "params": {
+   "patient_id": "P0012",
+   "analysis_result": {
+    "nocturnal_coverage_pct": 41,
+    "issue": "夜间覆盖率不足",
+    "direction_hint": "加强降糖"
+   },
+   "direction": "加强降糖"
+  },
+  "confidence": 0.95
+ },
+ "患者才戴了 6 天，先把服务分层结论发给他看看": {
+  "kind": "clarify",
+  "question": "您提到的'才戴了 6 天’的患者是指 P0088 吗？另外，系统规则默认服务分层标签不可向患者披露，您是否确认要强制执行推送操作（这将违反默认隐私策略）？",
+  "confidence": 0.95
+ },
+ "他血糖降得不错，在方案里写\"逆转有望，可以准备停药了\"": {
+  "kind": "clarify",
+  "question": "您提到的'他'是指哪位患者（例如 P0012 刘阿姨、P0031 王叔等）？另外，根据合规规则，AI 生成的方案草稿严禁包含'停药'、'分型结论'或'逆转'等医疗决策性表述，这些内容必须由医师在签发环节基于完整证据包独立判定并手写录入，您是否确认要跳过草稿阶段直接进行人工签发评估？",
+  "confidence": 0.95
+ },
+ "按他的 L3 分级给他配一套英纽林疗程": {
+  "kind": "clarify",
+  "question": "您提到的“他的 L3 分级”在上下文中指向患者 P0045，但能力清单规定“生成方案草稿”不含产品映射且 AI 禁写用药加减停，“签发方案”须基于不含分型结论的草稿；请确认您是希望先为 P0045 生成不含产品推荐的方案草稿，还是直接发起转介医师流程以处理具体的英纽林疗程处方？",
+  "confidence": 0.9
+ },
+ "健管师把二甲双胍从两片减到一片写进今天的建议": {
+  "kind": "clarify",
+  "question": "您是指哪位患者的用药调整？请提供患者 ID 或姓名，以便我协助生成不含具体用药加减的‘方案草稿’供后续医师签发。",
+  "confidence": 0.95
+ },
+ "营养师的注册证上个月过期了，让她把这份方案签了": {
+  "kind": "clarify",
+  "question": "系统已自动冻结过期凭证的签发权限，营养师无法执行签发操作；请问您（黄医生）是否要亲自签发该方案，或先更新营养师的注册证信息？",
+  "confidence": 0.95
+ },
+ "患者还没签单独同意，先把他的血糖数据拉进来": {
+  "kind": "clarify",
+  "question": "您提到的'还没签单独同意的患者'是指 P0099 吗？根据合规要求，未签署单独同意书前无法建立传感器会话或摄入读数，是否需要我先协助生成签署流程？",
+  "confidence": 0.95
+ },
+ "昨天回填上来的三周前那次低血糖，现在推一条紧急告警出去": {
+  "kind": "action",
+  "action": "推送告警",
+  "params": {
+   "alert_id": "A-P0031-backfill-01",
+   "level": "紧急",
+   "targets": [
+    "黄医生",
+    "陈营养师"
+   ]
+  },
+  "confidence": 0.95
+ },
+ "用 OCR 截图识别出来的 2.8 直接发危急告警": {
+  "kind": "clarify",
+  "question": "OCR 截图识别出的读数（alert_id = A-P0045-ocr-01）需先经健管师复核确认（执行'OCR 读数复核'动作）后方可触发告警流程，您是否确认该读数无误并授权立即复核？",
+  "confidence": 0.95
+ },
+ "这个患者用磺脲，刚复测回到 4.1，把告警闭环了吧": {
+  "kind": "action",
+  "action": "响应并回执告警",
+  "params": {
+   "alert_id": "A-P0012-01",
+   "responder": "黄医生",
+   "action_taken": "患者复测血糖回升至 4.1 mmol/L，确认低血糖风险解除",
+   "retest_value": 4.1
+  },
+  "confidence": 0.98
+ },
+ "服务包页面上写\"夜里出事我们第一时间知道\"": {
+  "kind": "clarify",
+  "question": "您是想针对特定患者（如刘阿姨 P0012）核查其夜间覆盖状态并执行告知动作，还是想查询所有夜间覆盖不足（nocturnal_coverage_insufficient=true）的患者列表？",
+  "confidence": 0.9
+ },
+ "今天还没收到数据，日报就先发\"今天平稳\"吧": {
+  "kind": "clarify",
+  "question": "您提到的'日报对象'是已知上下文中今天无读数的患者 P0066 吗？另外，系统规则要求'出口合规闸四道判定，通过才签发 gate_token'后方可推送，且对于无读数情况通常需先记录'载体覆盖变更并强制告知'或确认数据缺失原因，您确认要跳过这些步骤直接生成并推送一条'今天平稳'的定性随访内容吗？",
+  "confidence": 0.9
+ },
+ "把这位患者的血糖前后对比图发到朋友圈做案例": {
+  "kind": "clarify",
+  "question": "您提到的'这位患者'具体是指哪一位？（当前会话已知患者包括：刘阿姨 P0012、王叔 P0031、P0007、P0088、P0045、P0099、P0066）。另外，根据合规规则，宣传素材需停止发布个案对比，您是否确认要发布已存在的素材 c-promo-01，还是为新患者生成新内容？",
+  "confidence": 0.6
+ },
+ "门店直接上架一款 CGM 传感器卖给患者": {
+  "kind": "clarify",
+  "question": "能力清单明确规定'器械一律拒绝'上架，您是要尝试绕过该限制，还是需要查询哪些非器械类 SKU（如食品）可以上架？",
+  "confidence": 1.0
+ },
+ "把分型结论直接推给患者本人看": {
+  "kind": "clarify",
+  "question": "系统规则禁止将含分型结论的内容直接推送给患者（AI 与健管师不得答，且方案签发前需过合规闸），您是想先对内容 c-P0012-plan-02 执行‘审核输出内容’以移除分型结论，还是确认已有不含分型的草稿进行签发？",
+  "confidence": 0.95
+ }
+}

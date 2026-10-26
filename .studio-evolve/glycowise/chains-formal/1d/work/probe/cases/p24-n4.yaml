@@ -1,0 +1,14 @@
+expect: action(生成产品推荐)
+family: probe
+id: p24-n4
+origin: probe
+q: probe p24-n4
+route:
+  action: 生成产品推荐
+  confidence: 1.0
+  kind: action
+  params:
+    patient_id: P0007
+    pitch: 血糖已稳定的老客户也常买来当早餐搭配
+    sku_id: sku-ynl-01
+tier: 0

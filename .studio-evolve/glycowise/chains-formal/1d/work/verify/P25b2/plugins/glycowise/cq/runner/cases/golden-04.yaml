@@ -1,0 +1,12 @@
+id: golden-04
+q: 68 岁、在用胰岛素、TBR 3.5% 的患者，该按哪一套目标区间判达标？
+expect: query
+tier: 1
+family: golden
+origin: sim
+observed_at: '2026-10-23'
+elements: []
+label:
+  answer: query
+  source: simulate
+variants: []

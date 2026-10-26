@@ -1,0 +1,15 @@
+expect: action(响应并回执告警)
+family: probe
+id: p25-04
+origin: probe
+q: probe p25-04
+route:
+  action: 响应并回执告警
+  confidence: 1.0
+  kind: action
+  params:
+    action_taken: 补糖后 4.5，已脱离危险，保持观察
+    alert_id: A-P0045-02
+    responder: 黄医生
+    retest_value: 4.6
+tier: 0

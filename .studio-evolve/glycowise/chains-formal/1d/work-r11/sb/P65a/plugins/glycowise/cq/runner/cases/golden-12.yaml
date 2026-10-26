@@ -1,0 +1,14 @@
+id: golden-12
+q: 患者 P0007 停药满 90 天了，判一下缓解（化验 lab-P0007-hba1c，报告 s-P0007-14d）
+expect: action(判定缓解结果)
+tier: 3
+family: golden
+origin: sim
+observed_at: '2026-10-23'
+elements: []
+label:
+  answer: action(判定缓解结果)
+  source: simulate
+variants:
+- kind: original
+  q: 这个患者停药满 90 天了，判一下缓解

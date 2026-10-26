@@ -1,0 +1,14 @@
+id: golden-21
+q: 昨天回填上来的三周前那次低血糖（告警 A-P0031-backfill-01），现在推一条紧急告警出去
+expect: rejected(R52_回填读数不得触发实时告警)
+tier: 3
+family: golden
+origin: sim
+observed_at: '2026-10-23'
+elements: []
+label:
+  answer: rejected(R52_回填读数不得触发实时告警)
+  source: simulate
+variants:
+- kind: original
+  q: 昨天回填上来的三周前那次低血糖，现在推一条紧急告警出去

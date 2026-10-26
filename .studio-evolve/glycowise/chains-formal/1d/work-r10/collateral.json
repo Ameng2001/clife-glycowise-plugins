@@ -1,0 +1,763 @@
+{
+ "P30a": {
+  "reg": {},
+  "gain_Di": [
+   "产品与机构合规-r67",
+   "产品与机构合规-r68",
+   "产品与机构合规-r69",
+   "产品与机构合规-r75"
+  ],
+  "gain_other": []
+ },
+ "P30b1": {
+  "reg": {
+   "产品与机构合规-r08": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r17": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r57": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r58": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r59": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r73": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r74": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r79": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r81": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "出口签发闸-05": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ]
+  },
+  "gain_Di": [
+   "产品与机构合规-r67",
+   "产品与机构合规-r68",
+   "产品与机构合规-r69",
+   "产品与机构合规-r75"
+  ],
+  "gain_other": []
+ },
+ "P30b2": {
+  "reg": {},
+  "gain_Di": [
+   "产品与机构合规-r67",
+   "产品与机构合规-r68",
+   "产品与机构合规-r69",
+   "产品与机构合规-r75"
+  ],
+  "gain_other": []
+ },
+ "P31a": {
+  "reg": {},
+  "gain_Di": [
+   "产品与机构合规-r70",
+   "产品与机构合规-r71",
+   "产品与机构合规-r72",
+   "产品与机构合规-r76",
+   "产品与机构合规-r78"
+  ],
+  "gain_other": []
+ },
+ "P31b1": {
+  "reg": {
+   "产品与机构合规-r08": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r17": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r57": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r58": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r59": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r73": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r74": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r79": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r81": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "出口签发闸-05": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ]
+  },
+  "gain_Di": [
+   "产品与机构合规-r70",
+   "产品与机构合规-r71",
+   "产品与机构合规-r72",
+   "产品与机构合规-r76",
+   "产品与机构合规-r78"
+  ],
+  "gain_other": []
+ },
+ "P31b2": {
+  "reg": {},
+  "gain_Di": [
+   "产品与机构合规-r70",
+   "产品与机构合规-r71",
+   "产品与机构合规-r72",
+   "产品与机构合规-r76",
+   "产品与机构合规-r78"
+  ],
+  "gain_other": []
+ },
+ "P32a": {
+  "reg": {},
+  "gain_Di": [
+   "产品与机构合规-r82",
+   "产品与机构合规-r83"
+  ],
+  "gain_other": []
+ },
+ "P32b1": {
+  "reg": {
+   "产品与机构合规-01": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "产品与机构合规-r05": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r21": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r50": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r51": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r52": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r53": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r54": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r55": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r66": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "产品与机构合规-r80": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "低血糖安全-04": [
+    "原题",
+    "paraphrase-0",
+    "entity_swap-1",
+    "irrelevant_field-2"
+   ],
+   "低血糖安全-r45": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r16": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r18": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r37": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r60": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r61": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "结论层与分层-04": [
+    "原题",
+    "paraphrase-0",
+    "entity_swap-1",
+    "irrelevant_field-2"
+   ],
+   "结论层与分层-09": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-10": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r13": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r40": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r41": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r48": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r53": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ]
+  },
+  "gain_Di": [
+   "产品与机构合规-r82",
+   "产品与机构合规-r83"
+  ],
+  "gain_other": []
+ },
+ "P32b2": {
+  "reg": {},
+  "gain_Di": [
+   "产品与机构合规-r82",
+   "产品与机构合规-r83"
+  ],
+  "gain_other": []
+ },
+ "P33a": {
+  "reg": {},
+  "gain_Di": [
+   "低血糖安全-r47",
+   "低血糖安全-r54",
+   "低血糖安全-r55",
+   "低血糖安全-r59",
+   "低血糖安全-r60",
+   "低血糖安全-r61",
+   "低血糖安全-r62"
+  ],
+  "gain_other": []
+ },
+ "P33b1": {
+  "reg": {
+   "低血糖安全-01": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "低血糖安全-12": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "低血糖安全-r06": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "低血糖安全-r11": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "低血糖安全-r22": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "低血糖安全-r23": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ]
+  },
+  "gain_Di": [
+   "低血糖安全-r47",
+   "低血糖安全-r54",
+   "低血糖安全-r55",
+   "低血糖安全-r59",
+   "低血糖安全-r60",
+   "低血糖安全-r61",
+   "低血糖安全-r62"
+  ],
+  "gain_other": []
+ },
+ "P33b2": {
+  "reg": {},
+  "gain_Di": [
+   "低血糖安全-r47",
+   "低血糖安全-r54",
+   "低血糖安全-r55",
+   "低血糖安全-r59",
+   "低血糖安全-r60",
+   "低血糖安全-r61",
+   "低血糖安全-r62"
+  ],
+  "gain_other": []
+ },
+ "P34a": {
+  "reg": {
+   "参考与配置-r52": [
+    "原题",
+    "paraphrase-0"
+   ]
+  },
+  "gain_Di": [
+   "参考与配置-r48"
+  ],
+  "gain_other": []
+ },
+ "P35a": {
+  "reg": {},
+  "gain_Di": [
+   "结论层与分层-r49",
+   "结论层与分层-r50",
+   "结论层与分层-r51",
+   "结论层与分层-r52"
+  ],
+  "gain_other": []
+ },
+ "P35b1": {
+  "reg": {
+   "出口签发闸-04": [
+    "原题",
+    "paraphrase-0",
+    "entity_swap-1",
+    "irrelevant_field-2"
+   ],
+   "出口签发闸-r16": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "出口签发闸-r17": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "出口签发闸-r42": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r03": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "指标口径-r16": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r18": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r19": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r37": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r38": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r58": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r59": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "指标口径-r60": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r61": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "结论层与分层-02": [
+    "原题",
+    "paraphrase-0",
+    "entity_swap-1",
+    "irrelevant_field-2"
+   ],
+   "结论层与分层-04": [
+    "原题",
+    "paraphrase-0",
+    "entity_swap-1",
+    "irrelevant_field-2"
+   ],
+   "结论层与分层-09": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-10": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r04": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r05": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r08": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r12": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r13": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r15": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r16": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "结论层与分层-r17": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r40": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r41": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r45": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ]
+  },
+  "gain_Di": [
+   "结论层与分层-r49",
+   "结论层与分层-r50",
+   "结论层与分层-r51",
+   "结论层与分层-r52"
+  ],
+  "gain_other": [
+   "出口签发闸-r23"
+  ]
+ },
+ "P35b2": {
+  "reg": {},
+  "gain_Di": [
+   "结论层与分层-r49",
+   "结论层与分层-r50",
+   "结论层与分层-r51",
+   "结论层与分层-r52"
+  ],
+  "gain_other": []
+ },
+ "P36a": {
+  "reg": {},
+  "gain_Di": [
+   "高血糖与波动-r54"
+  ],
+  "gain_other": []
+ },
+ "P36b1": {
+  "reg": {
+   "产品与机构合规-r80": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "出口签发闸-04": [
+    "原题",
+    "paraphrase-0",
+    "entity_swap-1",
+    "irrelevant_field-2"
+   ],
+   "出口签发闸-r16": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "出口签发闸-r17": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "出口签发闸-r42": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r16": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r18": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r19": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r37": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r38": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r58": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r59": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "指标口径-r60": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "指标口径-r61": [
+    "原题",
+    "irrelevant_field-0"
+   ],
+   "结论层与分层-04": [
+    "原题",
+    "paraphrase-0",
+    "entity_swap-1",
+    "irrelevant_field-2"
+   ],
+   "结论层与分层-09": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-10": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r13": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r40": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r41": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r48": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ],
+   "结论层与分层-r53": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ]
+  },
+  "gain_Di": [
+   "高血糖与波动-r54"
+  ],
+  "gain_other": []
+ },
+ "P36b2": {
+  "reg": {},
+  "gain_Di": [
+   "高血糖与波动-r54"
+  ],
+  "gain_other": []
+ },
+ "P37a": {
+  "reg": {},
+  "gain_Di": [
+   "高血糖与波动-r52"
+  ],
+  "gain_other": []
+ },
+ "P38a": {
+  "reg": {},
+  "gain_Di": [
+   "因果链溯源-r53"
+  ],
+  "gain_other": []
+ },
+ "P38b1": {
+  "reg": {},
+  "gain_Di": [
+   "因果链溯源-r53"
+  ],
+  "gain_other": []
+ },
+ "P38b2": {
+  "reg": {},
+  "gain_Di": [
+   "因果链溯源-r53"
+  ],
+  "gain_other": []
+ },
+ "P39a": {
+  "reg": {},
+  "gain_Di": [
+   "低血糖安全-r63"
+  ],
+  "gain_other": []
+ },
+ "P39b1": {
+  "reg": {
+   "低血糖安全-r57": [
+    "原题",
+    "paraphrase-0",
+    "irrelevant_field-1"
+   ]
+  },
+  "gain_Di": [
+   "低血糖安全-r63"
+  ],
+  "gain_other": []
+ },
+ "P39b2": {
+  "reg": {},
+  "gain_Di": [
+   "低血糖安全-r63"
+  ],
+  "gain_other": []
+ },
+ "P40a": {
+  "reg": {},
+  "gain_Di": [
+   "高血糖与波动-r60"
+  ],
+  "gain_other": []
+ }
+}

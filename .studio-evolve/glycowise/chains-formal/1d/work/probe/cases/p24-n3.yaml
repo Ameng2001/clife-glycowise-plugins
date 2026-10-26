@@ -1,0 +1,14 @@
+expect: action(生成产品推荐)
+family: probe
+id: p24-n3
+origin: probe
+q: probe p24-n3
+route:
+  action: 生成产品推荐
+  confidence: 1.0
+  kind: action
+  params:
+    patient_id: P0007
+    pitch: 饭后吃一包，当作加餐
+    sku_id: sku-ynl-01
+tier: 0

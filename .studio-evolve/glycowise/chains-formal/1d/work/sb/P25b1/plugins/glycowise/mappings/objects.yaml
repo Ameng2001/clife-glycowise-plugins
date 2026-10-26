@@ -1,0 +1,189 @@
+# glycowise 对象映射 —— 由 ontology-map §6 编译生成。
+# 时序/只进不出明细落 clickhouse 且 virtual；推理主干与主数据落 postgres 且 materialized。
+objects:
+  - object: GlucoseReading
+    materialization: virtual
+    physical: { store: clickhouse, table: glucose_reading, key: reading_id, columns: [patient_id, value_mmol, unit_raw, time_utc, source_channel, quality_flag, sensor_serial, is_backfill, dedup_key] }
+  - object: IngestBatch
+    materialization: hybrid
+    physical: { store: postgres, table: ingest_batch, key: batch_id, columns: [channel, record_count, status] }
+  - object: VendorSummarySnapshot
+    materialization: hybrid
+    physical: { store: postgres, table: vendor_summary_snapshot, key: snapshot_id, columns: [vendor, algo_version, denominator_def] }
+  - object: ChannelRegistry
+    materialization: materialized
+    physical: { store: postgres, table: channel_registry, key: channel_id, columns: [vendor, model, capability_level, storage_region, sampling_interval, supports_realtime_alert] }
+  - object: DeviceModel
+    materialization: materialized
+    physical: { store: postgres, table: device_model, key: model_id, columns: [vendor, sampling_interval, warmup_minutes, expiry_days, mard_pct] }
+  - object: CarrierRegistry
+    materialization: materialized
+    physical: { store: postgres, table: carrier_registry, key: patient_id, columns: [carrier_type, last_sync_at, coverage_window] }
+  - object: GatewayDevice
+    materialization: materialized
+    physical: { store: postgres, table: gateway_device, key: sn, columns: [model, bound_patient_id, last_heartbeat_at, online, asset_status] }
+  - object: SensorSession
+    materialization: materialized
+    physical: { store: postgres, table: sensor_session, key: session_id, columns: [patient_id, sensor_serial, vendor, sensor_model, placement_time, end_reason] }
+  - object: PatientTimeBaseline
+    materialization: materialized
+    physical: { store: postgres, table: patient_time_baseline, key: patient_id, columns: [patient_phone_tz, device_clock_offset, tz_baseline] }
+  - object: SyncPlan
+    materialization: materialized
+    physical: { store: postgres, table: sync_plan, key: patient_id, columns: [trigger_type, expected_interval, assist_person] }
+  - object: ConsentRecord
+    materialization: materialized
+    physical: { store: postgres, table: consent_record, key: consent_id, columns: [patient_id, version, signed_at, hash] }
+  - object: ConsentRevocation
+    materialization: materialized
+    physical: { store: postgres, table: consent_revocation, key: revocation_id, columns: [patient_id, revoked_at, executed_at] }
+  - object: ContactConsent
+    materialization: materialized
+    physical: { store: postgres, table: contact_consent, key: contact_id, columns: [patient_id, contact_person, confirmed_at] }
+  - object: VendorGrant
+    materialization: materialized
+    physical: { store: postgres, table: vendor_grant, key: grant_id, columns: [vendor, patient_id, granted_at, expires_at, status] }
+  - object: PatientProfile
+    materialization: materialized
+    physical: { store: postgres, table: patient_profile, key: patient_id, columns: [age, pregnant, health_tier, target_profile, is_iah_high_risk, eGFR, tier_label, disclosure_approved, remission_status, away_mode] }
+  - object: MedClassHint
+    materialization: materialized
+    physical: { store: postgres, table: med_class_hint, key: hint_id, columns: [patient_id, hint_source, hypo_risk_med, sglt2i] }
+  - object: LabResult
+    materialization: materialized
+    physical: { store: postgres, table: lab_result, key: lab_result_id, columns: [patient_id, method, is_ngsp_certified, measured_at] }
+  - object: BodyMeasurement
+    materialization: materialized
+    physical: { store: postgres, table: body_measurement, key: measurement_id, columns: [patient_id, measured_at, device_id, protocol_version, fasting] }
+  - object: PatientIdentityLink
+    materialization: materialized
+    physical: { store: postgres, table: patient_identity_link, key: patient_id, columns: [wecom_external_userid, feishu_record_id, vendor_account_id] }
+  - object: AlertThreshold
+    materialization: materialized
+    physical: { store: postgres, table: alert_threshold, key: threshold_id, columns: [patient_id, field, current_value, safe_direction] }
+  - object: ThresholdChangeLog
+    materialization: hybrid
+    physical: { store: postgres, table: threshold_change_log, key: log_id, columns: [patient_id, changed_by, trigger_rule, before, after] }
+  - object: AlertEvent
+    materialization: materialized
+    physical: { store: postgres, table: alert_event, key: alert_id, columns: [patient_id, level, rule_id, raised_at, is_backfill, confidence] }
+  - object: AlertAck
+    materialization: materialized
+    physical: { store: postgres, table: alert_ack, key: ack_id, columns: [alert_id, responder, responded_at] }
+  - object: AlertEscalation
+    materialization: materialized
+    physical: { store: postgres, table: alert_escalation, key: escalation_id, columns: [alert_id, level, escalated_at, target] }
+  - object: AlertSuppressedLog
+    materialization: virtual
+    physical: { store: clickhouse, table: alert_suppressed_log, key: log_id, columns: [alert_id, reason, suppressed_at] }
+  - object: HypoEpisode
+    materialization: materialized
+    physical: { store: postgres, table: hypo_episode, key: episode_id, columns: [patient_id, start_time, end_time, level, night_flag] }
+  - object: HypoState
+    materialization: materialized
+    physical: { store: postgres, table: hypo_state, key: patient_id, columns: [prolonged_risk, recurrence_window_until, closure_blocked_reason] }
+  - object: CgmSummary
+    materialization: materialized
+    physical: { store: postgres, table: cgm_summary, key: summary_id, columns: [patient_id, window_start, window_end, wear_ratio, active_pct, sufficiency_ok, nocturnal_coverage_pct, nocturnal_coverage_insufficient, confounded_window] }
+  - object: ContextEvent
+    materialization: virtual
+    physical: { store: clickhouse, table: context_event, key: event_id, columns: [patient_id, event_type, occurred_at] }
+  - object: SymptomTreatmentRecord
+    materialization: materialized
+    physical: { store: postgres, table: symptom_treatment_record, key: record_id, columns: [patient_id, alert_id, symptom_tag, treatment_action, recorded_at] }
+  - object: KetoneReading
+    materialization: materialized
+    physical: { store: postgres, table: ketone_reading, key: ketone_id, columns: [patient_id, value_or_qualitative, measured_at, method] }
+  - object: ClinicalContextEvent
+    materialization: materialized
+    physical: { store: postgres, table: clinical_context_event, key: event_id, columns: [patient_id, type, start_at, end_at] }
+  - object: MealResponse
+    materialization: virtual
+    physical: { store: clickhouse, table: meal_response, key: response_id, columns: [patient_id, meal_event_id, delta_p, iAUC_2h, cross_brand] }
+  - object: DutyRoster
+    materialization: materialized
+    physical: { store: postgres, table: duty_roster, key: roster_id, columns: [date, slot, responder] }
+  - object: EmergencyContact
+    materialization: materialized
+    physical: { store: postgres, table: emergency_contact, key: contact_id, columns: [patient_id, relation, can_reach_onsite] }
+  - object: PlanDraft
+    materialization: hybrid
+    physical: { store: postgres, table: plan_draft, key: draft_id, columns: [patient_id, template_version, med_interaction_routed, direction] }
+  - object: PlanSigned
+    materialization: materialized
+    physical: { store: postgres, table: plan_signed, key: plan_id, columns: [patient_id, signer_id, signed_at, evidence_stale] }
+  - object: TaperPlan
+    materialization: materialized
+    physical: { store: postgres, table: taper_plan, key: taper_id, columns: [patient_id, original_document_hash] }
+  - object: ComplianceCheckLog
+    materialization: virtual
+    physical: { store: clickhouse, table: compliance_check_log, key: log_id, columns: [model_version, prompt_version, blocked_reason] }
+  - object: GateToken
+    materialization: hybrid
+    physical: { store: postgres, table: gate_token, key: token_id, columns: [issued_at, scope, expiry] }
+  - object: BannedTermLibrary
+    materialization: materialized
+    physical: { store: postgres, table: banned_term_library, key: term_id, columns: [term, category, version] }
+  - object: ComplianceIncident
+    materialization: materialized
+    physical: { store: postgres, table: compliance_incident, key: incident_id, columns: [actor, recorded_at] }
+  - object: Credential
+    materialization: materialized
+    physical: { store: postgres, table: credential, key: credential_id, columns: [holder, credential_type, registration_no, expiry_date, status] }
+  - object: ServicePackage
+    materialization: materialized
+    physical: { store: postgres, table: service_package, key: package_id, columns: [patient_id, tier, start_date, end_date, wear_days_fulfilled] }
+  - object: ServiceExitRecord
+    materialization: materialized
+    physical: { store: postgres, table: service_exit_record, key: exit_id, columns: [patient_id, exit_at, exit_stage, exit_path, refund_amount] }
+  - object: ChurnSignal
+    materialization: materialized
+    physical: { store: postgres, table: churn_signal, key: signal_id, columns: [patient_id, code, severity, applicable] }
+  - object: KpiSettlement
+    materialization: materialized
+    physical: { store: postgres, table: kpi_settlement, key: settlement_id, columns: [package_id, safety_gate_passed, tir_delta] }
+  - object: RemissionClock
+    materialization: materialized
+    physical: { store: postgres, table: remission_clock, key: patient_id, columns: [day0, status, confirmed_by] }
+  - object: RemissionAssessment
+    materialization: materialized
+    physical: { store: postgres, table: remission_assessment, key: assessment_id, columns: [patient_id, status, method_used] }
+  - object: EnrollmentDecision
+    materialization: materialized
+    physical: { store: postgres, table: enrollment_decision, key: decision_id, columns: [patient_id, decided_by, decided_at, coverage_disclosed_at, channel_verified_at_store] }
+  - object: ReviewEvidence
+    materialization: materialized
+    physical: { store: postgres, table: review_evidence, key: evidence_id, columns: [plan_id, dwell_time, review_suspicious] }
+  - object: DeliveryReceipt
+    materialization: virtual
+    physical: { store: clickhouse, table: delivery_receipt, key: receipt_id, columns: [target, channel, delivered_at, status] }
+  - object: StoreReadinessCheck
+    materialization: materialized
+    physical: { store: postgres, table: store_readiness_check, key: check_id, columns: [store_id, checked_at, signed_by] }
+  - object: ReferralRecord
+    materialization: materialized
+    physical: { store: postgres, table: referral_record, key: referral_id, columns: [patient_id, referred_to, referred_at, replied_at] }
+  - object: OnsiteTriageRecord
+    materialization: materialized
+    physical: { store: postgres, table: onsite_triage_record, key: record_id, columns: [patient_id, glucose_value, tier] }
+  - object: PsychNote
+    materialization: materialized
+    physical: { store: postgres, table: psych_note, key: note_id, columns: [patient_id] }
+  - object: MetricRegistry
+    materialization: materialized
+    physical: { store: postgres, table: metric_registry, key: metric_id, columns: [name, version, owner] }
+  - object: AuditLog
+    materialization: virtual
+    physical: { store: clickhouse, table: audit_log, key: log_id, columns: [actor, action, target, timestamp] }
+  - object: DataSubjectRequest
+    materialization: materialized
+    physical: { store: postgres, table: data_subject_request, key: request_id, columns: [patient_id, type, received_at, resolved_at] }
+  - object: StoreEntity
+    materialization: materialized
+    physical: { store: postgres, table: store_entity, key: store_id, columns: [name, license_no] }
+  - object: ProductSku
+    materialization: materialized
+    physical: { store: postgres, table: product_sku, key: sku_id, columns: [name, category, label_verified] }
+  - object: OutboundContent
+    materialization: hybrid
+    physical: { store: postgres, table: outbound_content, key: content_id, columns: [target_audience, content_type, gate_token_ref, disclaimer_attached] }

@@ -1,0 +1,14 @@
+expect: action(生成产品推荐)
+family: probe
+id: p24-n5
+origin: probe
+q: probe p24-n5
+route:
+  action: 生成产品推荐
+  confidence: 1.0
+  kind: action
+  params:
+    patient_id: P0007
+    pitch: 一周三次，搭配早餐
+    sku_id: sku-ynl-01
+tier: 0

@@ -1,0 +1,15 @@
+expect: rejected(R44_高危用药禁止闭环)
+family: probe
+id: p25-07
+origin: probe
+q: probe p25-07
+route:
+  action: 响应并回执告警
+  confidence: 1.0
+  kind: action
+  params:
+    action_taken: 复测 4.7，确认脱离风险，继续观察后闭环
+    alert_id: A-P0045-02
+    responder: 黄医生
+    retest_value: 4.6
+tier: 0

@@ -1,0 +1,14 @@
+expect: rejected(D9_产品功效声称拦截)
+family: probe
+id: p24-05
+origin: probe
+q: probe p24-05
+route:
+  action: 生成产品推荐
+  confidence: 1.0
+  kind: action
+  params:
+    patient_id: P0007
+    pitch: 饭后喝，血糖不往上蹿
+    sku_id: sku-ynl-01
+tier: 0

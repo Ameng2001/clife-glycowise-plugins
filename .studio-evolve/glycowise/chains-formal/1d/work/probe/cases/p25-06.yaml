@@ -1,0 +1,15 @@
+expect: action(响应并回执告警)
+family: probe
+id: p25-06
+origin: probe
+q: probe p25-06
+route:
+  action: 响应并回执告警
+  confidence: 1.0
+  kind: action
+  params:
+    action_taken: 复测 4.7，排除了低血糖风险，暂不结案，观察 24 小时
+    alert_id: A-P0045-02
+    responder: 黄医生
+    retest_value: 4.6
+tier: 0
