@@ -1,7 +1,7 @@
 """三维与一维仍能分开的通道在 formal 80 份提案 3d 裁决上的触发数（§5.5.1 表）。
 (a) 某层 ΔT_k < −0.02 且 ΔA ≥ 0（内关卡或任一外关卡）；(b) ΔW_family < 0（内或外）；(c) 内关卡 ΔT、ΔS、ΔW 均不为正且 ΔC < 0；
 另报外关卡 ΔS < 0 的次数及其中 ΔA ≥ 0 的次数，与 S_consist / S_stable 的取值分布（全部读数）。"""
-import glob, json
+import glob, json, re
 from collections import Counter
 from pathlib import Path
 W = Path(__file__).resolve().parents[2]
@@ -19,7 +19,11 @@ for p in a["proposals"]:
         if (o.get("dS") or 0) < 0:
             outer_dS["lt0"] += 1; outer_dS["lt0_with_dA_ge0"] += int((o.get("dA") or 0) >= 0)
 S = Counter()
+# 只数实验读数：跳过归因代理的工作目录（work*/scratch/sb）、链状态里的插件副本（state/、plugins/）
+# 与案例协议消融的中间副本（case-ablation/no_*，不入库，可由 case-ablation/run.py 重跑生成）——与复现包内容一致
+SKIP = re.compile(r"/(work[^/]*|scratch|sb|state|plugins|no_setup|no_expect_state)/")
 for f in glob.glob(str(W / "**/*.json"), recursive=True):
+    if SKIP.search(f[len(str(W)):]): continue
     try: d = json.load(open(f))
     except Exception: continue
     if isinstance(d, dict) and "S_consist" in d and "S_stable" in d: S[(d["S_consist"], d["S_stable"])] += 1
